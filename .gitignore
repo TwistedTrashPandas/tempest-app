@@ -4,6 +4,7 @@
 [Bb]uild/
 [Bb]uilds/
 Assets/AssetStoreTools*
+UnityGenerated/
 
 # Visual Studio cache directory
 .vs/
@@ -34,3 +35,11 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+#OS Generated
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
