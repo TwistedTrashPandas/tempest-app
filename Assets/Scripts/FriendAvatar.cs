@@ -3,26 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Friend : MonoBehaviour
+public class FriendAvatar : MonoBehaviour
 {
-    public ulong id;
+    public ulong steamID;
 
     public Image image;
     public Button buttonInvite;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
     public void Invite ()
     {
-        Facepunch.Steamworks.Client.Instance.Lobby.InviteUserToLobby(id);
+        Facepunch.Steamworks.Client.Instance.Lobby.InviteUserToLobby(steamID);
     }
 
     public void OnImage(Facepunch.Steamworks.Image image)

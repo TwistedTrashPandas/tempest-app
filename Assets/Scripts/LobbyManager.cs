@@ -33,12 +33,6 @@ public class LobbyManager : MonoBehaviour
             Debug.LogError("Client instance is null!");
         }
     }
-	
-	// Update is called once per frame
-	void Update ()
-    {
-
-    }
 
     void OnLobbyCreated(bool success)
     {
@@ -71,55 +65,106 @@ public class LobbyManager : MonoBehaviour
         Client.Instance.Lobby.Join(lobbyID);
     }
 
-    // THIS IS NOT A NICE WAY TO HANDLE THE LOBBY!
     IEnumerator RefreshLobby ()
     {
         yield return new WaitForSeconds(0.25f);
 
         while (true)
         {
-            DestroyAllFriends(layoutLobby);
-            DestroyAllFriends(layoutFriends);
+            RefreshFriendAvatars();
+            RefreshLobbyAvatars();
 
-            // Load all friends of this user
-            Client.Instance.Friends.Refresh();
-            IEnumerable<SteamFriend> friends = Client.Instance.Friends.All;
-
-            foreach (SteamFriend friend in friends)
-            {
-                if (friend.IsOnline)
-                {
-                    Friend f = Instantiate(friendPrefab, layoutFriends, false).GetComponent<Friend>();
-                    f.id = friend.Id;
-
-                    Client.Instance.Friends.GetAvatar(Friends.AvatarSize.Large, friend.Id, f.OnImage);
-                }
-            }
-
-            // Display current users that are in this lobby
-            textLobby.text = Client.Instance.Lobby.Name;
-            ulong[] memberIDs = Client.Instance.Lobby.GetMemberIDs();
-
-            foreach (ulong id in memberIDs)
-            {
-                Friend f = Instantiate(friendPrefab, layoutLobby, false).GetComponent<Friend>();
-                f.id = id;
-                f.buttonInvite.gameObject.SetActive(false);
-
-                Client.Instance.Friends.GetAvatar(Friends.AvatarSize.Large, id, f.OnImage);
-            }
-
-            yield return new WaitForSeconds(3);
+            yield return new WaitForSeconds(0.5f);
         }
     }
 
-    void DestroyAllFriends (Transform parent)
+    void InstantiateFriendAvatar (SteamFriend friend, Transform parent, bool inviteable)
     {
-        Friend[] tmp = parent.GetComponentsInChildren<Friend>();
+        FriendAvatar tmp = Instantiate(friendPrefab, parent, false).GetComponent<FriendAvatar>();
+        tmp.gameObject.name = friend.Name;
+        tmp.steamID = friend.Id;
+        tmp.buttonInvite.gameObject.SetActive(inviteable);
 
-        foreach (Friend f in tmp)
+        Client.Instance.Friends.GetAvatar(Friends.AvatarSize.Large, friend.Id, tmp.OnImage);
+    }
+
+    void RefreshFriendAvatars ()
+    {
+        FriendAvatar[] friendAvatars = layoutFriends.GetComponentsInChildren<FriendAvatar>();
+
+        Dictionary<ulong, bool> friendsToStay = new Dictionary<ulong, bool>();
+
+        // Mark all the friends for removal later
+        foreach (FriendAvatar f in friendAvatars)
         {
-            Destroy(f.gameObject);
+            friendsToStay[f.steamID] = false;
+        }
+
+        // Refresh all friends of this user
+        Client.Instance.Friends.Refresh();
+        IEnumerable<SteamFriend> friends = Client.Instance.Friends.All;
+
+        foreach (SteamFriend friend in friends)
+        {
+            if (friend.IsOnline)
+            {
+                if (!friendsToStay.ContainsKey(friend.Id))
+                {
+                    // A new friend is now online
+                    InstantiateFriendAvatar(friend, layoutFriends, true);
+                }
+
+                // This friend should not be removed later
+                friendsToStay[friend.Id] = true;
+            }
+        }
+
+        // Remove all friends that are no longer online
+        foreach (FriendAvatar f in friendAvatars)
+        {
+            if (!friendsToStay[f.steamID])
+            {
+                Destroy(f.gameObject);
+            }
+        }
+    }
+
+    void RefreshLobbyAvatars()
+    {
+        FriendAvatar[] lobbyAvatars = layoutLobby.GetComponentsInChildren<FriendAvatar>();
+
+        Dictionary<ulong, bool> lobbyMembersToStay = new Dictionary<ulong, bool>();
+
+        // Mark all the friends for removal later
+        foreach (FriendAvatar f in lobbyAvatars)
+        {
+            lobbyMembersToStay[f.steamID] = false;
+        }
+
+        // Display current users that are in this lobby
+        textLobby.text = Client.Instance.Lobby.Name;
+        ulong[] memberSteamIDs = Client.Instance.Lobby.GetMemberIDs();
+
+        foreach (ulong steamID in memberSteamIDs)
+        {
+            if (!lobbyMembersToStay.ContainsKey(steamID))
+            {
+                // A new lobby member joined
+                SteamFriend friend = Client.Instance.Friends.Get(steamID);
+                InstantiateFriendAvatar(friend, layoutLobby, false);
+            }
+
+            // This lobby member should not be removed later
+            lobbyMembersToStay[steamID] = true;
+        }
+
+        // Remove all lobby members that are no longer in the lobby
+        foreach (FriendAvatar f in lobbyAvatars)
+        {
+            if (!lobbyMembersToStay[f.steamID])
+            {
+                Destroy(f.gameObject);
+            }
         }
     }
 }

@@ -10,11 +10,11 @@ public class PeerToPeerManager : MonoBehaviour
 
 	void Start ()
     {
-        Client.Instance.Networking.SetListenChannel(0, true);
-
         Client.Instance.Networking.OnIncomingConnection = OnIncomingConnection;
         Client.Instance.Networking.OnConnectionFailed += OnConnectionFailed;
         Client.Instance.Networking.OnP2PData = OnRecievedP2PData;
+
+        Client.Instance.Networking.SetListenChannel(0, true);
     }
 
     bool OnIncomingConnection (ulong steamID)
@@ -49,7 +49,8 @@ public class PeerToPeerManager : MonoBehaviour
         }
 
         inputFieldChat.text = "";
-        inputFieldChat.Select();
         inputFieldChat.ActivateInputField();
+        inputFieldChat.Select();
+        inputFieldChat.placeholder.gameObject.SetActive(false);
     }
 }
