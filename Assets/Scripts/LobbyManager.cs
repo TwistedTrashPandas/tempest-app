@@ -7,8 +7,11 @@ public class LobbyManager : MonoBehaviour
 {
     public GameObject friendPrefab;
 
-    public Transform lobbyLayout;
-    public Transform friendsLayout;
+    public Transform layoutLobby;
+    public Transform layoutFriends;
+
+    public UnityEngine.UI.Text textLobby;
+    public UnityEngine.UI.Text textFriends;
 
 	// Use this for initialization
 	void Start ()
@@ -17,6 +20,7 @@ public class LobbyManager : MonoBehaviour
         {
             Client.Instance.Lobby.OnLobbyCreated += OnLobbyCreated;
             Client.Instance.Lobby.OnLobbyJoined += OnLobbyJoined;
+            Client.Instance.Lobby.OnUserInvitedToLobby += OnUserInvitedToLobby;
 
             // Create a lobby
             Client.Instance.Lobby.Create(Lobby.Type.FriendsOnly, 2);
@@ -42,6 +46,10 @@ public class LobbyManager : MonoBehaviour
         {
             Debug.Log("Created lobby \"" + Client.Instance.Lobby.Name + "\"");
         }
+        else
+        {
+            Debug.LogError("Failed to create lobby");
+        }
     }
 
     void OnLobbyJoined (bool success)
@@ -50,6 +58,17 @@ public class LobbyManager : MonoBehaviour
         {
             Debug.Log("Joined lobby \"" + Client.Instance.Lobby.Name + "\"");
         }
+        else
+        {
+            Debug.LogError("Failed to join lobby");
+        }
+    }
+
+    void OnUserInvitedToLobby (ulong lobbyID, ulong otherUserID)
+    {
+        Debug.Log("Accepting invitation to the lobby " + lobbyID + " from user " + otherUserID);
+        Client.Instance.Lobby.Leave();
+        Client.Instance.Lobby.Join(lobbyID);
     }
 
     // THIS IS NOT A NICE WAY TO HANDLE THE LOBBY!
@@ -59,8 +78,8 @@ public class LobbyManager : MonoBehaviour
 
         while (true)
         {
-            DestroyAllFriends(lobbyLayout);
-            DestroyAllFriends(friendsLayout);
+            DestroyAllFriends(layoutLobby);
+            DestroyAllFriends(layoutFriends);
 
             // Load all friends of this user
             Client.Instance.Friends.Refresh();
@@ -70,7 +89,7 @@ public class LobbyManager : MonoBehaviour
             {
                 if (friend.IsOnline)
                 {
-                    Friend f = Instantiate(friendPrefab, friendsLayout, false).GetComponent<Friend>();
+                    Friend f = Instantiate(friendPrefab, layoutFriends, false).GetComponent<Friend>();
                     f.id = friend.Id;
 
                     Client.Instance.Friends.GetAvatar(Friends.AvatarSize.Large, friend.Id, f.OnImage);
@@ -78,11 +97,12 @@ public class LobbyManager : MonoBehaviour
             }
 
             // Display current users that are in this lobby
+            textLobby.text = Client.Instance.Lobby.Name;
             ulong[] memberIDs = Client.Instance.Lobby.GetMemberIDs();
 
             foreach (ulong id in memberIDs)
             {
-                Friend f = Instantiate(friendPrefab, lobbyLayout, false).GetComponent<Friend>();
+                Friend f = Instantiate(friendPrefab, layoutLobby, false).GetComponent<Friend>();
                 f.id = id;
                 f.buttonInvite.gameObject.SetActive(false);
 

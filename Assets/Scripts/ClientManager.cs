@@ -40,8 +40,7 @@ public class ClientManager : MonoBehaviour
         else
         {
             client = null;
-            Debug.LogWarning("Couldn't initialize Steam");
-            return;
+            Debug.LogWarning("Couldn't initialize Steam. Make sure that Steam is running.");
         }
 	}
 	

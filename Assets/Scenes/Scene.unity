@@ -123,7 +123,7 @@ GameObject:
   - component: {fileID: 153771119}
   - component: {fileID: 153771120}
   m_Layer: 5
-  m_Name: Friends Layout
+  m_Name: Layout Friends
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -423,7 +423,7 @@ GameObject:
   - component: {fileID: 537718611}
   - component: {fileID: 537718612}
   m_Layer: 5
-  m_Name: Lobby Layout
+  m_Name: Layout Lobby
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -506,7 +506,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: -10}
-  m_SizeDelta: {x: 200, y: 80}
+  m_SizeDelta: {x: 600, y: 80}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &899999207
 MonoBehaviour:
@@ -553,7 +553,7 @@ MonoBehaviour:
     m_BestFit: 1
     m_MinSize: 10
     m_MaxSize: 300
-    m_Alignment: 0
+    m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
@@ -902,8 +902,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   friendPrefab: {fileID: 1223667611855650, guid: d392a89a0357f4e44ba8801edfbc4d1f,
     type: 2}
-  lobbyLayout: {fileID: 537718611}
-  friendsLayout: {fileID: 153771119}
+  layoutLobby: {fileID: 537718611}
+  layoutFriends: {fileID: 153771119}
+  textLobby: {fileID: 899999208}
+  textFriends: {fileID: 2139450661}
 --- !u!1 &2139450659
 GameObject:
   m_ObjectHideFlags: 0
@@ -938,7 +940,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: -10}
-  m_SizeDelta: {x: 230, y: 80}
+  m_SizeDelta: {x: 600, y: 80}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &2139450661
 MonoBehaviour:
@@ -966,7 +968,7 @@ MonoBehaviour:
     m_BestFit: 1
     m_MinSize: 10
     m_MaxSize: 300
-    m_Alignment: 0
+    m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
