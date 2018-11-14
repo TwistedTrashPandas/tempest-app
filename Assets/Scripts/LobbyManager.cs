@@ -13,6 +13,8 @@ public class LobbyManager : MonoBehaviour
     public UnityEngine.UI.Text textLobby;
     public UnityEngine.UI.Text textFriends;
 
+    public JoinLobbyDialog joinLobbyDialog;
+
 	// Use this for initialization
 	void Start ()
     {
@@ -60,9 +62,8 @@ public class LobbyManager : MonoBehaviour
 
     void OnUserInvitedToLobby (ulong lobbyID, ulong otherUserID)
     {
-        Debug.Log("Accepting invitation to the lobby " + lobbyID + " from user " + otherUserID);
-        Client.Instance.Lobby.Leave();
-        Client.Instance.Lobby.Join(lobbyID);
+        Debug.Log("Got invitation to the lobby " + lobbyID + " from user " + otherUserID);
+        joinLobbyDialog.ShowDialog(lobbyID, Client.Instance.Friends.Get(otherUserID).Name);
     }
 
     IEnumerator RefreshLobby ()

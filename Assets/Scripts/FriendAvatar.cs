@@ -17,7 +17,12 @@ public class FriendAvatar : MonoBehaviour
 
     public void OnImage(Facepunch.Steamworks.Image image)
     {
-        if (!image.IsError)
+        if (image.IsError)
+        {
+            Debug.Log("Failed to load avatar of user " + steamID + ". Trying again...");
+            Facepunch.Steamworks.Client.Instance.Friends.GetAvatar(Facepunch.Steamworks.Friends.AvatarSize.Large, steamID, OnImage);
+        }
+        else
         {
             Texture2D texture = new Texture2D(image.Width, image.Height);
 
