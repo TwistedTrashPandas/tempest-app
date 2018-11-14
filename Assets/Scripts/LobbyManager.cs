@@ -13,7 +13,7 @@ public class LobbyManager : MonoBehaviour
     public UnityEngine.UI.Text textLobby;
     public UnityEngine.UI.Text textFriends;
 
-    public JoinLobbyDialog joinLobbyDialog;
+    private ulong lobbyIDToJoin;
 
 	// Use this for initialization
 	void Start ()
@@ -24,9 +24,8 @@ public class LobbyManager : MonoBehaviour
             Client.Instance.Lobby.OnLobbyJoined += OnLobbyJoined;
             Client.Instance.Lobby.OnUserInvitedToLobby += OnUserInvitedToLobby;
 
-            // Create a lobby
-            Client.Instance.Lobby.Create(Lobby.Type.FriendsOnly, 2);
-            Client.Instance.Lobby.Name = Client.Instance.Username + "'s Lobby";
+            // Create a lobby that the player is in when the game starts
+            CreateDefaultLobby();
 
             StartCoroutine(RefreshLobby());
         }
@@ -34,6 +33,12 @@ public class LobbyManager : MonoBehaviour
         {
             Debug.LogError("Client instance is null!");
         }
+    }
+
+    void CreateDefaultLobby ()
+    {
+        Client.Instance.Lobby.Create(Lobby.Type.FriendsOnly, 4);
+        Client.Instance.Lobby.Name = Client.Instance.Username + "'s Lobby";
     }
 
     void OnLobbyCreated(bool success)
@@ -56,14 +61,23 @@ public class LobbyManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Failed to join lobby");
+            Debug.LogError("Failed to join lobby. Recreating default lobby...");
+            CreateDefaultLobby();
         }
     }
 
     void OnUserInvitedToLobby (ulong lobbyID, ulong otherUserID)
     {
         Debug.Log("Got invitation to the lobby " + lobbyID + " from user " + otherUserID);
-        joinLobbyDialog.ShowDialog(lobbyID, Client.Instance.Friends.Get(otherUserID).Name);
+        lobbyIDToJoin = lobbyID;
+        string message = "Do you want to accept the invitation to the lobby of " + Client.Instance.Friends.Get(otherUserID).Name + "?";
+        DialogBox.Show(message, AcceptLobbyInvitation, null);
+    }
+
+    public void AcceptLobbyInvitation()
+    {
+        Client.Instance.Lobby.Leave();
+        Client.Instance.Lobby.Join(lobbyIDToJoin);
     }
 
     IEnumerator RefreshLobby ()
@@ -77,16 +91,6 @@ public class LobbyManager : MonoBehaviour
 
             yield return new WaitForSeconds(0.5f);
         }
-    }
-
-    void InstantiateFriendAvatar (SteamFriend friend, Transform parent, bool inviteable)
-    {
-        FriendAvatar tmp = Instantiate(friendPrefab, parent, false).GetComponent<FriendAvatar>();
-        tmp.gameObject.name = friend.Name;
-        tmp.steamID = friend.Id;
-        tmp.buttonInvite.gameObject.SetActive(inviteable);
-
-        Client.Instance.Friends.GetAvatar(Friends.AvatarSize.Large, friend.Id, tmp.OnImage);
     }
 
     void RefreshFriendAvatars ()
@@ -167,5 +171,15 @@ public class LobbyManager : MonoBehaviour
                 Destroy(f.gameObject);
             }
         }
+    }
+
+    void InstantiateFriendAvatar(SteamFriend friend, Transform parent, bool inviteable)
+    {
+        FriendAvatar tmp = Instantiate(friendPrefab, parent, false).GetComponent<FriendAvatar>();
+        tmp.gameObject.name = friend.Name;
+        tmp.steamID = friend.Id;
+        tmp.buttonInvite.gameObject.SetActive(inviteable);
+
+        Client.Instance.Friends.GetAvatar(Friends.AvatarSize.Large, friend.Id, tmp.OnImage);
     }
 }
