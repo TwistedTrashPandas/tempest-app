@@ -7,14 +7,31 @@ public class GameServer : MonoBehaviour
 {
     public float hz = 30;
 
-    public Transform[] sharedCubes;
+    public static GameServer Instance = null;
+    public LinkedList<ServerObject> serverObjects = new LinkedList<ServerObject>();
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Debug.LogError("GameServer cannot have multiple instances!");
+            Destroy(gameObject);
+        }
+    }
 
     void Start()
     {
         Client.Instance.Networking.OnP2PData += OnP2PData;
 
-        // Channel 1 is for messages from the client to the server
-        Client.Instance.Networking.SetListenChannel(1, true);
+        // Listen to all the network messages on different channels that identify this message type
+        foreach (int channel in System.Enum.GetValues(typeof(NetworkMessageType)))
+        {
+            Client.Instance.Networking.SetListenChannel(channel, true);
+        }
 
         StartCoroutine(ServerUpdate());
     }
@@ -23,9 +40,9 @@ public class GameServer : MonoBehaviour
     {
         while (true)
         {
-            foreach (Transform cube in sharedCubes)
+            foreach (ServerObject serverObject in serverObjects)
             {
-                SendCubeTransform(cube);
+                SendMessageServerObject(serverObject);
             }
 
             yield return new WaitForSeconds(1.0f / hz);
@@ -34,28 +51,44 @@ public class GameServer : MonoBehaviour
 
     void OnP2PData(ulong steamID, byte[] data, int dataLength, int channel)
     {
-        if (channel == 1)
+        NetworkMessageType messageType = (NetworkMessageType)channel;
+
+        if (messageType == NetworkMessageType.MessageServerObject)
         {
-            // Client sent a message to me
+            // ...
         }
     }
 
-    public void SendCubeTransform (Transform cube)
+    public void SendMessageServerObject (ServerObject serverObject)
     {
-        string message = cube.GetInstanceID() + "\n"
-            + cube.transform.localPosition.x + "," + cube.transform.localPosition.y + "," + cube.transform.localPosition.z + "\n"
-            + cube.transform.localRotation.x + "," + cube.transform.localRotation.y + "," + cube.transform.localRotation.z + "," + cube.transform.localRotation.w + "\n"
-            + cube.transform.localScale.x + "," + cube.transform.localScale.y + "," + cube.transform.localScale.z;
-
-        byte[] data = System.Text.Encoding.UTF8.GetBytes(message);
-        ulong[] memberIDs = Client.Instance.Lobby.GetMemberIDs();
-
-        foreach (ulong id in memberIDs)
+        if (serverObject.transform.hasChanged)
         {
-            // Channel 0 is for messages from the server to the client
-            if (!Client.Instance.Networking.SendP2PPacket(id, data, data.Length, Networking.SendType.Reliable, 0))
+            SendToAllClients(new MessageServerObject(serverObject), Networking.SendType.Reliable, NetworkMessageType.MessageServerObject);
+            serverObject.transform.hasChanged = false;
+        }
+    }
+
+    public void SendMessageDestroyServerObject (ServerObject serverObject)
+    {
+        SendToAllClients(new MessageDestroyServerObject(serverObject), Networking.SendType.Reliable, NetworkMessageType.MessageDestroyGameObject);
+    }
+
+    public void SendToAllClients<T> (T serializableMessage, Networking.SendType sendType, NetworkMessageType networkMessageType)
+    {
+        if (Client.Instance != null)
+        {
+            string message = JsonUtility.ToJson(serializableMessage);
+            byte[] data = System.Text.Encoding.UTF8.GetBytes(message);
+
+            ulong[] memberIDs = Client.Instance.Lobby.GetMemberIDs();
+
+            foreach (ulong id in memberIDs)
             {
-                Debug.Log("Could not send peer to peer packet to user " + id);
+                // Send the message to the client on the channel of this message type
+                if (!Client.Instance.Networking.SendP2PPacket(id, data, data.Length, sendType, (int)networkMessageType))
+                {
+                    Debug.Log("Could not send peer to peer packet to user " + id);
+                }
             }
         }
     }
