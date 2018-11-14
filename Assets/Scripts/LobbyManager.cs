@@ -35,6 +35,18 @@ public class LobbyManager : MonoBehaviour
         }
     }
 
+    public void Play ()
+    {
+        // Load client scene
+        // Also load server scene if you are the owner of the lobby
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Client");
+
+        if (Client.Instance.Lobby.Owner == Client.Instance.SteamId)
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Server", UnityEngine.SceneManagement.LoadSceneMode.Additive);
+        }
+    }
+
     void CreateDefaultLobby ()
     {
         Client.Instance.Lobby.Create(Lobby.Type.FriendsOnly, 4);
@@ -70,11 +82,11 @@ public class LobbyManager : MonoBehaviour
     {
         Debug.Log("Got invitation to the lobby " + lobbyID + " from user " + otherUserID);
         lobbyIDToJoin = lobbyID;
-        string message = "Do you want to accept the invitation to the lobby of " + Client.Instance.Friends.Get(otherUserID).Name + "?";
+        string message = "Do you want to join " + Client.Instance.Friends.Get(otherUserID).Name + "'s lobby?";
         DialogBox.Show(message, AcceptLobbyInvitation, null);
     }
 
-    public void AcceptLobbyInvitation()
+    void AcceptLobbyInvitation()
     {
         Client.Instance.Lobby.Leave();
         Client.Instance.Lobby.Join(lobbyIDToJoin);
@@ -181,5 +193,15 @@ public class LobbyManager : MonoBehaviour
         tmp.buttonInvite.gameObject.SetActive(inviteable);
 
         Client.Instance.Friends.GetAvatar(Friends.AvatarSize.Large, friend.Id, tmp.OnImage);
+    }
+
+    void OnDestroy()
+    {
+        if (Client.Instance != null)
+        {
+            Client.Instance.Lobby.OnLobbyCreated -= OnLobbyCreated;
+            Client.Instance.Lobby.OnLobbyJoined -= OnLobbyJoined;
+            Client.Instance.Lobby.OnUserInvitedToLobby -= OnUserInvitedToLobby;
+        }
     }
 }

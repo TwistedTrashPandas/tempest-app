@@ -43,8 +43,25 @@ public class ClientManager : MonoBehaviour
             Debug.LogWarning("Couldn't initialize Steam. Make sure that Steam is running.");
         }
 	}
-	
-	void Update()
+
+    void Start()
+    {
+        Client.Instance.Networking.OnIncomingConnection += OnIncomingConnection;
+        Client.Instance.Networking.OnConnectionFailed += OnConnectionFailed;
+    }
+
+    bool OnIncomingConnection(ulong steamID)
+    {
+        Debug.Log("Incoming peer to peer connection from user " + steamID);
+        return true;
+    }
+
+    void OnConnectionFailed(ulong steamID, Networking.SessionError sessionError)
+    {
+        Debug.Log("Connection failed with user " + steamID + " " + sessionError);
+    }
+
+    void Update()
     {
         if (client != null)
         {
@@ -58,6 +75,9 @@ public class ClientManager : MonoBehaviour
     {
         if (client != null)
         {
+            Client.Instance.Networking.OnIncomingConnection -= OnIncomingConnection;
+            Client.Instance.Networking.OnConnectionFailed -= OnConnectionFailed;
+
             client.Dispose();
             client = null;
         }

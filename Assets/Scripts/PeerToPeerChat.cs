@@ -3,29 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using Facepunch.Steamworks;
 
-public class PeerToPeerManager : MonoBehaviour
+public class PeerToPeerChat : MonoBehaviour
 {
     public UnityEngine.UI.InputField inputFieldChat;
     public UnityEngine.UI.Text textChat;
 
 	void Start ()
     {
-        Client.Instance.Networking.OnIncomingConnection = OnIncomingConnection;
-        Client.Instance.Networking.OnConnectionFailed += OnConnectionFailed;
-        Client.Instance.Networking.OnP2PData = OnRecievedP2PData;
-
+        Client.Instance.Networking.OnP2PData += OnRecievedP2PData;
         Client.Instance.Networking.SetListenChannel(0, true);
-    }
-
-    bool OnIncomingConnection (ulong steamID)
-    {
-        Debug.Log("Incoming peer to peer connection from user " + steamID);
-        return true;
-    }
-
-    void OnConnectionFailed (ulong steamID, Networking.SessionError sessionError)
-    {
-        Debug.Log("Connection failed with user " + steamID + " " + sessionError);
     }
 
     void OnRecievedP2PData(ulong steamID, byte[] data, int dataLength, int channel)
@@ -52,5 +38,13 @@ public class PeerToPeerManager : MonoBehaviour
         inputFieldChat.ActivateInputField();
         inputFieldChat.Select();
         inputFieldChat.placeholder.gameObject.SetActive(false);
+    }
+
+    void OnDestroy()
+    {
+        if (Client.Instance != null)
+        {
+            Client.Instance.Networking.OnP2PData -= OnRecievedP2PData;
+        }
     }
 }
