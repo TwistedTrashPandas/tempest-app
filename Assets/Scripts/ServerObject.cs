@@ -23,8 +23,11 @@ public class ServerObject : MonoBehaviour
 
     void OnDestroy()
     {
-        // Send destroy message
-        GameServer.Instance.serverObjects.Remove(this);
-        GameServer.Instance.SendMessageDestroyServerObject(this);
+        if (GameServer.Instance != null)
+        {
+            // Send destroy message
+            GameServer.Instance.serverObjects.Remove(this);
+            GameServer.Instance.SendMessageDestroyServerObject(this);
+        }
     }
 }
