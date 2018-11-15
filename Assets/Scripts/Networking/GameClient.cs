@@ -34,7 +34,7 @@ public class GameClient : MonoBehaviour
                 // Make sure that the parent exists already if it has one
                 if (!messageServerObject.hasParent || objectsFromServer.ContainsKey(messageServerObject.parentInstanceID))
                 {
-                    GameObject instance = Instantiate(Resources.Load<GameObject>(messageServerObject.resourceName));
+                    GameObject instance = Instantiate(Resources.Load<GameObject>("ServerObjects/" + messageServerObject.resourceName));
                     objectsFromServer[messageServerObject.instanceID] = instance;
                     instance.layer = LayerMask.NameToLayer("Client");
                     DestroyImmediate(instance.GetComponent<ServerObject>());
@@ -44,7 +44,7 @@ public class GameClient : MonoBehaviour
             Transform tmp = objectsFromServer[messageServerObject.instanceID].transform;
 
             // Update values
-            tmp.name = messageServerObject.name + " (" + messageServerObject.instanceID + ")";
+            tmp.name = messageServerObject.name + "\t\t(" + messageServerObject.instanceID + ")";
             tmp.localPosition = messageServerObject.localPosition;
             tmp.localRotation = messageServerObject.localRotation;
             tmp.localScale = messageServerObject.localScale;
