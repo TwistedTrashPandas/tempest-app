@@ -8,15 +8,22 @@ public class FriendAvatar : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 {
     public ulong steamID;
 
-    public Image image;
-    public Button buttonInvite;
-
+    public Image avatar;
     public Image imageNameBackground;
+    public Image imageReadyOutline;
+    public Button buttonInvite;
     public Text textName;
 
     void Start ()
     {
         textName.text = gameObject.name;
+    }
+
+    void Update ()
+    {
+        bool ready = false;
+        bool.TryParse(Facepunch.Steamworks.Client.Instance.Lobby.GetMemberData(steamID, "Ready"), out ready);
+        imageReadyOutline.color = ready ? Color.green : Color.red;
     }
 
     public void Invite ()
@@ -46,7 +53,7 @@ public class FriendAvatar : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
             texture.Apply();
 
-            this.image.sprite = Sprite.Create(texture, new Rect(0, 0, image.Width, image.Height), Vector2.zero);
+            avatar.sprite = Sprite.Create(texture, new Rect(0, 0, image.Width, image.Height), Vector2.zero);
         }
     }
 

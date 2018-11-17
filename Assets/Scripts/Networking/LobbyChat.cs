@@ -10,37 +10,17 @@ public class LobbyChat : MonoBehaviour
 
 	void Start ()
     {
-        Client.Instance.Networking.OnP2PData += OnRecievedP2PData;
+        ClientManager.Instance.networkMessageReceiveEvents[NetworkMessageType.MessageLobbyChat] += OnMessageLobbyChat;
     }
 
-    void OnRecievedP2PData(ulong steamID, byte[] data, int dataLength, int channel)
+    void OnMessageLobbyChat(string message, ulong steamID)
     {
-        NetworkMessageType messageType = (NetworkMessageType)channel;
-        string message = System.Text.Encoding.UTF8.GetString(data, 0, dataLength);
-
-        if (messageType == NetworkMessageType.MessageLobbyChat)
-        {
-            textChat.text += "<color=grey>[" + Client.Instance.Friends.Get(steamID).Name + "]: </color>" + message + "\n";
-        }
-        else
-        {
-            Debug.Log("Ignoring " + messageType + ":" + message);
-        }
+        textChat.text += "<color=grey>[" + Client.Instance.Friends.Get(steamID).Name + "]: </color>" + message + "\n";
     }
 
     public void SendChatMessage ()
     {
-        byte[] data = System.Text.Encoding.UTF8.GetBytes(inputFieldChat.text);
-        ulong[] memberIDs = Client.Instance.Lobby.GetMemberIDs();
-
-        foreach (ulong id in memberIDs)
-        {
-            Debug.Log("Sending " + inputFieldChat.text + " to " + id);
-            if (!Client.Instance.Networking.SendP2PPacket(id, data, data.Length))
-            {
-                Debug.Log("Could not send peer to peer packet to user " + id);
-            }
-        }
+        ClientManager.Instance.SendToAllClients(inputFieldChat.text, NetworkMessageType.MessageLobbyChat, Networking.SendType.Reliable);
 
         inputFieldChat.text = "";
         inputFieldChat.ActivateInputField();
@@ -50,9 +30,6 @@ public class LobbyChat : MonoBehaviour
 
     void OnDestroy()
     {
-        if (Client.Instance != null)
-        {
-            Client.Instance.Networking.OnP2PData -= OnRecievedP2PData;
-        }
+        ClientManager.Instance.networkMessageReceiveEvents[NetworkMessageType.MessageLobbyChat] -= OnMessageLobbyChat;
     }
 }

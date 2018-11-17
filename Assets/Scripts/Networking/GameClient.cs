@@ -10,71 +10,55 @@ public class GameClient : MonoBehaviour
 
     void Start()
     {
-        Client.Instance.Networking.OnP2PData += OnP2PData;
+        ClientManager.Instance.networkMessageReceiveEvents[NetworkMessageType.MessageServerObject] += OnMessageServerObject;
+        ClientManager.Instance.networkMessageReceiveEvents[NetworkMessageType.MessageDestroyGameObject] += OnMessageDestroyGameObject;
     }
 
-    void OnP2PData(ulong steamID, byte[] data, int dataLength, int channel)
+    void OnMessageServerObject(string message, ulong steamID)
     {
-        NetworkMessageType messageType = (NetworkMessageType)channel;
-        string message = System.Text.Encoding.UTF8.GetString(data, 0, dataLength);
+        MessageServerObject messageServerObject = JsonUtility.FromJson<MessageServerObject>(message);
 
-        if (messageType == NetworkMessageType.MessageServerObject)
+        // Create a new object if it doesn't exist yet
+        if (!objectsFromServer.ContainsKey(messageServerObject.instanceID))
         {
-            MessageServerObject messageServerObject = JsonUtility.FromJson<MessageServerObject>(message);
-
-            // Create a new object if it doesn't exist yet
-            if (!objectsFromServer.ContainsKey(messageServerObject.instanceID))
+            // Make sure that the parent exists already if it has one
+            if (!messageServerObject.hasParent || objectsFromServer.ContainsKey(messageServerObject.parentInstanceID))
             {
-                // Make sure that the parent exists already if it has one
-                if (!messageServerObject.hasParent || objectsFromServer.ContainsKey(messageServerObject.parentInstanceID))
-                {
-                    GameObject instance = Instantiate(Resources.Load<GameObject>("ServerObjects/" + messageServerObject.resourceName));
-                    objectsFromServer[messageServerObject.instanceID] = instance;
-                    instance.layer = LayerMask.NameToLayer("Client");
-                    DestroyImmediate(instance.GetComponent<ServerObject>());
-                }
-            }
-
-            Transform tmp = objectsFromServer[messageServerObject.instanceID].transform;
-
-            // Update values
-            tmp.name = messageServerObject.name + "\t\t(" + messageServerObject.instanceID + ")";
-            tmp.localPosition = messageServerObject.localPosition;
-            tmp.localRotation = messageServerObject.localRotation;
-            tmp.localScale = messageServerObject.localScale;
-
-            if (messageServerObject.hasParent && objectsFromServer.ContainsKey(messageServerObject.parentInstanceID))
-            {
-                tmp.SetParent(objectsFromServer[messageServerObject.parentInstanceID].transform, false);
+                GameObject instance = Instantiate(Resources.Load<GameObject>("ServerObjects/" + messageServerObject.resourceName));
+                objectsFromServer[messageServerObject.instanceID] = instance;
+                instance.layer = LayerMask.NameToLayer("Client");
+                DestroyImmediate(instance.GetComponent<ServerObject>());
             }
         }
-        else if (messageType == NetworkMessageType.MessageDestroyGameObject)
-        {
-            MessageDestroyServerObject destroyTransformMessage = JsonUtility.FromJson<MessageDestroyServerObject>(message);
 
-            if (objectsFromServer.ContainsKey(destroyTransformMessage.instanceID))
-            {
-                Destroy(objectsFromServer[destroyTransformMessage.instanceID].gameObject);
-                objectsFromServer.Remove(destroyTransformMessage.instanceID);
-            }
+        Transform tmp = objectsFromServer[messageServerObject.instanceID].transform;
+
+        // Update values
+        tmp.name = messageServerObject.name + "\t\t(" + messageServerObject.instanceID + ")";
+        tmp.localPosition = messageServerObject.localPosition;
+        tmp.localRotation = messageServerObject.localRotation;
+        tmp.localScale = messageServerObject.localScale;
+
+        if (messageServerObject.hasParent && objectsFromServer.ContainsKey(messageServerObject.parentInstanceID))
+        {
+            tmp.SetParent(objectsFromServer[messageServerObject.parentInstanceID].transform, false);
         }
     }
 
-    public void SendMessage()
+    void OnMessageDestroyGameObject(string message, ulong steamID)
     {
-        /*
-        if (!Client.Instance.Networking.SendP2PPacket(id, data, data.Length, Networking.SendType.Reliable, NetworkMessage.?))
+        MessageDestroyServerObject destroyTransformMessage = JsonUtility.FromJson<MessageDestroyServerObject>(message);
+
+        if (objectsFromServer.ContainsKey(destroyTransformMessage.instanceID))
         {
-            Debug.Log("Could not send peer to peer packet to user " + id);
+            Destroy(objectsFromServer[destroyTransformMessage.instanceID].gameObject);
+            objectsFromServer.Remove(destroyTransformMessage.instanceID);
         }
-        */
     }
 
     void OnDestroy()
     {
-        if (Client.Instance != null)
-        {
-            Client.Instance.Networking.OnP2PData -= OnP2PData;
-        }
+        ClientManager.Instance.networkMessageReceiveEvents[NetworkMessageType.MessageServerObject] -= OnMessageServerObject;
+        ClientManager.Instance.networkMessageReceiveEvents[NetworkMessageType.MessageDestroyGameObject] -= OnMessageDestroyGameObject;
     }
 }

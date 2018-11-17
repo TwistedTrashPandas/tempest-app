@@ -12,10 +12,11 @@ public class LobbyManager : MonoBehaviour
 
     public UnityEngine.UI.Text textLobby;
     public UnityEngine.UI.Text textFriends;
+    public UnityEngine.UI.Button readyButton;
 
     private ulong lobbyIDToJoin;
+    private bool ready = false;
 
-	// Use this for initialization
 	void Start ()
     {
         if (Client.Instance != null)
@@ -33,18 +34,50 @@ public class LobbyManager : MonoBehaviour
         {
             Debug.LogError("Client instance is null!");
         }
+
+        Client.Instance.Lobby.SetMemberData("Ready", ready.ToString());
     }
 
-    public void Play ()
+    void Update()
     {
-        // Load client scene
-        // Also load server scene if you are the owner of the lobby
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Client");
+        ulong[] memberSteamIDs = Client.Instance.Lobby.GetMemberIDs();
 
-        if (Client.Instance.Lobby.Owner == Client.Instance.SteamId)
+        if (memberSteamIDs.Length > 0)
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene("Server", UnityEngine.SceneManagement.LoadSceneMode.Additive);
+            bool everyoneReady = true;
+
+            foreach (ulong steamID in memberSteamIDs)
+            {
+                bool memberReady = false;
+                bool.TryParse(Client.Instance.Lobby.GetMemberData(steamID, "Ready"), out memberReady);
+
+                if (!memberReady)
+                {
+                    everyoneReady = false;
+                    break;
+                }
+            }
+
+            if (everyoneReady)
+            {
+                // Load client scene
+                UnityEngine.SceneManagement.SceneManager.LoadScene("Client");
+
+                // Also load server scene if you are the owner of the lobby
+                if (Client.Instance.Lobby.Owner == Client.Instance.SteamId)
+                {
+                    UnityEngine.SceneManagement.SceneManager.LoadScene("Server", UnityEngine.SceneManagement.LoadSceneMode.Additive);
+                }
+            }
         }
+    }
+
+    public void Ready ()
+    {
+        ready = !ready;
+        Client.Instance.Lobby.SetMemberData("Ready", ready.ToString());
+        readyButton.GetComponent<UnityEngine.UI.Image>().color = ready ? new UnityEngine.Color(0, 0.25f, 0) : new UnityEngine.Color(0.25f, 0, 0);
+        readyButton.GetComponentInChildren<UnityEngine.UI.Text>().text = ready ? "Ready" : "Not Ready";
     }
 
     void CreateDefaultLobby ()
@@ -166,9 +199,9 @@ public class LobbyManager : MonoBehaviour
         {
             if (!lobbyMembersToStay.ContainsKey(steamID))
             {
-                // A new lobby member joined
+                // A new lobby member joined, activate ready outline
                 SteamFriend friend = Client.Instance.Friends.Get(steamID);
-                InstantiateFriendAvatar(friend, layoutLobby, false);
+                InstantiateFriendAvatar(friend, layoutLobby, false).imageReadyOutline.gameObject.SetActive(true);
             }
 
             // This lobby member should not be removed later
@@ -185,7 +218,7 @@ public class LobbyManager : MonoBehaviour
         }
     }
 
-    void InstantiateFriendAvatar(SteamFriend friend, Transform parent, bool inviteable)
+    FriendAvatar InstantiateFriendAvatar(SteamFriend friend, Transform parent, bool inviteable)
     {
         FriendAvatar tmp = Instantiate(friendPrefab, parent, false).GetComponent<FriendAvatar>();
         tmp.gameObject.name = friend.Name;
@@ -193,6 +226,8 @@ public class LobbyManager : MonoBehaviour
         tmp.buttonInvite.gameObject.SetActive(inviteable);
 
         Client.Instance.Friends.GetAvatar(Friends.AvatarSize.Large, friend.Id, tmp.OnImage);
+
+        return tmp;
     }
 
     void OnDestroy()
