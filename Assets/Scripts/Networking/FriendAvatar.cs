@@ -2,13 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class FriendAvatar : MonoBehaviour
+public class FriendAvatar : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public ulong steamID;
 
     public Image image;
     public Button buttonInvite;
+
+    public Image imageNameBackground;
+    public Text textName;
+
+    void Start ()
+    {
+        textName.text = gameObject.name;
+    }
 
     public void Invite ()
     {
@@ -39,5 +48,15 @@ public class FriendAvatar : MonoBehaviour
 
             this.image.sprite = Sprite.Create(texture, new Rect(0, 0, image.Width, image.Height), Vector2.zero);
         }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        imageNameBackground.gameObject.SetActive(true);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        imageNameBackground.gameObject.SetActive(false);
     }
 }

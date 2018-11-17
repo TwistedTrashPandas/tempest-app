@@ -82,7 +82,7 @@ public class LobbyManager : MonoBehaviour
     {
         Debug.Log("Got invitation to the lobby " + lobbyID + " from user " + otherUserID);
         lobbyIDToJoin = lobbyID;
-        string message = "Do you want to join " + Client.Instance.Friends.Get(otherUserID).Name + "'s lobby?";
+        string message = "Player " + Client.Instance.Friends.Get(otherUserID).Name + " invited you to a lobby.\nDo you want to join?";
         DialogBox.Show(message, AcceptLobbyInvitation, null);
     }
 

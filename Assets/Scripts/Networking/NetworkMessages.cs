@@ -4,6 +4,7 @@ using UnityEngine;
 
 public enum NetworkMessageType
 {
+    MessageLobbyChat,
     MessageServerObject,
     MessageDestroyGameObject
 };

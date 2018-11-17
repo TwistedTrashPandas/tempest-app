@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Facepunch.Steamworks;
 
-public class PeerToPeerChat : MonoBehaviour
+public class LobbyChat : MonoBehaviour
 {
     public UnityEngine.UI.InputField inputFieldChat;
     public UnityEngine.UI.Text textChat;
@@ -11,13 +11,21 @@ public class PeerToPeerChat : MonoBehaviour
 	void Start ()
     {
         Client.Instance.Networking.OnP2PData += OnRecievedP2PData;
-        Client.Instance.Networking.SetListenChannel(0, true);
     }
 
     void OnRecievedP2PData(ulong steamID, byte[] data, int dataLength, int channel)
     {
+        NetworkMessageType messageType = (NetworkMessageType)channel;
         string message = System.Text.Encoding.UTF8.GetString(data, 0, dataLength);
-        textChat.text += "<color=grey>[" + Client.Instance.Friends.Get(steamID).Name + "]: </color>" + message + "\n";
+
+        if (messageType == NetworkMessageType.MessageLobbyChat)
+        {
+            textChat.text += "<color=grey>[" + Client.Instance.Friends.Get(steamID).Name + "]: </color>" + message + "\n";
+        }
+        else
+        {
+            Debug.Log("Ignoring " + messageType + ":" + message);
+        }
     }
 
     public void SendChatMessage ()

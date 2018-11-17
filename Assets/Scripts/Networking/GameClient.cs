@@ -11,12 +11,6 @@ public class GameClient : MonoBehaviour
     void Start()
     {
         Client.Instance.Networking.OnP2PData += OnP2PData;
-
-        // Listen to all the network messages on different channels that identify this message type
-        foreach (int channel in System.Enum.GetValues(typeof(NetworkMessageType)))
-        {
-            Client.Instance.Networking.SetListenChannel(channel, true);
-        }
     }
 
     void OnP2PData(ulong steamID, byte[] data, int dataLength, int channel)

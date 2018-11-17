@@ -48,6 +48,12 @@ public class ClientManager : MonoBehaviour
     {
         Client.Instance.Networking.OnIncomingConnection += OnIncomingConnection;
         Client.Instance.Networking.OnConnectionFailed += OnConnectionFailed;
+
+        // Listen to all the network messages on different channels that identify this message type
+        foreach (int channel in System.Enum.GetValues(typeof(NetworkMessageType)))
+        {
+            Client.Instance.Networking.SetListenChannel(channel, true);
+        }
     }
 
     bool OnIncomingConnection(ulong steamID)
