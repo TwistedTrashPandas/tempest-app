@@ -35,7 +35,7 @@ public class FriendAvatar : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     {
         if (image.IsError)
         {
-            Debug.Log("Failed to load avatar of user " + steamID + ". Trying again...");
+            //Debug.Log("Failed to load avatar of user " + steamID + ". Trying again...");
             Facepunch.Steamworks.Client.Instance.Friends.GetAvatar(Facepunch.Steamworks.Friends.AvatarSize.Large, steamID, OnImage);
         }
         else

@@ -5,6 +5,7 @@ using UnityEngine;
 public class ServerObject : MonoBehaviour
 {
     public string resourceName = "";
+    public int serverID = 0;
 
 	void Start ()
     {
@@ -15,6 +16,9 @@ public class ServerObject : MonoBehaviour
             {
                 Debug.LogError("Cannot find resource \"" + resourceName + "\" of gameobject " + name);
             }
+
+            // Set server ID
+            serverID = transform.GetInstanceID();
 
             // Register to game server
             GameServer.Instance.serverObjects.AddLast(this);

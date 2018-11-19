@@ -25,6 +25,8 @@ public class LobbyManager : MonoBehaviour
             Client.Instance.Lobby.OnLobbyJoined += OnLobbyJoined;
             Client.Instance.Lobby.OnUserInvitedToLobby += OnUserInvitedToLobby;
 
+            ClientManager.Instance.clientMessageEvents[NetworkMessageType.LobbyStartGame] += OnMessageLobbyStartGame;
+
             // Create a lobby that the player is in when the game starts
             CreateDefaultLobby();
 
@@ -36,39 +38,47 @@ public class LobbyManager : MonoBehaviour
         }
 
         Client.Instance.Lobby.SetMemberData("Ready", ready.ToString());
+        StartCoroutine(CheckForEveryoneReady());
     }
 
-    void Update()
+    IEnumerator CheckForEveryoneReady ()
     {
-        ulong[] memberSteamIDs = Client.Instance.Lobby.GetMemberIDs();
+        // Only the lobby owner checks if everyone is ready and then sends a message to everyone to start the game
+        bool gameStarted = false;
 
-        if (memberSteamIDs.Length > 0)
+        while (!gameStarted)
         {
-            bool everyoneReady = true;
-
-            foreach (ulong steamID in memberSteamIDs)
+            // Always check this because the lobby owner could have changed
+            if (Client.Instance.SteamId == Client.Instance.Lobby.Owner)
             {
-                bool memberReady = false;
-                bool.TryParse(Client.Instance.Lobby.GetMemberData(steamID, "Ready"), out memberReady);
+                ulong[] memberSteamIDs = Client.Instance.Lobby.GetMemberIDs();
 
-                if (!memberReady)
+                if (memberSteamIDs.Length > 0)
                 {
-                    everyoneReady = false;
-                    break;
+                    bool everyoneReady = true;
+
+                    foreach (ulong steamID in memberSteamIDs)
+                    {
+                        bool memberReady = false;
+                        bool.TryParse(Client.Instance.Lobby.GetMemberData(steamID, "Ready"), out memberReady);
+
+                        if (!memberReady)
+                        {
+                            everyoneReady = false;
+                            break;
+                        }
+                    }
+
+                    if (everyoneReady)
+                    {
+                        // Send the game start message only once
+                        ClientManager.Instance.SendToAllClients("Start Game", NetworkMessageType.LobbyStartGame, Networking.SendType.Reliable);
+                        gameStarted = true;
+                    }
                 }
             }
 
-            if (everyoneReady)
-            {
-                // Load client scene
-                UnityEngine.SceneManagement.SceneManager.LoadScene("Client");
-
-                // Also load server scene if you are the owner of the lobby
-                if (Client.Instance.Lobby.Owner == Client.Instance.SteamId)
-                {
-                    UnityEngine.SceneManagement.SceneManager.LoadScene("Server", UnityEngine.SceneManagement.LoadSceneMode.Additive);
-                }
-            }
+            yield return new WaitForSeconds(0.5f);
         }
     }
 
@@ -84,6 +94,18 @@ public class LobbyManager : MonoBehaviour
     {
         Client.Instance.Lobby.Create(Lobby.Type.FriendsOnly, 4);
         Client.Instance.Lobby.Name = Client.Instance.Username + "'s Lobby";
+    }
+
+    void OnMessageLobbyStartGame(string message, ulong steamID)
+    {
+        // Load client scene
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Client");
+
+        // Also load server scene if you are the owner of the lobby
+        if (Client.Instance.Lobby.Owner == Client.Instance.SteamId)
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Server", UnityEngine.SceneManagement.LoadSceneMode.Additive);
+        }
     }
 
     void OnLobbyCreated(bool success)
@@ -237,6 +259,8 @@ public class LobbyManager : MonoBehaviour
             Client.Instance.Lobby.OnLobbyCreated -= OnLobbyCreated;
             Client.Instance.Lobby.OnLobbyJoined -= OnLobbyJoined;
             Client.Instance.Lobby.OnUserInvitedToLobby -= OnUserInvitedToLobby;
+
+            ClientManager.Instance.clientMessageEvents[NetworkMessageType.LobbyStartGame] -= OnMessageLobbyStartGame;
         }
     }
 }

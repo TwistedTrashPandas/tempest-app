@@ -14,13 +14,15 @@ public class ClientManager : MonoBehaviour
 
     // The app id should be 480 for testing purposes
     public uint appId = 480;
-    public bool debugIncomingNetworkMessages = false;
-    public bool debugOutgoingNetworkMessages = false;
+    public bool debugClientMessages = false;
+    public bool debugServerMessages = false;
 
     // Dynamically let other classes subscribe to these events
-    public Dictionary<NetworkMessageType, System.Action<string, ulong>> networkMessageReceiveEvents;
+    public Dictionary<NetworkMessageType, System.Action<string, ulong>> clientMessageEvents;
+    public Dictionary<NetworkMessageType, System.Action<string, ulong>> serverMessageEvents;
 
     private Client client;
+    private int serverMessagesOffset = 0;
 
     void Awake ()
     {
@@ -61,13 +63,22 @@ public class ClientManager : MonoBehaviour
         }
 
         // Create all the actions for incoming network messages
-        networkMessageReceiveEvents = new Dictionary<NetworkMessageType, System.Action<string, ulong>>();
+        clientMessageEvents = new Dictionary<NetworkMessageType, System.Action<string, ulong>>();
+        serverMessageEvents = new Dictionary<NetworkMessageType, System.Action<string, ulong>>();
+
+        System.Array types = System.Enum.GetValues(typeof(NetworkMessageType));
+        serverMessagesOffset = types.Length;
 
         // Listen to all the network messages on different channels - each represents a message type
-        foreach (NetworkMessageType type in System.Enum.GetValues(typeof(NetworkMessageType)))
+        foreach (NetworkMessageType type in types)
         {
+            // Listen to messages for the client
             client.Networking.SetListenChannel((int)type, true);
-            networkMessageReceiveEvents[type] = new System.Action<string, ulong>(DefaultNetworkMessageReceiveAction);
+            clientMessageEvents[type] = new System.Action<string, ulong>(DebugClientMessageEvent);
+
+            // Listen to all messages for the server with an offset -> know which messages are for the server
+            client.Networking.SetListenChannel(serverMessagesOffset + (int)type, true);
+            serverMessageEvents[type] = new System.Action<string, ulong>(DebugServerMessageEvent);
         }
     }
 
@@ -88,11 +99,19 @@ public class ClientManager : MonoBehaviour
         }
     }
 
-    void DefaultNetworkMessageReceiveAction(string message, ulong steamID)
+    void DebugClientMessageEvent(string message, ulong steamID)
     {
-        if (debugIncomingNetworkMessages)
+        if (debugClientMessages)
         {
-            Debug.Log("Incoming network message from " + steamID + ":\n" + message);
+            Debug.Log("Client received message from " + steamID + ":\n" + message);
+        }
+    }
+
+    void DebugServerMessageEvent(string message, ulong steamID)
+    {
+        if (debugServerMessages)
+        {
+            Debug.Log("Server received message from " + steamID + ":\n" + message);
         }
     }
 
@@ -110,32 +129,41 @@ public class ClientManager : MonoBehaviour
     // This is where all the messages are received and delegated to the respective events
     void OnP2PData(ulong steamID, byte[] data, int dataLength, int channel)
     {
-        NetworkMessageType messageType = (NetworkMessageType)channel;
         string message = System.Text.Encoding.UTF8.GetString(data, 0, dataLength);
 
-        networkMessageReceiveEvents[messageType].Invoke(message, steamID);
+        if (channel < serverMessagesOffset)
+        {
+            // The message is for the client
+            NetworkMessageType messageType = (NetworkMessageType)channel;
+            clientMessageEvents[messageType].Invoke(message, steamID);
+        }
+        else
+        {
+            // The message is for the server (which is running on this client)
+            NetworkMessageType messageType = (NetworkMessageType)(channel - serverMessagesOffset);
+            serverMessageEvents[messageType].Invoke(message, steamID);
+        }
     }
 
-    private void SendToClient (ulong steamID, byte[] data, NetworkMessageType networkMessageType, Networking.SendType sendType)
+    private void SendToClient (ulong steamID, byte[] data, int channel, Networking.SendType sendType)
     {
         if (client != null)
         {
             // Send the message to the client on the channel of this message type
-            if (!client.Networking.SendP2PPacket(steamID, data, data.Length, sendType, (int)networkMessageType))
+            if (!client.Networking.SendP2PPacket(steamID, data, data.Length, sendType, channel))
             {
                 Debug.Log("Could not send peer to peer packet to user " + steamID);
+            }
+            else if (debugClientMessages)
+            {
+                Debug.Log("Sending message to " + steamID + ":\n" + System.Text.Encoding.UTF8.GetString(data));
             }
         }
     }
 
     public void SendToClient(ulong steamID, string message, NetworkMessageType networkMessageType, Networking.SendType sendType)
     {
-        if (debugOutgoingNetworkMessages)
-        {
-            Debug.Log("Sending message to " + steamID + ":\n" + message);
-        }
-
-        SendToClient(steamID, System.Text.Encoding.UTF8.GetBytes(message), networkMessageType, sendType);
+        SendToClient(steamID, System.Text.Encoding.UTF8.GetBytes(message), (int)networkMessageType, sendType);
     }
 
     public void SendToAllClients(string message, NetworkMessageType networkMessageType, Networking.SendType sendType)
@@ -147,14 +175,16 @@ public class ClientManager : MonoBehaviour
 
             foreach (ulong steamID in lobbyMemberIDs)
             {
-                if (debugOutgoingNetworkMessages)
-                {
-                    Debug.Log("Sending message to " + steamID + ":\n" + message);
-                }
-
-                SendToClient(steamID, data, networkMessageType, sendType);
+                SendToClient(steamID, data, (int)networkMessageType, sendType);
             }
         }
+    }
+
+    public void SendToServer(string message, NetworkMessageType networkMessageType, Networking.SendType sendType)
+    {
+        // Messages for the server are sent on a different channel than messages for a client
+        // This way the client knows if the incoming message is for him as a client or him as a server
+        SendToClient(client.Lobby.Owner, System.Text.Encoding.UTF8.GetBytes(message), serverMessagesOffset + (int)networkMessageType, sendType);
     }
 
     void OnDestroy()

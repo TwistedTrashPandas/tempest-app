@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Facepunch.Steamworks;
+using System;
 
 public class LobbyChat : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class LobbyChat : MonoBehaviour
 
 	void Start ()
     {
-        ClientManager.Instance.networkMessageReceiveEvents[NetworkMessageType.MessageLobbyChat] += OnMessageLobbyChat;
+        ClientManager.Instance.clientMessageEvents[NetworkMessageType.LobbyChat] += OnMessageLobbyChat;
     }
 
     void OnMessageLobbyChat(string message, ulong steamID)
@@ -20,7 +21,7 @@ public class LobbyChat : MonoBehaviour
 
     public void SendChatMessage ()
     {
-        ClientManager.Instance.SendToAllClients(inputFieldChat.text, NetworkMessageType.MessageLobbyChat, Networking.SendType.Reliable);
+        ClientManager.Instance.SendToAllClients(inputFieldChat.text, NetworkMessageType.LobbyChat, Networking.SendType.Reliable);
 
         inputFieldChat.text = "";
         inputFieldChat.ActivateInputField();
@@ -30,6 +31,6 @@ public class LobbyChat : MonoBehaviour
 
     void OnDestroy()
     {
-        ClientManager.Instance.networkMessageReceiveEvents[NetworkMessageType.MessageLobbyChat] -= OnMessageLobbyChat;
+        ClientManager.Instance.clientMessageEvents[NetworkMessageType.LobbyChat] -= OnMessageLobbyChat;
     }
 }

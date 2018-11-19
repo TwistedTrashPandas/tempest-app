@@ -10,8 +10,17 @@ public class GameClient : MonoBehaviour
 
     void Start()
     {
-        ClientManager.Instance.networkMessageReceiveEvents[NetworkMessageType.MessageServerObject] += OnMessageServerObject;
-        ClientManager.Instance.networkMessageReceiveEvents[NetworkMessageType.MessageDestroyGameObject] += OnMessageDestroyGameObject;
+        ClientManager.Instance.clientMessageEvents[NetworkMessageType.ServerObject] += OnMessageServerObject;
+        ClientManager.Instance.clientMessageEvents[NetworkMessageType.DestroyGameObject] += OnMessageDestroyGameObject;
+        ClientManager.Instance.clientMessageEvents[NetworkMessageType.PushAllRigidbodiesUp] += OnMessagePushAllRigidbodiesUp;
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            ClientManager.Instance.SendToServer("Server, push all objects up!", NetworkMessageType.PushAllRigidbodiesUp, Networking.SendType.Reliable);
+        }
     }
 
     void OnMessageServerObject(string message, ulong steamID)
@@ -24,10 +33,12 @@ public class GameClient : MonoBehaviour
             // Make sure that the parent exists already if it has one
             if (!messageServerObject.hasParent || objectsFromServer.ContainsKey(messageServerObject.parentInstanceID))
             {
-                GameObject instance = Instantiate(Resources.Load<GameObject>("ServerObjects/" + messageServerObject.resourceName));
-                objectsFromServer[messageServerObject.instanceID] = instance;
-                instance.layer = LayerMask.NameToLayer("Client");
-                DestroyImmediate(instance.GetComponent<ServerObject>());
+                GameObject obj = Instantiate(Resources.Load<GameObject>("ServerObjects/" + messageServerObject.resourceName));
+                objectsFromServer[messageServerObject.instanceID] = obj;
+
+                // Overwrite the layer so that the server camera does not see this object as well
+                obj.layer = LayerMask.NameToLayer("Client");
+                obj.GetComponent<ServerObject>().serverID = messageServerObject.instanceID;
             }
         }
 
@@ -56,9 +67,15 @@ public class GameClient : MonoBehaviour
         }
     }
 
+    void OnMessagePushAllRigidbodiesUp(string message, ulong steamID)
+    {
+        Debug.Log("Client received: " + message);
+    }
+
     void OnDestroy()
     {
-        ClientManager.Instance.networkMessageReceiveEvents[NetworkMessageType.MessageServerObject] -= OnMessageServerObject;
-        ClientManager.Instance.networkMessageReceiveEvents[NetworkMessageType.MessageDestroyGameObject] -= OnMessageDestroyGameObject;
+        ClientManager.Instance.clientMessageEvents[NetworkMessageType.ServerObject] -= OnMessageServerObject;
+        ClientManager.Instance.clientMessageEvents[NetworkMessageType.DestroyGameObject] -= OnMessageDestroyGameObject;
+        ClientManager.Instance.clientMessageEvents[NetworkMessageType.PushAllRigidbodiesUp] -= OnMessagePushAllRigidbodiesUp;
     }
 }

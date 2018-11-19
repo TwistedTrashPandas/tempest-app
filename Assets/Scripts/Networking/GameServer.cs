@@ -5,7 +5,7 @@ using Facepunch.Steamworks;
 
 public class GameServer : MonoBehaviour
 {
-    public float hz = 30;
+    public float hz = 60;
 
     public static GameServer Instance = null;
     public LinkedList<ServerObject> serverObjects = new LinkedList<ServerObject>();
@@ -25,8 +25,24 @@ public class GameServer : MonoBehaviour
 
     void Start()
     {
-        // TODO: subscribe to network events from the ClientManager
+        ClientManager.Instance.serverMessageEvents[NetworkMessageType.PushAllRigidbodiesUp] += OnMessagePushAllRigidbodiesUp;
+
         StartCoroutine(ServerUpdate());
+    }
+
+    void OnMessagePushAllRigidbodiesUp(string message, ulong steamID)
+    {
+        Debug.Log("Server received: " + message);
+
+        Rigidbody[] rigidbodies = FindObjectsOfType<Rigidbody>();
+
+        foreach (Rigidbody r in rigidbodies)
+        {
+            r.AddForce(new Vector3(0, Random.Range(2, 10), 0), ForceMode.Impulse);
+            r.AddTorque(new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), Random.Range(-1, 1)));
+        }
+
+        ClientManager.Instance.SendToAllClients("Client, I pushed " + rigidbodies.Length + " objects up like you said!", NetworkMessageType.PushAllRigidbodiesUp, Networking.SendType.Reliable);
     }
 
     IEnumerator ServerUpdate()
@@ -48,18 +64,18 @@ public class GameServer : MonoBehaviour
         {
             serverObject.transform.hasChanged = false;
             string message = JsonUtility.ToJson(new MessageServerObject(serverObject));
-            ClientManager.Instance.SendToAllClients(message, NetworkMessageType.MessageServerObject, Networking.SendType.Reliable);
+            ClientManager.Instance.SendToAllClients(message, NetworkMessageType.ServerObject, Networking.SendType.Reliable);
         }
     }
 
     public void SendMessageDestroyServerObject (ServerObject serverObject)
     {
         string message = JsonUtility.ToJson(new MessageDestroyServerObject(serverObject));
-        ClientManager.Instance.SendToAllClients(message, NetworkMessageType.MessageDestroyGameObject, Networking.SendType.Reliable);
+        ClientManager.Instance.SendToAllClients(message, NetworkMessageType.DestroyGameObject, Networking.SendType.Reliable);
     }
 
     void OnDestroy()
     {
-        // TODO: Unsubscribe from network events
+        ClientManager.Instance.serverMessageEvents[NetworkMessageType.PushAllRigidbodiesUp] -= OnMessagePushAllRigidbodiesUp;
     }
 }

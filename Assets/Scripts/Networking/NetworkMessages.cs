@@ -4,9 +4,11 @@ using UnityEngine;
 
 public enum NetworkMessageType
 {
-    MessageLobbyChat,
-    MessageServerObject,
-    MessageDestroyGameObject
+    LobbyChat,
+    LobbyStartGame,
+    ServerObject,
+    DestroyGameObject,
+    PushAllRigidbodiesUp
 };
 
 [System.Serializable]
