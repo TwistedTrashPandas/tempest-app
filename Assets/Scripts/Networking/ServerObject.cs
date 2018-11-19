@@ -5,6 +5,7 @@ using UnityEngine;
 public class ServerObject : MonoBehaviour
 {
     public string resourceName = "";
+    public float lastUpdate = 0;
     public int serverID = 0;
 
 	void Start ()

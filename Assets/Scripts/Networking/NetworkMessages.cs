@@ -14,6 +14,7 @@ public enum NetworkMessageType
 [System.Serializable]
 struct MessageServerObject
 {
+    public float time;
     public string name;
     public string resourceName;
     public bool hasParent;
@@ -36,6 +37,7 @@ struct MessageServerObject
             hasParent = false;
         }
 
+        time = serverObject.lastUpdate = Time.time;
         name = serverObject.name;
         resourceName = serverObject.resourceName;
         instanceID = serverObject.transform.GetInstanceID();

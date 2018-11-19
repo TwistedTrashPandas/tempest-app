@@ -64,7 +64,7 @@ public class GameServer : MonoBehaviour
         {
             serverObject.transform.hasChanged = false;
             string message = JsonUtility.ToJson(new MessageServerObject(serverObject));
-            ClientManager.Instance.SendToAllClients(message, NetworkMessageType.ServerObject, Networking.SendType.Reliable);
+            ClientManager.Instance.SendToAllClients(message, NetworkMessageType.ServerObject, Networking.SendType.Unreliable);
         }
     }
 

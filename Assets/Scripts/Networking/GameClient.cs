@@ -6,7 +6,7 @@ using Facepunch.Steamworks;
 public class GameClient : MonoBehaviour
 {
     // Use the gameobject instance id from the server to keep track of the objects
-    public Dictionary<int, GameObject> objectsFromServer = new Dictionary<int, GameObject>();
+    public Dictionary<int, ServerObject> objectsFromServer = new Dictionary<int, ServerObject>();
 
     void Start()
     {
@@ -33,26 +33,32 @@ public class GameClient : MonoBehaviour
             // Make sure that the parent exists already if it has one
             if (!messageServerObject.hasParent || objectsFromServer.ContainsKey(messageServerObject.parentInstanceID))
             {
-                GameObject obj = Instantiate(Resources.Load<GameObject>("ServerObjects/" + messageServerObject.resourceName));
-                objectsFromServer[messageServerObject.instanceID] = obj;
+                GameObject resource = Resources.Load<GameObject>("ServerObjects/" + messageServerObject.resourceName);
+                ServerObject tmp = Instantiate(resource).GetComponent<ServerObject>();
+                objectsFromServer[messageServerObject.instanceID] = tmp;
 
                 // Overwrite the layer so that the server camera does not see this object as well
-                obj.layer = LayerMask.NameToLayer("Client");
-                obj.GetComponent<ServerObject>().serverID = messageServerObject.instanceID;
+                tmp.gameObject.layer = LayerMask.NameToLayer("Client");
+                tmp.serverID = messageServerObject.instanceID;
+                tmp.lastUpdate = messageServerObject.time;
             }
         }
 
-        Transform tmp = objectsFromServer[messageServerObject.instanceID].transform;
+        ServerObject serverObject = objectsFromServer[messageServerObject.instanceID];
 
-        // Update values
-        tmp.name = messageServerObject.name + "\t\t(" + messageServerObject.instanceID + ")";
-        tmp.localPosition = messageServerObject.localPosition;
-        tmp.localRotation = messageServerObject.localRotation;
-        tmp.localScale = messageServerObject.localScale;
-
-        if (messageServerObject.hasParent && objectsFromServer.ContainsKey(messageServerObject.parentInstanceID))
+        if (serverObject.lastUpdate <= messageServerObject.time)
         {
-            tmp.SetParent(objectsFromServer[messageServerObject.parentInstanceID].transform, false);
+            // Update values only if the UDP packet values are newer
+            serverObject.name = messageServerObject.name + "\t\t(" + messageServerObject.instanceID + ")";
+            serverObject.lastUpdate = messageServerObject.time;
+            serverObject.transform.localPosition = messageServerObject.localPosition;
+            serverObject.transform.localRotation = messageServerObject.localRotation;
+            serverObject.transform.localScale = messageServerObject.localScale;
+
+            if (messageServerObject.hasParent && objectsFromServer.ContainsKey(messageServerObject.parentInstanceID))
+            {
+                serverObject.transform.SetParent(objectsFromServer[messageServerObject.parentInstanceID].transform, false);
+            }
         }
     }
 
