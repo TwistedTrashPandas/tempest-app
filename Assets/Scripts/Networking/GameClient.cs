@@ -12,15 +12,6 @@ public class GameClient : MonoBehaviour
     {
         ClientManager.Instance.clientMessageEvents[NetworkMessageType.ServerObject] += OnMessageServerObject;
         ClientManager.Instance.clientMessageEvents[NetworkMessageType.DestroyGameObject] += OnMessageDestroyGameObject;
-        ClientManager.Instance.clientMessageEvents[NetworkMessageType.PushAllRigidbodiesUp] += OnMessagePushAllRigidbodiesUp;
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            ClientManager.Instance.SendToServer("Server, push all objects up!", NetworkMessageType.PushAllRigidbodiesUp, Networking.SendType.Reliable);
-        }
     }
 
     void OnMessageServerObject(string message, ulong steamID)
@@ -73,15 +64,9 @@ public class GameClient : MonoBehaviour
         }
     }
 
-    void OnMessagePushAllRigidbodiesUp(string message, ulong steamID)
-    {
-        Debug.Log("Client received: " + message);
-    }
-
     void OnDestroy()
     {
         ClientManager.Instance.clientMessageEvents[NetworkMessageType.ServerObject] -= OnMessageServerObject;
         ClientManager.Instance.clientMessageEvents[NetworkMessageType.DestroyGameObject] -= OnMessageDestroyGameObject;
-        ClientManager.Instance.clientMessageEvents[NetworkMessageType.PushAllRigidbodiesUp] -= OnMessagePushAllRigidbodiesUp;
     }
 }

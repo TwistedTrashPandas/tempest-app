@@ -25,24 +25,7 @@ public class GameServer : MonoBehaviour
 
     void Start()
     {
-        ClientManager.Instance.serverMessageEvents[NetworkMessageType.PushAllRigidbodiesUp] += OnMessagePushAllRigidbodiesUp;
-
         StartCoroutine(ServerUpdate());
-    }
-
-    void OnMessagePushAllRigidbodiesUp(string message, ulong steamID)
-    {
-        Debug.Log("Server received: " + message);
-
-        Rigidbody[] rigidbodies = FindObjectsOfType<Rigidbody>();
-
-        foreach (Rigidbody r in rigidbodies)
-        {
-            r.AddForce(new Vector3(0, Random.Range(2, 10), 0), ForceMode.Impulse);
-            r.AddTorque(new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), Random.Range(-1, 1)));
-        }
-
-        ClientManager.Instance.SendToAllClients("Client, I pushed " + rigidbodies.Length + " objects up like you said!", NetworkMessageType.PushAllRigidbodiesUp, Networking.SendType.Reliable);
     }
 
     IEnumerator ServerUpdate()
@@ -72,10 +55,5 @@ public class GameServer : MonoBehaviour
     {
         string message = JsonUtility.ToJson(new MessageDestroyServerObject(serverObject));
         ClientManager.Instance.SendToAllClients(message, NetworkMessageType.DestroyGameObject, Networking.SendType.Reliable);
-    }
-
-    void OnDestroy()
-    {
-        ClientManager.Instance.serverMessageEvents[NetworkMessageType.PushAllRigidbodiesUp] -= OnMessagePushAllRigidbodiesUp;
     }
 }

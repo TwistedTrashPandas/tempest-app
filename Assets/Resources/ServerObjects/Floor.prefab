@@ -111,4 +111,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resourceName: Floor
+  onServer: 1
   serverID: 0
+  lastUpdate: 0

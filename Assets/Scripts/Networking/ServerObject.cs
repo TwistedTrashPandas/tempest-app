@@ -5,12 +5,16 @@ using UnityEngine;
 public class ServerObject : MonoBehaviour
 {
     public string resourceName = "";
-    public float lastUpdate = 0;
-    public int serverID = 0;
 
-	void Start ()
+    public bool onServer = true;
+    public int serverID = 0;
+    public float lastUpdate = 0;
+
+    void Start ()
     {
-        if (gameObject.layer == LayerMask.NameToLayer("Server"))
+        onServer = gameObject.layer == LayerMask.NameToLayer("Server");
+
+        if (onServer)
         {
             // Check if the resource name is valid
             if (Resources.Load<GameObject>("ServerObjects/" + resourceName) == null)
@@ -28,7 +32,7 @@ public class ServerObject : MonoBehaviour
 
     void OnDestroy()
     {
-        if (gameObject.layer == LayerMask.NameToLayer("Server"))
+        if (onServer)
         {
             // Send destroy message
             GameServer.Instance.serverObjects.Remove(this);
