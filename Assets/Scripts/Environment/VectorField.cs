@@ -17,6 +17,8 @@ public class VectorField : MonoBehaviour
     /// 3D texture for shader (vector field)
     public Texture3D tex;
 
+    private Vector2 v2_rotCenter;
+
     // for loading files
     private static int header_size = 288; // + 4
     private static int grid_size = 64 * 64 * 64 * 12;
@@ -61,7 +63,7 @@ public class VectorField : MonoBehaviour
         float strength = 5f * f_cellSize, y_vel = 0.25f, minScale = 0.85f, maxScale = 1.15f;
         int nx = v3_dimensions[0], ny = v3_dimensions[1], nz = v3_dimensions[2];
         float middleOffset = 0f;// nx / 128f;
-        Vector2 middle = new Vector2((nx - 1f) / 2f, (nz - 1f) / 2f);
+        v2_rotCenter = new Vector2((nx - 1f) / 2f, (nz - 1f) / 2f);
         Vector2 midOffset = new Vector2((nx - 1f) / 4f, (nz - 1f) / 4f);
         /*Vector2 midOffset_1 = new Vector2((nx - 1f) / 4f, (nz - 1f) / 4f);
         for (float k = 0; k < ny; k++)
@@ -80,21 +82,21 @@ public class VectorField : MonoBehaviour
             float strModifier = 1.0f;
             if (k > ny / 5f)
             {
-                if (UnityEngine.Random.Range(0.0f, 1.0f) > 0.6f && middle.x < midOffset.x + (nx - 1f) / 2f)
+                if (UnityEngine.Random.Range(0.0f, 1.0f) > 0.6f && v2_rotCenter.x < midOffset.x + (nx - 1f) / 2f)
                 {
-                    middle.x += middleOffset;
+                    v2_rotCenter.x += middleOffset;
                 }
-                if (UnityEngine.Random.Range(0.0f, 1.0f) > 0.6f && middle.y < midOffset.y + (nz - 1f) / 2f)
+                if (UnityEngine.Random.Range(0.0f, 1.0f) > 0.6f && v2_rotCenter.y < midOffset.y + (nz - 1f) / 2f)
                 {
-                    middle.y += middleOffset;
+                    v2_rotCenter.y += middleOffset;
                 }
-                if (UnityEngine.Random.Range(0.0f, 1.0f) > 0.6f && middle.x > midOffset.x)
+                if (UnityEngine.Random.Range(0.0f, 1.0f) > 0.6f && v2_rotCenter.x > midOffset.x)
                 {
-                    middle.x -= middleOffset;
+                    v2_rotCenter.x -= middleOffset;
                 }
-                if (UnityEngine.Random.Range(0.0f, 1.0f) > 0.6f && middle.y > midOffset.y)
+                if (UnityEngine.Random.Range(0.0f, 1.0f) > 0.6f && v2_rotCenter.y > midOffset.y)
                 {
-                    middle.y -= middleOffset;
+                    v2_rotCenter.y -= middleOffset;
                 }
             }
             //  if (k < ny / 3f)
@@ -103,8 +105,8 @@ public class VectorField : MonoBehaviour
             {
                 for (int j = 0; j < nz; j++)
                 {
-                    float diffX = middle.x - i;
-                    float diffZ = middle.y - j;
+                    float diffX = v2_rotCenter.x - i;
+                    float diffZ = v2_rotCenter.y - j;
                     float hypotenuse = Mathf.Sqrt(diffX * diffX + diffZ * diffZ);
                     v3s_vectors[i, k, j] = new Vector3(diffZ / hypotenuse, y_vel, -diffX / hypotenuse) * (strength * strModifier);
                     v3s_vectors[i, k, j].Scale(new Vector3(UnityEngine.Random.Range(minScale, maxScale),
@@ -137,9 +139,40 @@ public class VectorField : MonoBehaviour
     public Vector3 GetVectorAtPos(Vector3 pos)
     {
         Vector3 tmp = pos - transform.position;
-        int i = (int)Mathf.Clamp((tmp.x / f_cellSize), 0, v3_dimensions[0] - 1),
+        float x_proj = tmp.x - v2_rotCenter.x;
+        float z_proj = tmp.z - v2_rotCenter.y;
+        int i = (int)(tmp.x / f_cellSize),
             j = (int)Mathf.Clamp((tmp.y / f_cellSize), 0, v3_dimensions[1] - 1),
-            k = (int)Mathf.Clamp((tmp.z / f_cellSize), 0, v3_dimensions[2] - 1);
+            k = (int)(tmp.z / f_cellSize);
+        if ((i < 0 || i >= v3_dimensions[0]) || (k < 0 || k >= v3_dimensions[2]))
+        {
+            if (Mathf.Abs(x_proj) > Mathf.Abs(z_proj))
+            {
+                z_proj /= x_proj;
+                x_proj = Mathf.Sign(x_proj);
+                z_proj *= x_proj;
+            }
+            else
+            {
+                x_proj /= z_proj;
+                z_proj = Mathf.Sign(z_proj);
+                x_proj *= z_proj;
+            }
+            print("x: " + x_proj);
+            print("z: " + z_proj);
+            i = (int)((x_proj * 0.5f + 0.5f) * (v3_dimensions[0] - 1));
+            k = (int)((z_proj * 0.5f + 0.5f) * (v3_dimensions[2] - 1));
+            print(i);
+            print(j);
+            print(k);
+        }
+        else
+        {
+            i = Math.Min(v3_dimensions[0] - 1, Math.Max(i, 0));
+            k = Math.Min(v3_dimensions[2] - 1, Math.Max(k, 0));
+        }
+        //print(v3s_vectors[i, j, k]);
+        //print(v3s_vectors[i+1, j, k]);
         return v3s_vectors[i, j, k];
     }
 

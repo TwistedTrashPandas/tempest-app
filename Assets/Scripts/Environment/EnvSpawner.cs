@@ -13,7 +13,7 @@ public class EnvSpawner : MonoBehaviour {
 	void Start () {
         envObjects = new List<EnvObject>();
         InstantiateNewObject();
-	}
+    }
 
     private void Update()
     {

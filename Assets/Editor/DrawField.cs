@@ -44,7 +44,7 @@ public class DrawField : Editor
             }
         }*/
         
-        int stepsize = 16;
+        int stepsize = 8;
             for (int i = 0; i < x; i += stepsize)
             {
                 for (int j = 0; j < y; j += stepsize)

@@ -42,7 +42,7 @@ public class Particles : MonoBehaviour
 
     void Start()
     { 
-        numberParticles = (uint)Mathf.Pow(2, 20f);
+        numberParticles = (uint)Mathf.Pow(2, 10f);
         maxVel = new float[3];
         rnd = new System.Random();
         particlePos = new Vector3[numberParticles];
