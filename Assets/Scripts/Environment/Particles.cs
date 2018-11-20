@@ -17,6 +17,8 @@ public class Particles : MonoBehaviour
     /// In and out Computer buffers for the shader
     private ComputeBuffer particleVelCB;
     private ComputeBuffer particlePosCB;
+    private ComputeBuffer particleVelRCB;
+    private ComputeBuffer particlePosRCB;
     private ComputeBuffer vectorFieldCBIn;
 
     /// kernel for computeshader
@@ -35,15 +37,18 @@ public class Particles : MonoBehaviour
     private Texture2D partTex;
     private int[] particleIdx;
 
+    private int counter;
+
     const uint BLOCK_SIZE = 1024;
-    const uint TRANSPOSE_BLOCK_SIZE = 16;
+    const uint TRANSPOSE_BLOCK_SIZE = 32;
 
     System.Random rnd = new System.Random();
 
     void Start()
     {
-        numberParticles = (uint)Mathf.Pow(2, 15f);
+        numberParticles = (uint)Mathf.Pow(2, 18f);
         maxVel = new float[3];
+        counter = 0;
         rnd = new System.Random();
         particlePos = new Vector3[numberParticles];
         particleVel = new Vector3[numberParticles];
@@ -67,11 +72,13 @@ public class Particles : MonoBehaviour
         //  particlesCB buffers
         particleVelCB = new ComputeBuffer((int)numberParticles, 12);
         particlePosCB = new ComputeBuffer((int)numberParticles, 12);
+        particleVelRCB = new ComputeBuffer((int)numberParticles, 12);
+        particlePosRCB = new ComputeBuffer((int)numberParticles, 12);
         vectorFieldCBIn = new ComputeBuffer(vectorField.GetAmountOfElements(), 12);
         //  get corresponding kernel index
         kernelP = particlesCS.FindKernel("UpdateParticles");
         kernelS = sortCS.FindKernel("BitonicSort");
-        // kernelT = sortCS.FindKernel("Transpose");
+        kernelT = sortCS.FindKernel("Transpose");
         int[] dims = new int[4];
         //  assume static grid size
         Vector3Int temp = vectorField.GetDimensions();
@@ -106,8 +113,13 @@ public class Particles : MonoBehaviour
         particlesCS.SetBuffer(kernelP, "vectorFieldIn", vectorFieldCBIn);
         particlesCS.SetBuffer(kernelP, "particlePosRW", particlePosCB);
         particlesCS.SetBuffer(kernelP, "particleVelRW", particleVelCB);
-        sortCS.SetBuffer(kernelP, "particlePosRW", particlePosCB);
-        sortCS.SetBuffer(kernelP, "particleVelRW", particleVelCB);
+        sortCS.SetBuffer(kernelS, "particlePosRW", particlePosCB);
+        sortCS.SetBuffer(kernelS, "particleVelRW", particleVelCB);
+        sortCS.SetBuffer(kernelT, "particlePosRW", particlePosCB);
+        sortCS.SetBuffer(kernelT, "particleVelRW", particleVelCB);
+        sortCS.SetBuffer(kernelT, "particlePos", particlePosRCB);
+        sortCS.SetBuffer(kernelT, "particleVel", particleVelRCB);
+        Shader.SetGlobalBuffer("g_vVertices", particlePosCB);
     }
 
 
@@ -133,53 +145,66 @@ public class Particles : MonoBehaviour
         camPos[2] = Camera.main.transform.position.z;
         sortCS.SetFloats("g_vCameraPos", camPos);
         sortCS.SetInt("g_iNumPart", (int)numberParticles);
-        /*for (int k = 2; k <= numberParticles ; k *= 2)
+        int groups = (int)((numberParticles / BLOCK_SIZE));
+        for (int k = 2; k <= BLOCK_SIZE; k <<= 1)
         {
-            sortCS.SetInt("g_iStage", k);
-            sortCS.Dispatch(kernelS, Mathf.CeilToInt(numberParticles / BLOCK_SIZE / 2), 1, 1);
-        }*/
-        sortCS.Dispatch(kernelS, 1, 1, 1);
-        //particlePosCB.GetData(particlePos);
+            sortCS.SetInt("k", k);
+            sortCS.SetInt("g_iStage_2", k);
+            sortCS.Dispatch(kernelS, groups, 1, 1);
+        }
+        uint width = BLOCK_SIZE;
+        uint height = (numberParticles / BLOCK_SIZE);
+
+        for (uint k = (BLOCK_SIZE << 1); k <= numberParticles; k <<= 1)
+        {
+            sortCS.SetInt("k", (int)(k / BLOCK_SIZE));
+            sortCS.SetInt("g_iStage_2", (int)((k & ~numberParticles) / BLOCK_SIZE));
+            sortCS.SetInt("g_iWidth", (int)width);
+            sortCS.SetInt("g_iHeight", (int)height);
+            sortCS.SetBuffer(kernelT, "particlePosRW", particlePosRCB);
+            sortCS.SetBuffer(kernelT, "particleVelRW", particleVelRCB);
+            sortCS.SetBuffer(kernelT, "particlePos", particlePosCB);
+            sortCS.SetBuffer(kernelT, "particleVel", particleVelCB);
+            sortCS.Dispatch(kernelT, (int)(width / TRANSPOSE_BLOCK_SIZE), (int)(height / TRANSPOSE_BLOCK_SIZE), 1);
+
+            sortCS.SetBuffer(kernelS, "particlePosRW", particlePosRCB);
+            sortCS.SetBuffer(kernelS, "particleVelRW", particleVelRCB);
+            sortCS.Dispatch(kernelS, groups, 1, 1);
+
+            sortCS.SetInt("k", (int)BLOCK_SIZE);
+            sortCS.SetInt("g_iStage_2", (int)k);
+            sortCS.SetInt("g_iWidth", (int)height);
+            sortCS.SetInt("g_iHeight", (int)width);
+            sortCS.SetBuffer(kernelT, "particlePosRW", particlePosCB);
+            sortCS.SetBuffer(kernelT, "particleVelRW", particleVelCB);
+            sortCS.SetBuffer(kernelT, "particlePos", particlePosRCB);
+            sortCS.SetBuffer(kernelT, "particleVel", particleVelRCB);
+            sortCS.Dispatch(kernelT, (int)(height / TRANSPOSE_BLOCK_SIZE), (int)(width / TRANSPOSE_BLOCK_SIZE), 1);
+
+            sortCS.SetBuffer(kernelS, "particlePosRW", particlePosCB);
+            sortCS.SetBuffer(kernelS, "particleVelRW", particleVelCB);
+            sortCS.Dispatch(kernelS, groups, 1, 1);
+        }
+        /*
+        particlePosCB.GetData(particlePos);
         for (int i = 0; i < numberParticles - 1; i++)
         {
             if (Vector3.Distance(particlePos[i], Camera.main.transform.position) < Vector3.Distance(particlePos[i + 1], Camera.main.transform.position))
             {
                 print(i.ToString() + " - not sorted!");
-                break;
-            }
-        }
-        /*
-        for (uint k = (BLOCK_SIZE << 1); k <= numberParticles; k <<= 1)
-        {
-            sortCS.SetInt("g_iStage", (int)(k / BLOCK_SIZE));
-            sortCS.SetInt("g_iStage_2", (int)(k & ~numberParticles));
-            sortCS.SetInt("g_iWidth", (int)BLOCK_SIZE);
-            sortCS.SetInt("g_iHeight", (int)(numberParticles/BLOCK_SIZE));
-            sortCS.Dispatch(kernelT, (int)(BLOCK_SIZE / TRANSPOSE_BLOCK_SIZE), (int)(numberParticles / BLOCK_SIZE / TRANSPOSE_BLOCK_SIZE), 1);            
-            sortCS.Dispatch(kernelS, Mathf.CeilToInt(numberParticles / (float)BLOCK_SIZE), 1, 1);
-            
-            sortCS.SetInt("g_iStage", (int)BLOCK_SIZE);
-            sortCS.SetInt("g_iStage_2", (int)k);
-            sortCS.Dispatch(kernelT, (int)(numberParticles / BLOCK_SIZE / TRANSPOSE_BLOCK_SIZE), (int)(BLOCK_SIZE / TRANSPOSE_BLOCK_SIZE), 1);
-            sortCS.Dispatch(kernelS, Mathf.CeilToInt(numberParticles / (float)BLOCK_SIZE), 1, 1);
-        }
-        /*
-        particlePosCB.GetData(particlePos);
-        for (int i = 0; i < numberParticles / 2; i++)
-        {
-            if (Vector3.Distance(particlePos[i], Camera.main.transform.position) > Vector3.Distance(particlePos[i + 1], Camera.main.transform.position))
-            {
-                print(i.ToString() + " - not sorted!");
+              //  print(Vector3.Distance(particlePos[i], Camera.main.transform.position));
+              //  print(Vector3.Distance(particlePos[i + 1], Camera.main.transform.position));
             }
         }*/
-        Shader.SetGlobalBuffer("g_vVertices", particlePosCB);
     }
 
 
     public void Update()
     {
+        counter = (counter + 1)%1;
         UpdateParticles();
-        // SortParticles();
+        if (counter == 0)
+            SortParticles();
     }
 
     private void CreateMesh()

@@ -1,19 +1,17 @@
 ﻿#pragma kernel BitonicSort
-//#pragma kernel Transpose
+#pragma kernel Transpose
 
 #define BLOCK_SIZE 1024
-#define TRANSPOSE_BLOCK_SIZE 16
+#define TRANSPOSE_BLOCK_SIZE 32
 
 RWStructuredBuffer<float3> particlePosRW: register(u0);
 RWStructuredBuffer<float3> particleVelRW: register(u1);
-// StructuredBuffer<float3> particlePos: register(t0);
-// StructuredBuffer<float3> particleVel: register(t1);
 
-//groupshared float3 shared_data[BLOCK_SIZE * 2];
-//groupshared float3 shared_data_2[BLOCK_SIZE * 2];
+StructuredBuffer<float3> particlePos: register(t0);
+StructuredBuffer<float3> particleVel: register(t1);
 
 float3 g_vCameraPos;
-uint g_iStage;
+int k;
 int g_iNumPart;
 int g_iStage_2;
 int g_iWidth;
@@ -30,40 +28,53 @@ void Swap(uint idx1, uint idx2) {
 	shared_data[idx2] = tmp;
 	tmp = shared_data_2[idx1];
 	shared_data_2[idx1] = shared_data_2[idx2];
-	shared_data_2[idx2] = tmp;	
+	shared_data_2[idx2] = tmp;
 }*/
 
+groupshared float3 shared_data[BLOCK_SIZE];
+groupshared float3 shared_data_2[BLOCK_SIZE];
+
 [numthreads(BLOCK_SIZE, 1, 1)]
-void BitonicSort(uint3 DTid : SV_DispatchThreadID)
+void BitonicSort(uint3 DTid : SV_DispatchThreadID, uint GI : SV_GroupIndex)
 {
+	/**/
+	shared_data[GI] = particlePosRW[DTid.x];
+	shared_data_2[GI] = particleVelRW[DTid.x];
+	GroupMemoryBarrierWithGroupSync();
+
+	for (unsigned int j = k >> 1; j > 0; j >>= 1)
+	{
+		float dist1 = DistToCam(shared_data[GI & ~j]);
+		float dist2 = DistToCam(shared_data[GI | j]);
+		bool comp = (dist1 <= dist2);
+		float3 result = (comp == (bool)(g_iStage_2 & DTid.x)) ? shared_data[GI]  : shared_data[GI ^ j];
+		float3 result_2 = (comp == (bool)(g_iStage_2 & DTid.x)) ? shared_data_2[GI] : shared_data_2[GI ^ j];
+		GroupMemoryBarrierWithGroupSync();
+		shared_data[GI] = result;
+		shared_data_2[GI] = result_2;
+		GroupMemoryBarrierWithGroupSync();
+	}
+
+	particlePosRW[DTid.x] = shared_data[GI];
+	particleVelRW[DTid.x] = shared_data_2[GI];
+	return;
+
 	// load shared data
-	// shared_data[GI] = particlePosRW[DTid.x];
-	// shared_data_2[GI] = particleVelRW[DTid.x];
-	// GroupMemoryBarrierWithGroupSync();
-	
+	uint DT = DTid.x * 2;
+	uint G = GI * 2;
+	shared_data[G] = particlePosRW[DT];
+	shared_data[G + 1] = particlePosRW[DT + 1];
+	shared_data_2[G] = particleVelRW[DT];
+	shared_data_2[G + 1] = particleVelRW[DT + 1];
+	GroupMemoryBarrierWithGroupSync();
+
 	// sort shared data
-	for (uint k = 2; k <= g_iNumPart; k <<= 1) {
-		for (unsigned int j = ((unsigned int)k) >> 1; j > 0; j >>= 1) {
-			for (uint i = 0; i < g_iNumPart / BLOCK_SIZE; i++) {
-				uint stride = j;
-				uint mod_j = (DTid.x + i * BLOCK_SIZE) % j;
-				uint mod_k = (DTid.x) % (((unsigned int)k));
-				uint idx1 = (DTid.x + i * BLOCK_SIZE);
-				idx1 <<= 1;
-				idx1 -= mod_j;
-				uint idx2 = idx1 + stride;
-				AllMemoryBarrierWithGroupSync();
-				float3 val1 = particlePosRW[idx1];
-				float3 val2 = particlePosRW[idx2];
-				bool swap = false;
 				if (mod_k >= ((unsigned int)k) >> 1) {
 					if (DistToCam(val1) > DistToCam(val2)) {
 						swap = true;
 					}
 				}
 				else
-				{
-					if (DistToCam(val1) < DistToCam(val2)) {
 						swap = true;
 					}
 				}
@@ -72,51 +83,58 @@ void BitonicSort(uint3 DTid : SV_DispatchThreadID)
 					particlePosRW[idx2] = val1;
 					particlePosRW[idx1] = val2;
 					val2 = particleVelRW[idx2];
-					particleVelRW[idx2] = particleVelRW[idx1];
 					particleVelRW[idx1] = val2;
-				}
+		int mod_j = (GI) % j;
+		int mod_k = (GI) % (k);
+		int idx1 = (GI);
+		idx1 <<= 1;
+		idx1 -= mod_j;
+		int idx2 = idx1 + stride;
+		bool swap = false;
+		float dist1 = DistToCam(shared_data[idx1]);
+		float dist2 = DistToCam(shared_data[idx2]);
+		if (mod_k > k >> 1) {
+			if (dist1 > dist2) {
+				swap = true;
 			}
-			/*uint idx1 = GI & ~j;
-			uint idx2 = GI | j;
-			float3 result;
-			float3 result_2;
-			if (DistToCam(shared_data[idx1]) <= DistToCam(shared_data[idx2]) == (bool)(g_iStage_2 & DTid.x)) {
-				result = shared_data[GI^j];
-				result_2 = shared_data_2[GI^j];
-			}
-			else {
-				result = shared_data[GI];
-				result_2 = shared_data_2[GI];
-			}
-			//unsigned int result = ((shared_data[GI & ~j] <= shared_data[GI | j]) == (bool)(g_iLevelMask & DTid.x)) ? shared_data[GI ^ j] : shared_data[GI];
-			/*unsigned int ixj = GI ^ j;
-			if (ixj > GI) {
-				if ((GI & (uint)g_iStage) == 0)
-					Swap(GI, ixj);
-				else
-					Swap(ixj, GI);
-			}
-			GroupMemoryBarrierWithGroupSync();
-			shared_data[GI] = result;
-			shared_data_2[GI] = result_2;
-			GroupMemoryBarrierWithGroupSync();*/
 		}
+		else
+		{
+			if (dist1 < dist2) {
+				swap = true;
+			}
+		}
+		GroupMemoryBarrierWithGroupSync();
+		if (swap) {
+			float3 tmp = shared_data[idx2];
+			shared_data[idx2] = shared_data[idx1];
+			shared_data[idx1] = tmp;
+			tmp = shared_data_2[idx2];
+			shared_data_2[idx2] = shared_data_2[idx1];
+			shared_data_2[idx1] = tmp;
+		}
+		GroupMemoryBarrierWithGroupSync();
 	}
-	//particlePosRW[DTid.x] = shared_data[GI];
-	//particleVelRW[DTid.x] = shared_data_2[GI];
+	particlePosRW[DT] = shared_data[G];
+	particlePosRW[DT + 1] = shared_data[G + 1];
+	particleVelRW[DT] = shared_data_2[G];
+	particleVelRW[DT + 1] = shared_data_2[G + 1];
 }
 
+groupshared float3 transpose_shared_data[TRANSPOSE_BLOCK_SIZE * TRANSPOSE_BLOCK_SIZE];
+groupshared float3 transpose_shared_data_2[TRANSPOSE_BLOCK_SIZE * TRANSPOSE_BLOCK_SIZE];
 
-//groupshared float3 transpose_shared_data[TRANSPOSE_BLOCK_SIZE * TRANSPOSE_BLOCK_SIZE];
-//groupshared float3 transpose_shared_data_2[TRANSPOSE_BLOCK_SIZE * TRANSPOSE_BLOCK_SIZE];
-/*
 [numthreads(TRANSPOSE_BLOCK_SIZE, TRANSPOSE_BLOCK_SIZE, 1)]
 void Transpose(uint3 DTid : SV_DispatchThreadID, uint3 GTid : SV_GroupThreadID, uint GI : SV_GroupIndex)
 {
-	transpose_shared_data[GI] = particlePosRW[DTid.y * g_iWidth + DTid.x];
-	transpose_shared_data_2[GI] = particleVelRW[DTid.y * g_iWidth + DTid.x];
+	transpose_shared_data[GI] = particlePos[DTid.y * g_iWidth + DTid.x];
+	transpose_shared_data_2[GI] = particleVel[DTid.y * g_iWidth + DTid.x];
 	GroupMemoryBarrierWithGroupSync();
 	uint2 XY = DTid.yx - GTid.yx + GTid.xy;
 	particlePosRW[XY.y * g_iHeight + XY.x] = transpose_shared_data[GTid.x * TRANSPOSE_BLOCK_SIZE + GTid.y];
 	particleVelRW[XY.y * g_iHeight + XY.x] = transpose_shared_data_2[GTid.x * TRANSPOSE_BLOCK_SIZE + GTid.y];
-}*/
+
+	//transpose_shared_data_2[GI] = particleVelRW[DTid.y * g_iWidth + DTid.x];
+	//particleVelRW[XY.y * g_iHeight + XY.x] = transpose_shared_data_2[GTid.x * TRANSPOSE_BLOCK_SIZE + GTid.y];
+}
+
