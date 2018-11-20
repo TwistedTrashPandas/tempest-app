@@ -60,9 +60,9 @@ public class VectorField : MonoBehaviour
             }
         }*/
 
-        float strength = 5f * f_cellSize, y_vel = 0.25f, minScale = 0.85f, maxScale = 1.15f;
+        float strength = 50f * f_cellSize, y_vel = 0.125f, minScale = 0.85f, maxScale = 1.15f;
         int nx = v3_dimensions[0], ny = v3_dimensions[1], nz = v3_dimensions[2];
-        float middleOffset = 0f;// nx / 128f;
+        float middleOffset = nx / 128f;
         v2_rotCenter = new Vector2((nx - 1f) / 2f, (nz - 1f) / 2f);
         Vector2 midOffset = new Vector2((nx - 1f) / 4f, (nz - 1f) / 4f);
         /*Vector2 midOffset_1 = new Vector2((nx - 1f) / 4f, (nz - 1f) / 4f);
@@ -158,13 +158,8 @@ public class VectorField : MonoBehaviour
                 z_proj = Mathf.Sign(z_proj);
                 x_proj *= z_proj;
             }
-            print("x: " + x_proj);
-            print("z: " + z_proj);
             i = (int)((x_proj * 0.5f + 0.5f) * (v3_dimensions[0] - 1));
             k = (int)((z_proj * 0.5f + 0.5f) * (v3_dimensions[2] - 1));
-            print(i);
-            print(j);
-            print(k);
         }
         else
         {

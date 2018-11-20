@@ -41,8 +41,8 @@ public class Particles : MonoBehaviour
     System.Random rnd = new System.Random();
 
     void Start()
-    { 
-        numberParticles = (uint)Mathf.Pow(2, 10f);
+    {
+        numberParticles = (uint)Mathf.Pow(2, 15f);
         maxVel = new float[3];
         rnd = new System.Random();
         particlePos = new Vector3[numberParticles];
@@ -80,10 +80,10 @@ public class Particles : MonoBehaviour
         dims[2] = temp.z;
         dims[3] = Mathf.RoundToInt(vectorField.GetCellSize());
         maxDist = temp.x * vectorField.GetCellSize() * 3f;
-        maxVel[0] = 25f * dims[3];
-        maxVel[1] = 100f * dims[3];
-        maxVel[2] = 25f * dims[3];
-        dampVel = 0.5f;
+        maxVel[0] = dims[3] * 10f;
+        maxVel[1] = dims[3] * 2f;
+        maxVel[2] = dims[3] * 10f;
+        dampVel = 0.999f;
         float[] center = new float[3];
         center[0] = (temp.x - 1) * 0.5f * dims[3];
         center[1] = (temp.y - 1) * 0.5f * dims[3];
@@ -115,12 +115,12 @@ public class Particles : MonoBehaviour
     {
         float dt = Time.deltaTime;
         particlesCS.SetFloat("g_fTimestep", dt);
-        float[] randVel = new float[3];
-        for (int i = 0; i < 3; i++)
-        {
-            randVel[i] = (rnd.Next(0, 2) * 2 - 1f) * ((float)(0.8 + rnd.NextDouble()));
-        }
-        //particlesCS.SetFloats("g_fRandVel", randVel);
+        float[] randPos = new float[3];
+        randPos[0] = (rnd.Next(0, 2) * 2 - 1f) * (0.25f + (float)rnd.NextDouble() * 0.5f);
+        randPos[1] = rnd.Next(0, 2);
+        randPos[2] = (rnd.Next(0, 2) * 2 - 1f) * (0.25f + (float)rnd.NextDouble() * 0.5f);
+        particlesCS.SetFloats("g_fRandPos", randPos);
+
         particlesCS.Dispatch(kernelP, Mathf.CeilToInt(numberParticles / 256f), 1, 1);
         Shader.SetGlobalBuffer("g_vVertices", particlePosCB);
     }
@@ -143,7 +143,7 @@ public class Particles : MonoBehaviour
         for (int i = 0; i < numberParticles - 1; i++)
         {
             if (Vector3.Distance(particlePos[i], Camera.main.transform.position) < Vector3.Distance(particlePos[i + 1], Camera.main.transform.position))
-            { 
+            {
                 print(i.ToString() + " - not sorted!");
                 break;
             }
@@ -179,7 +179,7 @@ public class Particles : MonoBehaviour
     public void Update()
     {
         UpdateParticles();
-       // SortParticles();
+        // SortParticles();
     }
 
     private void CreateMesh()

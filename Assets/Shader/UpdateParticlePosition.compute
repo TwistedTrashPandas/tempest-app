@@ -8,7 +8,7 @@ StructuredBuffer<float3> vectorFieldIn: register(t0);
 int4 g_i3Dimensions;
 float3 g_vCenter;
 float3 g_fMaxVel;
-float3 g_fRandVel;
+float3 g_fRandPos;
 float g_fTimestep;
 float g_fDampVel;
 float g_fMaxDist;
@@ -46,15 +46,22 @@ void UpdateParticles(uint3 id : SV_DispatchThreadID)
 	// update velocity and positions accordingly
 	float dims = g_i3Dimensions[1] * g_i3Dimensions[2];
 	particleVelRW[id.x] *= g_fDampVel;
-	particleVelRW[id.x] += vectorFieldIn[min(idx.x * dims + idx.y * g_i3Dimensions[2] + idx.z, dims*g_i3Dimensions[0])] * g_fTimestep * 100.0f;
-	particleVelRW[id.x] = max(-g_fMaxVel, min(g_fMaxVel, particleVelRW[id.x]));
+	particleVelRW[id.x] += vectorFieldIn[min(idx.x * dims + idx.y * g_i3Dimensions[2] + idx.z, dims*g_i3Dimensions[0])] * g_fTimestep * 200.0f;
+	particleVelRW[id.x].y = max(-g_fMaxVel.y, min(g_fMaxVel.y, particleVelRW[id.x].y));
+	
+	float2 tempVel = float2(particleVelRW[id.x].x, particleVelRW[id.x].z);
+	if (length(tempVel) > g_fMaxVel.x) {
+		tempVel = normalize(tempVel) * g_fMaxVel.x;
+	}
+	particleVelRW[id.x].x = tempVel.x;
+	particleVelRW[id.x].z = tempVel.y;
+
 	particlePosRW[id.x] += particleVelRW[id.x] * g_fTimestep;
 	//float vel_magn = length(particleVelRW[id.x].xz);
 	//particleVelRW[id.x].xz = normalize(particleVelRW[id.x].xz) * min(g_fMaxVel.x, vel_magn);
 
 	if (distance(particlePosRW[id.x].xz, g_vCenter.xz) > g_fMaxDist || particlePosRW[id.x].y > g_i3Dimensions[1] * g_i3Dimensions.w) {
-		particlePosRW[id.x].xz = particlePosRW[id.x].xz / 8.0f + g_vCenter.xz;
-		particleVelRW[id.x].xz *= g_fRandVel;
-		particlePosRW[id.x].y = 0.0f;
+		particlePosRW[id.x].xz = g_fRandPos.xz * particlePosRW[id.x].xz / 2.0f + g_vCenter.xz;
+		particlePosRW[id.x].y = g_fRandPos.y;
 	}
 }
