@@ -69,21 +69,8 @@ void BitonicSort(uint3 DTid : SV_DispatchThreadID, uint GI : SV_GroupIndex)
 	GroupMemoryBarrierWithGroupSync();
 
 	// sort shared data
-				if (mod_k >= ((unsigned int)k) >> 1) {
-					if (DistToCam(val1) > DistToCam(val2)) {
-						swap = true;
-					}
-				}
-				else
-						swap = true;
-					}
-				}
-				AllMemoryBarrierWithGroupSync();
-				if (swap) {
-					particlePosRW[idx2] = val1;
-					particlePosRW[idx1] = val2;
-					val2 = particleVelRW[idx2];
-					particleVelRW[idx1] = val2;
+	for (int j = k >> 1; j > 0; j >>= 1) {
+		int stride = j;
 		int mod_j = (GI) % j;
 		int mod_k = (GI) % (k);
 		int idx1 = (GI);
