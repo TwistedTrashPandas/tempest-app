@@ -5,7 +5,9 @@ using Facepunch.Steamworks;
 
 public class NetworkBehaviour : MonoBehaviour
 {
-    private ServerObject serverObject;
+    protected bool initialized = false;
+    protected ServerObject serverObject;
+
     public NetworkMessageType networkMessageType = NetworkMessageType.Empty;
 
     [System.Serializable]
@@ -23,22 +25,30 @@ public class NetworkBehaviour : MonoBehaviour
 
     protected virtual void Start ()
     {
+        initialized = false;
         serverObject = GetComponent<ServerObject>();
 
         if (serverObject.onServer)
         {
             ClientManager.Instance.serverMessageEvents[networkMessageType] += OnServerMessage;
-            StartServer();
+
+            // Wait for the initialize message
+            ClientManager.Instance.serverMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] += OnServerNetworkBehaviourInitialized;
         }
         else
         {
             ClientManager.Instance.clientMessageEvents[networkMessageType] += OnClientMessage;
-            StartClient();
+
+            // Wait for the initialize message
+            ClientManager.Instance.clientMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] += OnClientNetworkBehaviourInitialized;
+
+            // Begin the initialization, tell the server that this object is ready
+            ClientManager.Instance.SendToServer(serverObject.serverID.ToString(), NetworkMessageType.NetworkBehaviourInitialized, Networking.SendType.Reliable);
         }
 
         if (networkMessageType == NetworkMessageType.Empty)
         {
-            Debug.LogError("NetworkMessageType of " + gameObject.name + " should not be Empty!");
+            Debug.LogError("NetworkMessageType of " + gameObject.name + " should not be Empty!\nDid you forget to add a new type in NetworkMessages.cs?");
         }
     }
 
@@ -54,13 +64,16 @@ public class NetworkBehaviour : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (serverObject.onServer)
+        if (initialized)
         {
-            UpdateServer();
-        }
-        else
-        {
-            UpdateClient();
+            if (serverObject.onServer)
+            {
+                UpdateServer();
+            }
+            else
+            {
+                UpdateClient();
+            }
         }
     }
 
@@ -72,6 +85,27 @@ public class NetworkBehaviour : MonoBehaviour
     protected virtual void UpdateClient()
     {
         // To be overwritten by the superclass
+    }
+
+    private void OnServerNetworkBehaviourInitialized (string message, ulong steamID)
+    {
+        if (!initialized && (serverObject.serverID == int.Parse(message)))
+        {
+            initialized = true;
+            ClientManager.Instance.SendToClient(steamID, serverObject.serverID.ToString(), NetworkMessageType.NetworkBehaviourInitialized, Networking.SendType.Reliable);
+            ClientManager.Instance.serverMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] -= OnServerNetworkBehaviourInitialized;
+            StartServer();
+        }
+    }
+
+    private void OnClientNetworkBehaviourInitialized (string message, ulong steamID)
+    {
+        if (!initialized && (serverObject.serverID == int.Parse(message)))
+        {
+            initialized = true;
+            ClientManager.Instance.clientMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] -= OnClientNetworkBehaviourInitialized;
+            StartClient();
+        }
     }
 
     private void OnServerMessage (string message, ulong steamID)

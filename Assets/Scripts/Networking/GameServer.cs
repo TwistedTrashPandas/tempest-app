@@ -5,7 +5,7 @@ using Facepunch.Steamworks;
 
 public class GameServer : MonoBehaviour
 {
-    public float hz = 60;
+    public float hz = 64;
 
     public static GameServer Instance = null;
     public LinkedList<ServerObject> serverObjects = new LinkedList<ServerObject>();

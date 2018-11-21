@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Add new types here (e.g. the name of the class that uses it)
+// Make sure to assign and never change the index
 public enum NetworkMessageType
 {
-    Empty,
-    LobbyChat,
-    LobbyStartGame,
-    ServerObject,
-    DestroyGameObject,
-    PushRigidbodyUp
+    Empty = 0,
+    LobbyChat = 1,
+    LobbyStartGame = 2,
+    ServerObject = 3,
+    DestroyGameObject = 4,
+    NetworkBehaviourInitialized = 5,
+    PushRigidbodyUp = 6
 };
 
 [System.Serializable]

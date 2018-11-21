@@ -2,7 +2,7 @@
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 
-public class CopyFilesOnBuild : IPostprocessBuildWithReport
+public class EditorCopyFilesOnBuild : IPostprocessBuildWithReport
 {
     int IOrderedCallback.callbackOrder { get { return 0; } }
 
