@@ -46,7 +46,7 @@ public class Particles : MonoBehaviour
 
     void Start()
     {
-        numberParticles = (uint)Mathf.Pow(2, 18f);
+        numberParticles = (uint)Mathf.Pow(2, 20f);
         maxVel = new float[3];
         counter = 0;
         rnd = new System.Random();
@@ -201,7 +201,7 @@ public class Particles : MonoBehaviour
 
     public void Update()
     {
-        counter = (counter + 1)%1;
+        counter = (counter + 1)%15;
         UpdateParticles();
         if (counter == 0)
             SortParticles();

@@ -222,7 +222,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   f_cellSize: 1
-  v3_dimensions: {x: 64, y: 128, z: 64}
+  v3_dimensions: {x: 120, y: 256, z: 120}
   tex: {fileID: 0}
 --- !u!4 &1538512623
 Transform:

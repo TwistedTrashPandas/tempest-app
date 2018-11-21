@@ -10,7 +10,7 @@ public class VectorField : MonoBehaviour
     /// cellSize for the vector field
     public float f_cellSize = 10.0f;
     /// dimensions of the field
-    public Vector3Int v3_dimensions = new Vector3Int(64, 64, 64);
+    public Vector3Int v3_dimensions;
     /// actual values
     public Vector3[,,] v3s_vectors;
 
@@ -21,14 +21,14 @@ public class VectorField : MonoBehaviour
 
     // for loading files
     private static int header_size = 288; // + 4
-    private static int grid_size = 64 * 64 * 64 * 12;
+    private static int grid_size = 128 * 256 * 128 * 12;
 
     void Awake()
     {
         v3s_vectors = new Vector3[v3_dimensions[0], v3_dimensions[1], v3_dimensions[2]];
-        InitializeVectorField();
-        // Create3DTexture();
-        // LoadVectorFieldFromFile();
+    // InitializeVectorField();
+    // Create3DTexture();
+        LoadVectorFieldFromFile();
     }
 
     private void InitializeVectorField()
@@ -173,26 +173,28 @@ public class VectorField : MonoBehaviour
 
     private void LoadVectorFieldFromFile()
     {
-        string name = "B:\\Unity\\ShaderOrTornado\\Assets\\mantaflow\\data\\velocity_low_0200.uni";
+        string name = Application.dataPath + "/Uni-files/plume3DHighRes_vel_0291.uni";
         FileInfo inf = new FileInfo(name);
         Decompress(inf);
-        name = "B:\\Unity\\ShaderOrTornado\\Assets\\mantaflow\\data\\velocity_low_0200";
+        name = Application.dataPath + "/Uni-files/plume3DHighRes_vel_0291";
         inf = new FileInfo(name);
         byte[] buffer = ReadFile(inf);
         v3s_vectors = new Vector3[v3_dimensions[0], v3_dimensions[1], v3_dimensions[2]];
         // convert bytes to vectors
-
-        for (int i = 0; i < v3_dimensions[0]; i++)
+        print(buffer.Length);
+        int start_idx = 4;
+        for (int i = 0; i < 256; i++)
         {
-            for (int j = 0; j < v3_dimensions[1]; j++)
+            for (int j = start_idx; j < 128- start_idx; j++)
             {
-                for (int k = 0; k < v3_dimensions[2]; k++)
+                for (int k = start_idx; k <128- start_idx; k++)
                 {
-                    int start_index = header_size + 4 + (i * v3_dimensions[0] + j * v3_dimensions[0] * v3_dimensions[2] + k) * 12;
+                    int start_index = header_size + 4 + ((i) * 128 + (j) * 128 * 256 + (k)) * 12;
                     float x = BitConverter.ToSingle(buffer, start_index);
                     float y = BitConverter.ToSingle(buffer, start_index + 4);
                     float z = BitConverter.ToSingle(buffer, start_index + 8);
-                    v3s_vectors[k, i, j] = new Vector3(x, y, z) * 32;
+
+                    v3s_vectors[k-start_idx, i, j-start_idx] = new Vector3(x, y, z) * 16;
                 }
             }
         }
@@ -209,7 +211,7 @@ public class VectorField : MonoBehaviour
             {
                 using (GZipStream decompressionStream = new GZipStream(originalFileStream, CompressionMode.Decompress))
                 {
-                    // decompressionStream.CopyTo(decompressedFileStream);
+                    decompressionStream.CopyTo(decompressedFileStream);
                 }
             }
         }

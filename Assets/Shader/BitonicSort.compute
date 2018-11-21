@@ -58,7 +58,7 @@ void BitonicSort(uint3 DTid : SV_DispatchThreadID, uint GI : SV_GroupIndex)
 	particlePosRW[DTid.x] = shared_data[GI];
 	particleVelRW[DTid.x] = shared_data_2[GI];
 	return;
-
+	/*
 	// load shared data
 	uint DT = DTid.x * 2;
 	uint G = GI * 2;
@@ -105,7 +105,7 @@ void BitonicSort(uint3 DTid : SV_DispatchThreadID, uint GI : SV_GroupIndex)
 	particlePosRW[DT] = shared_data[G];
 	particlePosRW[DT + 1] = shared_data[G + 1];
 	particleVelRW[DT] = shared_data_2[G];
-	particleVelRW[DT + 1] = shared_data_2[G + 1];
+	particleVelRW[DT + 1] = shared_data_2[G + 1];*/
 }
 
 groupshared float3 transpose_shared_data[TRANSPOSE_BLOCK_SIZE * TRANSPOSE_BLOCK_SIZE];
