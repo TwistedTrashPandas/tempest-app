@@ -15,24 +15,24 @@ namespace MastersOfTempest
             public Vector3Int v3_dimensions;
             /// actual values
             public Vector3[,,] v3s_vectors;
-
             /// 3D texture for shader (vector field)
             public Texture3D tex;
-
             public bool loadFromFile;
-
+            
+            /// scaling of vector field
+            [Range(0.01f, 256f)]
             public float velScale;
 
             private Vector2 v2_rotCenter;
             private String uniFilePath = "/UniFiles/";
-            private String fileName = "/plume3DHighRes_vel_";
+            private String fileName = "plume3DHighRes_vel_";
+            private String currentVelFile;
 
             // for loading files
-            private static uint header_size = 288; // + 4
-                                                   // fixed grid size for the loaded files (in byte)
+            private static uint header_size = 288;
+            // fixed grid size for the loaded files (in byte)
             private static uint grid_size = 128 * 256 * 128 * 12;
 
-            private String currentVelFile;
 
             void Awake()
             {
@@ -43,19 +43,22 @@ namespace MastersOfTempest
                     InitializeVectorField();
             }
 
-            // decompresses and loads uni files for the vectorfield
+            // decompresses and loads uni file for the vectorfield
             private void LoadVectorFieldFromFile(int fileIndex)
             {
+                // decompress uni file
                 string uni_name = Application.dataPath + uniFilePath + fileName + fileIndex.ToString("D" + 4) + ".uni";
                 FileInfo inf = new FileInfo(uni_name);
                 FileHandling.Decompress(inf);
+
+                // load decompressed file
                 name = Application.dataPath + uniFilePath + fileName + fileIndex.ToString("D" + 4);
                 currentVelFile = name;
                 inf = new FileInfo(name);
                 byte[] buffer = FileHandling.ReadFile(inf, header_size + grid_size + 4);
                 v3s_vectors = new Vector3[v3_dimensions[0], v3_dimensions[1], v3_dimensions[2]];
+
                 // convert bytes to vectors
-                print(buffer.Length);
                 uint start_idx = 4;
                 for (uint i = 0; i < 256; i++)
                 {

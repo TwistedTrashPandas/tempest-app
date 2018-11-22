@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace MastersOfTempest
 {
+    using Tools;
     namespace Environment
     {
         namespace VisualEffects
@@ -18,7 +19,6 @@ namespace MastersOfTempest
 
                 /// Vector field for tornado
                 public VectorField vectorField;
-                public GenNoiseTexture noiseTex;
 
                 /// sort all particles with respect to the camera position each "sortEach" timestep
                 [Range(1, 100)]
@@ -73,7 +73,7 @@ namespace MastersOfTempest
                     }
                     initBuffers();
                     CreateMesh();
-                    partTex = noiseTex.GetNoise();
+                    partTex = GenNoiseTexture.Gen2DTexture(1024, 1024);
                     // GetComponent<Renderer>().material.SetTexture("g_NoiseTex", partTex);
                 }
 

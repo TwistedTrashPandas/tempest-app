@@ -33,6 +33,11 @@ namespace MastersOfTempest
                     rb.velocity = v;
                 }
 
+                public void AddForce(Vector3 force, Vector3 pos)
+                {
+                    rb.AddForceAtPosition(force, pos);
+                }
+
                 protected virtual void OnCollisionEnter(Collision collision)
                 {
                 }

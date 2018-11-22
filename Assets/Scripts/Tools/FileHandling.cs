@@ -6,7 +6,6 @@ namespace MastersOfTempest
 {
     namespace Tools
     {
-
         public static class FileHandling
         {
             public static void Decompress(FileInfo fileToDecompress)

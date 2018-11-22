@@ -224,6 +224,8 @@ MonoBehaviour:
   f_cellSize: 1
   v3_dimensions: {x: 120, y: 256, z: 120}
   tex: {fileID: 0}
+  loadFromFile: 0
+  velScale: 0
 --- !u!4 &1538512623
 Transform:
   m_ObjectHideFlags: 0
@@ -341,7 +343,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b481b83ab7320c43aa7cabceab2dbc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 1476894203371464, guid: e8c9d0a525a3e1b4fba9d4d419b35e72, type: 2}
+  prefabs:
+  - {fileID: 0}
   vectorField: {fileID: 1538512622}
 --- !u!65 &1677918027
 BoxCollider:

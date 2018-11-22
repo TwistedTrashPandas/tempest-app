@@ -8,19 +8,19 @@ namespace MastersOfTempest
     {
         namespace Interacting
         {
-            public class EnvRock : EnvObject
+            public class DangerZone : EnvObject
             {
-
-                public EnvRock(float sp) : base(sp)
+                public DangerZone(float sp) : base(sp)
                 {
 
                 }
 
                 protected override void OnCollisionEnter(Collision collision)
                 {
-                    // base.OnTriggerEnter(other);
-                    //new stuff
-                    print("Trigger Entered! Rock");
+                    if (collision.gameObject.tag == "Player")
+                    {
+                        // TODO: collision
+                    }
                 }
             }
         }

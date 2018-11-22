@@ -16,7 +16,7 @@ namespace MastersOfTempest
                     DangerZone,
                     Helping
                 };
-                public GameObject prefab;
+                public GameObject[] prefabs;
                 public VectorField vectorField;
 
                 private List<EnvObject> envObjects;
@@ -37,7 +37,7 @@ namespace MastersOfTempest
 
                 private void InstantiateNewObject()
                 {
-                    envObjects.Add(GameObject.Instantiate(prefab).GetComponent<EnvObject>());
+                    envObjects.Add(GameObject.Instantiate(prefabs[0]).GetComponent<EnvObject>());
                 }
             }
         }
