@@ -3,57 +3,60 @@ using System.Collections.Generic;
 using UnityEngine;
 using Facepunch.Steamworks;
 
-public class GameServer : MonoBehaviour
+namespace MasterOfTempest.Networking
 {
-    public float hz = 64;
-
-    public static GameServer Instance = null;
-    public LinkedList<ServerObject> serverObjects = new LinkedList<ServerObject>();
-
-    void Awake()
+    public class GameServer : MonoBehaviour
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Debug.LogError("GameServer cannot have multiple instances!");
-            Destroy(gameObject);
-        }
-    }
+        public float hz = 64;
 
-    void Start()
-    {
-        StartCoroutine(ServerUpdate());
-    }
+        public static GameServer Instance = null;
+        public LinkedList<ServerObject> serverObjects = new LinkedList<ServerObject>();
 
-    IEnumerator ServerUpdate()
-    {
-        while (true)
+        void Awake()
         {
-            foreach (ServerObject serverObject in serverObjects)
+            if (Instance == null)
             {
-                SendMessageServerObject(serverObject);
+                Instance = this;
             }
-
-            yield return new WaitForSeconds(1.0f / hz);
+            else
+            {
+                Debug.LogError("GameServer cannot have multiple instances!");
+                Destroy(gameObject);
+            }
         }
-    }
 
-    public void SendMessageServerObject (ServerObject serverObject)
-    {
-        if (serverObject.transform.hasChanged)
+        void Start()
         {
-            serverObject.transform.hasChanged = false;
-            string message = JsonUtility.ToJson(new MessageServerObject(serverObject));
-            ClientManager.Instance.SendToAllClients(message, NetworkMessageType.ServerObject, Networking.SendType.Unreliable);
+            StartCoroutine(ServerUpdate());
         }
-    }
 
-    public void SendMessageDestroyServerObject (ServerObject serverObject)
-    {
-        string message = JsonUtility.ToJson(new MessageDestroyServerObject(serverObject));
-        ClientManager.Instance.SendToAllClients(message, NetworkMessageType.DestroyGameObject, Networking.SendType.Reliable);
+        IEnumerator ServerUpdate()
+        {
+            while (true)
+            {
+                foreach (ServerObject serverObject in serverObjects)
+                {
+                    SendMessageServerObject(serverObject);
+                }
+
+                yield return new WaitForSeconds(1.0f / hz);
+            }
+        }
+
+        public void SendMessageServerObject(ServerObject serverObject)
+        {
+            if (serverObject.transform.hasChanged)
+            {
+                serverObject.transform.hasChanged = false;
+                string message = JsonUtility.ToJson(new MessageServerObject(serverObject));
+                ClientManager.Instance.SendToAllClients(message, NetworkMessageType.ServerObject, Facepunch.Steamworks.Networking.SendType.Unreliable);
+            }
+        }
+
+        public void SendMessageDestroyServerObject(ServerObject serverObject)
+        {
+            string message = JsonUtility.ToJson(new MessageDestroyServerObject(serverObject));
+            ClientManager.Instance.SendToAllClients(message, NetworkMessageType.DestroyGameObject, Facepunch.Steamworks.Networking.SendType.Reliable);
+        }
     }
 }
