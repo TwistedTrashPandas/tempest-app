@@ -253,6 +253,7 @@ MonoBehaviour:
   renderParticlesS: {fileID: 4800000, guid: 48749fd051690e34e80725bd55a4cbc7, type: 3}
   vectorField: {fileID: 1538512622}
   noiseTex: {fileID: 1538512626}
+  sortEach: 20
 --- !u!33 &1538512625
 MeshFilter:
   m_ObjectHideFlags: 0
