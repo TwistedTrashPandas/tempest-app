@@ -32,6 +32,5 @@ namespace MastersOfTempest
             }
             players.Add(player);
         }
-
     }
 }
