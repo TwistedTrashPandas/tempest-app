@@ -15,7 +15,6 @@ namespace MastersOfTempest
             players = new List<Player>();
         }
 
-
         public void Register(Ship shipToRegister)
         {
             if (ship != null)

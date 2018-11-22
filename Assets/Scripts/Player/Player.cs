@@ -19,6 +19,16 @@ namespace MastersOfTempest
             SanityCheck();
         }
 
+        private void OnEnable()
+        {
+            playerInput.ActionMade += ExecutePlayerAction;
+        }
+
+        void ExecutePlayerAction(object sender, EventArgs e)
+        {
+            ((ActionMadeEventArgs)e).Action.Execute(context);
+        }
+
         private void Start()
         {
             context = FindObjectOfType<Gamemaster>();

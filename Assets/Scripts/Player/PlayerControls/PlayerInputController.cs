@@ -15,5 +15,10 @@ namespace MastersOfTempest.PlayerControls
         public abstract void Suppress();
 
         public abstract void Resume();
+
+        protected void TriggerActionEvent(ActionMadeEventArgs args)
+        {
+            ActionMade?.Invoke(this, args);
+        }
     }
 }
