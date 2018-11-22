@@ -29,9 +29,10 @@ public class GameClient : MonoBehaviour
                 objectsFromServer[messageServerObject.instanceID] = tmp;
 
                 // Overwrite the layer so that the server camera does not see this object as well
-                tmp.gameObject.layer = LayerMask.NameToLayer("Client");
-                tmp.serverID = messageServerObject.instanceID;
+                tmp.onServer = false;
                 tmp.lastUpdate = messageServerObject.time;
+                tmp.serverID = messageServerObject.instanceID;
+                tmp.gameObject.layer = LayerMask.NameToLayer("Client");
             }
         }
 
