@@ -80,10 +80,7 @@ public class ClientManager : MonoBehaviour
             client.Networking.SetListenChannel(serverMessagesOffset + (int)type, true);
             serverMessageEvents[type] = new System.Action<string, ulong>(DebugServerMessageEvent);
         }
-    }
 
-    void Start()
-    {
         client.Networking.OnIncomingConnection += OnIncomingConnection;
         client.Networking.OnConnectionFailed += OnConnectionFailed;
         client.Networking.OnP2PData += OnP2PData;

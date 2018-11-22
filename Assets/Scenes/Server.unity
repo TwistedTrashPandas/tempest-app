@@ -997,6 +997,11 @@ Prefab:
       propertyPath: m_LocalScale.z
       value: 1.5
       objectReference: {fileID: 0}
+    - target: {fileID: 114513804915424988, guid: b0aeacfd92c7d4546816f8103687abbf,
+        type: 2}
+      propertyPath: networkMessageType
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b0aeacfd92c7d4546816f8103687abbf, type: 2}
   m_IsPrefabAsset: 0
@@ -1040,7 +1045,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 316f497cf4acb8c419e173eef059255f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hz: 60
+  hz: 64
 --- !u!1001 &1847940358
 Prefab:
   m_ObjectHideFlags: 0

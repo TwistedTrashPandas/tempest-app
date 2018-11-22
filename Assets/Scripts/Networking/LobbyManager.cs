@@ -14,6 +14,10 @@ public class LobbyManager : MonoBehaviour
     public UnityEngine.UI.Text textFriends;
     public UnityEngine.UI.Button readyButton;
 
+    [Header("Change this to your development scene(s)")]
+    public string serverSceneName = "Server";
+    public string clientSceneName = "Client";
+
     private ulong lobbyIDToJoin;
     private bool ready = false;
 
@@ -99,12 +103,12 @@ public class LobbyManager : MonoBehaviour
     void OnMessageLobbyStartGame(string message, ulong steamID)
     {
         // Load client scene
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Client");
+        UnityEngine.SceneManagement.SceneManager.LoadScene(clientSceneName);
 
         // Also load server scene if you are the owner of the lobby
         if (Client.Instance.Lobby.Owner == Client.Instance.SteamId)
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene("Server", UnityEngine.SceneManagement.LoadSceneMode.Additive);
+            UnityEngine.SceneManagement.SceneManager.LoadScene(serverSceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive);
         }
     }
 

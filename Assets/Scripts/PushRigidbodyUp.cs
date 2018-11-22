@@ -4,11 +4,6 @@ using UnityEngine;
 
 public class PushRigidbodyUp : NetworkBehaviour
 {
-	protected override void StartClient ()
-    {
-
-	}
-
     protected override void StartServer()
     {
         gameObject.AddComponent<Rigidbody>();
@@ -32,11 +27,6 @@ public class PushRigidbodyUp : NetworkBehaviour
         }
     }
 
-    protected override void UpdateServer()
-    {
-
-    }
-
     protected override void OnClientReceivedMessage(string message, ulong steamID)
     {
         Debug.Log(message);
@@ -51,15 +41,5 @@ public class PushRigidbodyUp : NetworkBehaviour
         rigidbody.AddTorque(new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), Random.Range(-1, 1)));
 
         SendToClient(steamID, "Hey client, I pushed your rigidbody " + rigidbody + " up!");
-    }
-
-    protected override void OnDestroyClient()
-    {
-
-    }
-
-    protected override void OnDestroyServer()
-    {
-
     }
 }

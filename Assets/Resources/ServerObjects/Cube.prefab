@@ -124,4 +124,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4768d1d5a037b574a957876d1c9f2daf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  networkMessageType: 5
+  networkMessageType: 6
