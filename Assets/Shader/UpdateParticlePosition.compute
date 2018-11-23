@@ -5,7 +5,7 @@ RWStructuredBuffer<float3> particlePosRW: register(u0);
 RWStructuredBuffer<float3> particleVelRW: register(u1);
 StructuredBuffer<float3> vectorFieldIn: register(t0);
 
-int4 g_i3Dimensions;
+float4 g_i3Dimensions;
 float3 g_vCenter;
 float3 g_fMaxVel;
 float3 g_fRandPos;

@@ -23,6 +23,8 @@ namespace MastersOfTempest
                 /// sort all particles with respect to the camera position each "sortEach" timestep
                 [Range(1, 100)]
                 public int sortEach;
+                
+                public Texture2D[] densityTextures;
 
                 /// In and out Computer buffers for the shader
                 private ComputeBuffer particleVelCB;
@@ -73,6 +75,7 @@ namespace MastersOfTempest
                     }
                     initBuffers();
                     CreateMesh();
+                    StartCoroutine(UpdateDensTex(0));
                     partTex = GenNoiseTexture.Gen2DTexture(1024, 1024);
                     // GetComponent<Renderer>().material.SetTexture("g_NoiseTex", partTex);
                 }
@@ -89,7 +92,7 @@ namespace MastersOfTempest
                     kernelP = particlesCS.FindKernel("UpdateParticles");
                     kernelS = sortCS.FindKernel("BitonicSort");
                     kernelT = sortCS.FindKernel("Transpose");
-                    int[] dims = new int[4];
+                    float[] dims = new float[4];
                     //  assume static grid size
                     Vector3Int temp = vectorField.GetDimensions();
                     dims[0] = temp.x;
@@ -106,7 +109,7 @@ namespace MastersOfTempest
                     center[1] = (temp.y - 1) * 0.5f * dims[3];
                     center[2] = (temp.z - 1) * 0.5f * dims[3];
 
-                    particlesCS.SetInts("g_i3Dimensions", dims);
+                    particlesCS.SetFloats("g_i3Dimensions", dims);
                     particlesCS.SetFloats("g_vCenter", center);
                     particlesCS.SetFloat("g_fDampVel", dampVel);
                     particlesCS.SetFloats("g_fMaxVel", maxVel);
@@ -114,6 +117,8 @@ namespace MastersOfTempest
 
                     Shader.SetGlobalFloat("g_fHeightInterp", dims[1] * dims[3] * 0.333f);
                     Shader.SetGlobalFloat("g_fMaxHeight", dims[1] * dims[3]);
+                    Shader.SetGlobalVector("g_i3Dimensions", new Vector4(dims[0], dims[1], dims[2], dims[3]));
+                    Shader.SetGlobalVector("g_vCenter", new Vector4(center[0], center[1], center[2], 1.0f));
 
                     //  assume static data for compute buffers
                     vectorFieldCBIn.SetData(vectorField.GetVectorField());
@@ -132,6 +137,12 @@ namespace MastersOfTempest
                     Shader.SetGlobalBuffer("g_vVertices", particlePosCB);
                 }
 
+                IEnumerator UpdateDensTex(int c)
+                {
+                    Shader.SetGlobalTexture("g_TornadoTex", densityTextures[c]);
+                    yield return new WaitForSeconds(0.25f);
+                    StartCoroutine(UpdateDensTex((c+1)%10)); 
+                }
 
                 private void UpdateParticles()
                 {
@@ -203,8 +214,8 @@ namespace MastersOfTempest
 
                 public void Update()
                 {
-                    counter = (counter + 1) % sortEach;
                     UpdateParticles();
+                    counter = (counter + 1) % sortEach;
                     if (counter == 0)
                         SortParticles();
                 }

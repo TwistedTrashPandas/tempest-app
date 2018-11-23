@@ -9,7 +9,7 @@ public class DrawField : Editor
 {
     // draw vector field in scene view
     private void OnSceneGUI()
-    {
+    {/*
         if (Application.isPlaying) { 
         VectorField grid = target as VectorField;
         // Handles.DrawLine(grid.transform.position + grid.v3_dimensions[0] * new Vector3(0,0,2), grid.transform.position);
@@ -27,6 +27,6 @@ public class DrawField : Editor
                     }
                 }
             }
-        }
+        }*/
     }
 }

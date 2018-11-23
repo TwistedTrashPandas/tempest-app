@@ -10,7 +10,7 @@ Material:
   m_Shader: {fileID: 4800000, guid: 48749fd051690e34e80725bd55a4cbc7, type: 3}
   m_ShaderKeywords: _ALPHAPREMULTIPLY_ON
   m_LightmapFlags: 0
-  m_EnableInstancingVariants: 0
+  m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: 3000
   stringTagMap: {}
@@ -59,7 +59,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - g_NoiseTex:
-        m_Texture: {fileID: 2800000, guid: b7994cf7a6886db46b7be40ba2ab2702, type: 3}
+        m_Texture: {fileID: 2800000, guid: 1b763434ae5ba674e9808f545b783d8c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
@@ -102,7 +102,7 @@ Material:
     - g_FoamDepth: 0.1
     - g_Reflection: 1
     - g_Shininess: 20
-    - g_fBillboardSize: 0.9
+    - g_fBillboardSize: 4.34
     m_Colors:
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
@@ -113,4 +113,4 @@ Material:
     - _TintColor: {r: 1, g: 0.07585368, b: 0, a: 0.5}
     - g_Color: {r: 1, g: 1, b: 1, a: 1}
     - g_DepthColor: {r: 1, g: 1, b: 1, a: 1}
-    - g_SpecColor: {r: 1, g: 1, b: 1, a: 1}
+    - g_SpecColor: {r: 0, g: 0, b: 0, a: 0}

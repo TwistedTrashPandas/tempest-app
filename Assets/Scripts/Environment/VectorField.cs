@@ -60,7 +60,7 @@ namespace MastersOfTempest
 
                 // convert bytes to vectors
                 uint start_idx = 4;
-                for (uint i = 0; i < 256; i++)
+                for (uint i = start_idx; i < 256- start_idx; i++)
                 {
                     for (uint j = start_idx; j < 128 - start_idx; j++)
                     {
@@ -71,7 +71,7 @@ namespace MastersOfTempest
                             float y = BitConverter.ToSingle(buffer, (int)start_index + 4);
                             float z = BitConverter.ToSingle(buffer, (int)start_index + 8);
 
-                            v3s_vectors[k - start_idx, i, j - start_idx] = new Vector3(x, y, z) * velScale;
+                            v3s_vectors[k - start_idx, i- start_idx, j - start_idx] = new Vector3(x, y, z) * velScale;
                         }
                     }
                 }
