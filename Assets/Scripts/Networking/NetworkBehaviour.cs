@@ -39,6 +39,10 @@ namespace MastersOfTempest.Networking
             }
             else
             {
+                //We should remove all "physics" components on the client side: 
+                //only Server should determine all the movement;
+                RemovePhysics();
+
                 ClientManager.Instance.clientMessageEvents[networkMessageType] += OnClientMessage;
 
                 // Wait for the initialize message
@@ -182,6 +186,15 @@ namespace MastersOfTempest.Networking
         protected virtual void OnDestroyClient()
         {
             // To be overwritten by the superclass
+        }
+
+        private void RemovePhysics()
+        {
+            var rigidBodyComponent = GetComponent<Rigidbody>();
+            if(rigidBodyComponent != null)
+            {
+                Destroy(rigidBodyComponent);
+            }
         }
     }
 }

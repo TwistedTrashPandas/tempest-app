@@ -7,11 +7,6 @@ namespace MastersOfTempest
 {
     public class PushRigidbodyUp : NetworkBehaviour
     {
-        protected override void StartServer()
-        {
-            gameObject.AddComponent<Rigidbody>();
-        }
-
         protected override void UpdateClient()
         {
             if (Input.GetKeyDown(KeyCode.Mouse0))
