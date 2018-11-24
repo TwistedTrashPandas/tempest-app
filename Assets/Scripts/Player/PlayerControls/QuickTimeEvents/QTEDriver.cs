@@ -16,35 +16,35 @@ namespace MastersOfTempest.PlayerControls.QTE
         public event EventHandler End;
         public event EventHandler Success;
         public event EventHandler Fail;
-        public event EventHandler StartedWaitingForTheNextKey;
+        public event EventHandler NewKey;
 
-        private List<KeyCode> possibleKeys = new List<KeyCode> {KeyCode.A, KeyCode.B, KeyCode.C };
+        //todo: have more keys and different way to initialize
+        private readonly List<KeyCode> possibleKeys = new List<KeyCode> {KeyCode.A, KeyCode.B, KeyCode.C };
 
-
-        public void StartQuickTimeEvent()
+        /// <summary>
+        /// Starts the quick time event that will be running until the cancellation is requested
+        /// </summary>
+        /// <param name="cancellationToken">Cancellation token to interrupt the QTE generation</param>
+        public void StartQuickTimeEvent(CoroutineCancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            StartCoroutine(QTE(cancellationToken));
         }
 
-        public void EndQuickTimeEvent()
+        private IEnumerator QTE(CoroutineCancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
-        }
-
-        private IEnumerator QTE()
-        {
-            //TODO: fire Start
+            Start?.Invoke(this, EventArgs.Empty);
 
             const float timeToReact = 2f;
             float timeElapsed;
-
-            //TODO: have exit condition here
-            while (true)
+            bool interactionFlag;
+            
+            while (!cancellationToken.CancellationRequested)
             {
                 var expectedKey = GetNextExpectedKey();
                 timeElapsed = 0f;
-                //TODO: fire StartWaitingForTheNextKey
-                while (timeElapsed < timeToReact)
+                interactionFlag = false;
+                NewKey?.Invoke(this, new QTENewKeyEventArgs(expectedKey, timeToReact));
+                while (timeElapsed < timeToReact && !cancellationToken.CancellationRequested)
                 {
 
                     yield return null;
@@ -56,20 +56,25 @@ namespace MastersOfTempest.PlayerControls.QTE
                         {
                             if (expectedKey == key)
                             {
-                                //TODO: fire success
+                                Success?.Invoke(this, EventArgs.Empty);
                             }
                             else
                             {
-                                //TODO: fire fail
+                                Fail?.Invoke(this, EventArgs.Empty);
                             }
+                            interactionFlag = true;
                             break;
                         }
                     }
                 }
-                //TODO: if not success, then fire fail, player was too slow
+                //If player haven't interacted in the given timeframe, then it's 
+                //a fail too - too slow (we don't fire a fail if QTE was cancelled)
+                if (!interactionFlag && !cancellationToken.CancellationRequested)
+                {
+                    Fail?.Invoke(this, EventArgs.Empty);
+                }
             }
-
-            //TODO: fire End
+            End?.Invoke(this, EventArgs.Empty);
         }
 
         private KeyCode GetNextExpectedKey()
