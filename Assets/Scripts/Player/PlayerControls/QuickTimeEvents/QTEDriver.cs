@@ -19,7 +19,7 @@ namespace MastersOfTempest.PlayerControls.QTE
         public event EventHandler NewKey;
 
         //todo: have more keys and different way to initialize
-        private readonly List<KeyCode> possibleKeys = new List<KeyCode> {KeyCode.A, KeyCode.B, KeyCode.C };
+        private readonly List<KeyCode> possibleKeys = new List<KeyCode> {KeyCode.A, KeyCode.B, KeyCode.C, KeyCode.E, KeyCode.Z, KeyCode.G };
 
         /// <summary>
         /// Starts the quick time event that will be running until the cancellation is requested
@@ -65,6 +65,10 @@ namespace MastersOfTempest.PlayerControls.QTE
                             interactionFlag = true;
                             break;
                         }
+                    }
+                    if(interactionFlag)
+                    {
+                        break;
                     }
                 }
                 //If player haven't interacted in the given timeframe, then it's 
