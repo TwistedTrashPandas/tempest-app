@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MasterOfTempest.Networking;
+using MastersOfTempest.Networking;
 
-namespace MasterOfTempest
+namespace MastersOfTempest
 {
     public class PushRigidbodyUp : NetworkBehaviour
     {

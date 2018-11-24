@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-namespace MasterOfTempest.Networking
+namespace MastersOfTempest.Networking
 {
     public class FriendAvatar : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
