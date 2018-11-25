@@ -23,11 +23,11 @@ namespace MastersOfTempest.PlayerControls
         private void Awake()
         {
             keyCodes = Enum.GetValues(typeof(KeyCode));
-            SanityCheck();
         }
 
-        private void OnEnable()
+        private void Start()
         {
+            SanityCheck();
             QTEDriver.Success += OnSuccess;
             QTEDriver.Fail += OnFail;
         }

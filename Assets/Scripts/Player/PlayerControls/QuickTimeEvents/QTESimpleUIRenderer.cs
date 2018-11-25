@@ -13,13 +13,9 @@ namespace MastersOfTempest.PlayerControls.QTE
         public QTEDriver Driver;
         public Text InfoForUser;
 
-        private void Awake()
+        private void Start()
         {
             SanityCheck();
-        }
-
-        private void OnEnable()
-        {
             Driver.Start += OnQTEStart;
             Driver.End += OnQTEEnd;
             Driver.Success += OnQTESuccess;
@@ -27,7 +23,9 @@ namespace MastersOfTempest.PlayerControls.QTE
             Driver.NewKey += OnQTENewKey;
         }
 
-        private void OnDisable()
+
+
+        private void OnDestroy()
         {
             Driver.Start -= OnQTEStart;
             Driver.End -= OnQTEEnd;

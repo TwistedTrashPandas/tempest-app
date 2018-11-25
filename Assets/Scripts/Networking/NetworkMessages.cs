@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace MastersOfTempest.Networking
+﻿namespace MastersOfTempest.Networking
 {
     // Add new types here (e.g. the name of the class that uses it)
     // Make sure to assign and never change the index
@@ -14,6 +10,7 @@ namespace MastersOfTempest.Networking
         ServerObject = 3,
         DestroyGameObject = 4,
         NetworkBehaviourInitialized = 5,
-        PushRigidbodyUp = 6
+        PushRigidbodyUp = 6,
+        ForceManipulator = 7
     };
 }

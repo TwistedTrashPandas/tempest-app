@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
+using MastersOfTempest.Networking;
+using MastersOfTempest.ShipBL;
 
 namespace MastersOfTempest
 {
-    public class Gamemaster : MonoBehaviour
+    /// <summary>
+    /// Provides context for all game objects that want to interact with each other.
+    /// Behaves the same on Client and Server.
+    /// </summary>
+    public class Gamemaster : NetworkBehaviour
     {
         private Ship ship;
         private List<Player> players;
@@ -36,6 +41,5 @@ namespace MastersOfTempest
         {
             return ship;
         }
-
     }
 }

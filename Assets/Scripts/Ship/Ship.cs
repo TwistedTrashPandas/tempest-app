@@ -1,28 +1,29 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+using MastersOfTempest.Networking;
 using UnityEngine;
 
 
-namespace MastersOfTempest
+namespace MastersOfTempest.ShipBL
 {
-    [RequireComponent(typeof(ShipManipulator))]
-    public class Ship : MonoBehaviour
+    [RequireComponent(typeof(ForceManilpulator))]
+    public class Ship : NetworkBehaviour
     {
         private Gamemaster context;
-        private ShipManipulator shipManipulator;
+        private ForceManilpulator forceManipulator;
 
         private void Awake()
         {
-            shipManipulator = GetComponent<ShipManipulator>();
-            if (shipManipulator == null)
+            forceManipulator = GetComponent<ForceManilpulator>();
+            if (forceManipulator == null)
             {
-                throw new InvalidOperationException($"{nameof(ShipManipulator)} is not specified!");
+                throw new InvalidOperationException($"{nameof(ForceManilpulator)} is not specified!");
             }
         }
 
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
+            //both client and server versions need the context object
             context = FindObjectOfType<Gamemaster>();
             if (context == null)
             {
@@ -31,9 +32,9 @@ namespace MastersOfTempest
             context.Register(this);
         }
 
-        public ShipManipulator GetShipManipulator()
+        public ForceManilpulator GetShipForceManipulator()
         {
-            return shipManipulator;
+            return forceManipulator;
         }
     }
 }

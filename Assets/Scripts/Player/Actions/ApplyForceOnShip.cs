@@ -23,7 +23,7 @@ namespace MastersOfTempest.PlayerControls
 
         public override void Execute(Gamemaster context)
         {
-            context.GetShip().GetShipManipulator().AddForce(force, duration);
+            context.GetShip().GetShipForceManipulator().AddForce(force, duration);
         }
     }
 }
