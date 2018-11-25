@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Facepunch.Steamworks;
+﻿using UnityEngine;
 
 namespace MastersOfTempest.Networking
 {
+    [RequireComponent(typeof(ServerObject))]
     public class NetworkBehaviour : MonoBehaviour
     {
         protected bool initialized = false;
@@ -54,7 +52,7 @@ namespace MastersOfTempest.Networking
 
             if (networkMessageType == NetworkMessageType.Empty)
             {
-                Debug.LogError("NetworkMessageType of " + gameObject.name + " should not be Empty!\nDid you forget to add a new type in NetworkMessages.cs?");
+                Debug.LogWarning("NetworkMessageType of " + gameObject.name + " should not be Empty!\nDid you forget to add a new type in NetworkMessages.cs?");
             }
         }
 
