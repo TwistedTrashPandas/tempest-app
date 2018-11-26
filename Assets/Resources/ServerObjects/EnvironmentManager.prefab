@@ -83,7 +83,7 @@ MonoBehaviour:
   f_cellSize: 1
   v3_dimensions: {x: 120, y: 248, z: 120}
   tex: {fileID: 0}
-  loadFromFile: 0
+  loadFromFile: 1
   velScale: 50
   yVelScale: 0.05
 --- !u!114 &114458285926744006

@@ -33,6 +33,19 @@ namespace MastersOfTempest.Tools
             return buffer;
         }
 
+        public static byte[] ReadFile(string filePath)
+        {
+            byte[] buffer;
+
+            if (File.Exists(filePath))
+            {
+                buffer = File.ReadAllBytes(filePath);
+                return buffer;
+            }
+            else
+                throw new FileNotFoundException(filePath + " not found.");
+        }
+
         public static void DeleteFile(String fileToDelete)
         {
             if (File.Exists(fileToDelete))

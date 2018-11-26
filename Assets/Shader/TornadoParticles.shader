@@ -3,9 +3,10 @@
 		g_NoiseTex("g_NoiseTex", 2D) = ""  {}
 		g_Tex1("g_Tex1", 2D) = ""  {}
 		g_Tex2("g_Tex2", 2D) = ""  {}
+		g_NormalTex("g_NormalTex", 2D) = ""  {}
 		g_Color("g_Color", Color) = (1,1,1,1)
 		g_SpecColor("g_SpecColor", Color) = (1,1,1,1)
-		g_fBillboardSize("g_BillboardSize", Range(0.1,10.0)) = 1.0
+		g_fBillboardSize("g_BillboardSize", Range(0.01,10.0)) = 1.0
 		_InvFade("Soft Particles Factor", Range(0.01,3.0)) = 1.0
 		g_fTimeDiff("TimeDiff", Range(0.0, 0.25)) = 0.01
 		g_fTimeStepTex("TimeStepTex", Range(0.05, 1.0)) = 0.25
@@ -31,6 +32,7 @@
 		sampler2D g_TornadoTex;
 		sampler2D g_Tex1;
 		sampler2D g_Tex2;
+		sampler2D g_NormalTex;
 
 		struct appdata {
 			uint id : SV_VertexID;
@@ -49,6 +51,7 @@
 			float3 normal : NORMAL;
 			fixed4 color : COLOR;
 			float2 texcoord : TEXCOORD0;
+			float2 texcoord_2 : TEXCOORD1;
 			UNITY_FOG_COORDS(3)
 			float4 projPos : TEXCOORD4;
 			UNITY_VERTEX_OUTPUT_STEREO
@@ -71,7 +74,7 @@
 			half NdotH = dot(normal, H);
 			intensity = pow(saturate(NdotH), 0.0);
 
-			lightOut = diffuse + intensity * _LightColor0  * g_SpecColor.rgb / distance;
+			lightOut = diffuse + intensity * _LightColor0.rgb  * g_SpecColor.rgb / distance;
 			return lightOut;
 		}
 
@@ -101,12 +104,12 @@
 			i.color.a *= fade;
 
 			float alpha = max(min(g_fTimeStepTex / g_fTimeDiff,1),0);
-			fixed4 colA = fixed4((tex2D(g_Tex2, i.texcoord) * alpha + tex2D(g_Tex1, i.texcoord) * (1.0 - alpha)).xyz, 0.1f);
-			colA.a = colA.r;
+			fixed4 colA = fixed4((tex2D(g_Tex2, i.texcoord) * alpha + tex2D(g_Tex1, i.texcoord) * (1.0 - alpha)).xyz, 0.2f);
+			colA.a += colA.r;
+			float3 normal = tex2D(g_NormalTex, i.texcoord);
+			fixed4 colL = fixed4(BlinnPhong(_WorldSpaceLightPos0.xyz, i.normal, look), 1.0f);
 
-			fixed4 colL = fixed4(BlinnPhong(_WorldSpaceLightPos0.xyz, i.normal, look), 0.05f);
-
-			fixed4 col = i.color * colA + colL;
+			fixed4 col = colA * colL; //* fixed4(tex2D(g_NoiseTex, i.texcoord_2).rgb, );
 			UNITY_APPLY_FOG(i.fogCoord, col);
 
 			return col;
@@ -169,6 +172,7 @@
 
 					o.vertex = UnityObjectToClipPos(v[0]);
 					o.texcoord = float2(max(v[0].x*mul_val_x,0), min(v[0].y*mul_val_y, 1.0));
+					o.texcoord_2 = float2(1,0);
 					o.projPos = ComputeScreenPos(v[0]);
 					UNITY_TRANSFER_FOG(o, o.vertex);
 					//COMPUTE_EYEDEPTH(o.projPos.z);
@@ -176,18 +180,21 @@
 
 					o.vertex = UnityObjectToClipPos(v[1]);
 					o.texcoord = float2(max(v[1].x*mul_val_x, 0), min(v[1].y*mul_val_y, 1.0));
+					o.texcoord_2 = float2(1,1);
 					o.projPos = ComputeScreenPos(v[1]);
 					UNITY_TRANSFER_FOG(o, o.vertex);
 					tristream.Append(o);
 
 					o.vertex = UnityObjectToClipPos(v[2]);
 					o.texcoord = float2(max(v[2].x*mul_val_x, 0), min(v[2].y*mul_val_y, 1.0));
+					o.texcoord_2 = float2(0,0);
 					o.projPos = ComputeScreenPos(v[2]);
 					UNITY_TRANSFER_FOG(o, o.vertex);
 					tristream.Append(o);
 
 					o.vertex = UnityObjectToClipPos(v[3]);
 					o.texcoord = float2(max(v[3].x*mul_val_x, 0), min(v[3].y*mul_val_y, 1.0));
+					o.texcoord_2 = float2(0,1);
 					o.projPos = ComputeScreenPos(v[3]);
 					UNITY_TRANSFER_FOG(o, o.vertex);
 					tristream.Append(o);

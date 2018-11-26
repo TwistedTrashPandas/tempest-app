@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MastersOfTempest;
 
 namespace MastersOfTempest.Environment.VisualEffects
 {
@@ -23,7 +24,10 @@ namespace MastersOfTempest.Environment.VisualEffects
         public float g_fTimeDiff;
         public float g_fTimeStepTex;
 
-        public Texture2D[] densityTextures;
+        public string densityTexPrefix;
+        public int startIdx;
+        public int endIdx;
+        public int skipIdx;
 
         /// In and out Computer buffers for the shader
         private ComputeBuffer particleVelCB;
@@ -46,6 +50,7 @@ namespace MastersOfTempest.Environment.VisualEffects
         private Vector3[] particlePos;
         private Vector3[] particleVel;
         private Texture2D partTex;
+        private Texture2D[] densityTextures;
         private int[] particleIdx;
 
         private Material material;
@@ -78,9 +83,24 @@ namespace MastersOfTempest.Environment.VisualEffects
             material = GetComponent<MeshRenderer>().material;
             initBuffers();
             CreateMesh();
+            LoadDensityTextures();
             StartCoroutine(UpdateDensTex());
             partTex = GenNoiseTexture.Gen2DTexture(1024, 1024);
             // GetComponent<Renderer>().material.SetTexture("g_NoiseTex", partTex);
+        }
+
+        private void LoadDensityTextures()
+        {
+            densityTextures = new Texture2D[(endIdx - startIdx) / skipIdx];
+            for (int i = startIdx; i < endIdx; i += skipIdx)
+            {
+                string filepath = Application.dataPath + "/UniFiles/DensityTextures/" + densityTexPrefix + i.ToString("D" + 4) + ".png";
+                print(filepath);
+                byte[] buffer = Tools.FileHandling.ReadFile(filepath);
+                densityTextures[(i - startIdx) / skipIdx] = new Texture2D(1024, 2048);
+                densityTextures[(i - startIdx) / skipIdx].LoadImage(buffer);
+                print(buffer.Length);
+            }
         }
 
         private void initBuffers()
@@ -147,9 +167,9 @@ namespace MastersOfTempest.Environment.VisualEffects
             while (true)
             {
                 material.SetTexture("g_Tex1", densityTextures[c]);
-                material.SetTexture("g_Tex2", densityTextures[(c + 1) % 10]);
+                material.SetTexture("g_Tex2", densityTextures[(c + 1) % densityTextures.Length]);
                 yield return new WaitForSeconds(g_fTimeStepTex);
-                c = (c + 1) % 10;
+                c = (c + 1) % densityTextures.Length;
             }
         }
 

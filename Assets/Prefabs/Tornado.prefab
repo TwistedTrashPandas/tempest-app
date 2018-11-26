@@ -49,8 +49,8 @@ MeshRenderer:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1726956007735904}
   m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
@@ -102,14 +102,7 @@ MonoBehaviour:
   sortEach: 20
   g_fTimeDiff: 0
   g_fTimeStepTex: 0.1
-  densityTextures:
-  - {fileID: 2800000, guid: ad4a328c6249e9c44a365bfa9c93d02d, type: 3}
-  - {fileID: 2800000, guid: 1b763434ae5ba674e9808f545b783d8c, type: 3}
-  - {fileID: 2800000, guid: 34b4899d729036d469a299ca6999c7a3, type: 3}
-  - {fileID: 2800000, guid: 129101abad77883408e4a452fcc65449, type: 3}
-  - {fileID: 2800000, guid: 48a15783f8cc25944ac78de6660326d6, type: 3}
-  - {fileID: 2800000, guid: b69771e0fa1ac804dbb08af60782f7c8, type: 3}
-  - {fileID: 2800000, guid: 939df1741a334f94681f3f8d6f4b352a, type: 3}
-  - {fileID: 2800000, guid: 67c40031f96ac57499f4e13cd08489cf, type: 3}
-  - {fileID: 2800000, guid: 300a7626bc91a9d44895b6b786c14c8b, type: 3}
-  - {fileID: 2800000, guid: a2b11be95bb0f634389139e59209584c, type: 3}
+  densityTexPrefix: diffuse_
+  startIdx: 500
+  endIdx: 501
+  skipIdx: 1
