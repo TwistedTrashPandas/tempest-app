@@ -70,6 +70,17 @@ namespace MastersOfTempest.ShipBL
             }
         }
 
+        public void AddForceAtPosition(Vector3 force, Vector3 position)
+        {
+            //TODO: actually use the position
+            AddForce(force);
+        }
+        public void AddForceAtPosition(Vector3 force, Vector3 position, float duration)
+        {
+            //TODO: actually use the position
+            AddForce(force, duration);
+        }
+
         private IEnumerator RemoveForce(Vector3 force, float time)
         {
             yield return new WaitForSeconds(time);
