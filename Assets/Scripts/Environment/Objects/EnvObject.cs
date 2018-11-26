@@ -6,33 +6,30 @@ namespace MastersOfTempest.Environment.Interacting
 {
     public abstract class EnvObject : MonoBehaviour
     {
-        Rigidbody rb;
         public int instanceID { get; set; }
-        public EnvSpawner.EnvObjectType type;
-
-        public EnvObject()
-        {
-        }
-
-        public EnvObject(float sp)
-        {
-        }
-
+        public EnvSpawner.EnvObjectType type { get; set; }
+        private new Rigidbody rigidbody;
+        
         private void Awake()
         {
-            rb = GetComponent<Rigidbody>();
-            if (rb == null)
+            rigidbody = GetComponent<Rigidbody>();
+            if (rigidbody == null)
                 throw new System.InvalidOperationException("EnvObject cannot operate without Rigidbody on the same object.");
         }
 
         public void SetVelocity(Vector3 v)
         {
-            rb.velocity = v;
+            rigidbody.velocity = v;
         }
 
         public void AddForce(Vector3 force, Vector3 pos)
         {
-            rb.AddForceAtPosition(force, pos);
+            rigidbody.AddForceAtPosition(force, rigidbody.transform.position);
+        }
+
+        public void DampVelocity(float damping_factor)
+        {
+            rigidbody.velocity *= damping_factor;
         }
 
         protected virtual void OnCollisionEnter(Collision collision)

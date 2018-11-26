@@ -10,11 +10,6 @@ namespace MastersOfTempest
         {
             public class DangerZone : EnvObject
             {
-                public DangerZone(float sp) : base(sp)
-                {
-
-                }
-
                 protected override void OnCollisionEnter(Collision collision)
                 {
                     if (collision.gameObject.tag == "Player")

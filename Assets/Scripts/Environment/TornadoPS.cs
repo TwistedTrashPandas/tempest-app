@@ -20,6 +20,9 @@ namespace MastersOfTempest.Environment.VisualEffects
         [Range(1, 100)]
         public int sortEach;
 
+        public float g_fTimeDiff;
+        public float g_fTimeStepTex;
+
         public Texture2D[] densityTextures;
 
         /// In and out Computer buffers for the shader
@@ -45,6 +48,9 @@ namespace MastersOfTempest.Environment.VisualEffects
         private Texture2D partTex;
         private int[] particleIdx;
 
+        private Material material;
+
+        // counter for sorting particles
         private int counter;
 
         const uint BLOCK_SIZE = 1024;
@@ -69,9 +75,10 @@ namespace MastersOfTempest.Environment.VisualEffects
                 particlePos[i] = new Vector3(x, y, z);
                 particleIdx[i] = i;
             }
+            material = GetComponent<MeshRenderer>().material;
             initBuffers();
             CreateMesh();
-            StartCoroutine(UpdateDensTex(0));
+            StartCoroutine(UpdateDensTex());
             partTex = GenNoiseTexture.Gen2DTexture(1024, 1024);
             // GetComponent<Renderer>().material.SetTexture("g_NoiseTex", partTex);
         }
@@ -131,13 +138,19 @@ namespace MastersOfTempest.Environment.VisualEffects
             sortCS.SetBuffer(kernelT, "particlePos", particlePosRCB);
             sortCS.SetBuffer(kernelT, "particleVel", particleVelRCB);
             Shader.SetGlobalBuffer("g_vVertices", particlePosCB);
+            material.SetFloat("g_fTimeStepTex", g_fTimeStepTex);
         }
 
-        IEnumerator UpdateDensTex(int c)
+        IEnumerator UpdateDensTex()
         {
-            Shader.SetGlobalTexture("g_TornadoTex", densityTextures[c]);
-            yield return new WaitForSeconds(0.25f);
-            StartCoroutine(UpdateDensTex((c + 1) % 10));
+            int c = 0;
+            while (true)
+            {
+                material.SetTexture("g_Tex1", densityTextures[c]);
+                material.SetTexture("g_Tex2", densityTextures[(c + 1) % 10]);
+                yield return new WaitForSeconds(g_fTimeStepTex);
+                c = (c + 1) % 10;
+            }
         }
 
         private void UpdateParticles()
@@ -214,6 +227,14 @@ namespace MastersOfTempest.Environment.VisualEffects
             counter = (counter + 1) % sortEach;
             if (counter == 0)
                 SortParticles();
+        }
+
+        public void OnWillRenderObject()
+        {
+            g_fTimeDiff += Time.smoothDeltaTime;
+            if (g_fTimeDiff > g_fTimeStepTex)
+                g_fTimeDiff = 0.0f;
+            material.SetFloat("g_fTimeDiff", g_fTimeDiff);
         }
 
         private void CreateMesh()

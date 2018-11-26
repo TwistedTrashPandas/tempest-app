@@ -9,47 +9,45 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1476894203371464}
+  m_RootGameObject: {fileID: 1726956007735904}
   m_IsPrefabAsset: 1
---- !u!1 &1476894203371464
+--- !u!1 &1726956007735904
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4994672270940162}
-  - component: {fileID: 33876471270385866}
-  - component: {fileID: 23290094243127342}
-  - component: {fileID: 65130192109209252}
-  - component: {fileID: 54334168285859978}
-  - component: {fileID: 114263723997430558}
-  m_Layer: 10
-  m_Name: Cube (1)
+  - component: {fileID: 4529844370892034}
+  - component: {fileID: 114315063605312610}
+  - component: {fileID: 33802898687387734}
+  - component: {fileID: 23774516927882116}
+  m_Layer: 0
+  m_Name: Tornado
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4994672270940162
+--- !u!4 &4529844370892034
 Transform:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1476894203371464}
+  m_GameObject: {fileID: 1726956007735904}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.4016495, y: 1.5845468, z: 10.68}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &23290094243127342
+--- !u!23 &23774516927882116
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1476894203371464}
+  m_GameObject: {fileID: 1726956007735904}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -59,7 +57,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a533d20b0f09e4b45a53964c52b05942, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -79,49 +77,39 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!33 &33876471270385866
+--- !u!33 &33802898687387734
 MeshFilter:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1476894203371464}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!54 &54334168285859978
-Rigidbody:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1476894203371464}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 112
-  m_CollisionDetection: 0
---- !u!65 &65130192109209252
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1476894203371464}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114263723997430558
+  m_GameObject: {fileID: 1726956007735904}
+  m_Mesh: {fileID: 0}
+--- !u!114 &114315063605312610
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1476894203371464}
+  m_GameObject: {fileID: 1726956007735904}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93357bd337da71e499a3292309c54afc, type: 3}
+  m_Script: {fileID: 11500000, guid: bcb22f061abca8c42b29ef303798e71a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
+  particlesCS: {fileID: 7200000, guid: 726b78c77bcda8e40beb389408cbba57, type: 3}
+  sortCS: {fileID: 7200000, guid: 75eeb224b5bab704fb3f47717cb5d167, type: 3}
+  renderParticlesS: {fileID: 4800000, guid: 48749fd051690e34e80725bd55a4cbc7, type: 3}
+  vectorField: {fileID: 0}
+  sortEach: 20
+  g_fTimeDiff: 0
+  g_fTimeStepTex: 0.1
+  densityTextures:
+  - {fileID: 2800000, guid: ad4a328c6249e9c44a365bfa9c93d02d, type: 3}
+  - {fileID: 2800000, guid: 1b763434ae5ba674e9808f545b783d8c, type: 3}
+  - {fileID: 2800000, guid: 34b4899d729036d469a299ca6999c7a3, type: 3}
+  - {fileID: 2800000, guid: 129101abad77883408e4a452fcc65449, type: 3}
+  - {fileID: 2800000, guid: 48a15783f8cc25944ac78de6660326d6, type: 3}
+  - {fileID: 2800000, guid: b69771e0fa1ac804dbb08af60782f7c8, type: 3}
+  - {fileID: 2800000, guid: 939df1741a334f94681f3f8d6f4b352a, type: 3}
+  - {fileID: 2800000, guid: 67c40031f96ac57499f4e13cd08489cf, type: 3}
+  - {fileID: 2800000, guid: 300a7626bc91a9d44895b6b786c14c8b, type: 3}
+  - {fileID: 2800000, guid: a2b11be95bb0f634389139e59209584c, type: 3}

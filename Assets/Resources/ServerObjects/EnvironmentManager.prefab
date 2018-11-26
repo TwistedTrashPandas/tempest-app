@@ -83,8 +83,9 @@ MonoBehaviour:
   f_cellSize: 1
   v3_dimensions: {x: 120, y: 248, z: 120}
   tex: {fileID: 0}
-  loadFromFile: 1
-  velScale: 10
+  loadFromFile: 0
+  velScale: 50
+  yVelScale: 0.05
 --- !u!114 &114458285926744006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -96,6 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b481b83ab7320c43aa7cabceab2dbc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damping_factor: 0.9
   prefabs:
   - {fileID: 1476894203371464, guid: e8c9d0a525a3e1b4fba9d4d419b35e72, type: 2}
   vectorField: {fileID: 114404567317752372}

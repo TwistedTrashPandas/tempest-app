@@ -21,6 +21,9 @@ namespace MastersOfTempest.Environment
         [Range(0.01f, 256f)]
         public float velScale;
 
+        [Range(0.001f, 1.0f)]
+        public float yVelScale;
+
         private Vector2 v2_rotCenter;
         private String uniFilePath = "/UniFiles/";
         private String fileName = "plume3DHighRes_vel_";
@@ -66,7 +69,7 @@ namespace MastersOfTempest.Environment
                     {
                         uint start_index = header_size + 4 + ((i) * 128 + (j) * 128 * 256 + (k)) * 12;
                         float x = BitConverter.ToSingle(buffer, (int)start_index);
-                        float y = BitConverter.ToSingle(buffer, (int)start_index + 4);
+                        float y = BitConverter.ToSingle(buffer, (int)start_index + 4) * yVelScale;
                         float z = BitConverter.ToSingle(buffer, (int)start_index + 8);
 
                         v3s_vectors[k - start_idx, i - start_idx, j - start_idx] = new Vector3(x, y, z) * velScale;
@@ -77,7 +80,7 @@ namespace MastersOfTempest.Environment
 
         private void InitializeVectorField()
         {
-            float y_vel = 0.125f, minScale = 0.85f, maxScale = 1.15f;
+            float y_vel = 1.0f* yVelScale, minScale = 0.85f, maxScale = 1.15f;
             int nx = v3_dimensions[0], ny = v3_dimensions[1], nz = v3_dimensions[2];
             float middleOffset = nx / 128f;
             v2_rotCenter = new Vector2((nx - 1f) / 2f, (nz - 1f) / 2f);
@@ -123,7 +126,7 @@ namespace MastersOfTempest.Environment
                         float diffX = v2_rotCenter.x - i;
                         float diffZ = v2_rotCenter.y - j;
                         float hypotenuse = Mathf.Sqrt(diffX * diffX + diffZ * diffZ);
-                        v3s_vectors[i, k, j] = new Vector3(diffZ / hypotenuse, y_vel, -diffX / hypotenuse) * (velScale * strModifier);
+                        v3s_vectors[i, k, j] = new Vector3(-diffZ / hypotenuse, y_vel, diffX / hypotenuse) * (velScale * strModifier);
                         v3s_vectors[i, k, j].Scale(new Vector3(UnityEngine.Random.Range(minScale, maxScale),
                             UnityEngine.Random.Range(minScale, maxScale), UnityEngine.Random.Range(minScale, maxScale)));
                     }
