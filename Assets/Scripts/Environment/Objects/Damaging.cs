@@ -2,26 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MastersOfTempest
+namespace MastersOfTempest.Environment.Interacting
 {
-    namespace Environment
+    public class Damaging : EnvObject
     {
-        namespace Interacting
+        public Damaging(float sp) : base(sp)
         {
-            public class Damaging : EnvObject
+
+        }
+
+        protected override void OnCollisionEnter(Collision collision)
+        {
+            if (collision.gameObject.tag == "Player")
             {
-                public Damaging(float sp) : base(sp)
-                {
-
-                }
-
-                protected override void OnCollisionEnter(Collision collision)
-                {
-                    if(collision.gameObject.tag == "Player")
-                    {
-                        // TODO: collision
-                    }
-                }
+                // TODO: collision
             }
         }
     }

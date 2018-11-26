@@ -14,6 +14,8 @@ namespace MasterOfTempest.Networking
         ServerObject = 3,
         DestroyGameObject = 4,
         NetworkBehaviourInitialized = 5,
-        PushRigidbodyUp = 6
+        PushRigidbodyUp = 6,
+        ForceManipulator = 7,
+        EnvObjects = 8
     };
 }

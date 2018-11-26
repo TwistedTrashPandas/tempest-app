@@ -2,17 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MastersOfTempest
+namespace MastersOfTempest.Environment.VisualEffects
 {
-    namespace Environment
+    public class VisualSpawner : MonoBehaviour
     {
-        namespace VisualEffects
-        {
-            public class VisualSpawner : MonoBehaviour
-            {
-                TornadoPS m_tornado;
-
-            }
-        }
+        TornadoPS m_tornado;
     }
 }

@@ -2,46 +2,41 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MastersOfTempest
+namespace MastersOfTempest.Environment.Interacting
 {
-    namespace Environment
+    public abstract class EnvObject : MonoBehaviour
     {
-        namespace Interacting
+        Rigidbody rb;
+        public int instanceID { get; set; }
+        public EnvSpawner.EnvObjectType type;
+
+        public EnvObject()
         {
-            public class EnvObject : MonoBehaviour
-            {
+        }
 
-                protected Rigidbody rb;
-                protected float speed;
+        public EnvObject(float sp)
+        {
+        }
 
-                public EnvObject()
-                {
-                }
+        private void Awake()
+        {
+            rb = GetComponent<Rigidbody>();
+            if (rb == null)
+                throw new System.InvalidOperationException("EnvObject cannot operate without Rigidbody on the same object.");
+        }
 
-                public EnvObject(float sp)
-                {
-                    speed = sp;
-                }
+        public void SetVelocity(Vector3 v)
+        {
+            rb.velocity = v;
+        }
 
-                private void Awake()
-                {
-                    rb = GetComponent<Rigidbody>();
-                }
+        public void AddForce(Vector3 force, Vector3 pos)
+        {
+            rb.AddForceAtPosition(force, pos);
+        }
 
-                public void SetVelocity(Vector3 v)
-                {
-                    rb.velocity = v;
-                }
-
-                public void AddForce(Vector3 force, Vector3 pos)
-                {
-                    rb.AddForceAtPosition(force, pos);
-                }
-
-                protected virtual void OnCollisionEnter(Collision collision)
-                {
-                }
-            }
+        protected virtual void OnCollisionEnter(Collision collision)
+        {
         }
     }
 }

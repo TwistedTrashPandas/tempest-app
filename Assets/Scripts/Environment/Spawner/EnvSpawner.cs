@@ -1,43 +1,90 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MasterOfTempest.Networking;
+using static MasterOfTempest.EnvironmentNetwork;
 
-namespace MastersOfTempest
+namespace MastersOfTempest.Environment.Interacting
 {
-    namespace Environment
+    public class EnvSpawner : MonoBehaviour
     {
-        namespace Interacting
+        public enum EnvObjectType
         {
-            public class EnvSpawner : MonoBehaviour
+            Damaging,
+            DangerZone,
+            Helping
+        };
+
+        public GameObject[] prefabs;
+        public VectorField vectorField;
+        public List<EnvObject> envObjects { get; private set; }
+
+
+        private void Start()
+        {
+            envObjects = new List<EnvObject>();
+            if (GetComponent<ServerObject>().onServer)
             {
-                enum ObjectType
-                {
-                    Damaging,
-                    DangerZone,
-                    Helping
-                };
-                public GameObject[] prefabs;
-                public VectorField vectorField;
+                InstantiateNewObject(true);
+                InstantiateNewObject(true);
+                InstantiateNewObject(true);
+            }
+        }
 
-                private List<EnvObject> envObjects;
-
-                void Start()
+        void Update()
+        {
+            // update all objects' velocity by looking up value in velocity grid if the spawner is on the server
+            if (GetComponent<ServerObject>().onServer)
+            {
+                for (int i = 0; i < envObjects.Count; i++)
                 {
-                    envObjects = new List<EnvObject>();
-                    InstantiateNewObject();
+                    envObjects[i].SetVelocity(vectorField.GetVectorAtPos(envObjects[i].transform.position));
                 }
+            }
+        }
 
-                private void Update()
+        private void InstantiateNewObject(bool onServer, EnvObjectType type = EnvObjectType.Damaging, int ID = 0)
+        {
+            envObjects.Add(GameObject.Instantiate(prefabs[0]).GetComponent<EnvObject>());
+            if (!onServer)
+            {
+                envObjects[envObjects.Count - 1].gameObject.layer = 9;
+                envObjects[envObjects.Count - 1].instanceID = ID;
+                Destroy(envObjects[envObjects.Count - 1].GetComponent<Rigidbody>());
+            }
+        }
+
+        private void UpdateTransform(MessageEnvObject obj, int idx)
+        {
+            envObjects[idx].transform.position = obj.position;
+            envObjects[idx].transform.localScale = obj.localScale;
+            envObjects[idx].transform.rotation = obj.orientation;
+        }
+
+        public void UpdateEnvObjects(List<MessageEnvObject> objects)
+        {
+            for (int i = 0; i < objects.Count;)
+            {
+                if (envObjects.Count == i)
                 {
-                    for (int i = 0; i < envObjects.Count; i++)
+                    InstantiateNewObject(false, objects[i].type, objects[i].instanceID);
+                    i++;
+                }
+                else
+                {
+                    // object already present -> update transform
+                    if (envObjects[i].instanceID == objects[i].instanceID)
                     {
-                        envObjects[i].SetVelocity(vectorField.GetVectorAtPos(envObjects[i].transform.position));
+                        UpdateTransform(objects[i], i);
+                        i++;
                     }
-                }
-
-                private void InstantiateNewObject()
-                {
-                    envObjects.Add(GameObject.Instantiate(prefabs[0]).GetComponent<EnvObject>());
+                    // object got destroyed on server -> destroy on all clients
+                    else
+                    {
+                        GameObject toDestroy = envObjects[i].gameObject;
+                        envObjects.RemoveAt(i);
+                        Destroy(toDestroy);
+                    }
                 }
             }
         }
