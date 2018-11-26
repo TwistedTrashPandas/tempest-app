@@ -4,33 +4,36 @@ using UnityEngine;
 using Facepunch.Steamworks;
 using System;
 
-public class LobbyChat : MonoBehaviour
+namespace MasterOfTempest.Networking
 {
-    public UnityEngine.UI.InputField inputFieldChat;
-    public UnityEngine.UI.Text textChat;
-
-	void Start ()
+    public class LobbyChat : MonoBehaviour
     {
-        ClientManager.Instance.clientMessageEvents[NetworkMessageType.LobbyChat] += OnMessageLobbyChat;
-    }
+        public UnityEngine.UI.InputField inputFieldChat;
+        public UnityEngine.UI.Text textChat;
 
-    void OnMessageLobbyChat(string message, ulong steamID)
-    {
-        textChat.text += "<color=grey>[" + Client.Instance.Friends.Get(steamID).Name + "]: </color>" + message + "\n";
-    }
+        void Start()
+        {
+            ClientManager.Instance.clientMessageEvents[NetworkMessageType.LobbyChat] += OnMessageLobbyChat;
+        }
 
-    public void SendChatMessage ()
-    {
-        ClientManager.Instance.SendToAllClients(inputFieldChat.text, NetworkMessageType.LobbyChat, Networking.SendType.Reliable);
+        void OnMessageLobbyChat(string message, ulong steamID)
+        {
+            textChat.text += "<color=grey>[" + Client.Instance.Friends.Get(steamID).Name + "]: </color>" + message + "\n";
+        }
 
-        inputFieldChat.text = "";
-        inputFieldChat.ActivateInputField();
-        inputFieldChat.Select();
-        inputFieldChat.placeholder.gameObject.SetActive(false);
-    }
+        public void SendChatMessage()
+        {
+            ClientManager.Instance.SendToAllClients(inputFieldChat.text, NetworkMessageType.LobbyChat, Facepunch.Steamworks.Networking.SendType.Reliable);
 
-    void OnDestroy()
-    {
-        ClientManager.Instance.clientMessageEvents[NetworkMessageType.LobbyChat] -= OnMessageLobbyChat;
+            inputFieldChat.text = "";
+            inputFieldChat.ActivateInputField();
+            inputFieldChat.Select();
+            inputFieldChat.placeholder.gameObject.SetActive(false);
+        }
+
+        void OnDestroy()
+        {
+            ClientManager.Instance.clientMessageEvents[NetworkMessageType.LobbyChat] -= OnMessageLobbyChat;
+        }
     }
 }

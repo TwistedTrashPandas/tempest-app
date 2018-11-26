@@ -3,50 +3,53 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-// Creates simple dialog boxes at runtime with yes/no buttons that invoke functions when they are pressed
-public class DialogBox : MonoBehaviour
+namespace MasterOfTempest
 {
-    public delegate void OnButtonClick();
-
-    public Text text;
-    public OnButtonClick onYes;
-    public OnButtonClick onNo;
-
-    public static void Show(string text, OnButtonClick onYes, OnButtonClick onNo)
+    // Creates simple dialog boxes at runtime with yes/no buttons that invoke functions when they are pressed
+    public class DialogBox : MonoBehaviour
     {
-        Canvas canvas = FindObjectOfType<Canvas>();
+        public delegate void OnButtonClick();
 
-        if (canvas != null)
-        {
-            GameObject dialogBoxPrefab = Resources.Load<GameObject>("Dialog Box");
-            DialogBox dialogBox = Instantiate(dialogBoxPrefab, canvas.transform).GetComponent<DialogBox>();
-            dialogBox.text.text = text;
-            dialogBox.onYes = onYes;
-            dialogBox.onNo = onNo;
-        }
-        else
-        {
-            Debug.LogError("There is no canvas in the scene that the dialog box can be attached to!");
-        }
-    }
+        public Text text;
+        public OnButtonClick onYes;
+        public OnButtonClick onNo;
 
-    public void Yes ()
-    {
-        if (onYes != null)
+        public static void Show(string text, OnButtonClick onYes, OnButtonClick onNo)
         {
-            onYes.Invoke();
-        }
+            Canvas canvas = FindObjectOfType<Canvas>();
 
-        Destroy(gameObject);
-    }
-
-    public void No ()
-    {
-        if (onNo != null)
-        {
-            onNo.Invoke();
+            if (canvas != null)
+            {
+                GameObject dialogBoxPrefab = Resources.Load<GameObject>("Dialog Box");
+                DialogBox dialogBox = Instantiate(dialogBoxPrefab, canvas.transform).GetComponent<DialogBox>();
+                dialogBox.text.text = text;
+                dialogBox.onYes = onYes;
+                dialogBox.onNo = onNo;
+            }
+            else
+            {
+                Debug.LogError("There is no canvas in the scene that the dialog box can be attached to!");
+            }
         }
 
-        Destroy(gameObject);
+        public void Yes()
+        {
+            if (onYes != null)
+            {
+                onYes.Invoke();
+            }
+
+            Destroy(gameObject);
+        }
+
+        public void No()
+        {
+            if (onNo != null)
+            {
+                onNo.Invoke();
+            }
+
+            Destroy(gameObject);
+        }
     }
 }
