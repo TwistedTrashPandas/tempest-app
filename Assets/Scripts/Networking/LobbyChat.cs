@@ -4,7 +4,7 @@ using UnityEngine;
 using Facepunch.Steamworks;
 using System;
 
-namespace MasterOfTempest.Networking
+namespace MastersOfTempest.Networking
 {
     public class LobbyChat : MonoBehaviour
     {

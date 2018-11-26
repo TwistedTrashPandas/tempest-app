@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Facepunch.Steamworks;
 
-namespace MasterOfTempest.Networking
+namespace MastersOfTempest.Networking
 {
     public class LobbyManager : MonoBehaviour
     {

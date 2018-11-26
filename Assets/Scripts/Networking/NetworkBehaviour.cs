@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Facepunch.Steamworks;
+﻿using UnityEngine;
 
-namespace MasterOfTempest.Networking
+namespace MastersOfTempest.Networking
 {
+    [RequireComponent(typeof(ServerObject))]
     public class NetworkBehaviour : MonoBehaviour
     {
         protected bool initialized = false;
@@ -39,6 +37,10 @@ namespace MasterOfTempest.Networking
             }
             else
             {
+                //We should remove all "physics" components on the client side: 
+                //only Server should determine all the movement;
+                RemovePhysics();
+
                 ClientManager.Instance.clientMessageEvents[networkMessageType] += OnClientMessage;
 
                 // Wait for the initialize message
@@ -182,6 +184,15 @@ namespace MasterOfTempest.Networking
         protected virtual void OnDestroyClient()
         {
             // To be overwritten by the superclass
+        }
+
+        private void RemovePhysics()
+        {
+            var rigidBodyComponent = GetComponent<Rigidbody>();
+            if(rigidBodyComponent != null)
+            {
+                Destroy(rigidBodyComponent);
+            }
         }
     }
 }
