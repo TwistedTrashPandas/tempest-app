@@ -11,6 +11,7 @@
         DestroyGameObject = 4,
         NetworkBehaviourInitialized = 5,
         PushRigidbodyUp = 6,
-        ForceManipulator = 7
+        ForceManipulator = 7,
+        NoMessages = 8
     };
 }

@@ -52,7 +52,7 @@ namespace MastersOfTempest.Networking
 
             if (networkMessageType == NetworkMessageType.Empty)
             {
-                Debug.LogWarning("NetworkMessageType of " + gameObject.name + " should not be Empty!\nDid you forget to add a new type in NetworkMessages.cs?");
+                Debug.LogError("NetworkMessageType of " + gameObject.name + " should not be Empty!\nDid you forget to add a new type in NetworkMessages.cs?");
             }
         }
 

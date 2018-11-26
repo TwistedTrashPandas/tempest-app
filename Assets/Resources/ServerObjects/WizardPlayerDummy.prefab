@@ -236,7 +236,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a42a63c06c484875b696b3733ae734d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  networkMessageType: 0
+  networkMessageType: 8
   Text: {fileID: 114788500876867982}
 --- !u!222 &222870503025083430
 CanvasRenderer:
