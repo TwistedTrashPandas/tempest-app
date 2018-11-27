@@ -81,7 +81,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   f_cellSize: 1
-  v3_dimensions: {x: 120, y: 248, z: 120}
+  v3_dimensions: {x: 152, y: 312, z: 152}
   tex: {fileID: 0}
   loadFromFile: 1
   velScale: 50

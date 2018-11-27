@@ -26,7 +26,7 @@ public class DrawField : Editor
                         Handles.DrawLine(grid.transform.position + new Vector3(i, j, k) * c_s, grid.transform.position + new Vector3(i, j, k) * c_s + grid.v3s_vectors[i, j, k]);
                     }
                 }
-            }
+            }        
         }
     }
 }

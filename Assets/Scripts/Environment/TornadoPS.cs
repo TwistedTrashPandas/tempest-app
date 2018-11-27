@@ -13,7 +13,7 @@ namespace MastersOfTempest.Environment.VisualEffects
         public ComputeShader particlesCS;
         public ComputeShader sortCS;
         public Shader renderParticlesS;
-
+        
         /// Vector field for tornado
         public VectorField vectorField;
 
@@ -25,6 +25,7 @@ namespace MastersOfTempest.Environment.VisualEffects
         public float g_fTimeStepTex;
 
         public string densityTexPrefix;
+        public string normalTexPrefix;
         public int startIdx;
         public int endIdx;
         public int skipIdx;
@@ -51,6 +52,7 @@ namespace MastersOfTempest.Environment.VisualEffects
         private Vector3[] particleVel;
         private Texture2D partTex;
         private Texture2D[] densityTextures;
+        private Texture2D[] normalTextures;
         private int[] particleIdx;
 
         private Material material;
@@ -84,7 +86,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             initBuffers();
             CreateMesh();
             LoadDensityTextures();
-            StartCoroutine(UpdateDensTex());
+            StartCoroutine(UpdateTex());
             partTex = GenNoiseTexture.Gen2DTexture(1024, 1024);
             // GetComponent<Renderer>().material.SetTexture("g_NoiseTex", partTex);
         }
@@ -92,14 +94,17 @@ namespace MastersOfTempest.Environment.VisualEffects
         private void LoadDensityTextures()
         {
             densityTextures = new Texture2D[(endIdx - startIdx) / skipIdx];
+            normalTextures = new Texture2D[(endIdx - startIdx) / skipIdx];
             for (int i = startIdx; i < endIdx; i += skipIdx)
             {
                 string filepath = Application.dataPath + "/UniFiles/DensityTextures/" + densityTexPrefix + i.ToString("D" + 4) + ".png";
-                print(filepath);
                 byte[] buffer = Tools.FileHandling.ReadFile(filepath);
-                densityTextures[(i - startIdx) / skipIdx] = new Texture2D(1024, 2048);
+                densityTextures[(i - startIdx) / skipIdx] = new Texture2D(720, 1024);
                 densityTextures[(i - startIdx) / skipIdx].LoadImage(buffer);
-                print(buffer.Length);
+                filepath = Application.dataPath + "/UniFiles/NormalTextures/" + normalTexPrefix + i.ToString("D" + 4) + ".png";
+                buffer = Tools.FileHandling.ReadFile(filepath);
+                normalTextures[(i - startIdx) / skipIdx] = new Texture2D(720, 1024);
+                normalTextures[(i - startIdx) / skipIdx].LoadImage(buffer);
             }
         }
 
@@ -138,10 +143,10 @@ namespace MastersOfTempest.Environment.VisualEffects
             particlesCS.SetFloats("g_fMaxVel", maxVel);
             particlesCS.SetFloat("g_fMaxDist", maxDist);
 
-            Shader.SetGlobalFloat("g_fHeightInterp", dims[1] * dims[3] * 0.333f);
-            Shader.SetGlobalFloat("g_fMaxHeight", dims[1] * dims[3]);
-            Shader.SetGlobalVector("g_i3Dimensions", new Vector4(dims[0], dims[1], dims[2], dims[3]));
-            Shader.SetGlobalVector("g_vCenter", new Vector4(center[0], center[1], center[2], 1.0f));
+            material.SetFloat("g_fHeightInterp", dims[1] * dims[3] * 0.333f);
+            material.SetFloat("g_fMaxHeight", dims[1] * dims[3]);
+            material.SetVector("g_i3Dimensions", new Vector4(dims[0], dims[1], dims[2], dims[3]));
+            material.SetVector("g_vCenter", new Vector4(center[0], center[1], center[2], 1.0f));
 
             //  assume static data for compute buffers
             vectorFieldCBIn.SetData(vectorField.GetVectorField());
@@ -157,17 +162,19 @@ namespace MastersOfTempest.Environment.VisualEffects
             sortCS.SetBuffer(kernelT, "particleVelRW", particleVelCB);
             sortCS.SetBuffer(kernelT, "particlePos", particlePosRCB);
             sortCS.SetBuffer(kernelT, "particleVel", particleVelRCB);
-            Shader.SetGlobalBuffer("g_vVertices", particlePosCB);
+            material.SetBuffer("g_vVertices", particlePosCB);
             material.SetFloat("g_fTimeStepTex", g_fTimeStepTex);
         }
 
-        IEnumerator UpdateDensTex()
+        IEnumerator UpdateTex()
         {
             int c = 0;
             while (true)
             {
                 material.SetTexture("g_Tex1", densityTextures[c]);
                 material.SetTexture("g_Tex2", densityTextures[(c + 1) % densityTextures.Length]);
+                material.SetTexture("g_NormalTex1", normalTextures[c]);
+                material.SetTexture("g_NormalTex2", normalTextures[(c + 1) % densityTextures.Length]);
                 yield return new WaitForSeconds(g_fTimeStepTex);
                 c = (c + 1) % densityTextures.Length;
             }
@@ -184,7 +191,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             particlesCS.SetFloats("g_fRandPos", randPos);
 
             particlesCS.Dispatch(kernelP, Mathf.CeilToInt(numberParticles / 256f), 1, 1);
-            Shader.SetGlobalBuffer("g_vVertices", particlePosCB);
+            material.SetBuffer("g_vVertices", particlePosCB);
         }
 
         private void SortParticles()

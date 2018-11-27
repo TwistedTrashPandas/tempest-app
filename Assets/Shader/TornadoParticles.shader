@@ -3,13 +3,14 @@
 		g_NoiseTex("g_NoiseTex", 2D) = ""  {}
 		g_Tex1("g_Tex1", 2D) = ""  {}
 		g_Tex2("g_Tex2", 2D) = ""  {}
-		g_NormalTex("g_NormalTex", 2D) = ""  {}
+		g_NormalTex1("g_NormalTex1", 2D) = ""  {}
+		g_NormalTex2("g_NormalTex2", 2D) = ""  {}
 		g_Color("g_Color", Color) = (1,1,1,1)
 		g_SpecColor("g_SpecColor", Color) = (1,1,1,1)
 		g_fBillboardSize("g_BillboardSize", Range(0.01,10.0)) = 1.0
 		_InvFade("Soft Particles Factor", Range(0.01,3.0)) = 1.0
-		g_fTimeDiff("TimeDiff", Range(0.0, 0.25)) = 0.01
-		g_fTimeStepTex("TimeStepTex", Range(0.05, 1.0)) = 0.25
+		g_fTimeDiff("TimeDiff", Range(0.0, 1.0)) = 0.01
+		g_fTimeStepTex("TimeStepTex", Range(0.05, 1.0)) = 1.0
 	}
 		SubShader{
 		Tags { "Queue" = "Transparent" "RenderType" = "Transparent" "IgnoreProjector" = "True" "PreviewType" = "Plane" }
@@ -32,7 +33,8 @@
 		sampler2D g_TornadoTex;
 		sampler2D g_Tex1;
 		sampler2D g_Tex2;
-		sampler2D g_NormalTex;
+		sampler2D g_NormalTex1;
+		sampler2D g_NormalTex2;
 
 		struct appdata {
 			uint id : SV_VertexID;
@@ -104,12 +106,12 @@
 			i.color.a *= fade;
 
 			float alpha = max(min(g_fTimeStepTex / g_fTimeDiff,1),0);
-			fixed4 colA = fixed4((tex2D(g_Tex2, i.texcoord) * alpha + tex2D(g_Tex1, i.texcoord) * (1.0 - alpha)).xyz, 0.2f);
-			colA.a += colA.r;
-			float3 normal = tex2D(g_NormalTex, i.texcoord);
-			fixed4 colL = fixed4(BlinnPhong(_WorldSpaceLightPos0.xyz, i.normal, look), 1.0f);
+			fixed4 colA = fixed4((tex2D(g_Tex2, i.texcoord) * alpha + tex2D(g_Tex1, i.texcoord) * (1.0 - alpha)).xyz, g_Color.a);
+			colA.a = colA.r;
+			float3 normal = tex2D(g_NormalTex2, i.texcoord) * alpha + tex2D(g_NormalTex1, i.texcoord) * (1.0-alpha);
+			fixed4 colL = fixed4(BlinnPhong(_WorldSpaceLightPos0.xyz, -normal, look), g_Color.a);
 
-			fixed4 col = colA * colL; //* fixed4(tex2D(g_NoiseTex, i.texcoord_2).rgb, );
+			fixed4 col = colA * colL * tex2D(g_NoiseTex, i.texcoord_2).a;
 			UNITY_APPLY_FOG(i.fogCoord, col);
 
 			return col;
@@ -163,7 +165,6 @@
 					g2f o;
 					o.normal = p[0].normal;
 					o.color = p[0].color;
-					float coord_offset = 1.0f / 8.0f;
 					//float x = p[0].vertex.x / g_fCellSize;// p[0].uv.x;
 					//float y = p[0].vertex.y / g_fCellSize;// p[0].uv.y;
 					float mul_val_x = 1.0f / g_i3Dimensions.w;

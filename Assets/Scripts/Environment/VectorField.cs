@@ -32,14 +32,14 @@ namespace MastersOfTempest.Environment
         // for loading files
         private static uint header_size = 288;
         // fixed grid size for the loaded files (in byte)
-        private static uint grid_size = 128 * 256 * 128 * 12;
+        private static uint grid_size = 160 * 320 * 160 * 12;
 
 
         void Awake()
         {
             v3s_vectors = new Vector3[v3_dimensions[0], v3_dimensions[1], v3_dimensions[2]];
             if (loadFromFile)
-                LoadVectorFieldFromFile(291);
+                LoadVectorFieldFromFile(999);
             else
                 InitializeVectorField();
         }
@@ -61,13 +61,13 @@ namespace MastersOfTempest.Environment
 
             // convert bytes to vectors
             uint start_idx = 4;
-            for (uint i = start_idx; i < 256 - start_idx; i++)
+            for (uint i = start_idx; i < 320 - start_idx; i++)
             {
-                for (uint j = start_idx; j < 128 - start_idx; j++)
+                for (uint j = start_idx; j < 160 - start_idx; j++)
                 {
-                    for (uint k = start_idx; k < 128 - start_idx; k++)
+                    for (uint k = start_idx; k < 160 - start_idx; k++)
                     {
-                        uint start_index = header_size + 4 + ((i) * 128 + (j) * 128 * 256 + (k)) * 12;
+                        uint start_index = header_size + 4 + ((i) * 160 + (j) * 160 * 320 + (k)) * 12;
                         float x = BitConverter.ToSingle(buffer, (int)start_index);
                         float y = BitConverter.ToSingle(buffer, (int)start_index + 4) * yVelScale;
                         float z = BitConverter.ToSingle(buffer, (int)start_index + 8);

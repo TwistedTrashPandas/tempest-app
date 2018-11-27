@@ -98,11 +98,13 @@ MonoBehaviour:
   particlesCS: {fileID: 7200000, guid: 726b78c77bcda8e40beb389408cbba57, type: 3}
   sortCS: {fileID: 7200000, guid: 75eeb224b5bab704fb3f47717cb5d167, type: 3}
   renderParticlesS: {fileID: 4800000, guid: 48749fd051690e34e80725bd55a4cbc7, type: 3}
-  vectorField: {fileID: 0}
+  vectorField: {fileID: 114404567317752372, guid: 941dacf29dd13114da83072443e844b1,
+    type: 2}
   sortEach: 20
   g_fTimeDiff: 0
   g_fTimeStepTex: 0.1
   densityTexPrefix: diffuse_
-  startIdx: 500
-  endIdx: 501
+  normalTexPrefix: normal_
+  startIdx: 0
+  endIdx: 71
   skipIdx: 1
