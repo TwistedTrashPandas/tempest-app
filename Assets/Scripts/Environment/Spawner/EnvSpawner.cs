@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MasterOfTempest.Networking;
-using static MasterOfTempest.EnvironmentNetwork;
+using MastersOfTempest.Networking;
+using static MastersOfTempest.EnvironmentNetwork;
 
 namespace MastersOfTempest.Environment.Interacting
 {
@@ -12,14 +12,15 @@ namespace MastersOfTempest.Environment.Interacting
         {
             Damaging,
             DangerZone,
-            Helping
+            Supporting
         };
 
         public float damping_factor;
-        public GameObject[] prefabs;
         public VectorField vectorField;
         public List<EnvObject> envObjects { get; private set; }
-
+        public GameObject[] damagingPrefabs;
+        public GameObject[] supportingPrefabs;
+        public GameObject[] DangerzonesPrefabs;
 
         private void Start()
         {
@@ -27,46 +28,41 @@ namespace MastersOfTempest.Environment.Interacting
             if (GetComponent<ServerObject>().onServer)
             {
                 InstantiateNewObject(true);
-                //InstantiateNewObject(true);
-                //InstantiateNewObject(true);
-                //InstantiateNewObject(true);
             }
         }
 
         void FixedUpdate()
         {
-            // update all objects' velocity by looking up value in velocity grid if the spawner is on the server
+            // update all objects' velocity or add force by looking up value in vector grid if the spawner is on the server
             if (GetComponent<ServerObject>().onServer)
             {
                 for (int i = 0; i < envObjects.Count; i++)
                 {
                     envObjects[i].AddForce(vectorField.GetVectorAtPos(envObjects[i].transform.position), new Vector3());
                     //envObjects[i].SetVelocity(vectorField.GetVectorAtPos(envObjects[i].transform.position));
-                    // envObjects[i].DampVelocity(damping_factor);
-                }
-                if (envObjects.Count == 4)
-                {
-                    GameObject toDestroy = envObjects[2].gameObject;
-                    envObjects.RemoveAt(2);
-                    Destroy(toDestroy);
-                }
-                else if (envObjects.Count == 3)
-                {
-                    InstantiateNewObject(true);
-                    InstantiateNewObject(true);
-                    InstantiateNewObject(true);
-                    InstantiateNewObject(true);
+                    //envObjects[i].DampVelocity(damping_factor);
                 }
             }
         }
 
         private void InstantiateNewObject(bool onServer, EnvObjectType type = EnvObjectType.Damaging, int ID = 0)
         {
-            envObjects.Add(GameObject.Instantiate(prefabs[0]).GetComponent<EnvObject>());
+            switch (type)
+            {
+                case EnvObjectType.Damaging:
+                    envObjects.Add(GameObject.Instantiate(damagingPrefabs[0]).GetComponent<EnvObject>());
+                    break;
+                case EnvObjectType.DangerZone:
+                    break;
+                case EnvObjectType.Supporting:
+                    break;
+            }
             if (!onServer)
             {
+                //  set layer, instanceID (for deleting/updating objects) only for clients
                 envObjects[envObjects.Count - 1].gameObject.layer = 9;
                 envObjects[envObjects.Count - 1].instanceID = ID;
+                //  disable unnecessary components
                 Destroy(envObjects[envObjects.Count - 1].GetComponent<Rigidbody>());
                 Destroy(envObjects[envObjects.Count - 1].GetComponent<Collider>());
             }
@@ -83,6 +79,7 @@ namespace MastersOfTempest.Environment.Interacting
         {
             for (int i = 0; i < objects.Count; i++)
             {
+                //  less objects on client than on server currently -> create new object
                 if (envObjects.Count <= i)
                 {
                     InstantiateNewObject(false, objects[i].type, objects[i].instanceID);

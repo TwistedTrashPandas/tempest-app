@@ -34,6 +34,11 @@ namespace MastersOfTempest.Environment.Interacting
 
         protected virtual void OnCollisionEnter(Collision collision)
         {
+
+        }
+        protected virtual void OnCollisionStay(Collision collision)
+        {
+
         }
     }
 }

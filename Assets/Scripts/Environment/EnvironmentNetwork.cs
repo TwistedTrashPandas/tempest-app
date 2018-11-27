@@ -1,11 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MasterOfTempest.Networking;
+using MastersOfTempest.Networking;
 using MastersOfTempest.Environment.Interacting;
 using MastersOfTempest.Environment;
 
-namespace MasterOfTempest
+namespace MastersOfTempest
 {
     // Use this class for custom networking messages between the client and the server
     // Requires a ServerObject to be attached to this gameObject
@@ -18,9 +18,7 @@ namespace MasterOfTempest
     // - If you have to use the MonoBehaviour Start(), Update() and OnDestroy() methods you have to call base.Start() / base.Update() / base.OnDestroy() inside
     // - If you want to synchronize a lot of objects it is more performant to only have one NetworkBehaviour that handles e.g. a list of objects that you want to synchronize
     public class EnvironmentNetwork : NetworkBehaviour
-    {
-        EnvironmentManager environmentManager;
-        
+    {        
         [System.Serializable]
         private struct MessageAllEnvObjects
         {
@@ -58,17 +56,12 @@ namespace MasterOfTempest
         // Used for initialization when this object is on a client
         protected override void StartClient()
         {
-            environmentManager = GetComponent<EnvironmentManager>();
-            if (environmentManager == null)
-                throw new System.InvalidOperationException("EnvironmentNetwork cannot operate without EnvironmentManager on the same object.");
+
         }
 
         // Used for initialization when this object is on the server
         protected override void StartServer()
         {
-            environmentManager = GetComponent<EnvironmentManager>();
-            if (environmentManager == null)
-                throw new System.InvalidOperationException("EnvironmentNetwork cannot operate without EnvironmentManager on the same object.");
             StartCoroutine(SendEnvObjects());
         }
 
@@ -76,7 +69,7 @@ namespace MasterOfTempest
         {
             while (true)
             {
-                string msg = JsonUtility.ToJson(new MessageAllEnvObjects(environmentManager.envSpawner.envObjects));
+                string msg = JsonUtility.ToJson(new MessageAllEnvObjects(EnvironmentManager.instance_s.envSpawner.envObjects));
                 SendToAllClients(msg, Facepunch.Steamworks.Networking.SendType.Reliable);
                 yield return new WaitForSeconds(1.0f / GameServer.Instance.hz);
             }
@@ -85,11 +78,11 @@ namespace MasterOfTempest
         // Called when the object is on a client and receives a message
         protected override void OnClientReceivedMessage(string message, ulong steamID)
         {
-            if (environmentManager != null)
+            if (EnvironmentManager.instance_c != null)
             {
                 base.OnClientReceivedMessage(message, steamID);
                 MessageAllEnvObjects tmp = JsonUtility.FromJson<MessageAllEnvObjects>(message);
-                environmentManager.envSpawner.UpdateEnvObjects(tmp.envObjects);
+                EnvironmentManager.instance_c.envSpawner.UpdateEnvObjects(tmp.envObjects);
             }
         }
     }

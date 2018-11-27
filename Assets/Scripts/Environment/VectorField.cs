@@ -155,6 +155,11 @@ namespace MastersOfTempest.Environment
             return v3_dimensions[0] * v3_dimensions[1] * v3_dimensions[2];
         }
 
+        public Vector3 GetCenter()
+        {
+            return new Vector3(v3_dimensions[0] * f_cellSize / 2f - 0.5f, v3_dimensions[0] * f_cellSize / 2f - 0.5f, v3_dimensions[0] * f_cellSize / 2f - 0.5f);
+        }
+
         // calculates the extrapolated position in the grid (in a circular fashion)
         public Vector3 GetVectorAtPos(Vector3 pos)
         {

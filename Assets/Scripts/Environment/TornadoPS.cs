@@ -16,6 +16,7 @@ namespace MastersOfTempest.Environment.VisualEffects
         
         /// Vector field for tornado
         public VectorField vectorField;
+        public Transform camPos;
 
         /// sort all particles with respect to the camera position each "sortEach" timestep
         [Range(1, 100)]
@@ -33,8 +34,9 @@ namespace MastersOfTempest.Environment.VisualEffects
         /// In and out Computer buffers for the shader
         private ComputeBuffer particleVelCB;
         private ComputeBuffer particlePosCB;
-        private ComputeBuffer particleVelRCB;
-        private ComputeBuffer particlePosRCB;
+        private ComputeBuffer particleinitialPosCB;
+        private ComputeBuffer indicesCB;
+        private ComputeBuffer indicesRCB;
         private ComputeBuffer vectorFieldCBIn;
 
         /// kernel for computeshader
@@ -78,20 +80,21 @@ namespace MastersOfTempest.Environment.VisualEffects
             {
                 float x = Random.Range(0f, vectorField.GetDimensions()[0] * vectorField.GetCellSize());
                 float z = Random.Range(0f, vectorField.GetDimensions()[2] * vectorField.GetCellSize());
-                float y = Random.Range(0f, vectorField.GetDimensions()[1] * vectorField.GetCellSize());
+                float y = Random.Range(-vectorField.GetDimensions()[1] * vectorField.GetCellSize() * 0.2f, vectorField.GetDimensions()[1] * vectorField.GetCellSize());
                 particlePos[i] = new Vector3(x, y, z);
                 particleIdx[i] = i;
             }
             material = GetComponent<MeshRenderer>().material;
             initBuffers();
             CreateMesh();
-            LoadDensityTextures();
-            StartCoroutine(UpdateTex());
+            LoadTextures();
+            camPos = Camera.main.transform;
+            StartCoroutine(UpdateTextures());
             partTex = GenNoiseTexture.Gen2DTexture(1024, 1024);
             // GetComponent<Renderer>().material.SetTexture("g_NoiseTex", partTex);
         }
 
-        private void LoadDensityTextures()
+        private void LoadTextures()
         {
             densityTextures = new Texture2D[(endIdx - startIdx) / skipIdx];
             normalTextures = new Texture2D[(endIdx - startIdx) / skipIdx];
@@ -113,8 +116,9 @@ namespace MastersOfTempest.Environment.VisualEffects
             //  particlesCB buffers
             particleVelCB = new ComputeBuffer((int)numberParticles, 12);
             particlePosCB = new ComputeBuffer((int)numberParticles, 12);
-            particleVelRCB = new ComputeBuffer((int)numberParticles, 12);
-            particlePosRCB = new ComputeBuffer((int)numberParticles, 12);
+            particleinitialPosCB = new ComputeBuffer((int)numberParticles, 12);
+            indicesCB = new ComputeBuffer((int)numberParticles, 4);
+            indicesRCB = new ComputeBuffer((int)numberParticles, 4);
             vectorFieldCBIn = new ComputeBuffer(vectorField.GetAmountOfElements(), 12);
             //  get corresponding kernel index
             kernelP = particlesCS.FindKernel("UpdateParticles");
@@ -128,14 +132,17 @@ namespace MastersOfTempest.Environment.VisualEffects
             dims[2] = temp.z;
             dims[3] = Mathf.RoundToInt(vectorField.GetCellSize());
             maxDist = temp.x * vectorField.GetCellSize() * 3f;
-            maxVel[0] = dims[3] * 10f;
-            maxVel[1] = dims[3] * 2f;
-            maxVel[2] = dims[3] * 10f;
+            maxVel[0] = dims[3] * 100f;
+            maxVel[1] = dims[3] * 40f;
+            maxVel[2] = dims[3] * 100f;
             dampVel = 0.999f;
             float[] center = new float[3];
             center[0] = (temp.x - 1) * 0.5f * dims[3];
             center[1] = (temp.y - 1) * 0.5f * dims[3];
             center[2] = (temp.z - 1) * 0.5f * dims[3];
+            int[] idcs = new int[numberParticles];
+            for (int i = 0; i < numberParticles; i++)
+                idcs[i] = i;
 
             particlesCS.SetFloats("g_i3Dimensions", dims);
             particlesCS.SetFloats("g_vCenter", center);
@@ -151,32 +158,40 @@ namespace MastersOfTempest.Environment.VisualEffects
             //  assume static data for compute buffers
             vectorFieldCBIn.SetData(vectorField.GetVectorField());
             particlePosCB.SetData(particlePos);
+            particleinitialPosCB.SetData(particlePos);
             particleVelCB.SetData(particleVel);
+            indicesCB.SetData(idcs);
+            indicesRCB.SetData(idcs);
             //  assume static vector field
             particlesCS.SetBuffer(kernelP, "vectorFieldIn", vectorFieldCBIn);
             particlesCS.SetBuffer(kernelP, "particlePosRW", particlePosCB);
             particlesCS.SetBuffer(kernelP, "particleVelRW", particleVelCB);
-            sortCS.SetBuffer(kernelS, "particlePosRW", particlePosCB);
-            sortCS.SetBuffer(kernelS, "particleVelRW", particleVelCB);
-            sortCS.SetBuffer(kernelT, "particlePosRW", particlePosCB);
-            sortCS.SetBuffer(kernelT, "particleVelRW", particleVelCB);
-            sortCS.SetBuffer(kernelT, "particlePos", particlePosRCB);
-            sortCS.SetBuffer(kernelT, "particleVel", particleVelRCB);
+            sortCS.SetBuffer(kernelS, "particlePos", particlePosCB);
+            sortCS.SetBuffer(kernelS, "indicesRW", indicesCB);
+            sortCS.SetBuffer(kernelT, "indices", indicesRCB);
             material.SetBuffer("g_vVertices", particlePosCB);
+            material.SetBuffer("g_vInitialWorldPos", particleinitialPosCB);
+            material.SetBuffer("g_iIndices", indicesCB);
             material.SetFloat("g_fTimeStepTex", g_fTimeStepTex);
         }
 
-        IEnumerator UpdateTex()
+        IEnumerator UpdateTextures()
         {
-            int c = 0;
             while (true)
             {
-                material.SetTexture("g_Tex1", densityTextures[c]);
-                material.SetTexture("g_Tex2", densityTextures[(c + 1) % densityTextures.Length]);
-                material.SetTexture("g_NormalTex1", normalTextures[c]);
-                material.SetTexture("g_NormalTex2", normalTextures[(c + 1) % densityTextures.Length]);
+                Vector3 look =- camPos.position + vectorField.GetCenter();
+                look.y = 0;
+                look = Vector3.Normalize(look);
+                float angle =Mathf.Rad2Deg * (Mathf.Atan2(look.x, look.z) - Mathf.Atan2(0f, 1f));
+                angle = (angle < 0f) ? 360f+angle : angle;
+                int idx = Mathf.FloorToInt(angle / 5f);
+                material.SetTexture("g_Tex1", densityTextures[idx % densityTextures.Length]);
+                material.SetTexture("g_Tex2", densityTextures[(idx + 1) % densityTextures.Length]);
+                material.SetTexture("g_NormalTex1", normalTextures[idx % densityTextures.Length]);
+                material.SetTexture("g_NormalTex2", normalTextures[(idx + 1) % densityTextures.Length]);
+                material.SetFloat("g_fTimeDiff", (angle-idx*5f)/5f * g_fTimeStepTex);
+                material.SetFloat("g_fTimeStepTex", g_fTimeStepTex);
                 yield return new WaitForSeconds(g_fTimeStepTex);
-                c = (c + 1) % densityTextures.Length;
             }
         }
 
@@ -213,7 +228,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             }
             uint width = BLOCK_SIZE;
             uint height = (numberParticles / BLOCK_SIZE);
-
+            
             // transpose data and sort transposed columns then rows again
             for (uint k = (BLOCK_SIZE << 1); k <= numberParticles; k <<= 1)
             {
@@ -221,28 +236,22 @@ namespace MastersOfTempest.Environment.VisualEffects
                 sortCS.SetInt("g_iStage_2", (int)((k & ~numberParticles) / BLOCK_SIZE));
                 sortCS.SetInt("g_iWidth", (int)width);
                 sortCS.SetInt("g_iHeight", (int)height);
-                sortCS.SetBuffer(kernelT, "particlePosRW", particlePosRCB);
-                sortCS.SetBuffer(kernelT, "particleVelRW", particleVelRCB);
-                sortCS.SetBuffer(kernelT, "particlePos", particlePosCB);
-                sortCS.SetBuffer(kernelT, "particleVel", particleVelCB);
+                sortCS.SetBuffer(kernelT, "indicesRW", indicesRCB);
+                sortCS.SetBuffer(kernelT, "indices", indicesCB);
                 sortCS.Dispatch(kernelT, (int)(width / TRANSPOSE_BLOCK_SIZE), (int)(height / TRANSPOSE_BLOCK_SIZE), 1);
-
-                sortCS.SetBuffer(kernelS, "particlePosRW", particlePosRCB);
-                sortCS.SetBuffer(kernelS, "particleVelRW", particleVelRCB);
+                
+                sortCS.SetBuffer(kernelS, "indicesRW", indicesRCB);
                 sortCS.Dispatch(kernelS, groups, 1, 1);
 
                 sortCS.SetInt("k", (int)BLOCK_SIZE);
                 sortCS.SetInt("g_iStage_2", (int)k);
                 sortCS.SetInt("g_iWidth", (int)height);
                 sortCS.SetInt("g_iHeight", (int)width);
-                sortCS.SetBuffer(kernelT, "particlePosRW", particlePosCB);
-                sortCS.SetBuffer(kernelT, "particleVelRW", particleVelCB);
-                sortCS.SetBuffer(kernelT, "particlePos", particlePosRCB);
-                sortCS.SetBuffer(kernelT, "particleVel", particleVelRCB);
+                sortCS.SetBuffer(kernelT, "indicesRW", indicesCB);
+                sortCS.SetBuffer(kernelT, "indices", indicesRCB);
                 sortCS.Dispatch(kernelT, (int)(height / TRANSPOSE_BLOCK_SIZE), (int)(width / TRANSPOSE_BLOCK_SIZE), 1);
 
-                sortCS.SetBuffer(kernelS, "particlePosRW", particlePosCB);
-                sortCS.SetBuffer(kernelS, "particleVelRW", particleVelCB);
+                sortCS.SetBuffer(kernelS, "indicesRW", indicesCB);
                 sortCS.Dispatch(kernelS, groups, 1, 1);
             }
         }
@@ -255,15 +264,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             if (counter == 0)
                 SortParticles();
         }
-
-        public void OnWillRenderObject()
-        {
-            g_fTimeDiff += Time.smoothDeltaTime;
-            if (g_fTimeDiff > g_fTimeStepTex)
-                g_fTimeDiff = 0.0f;
-            material.SetFloat("g_fTimeDiff", g_fTimeDiff);
-        }
-
+        
         private void CreateMesh()
         {
             Vector2[] newUV;
@@ -291,8 +292,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             // releasing compute buffers
             particleVelCB.Release();
             particlePosCB.Release();
-            particlePosRCB.Release();
-            particleVelRCB.Release();
+            indicesCB.Release();
             vectorFieldCBIn.Release();
         }
     }

@@ -84,7 +84,7 @@ MonoBehaviour:
   v3_dimensions: {x: 152, y: 312, z: 152}
   tex: {fileID: 0}
   loadFromFile: 1
-  velScale: 50
+  velScale: 10
   yVelScale: 0.05
 --- !u!114 &114458285926744006
 MonoBehaviour:
@@ -98,9 +98,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damping_factor: 0.9
-  prefabs:
-  - {fileID: 1476894203371464, guid: e8c9d0a525a3e1b4fba9d4d419b35e72, type: 2}
   vectorField: {fileID: 114404567317752372}
+  damagingPrefabs:
+  - {fileID: 1476894203371464, guid: e8c9d0a525a3e1b4fba9d4d419b35e72, type: 2}
+  supportingPrefabs: []
+  DangerzonesPrefabs: []
 --- !u!114 &114801461701559052
 MonoBehaviour:
   m_ObjectHideFlags: 1

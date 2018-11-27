@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MastersOfTempest.Environment.Interacting
 {
-    public class Damaging : EnvObject
+    public class Supporting : EnvObject
     {
         protected override void OnCollisionEnter(Collision collision)
         {

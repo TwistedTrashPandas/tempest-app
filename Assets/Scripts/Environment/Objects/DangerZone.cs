@@ -2,21 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MastersOfTempest
+namespace MastersOfTempest.Environment.Interacting
 {
-    namespace Environment
+    public class DangerZone : EnvObject
     {
-        namespace Interacting
+        protected override void OnCollisionStay(Collision collision)
         {
-            public class DangerZone : EnvObject
+            if (collision.gameObject.tag == "Ship")
             {
-                protected override void OnCollisionEnter(Collision collision)
-                {
-                    if (collision.gameObject.tag == "Player")
-                    {
-                        // TODO: collision
-                    }
-                }
+
             }
         }
     }
