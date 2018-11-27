@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace MasterOfTempest.Networking
+namespace MastersOfTempest.Networking
 {
     public class ServerObject : MonoBehaviour
     {

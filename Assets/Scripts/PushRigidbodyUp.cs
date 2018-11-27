@@ -1,17 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MasterOfTempest.Networking;
+using MastersOfTempest.Networking;
 
-namespace MasterOfTempest
+namespace MastersOfTempest
 {
     public class PushRigidbodyUp : NetworkBehaviour
     {
-        protected override void StartServer()
-        {
-            gameObject.AddComponent<Rigidbody>();
-        }
-
         protected override void UpdateClient()
         {
             if (Input.GetKeyDown(KeyCode.Mouse0))
