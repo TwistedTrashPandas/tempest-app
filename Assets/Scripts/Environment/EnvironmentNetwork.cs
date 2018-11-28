@@ -23,14 +23,16 @@ namespace MastersOfTempest
         private struct MessageAllEnvObjects
         {
             public List<MessageEnvObject> envObjects;
+            public float lastUpdate;
 
             public MessageAllEnvObjects(List<EnvObject> objects)
             {
                 envObjects = new List<MessageEnvObject>();
                 for (int i = 0; i < objects.Count; i++)
                 {
-                    envObjects.Add(new MessageEnvObject(objects[i].transform, 0));
+                    envObjects.Add(new MessageEnvObject(objects[i].transform, objects[i].type, objects[i].prefabNum));
                 }
+                lastUpdate = Time.fixedTime;
             }
         };
 
@@ -38,30 +40,39 @@ namespace MastersOfTempest
         public struct MessageEnvObject
         {
             public int instanceID;
+            public int prefabNum;
             public Vector3 position;
             public Vector3 localScale;
             public Quaternion orientation;
             public EnvSpawner.EnvObjectType type;
 
-            public MessageEnvObject(Transform transform, EnvSpawner.EnvObjectType t)
+            public MessageEnvObject(Transform transform, EnvSpawner.EnvObjectType t, int pNum)
             {
                 position = transform.position;
                 localScale = transform.localScale;
                 orientation = transform.rotation;
                 instanceID = transform.GetInstanceID();
                 type = t;
+                prefabNum = pNum;
             }
         };
+
+        private EnvironmentManager envManager;
 
         // Used for initialization when this object is on a client
         protected override void StartClient()
         {
-
+            envManager = GetComponent<EnvironmentManager>();
+            if (envManager == null)
+                throw new System.InvalidOperationException("EnvironmentNetwork cannot operate without Environment Manager on the same object");
         }
 
         // Used for initialization when this object is on the server
         protected override void StartServer()
         {
+            envManager = GetComponent<EnvironmentManager>();
+            if (envManager == null)
+                throw new System.InvalidOperationException("EnvironmentNetwork cannot operate without Environment Manager on the same object");
             StartCoroutine(SendEnvObjects());
         }
 
@@ -69,7 +80,7 @@ namespace MastersOfTempest
         {
             while (true)
             {
-                string msg = JsonUtility.ToJson(new MessageAllEnvObjects(EnvironmentManager.instance_s.envSpawner.envObjects));
+                string msg = JsonUtility.ToJson(new MessageAllEnvObjects(envManager.envSpawner.envObjects));
                 SendToAllClients(msg, Facepunch.Steamworks.Networking.SendType.Reliable);
                 yield return new WaitForSeconds(1.0f / GameServer.Instance.hz);
             }
@@ -78,11 +89,11 @@ namespace MastersOfTempest
         // Called when the object is on a client and receives a message
         protected override void OnClientReceivedMessage(string message, ulong steamID)
         {
-            if (EnvironmentManager.instance_c != null)
+            if (envManager != null)
             {
                 base.OnClientReceivedMessage(message, steamID);
                 MessageAllEnvObjects tmp = JsonUtility.FromJson<MessageAllEnvObjects>(message);
-                EnvironmentManager.instance_c.envSpawner.UpdateEnvObjects(tmp.envObjects);
+                envManager.envSpawner.UpdateEnvObjects(tmp.envObjects, tmp.lastUpdate);
             }
         }
     }

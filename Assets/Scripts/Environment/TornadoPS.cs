@@ -22,6 +22,9 @@ namespace MastersOfTempest.Environment.VisualEffects
         [Range(1, 100)]
         public int sortEach;
 
+        [Range(15, 20)]
+        public uint particelNumExp;
+
         public float g_fTimeDiff;
         public float g_fTimeStepTex;
 
@@ -69,7 +72,7 @@ namespace MastersOfTempest.Environment.VisualEffects
 
         void Start()
         {
-            numberParticles = (uint)Mathf.Pow(2, 18f);
+            numberParticles = (uint)Mathf.Pow(2, particelNumExp);
             maxVel = new float[3];
             counter = 0;
             rnd = new System.Random();

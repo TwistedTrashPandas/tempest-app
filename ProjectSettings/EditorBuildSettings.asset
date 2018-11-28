@@ -20,4 +20,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_scenes/EnvTestClient.unity
     guid: 7c297102a82f8d944b8fb0f6369187b5
+  - enabled: 1
+    path: Assets/_scenes/ShipSceneClient.unity
+    guid: 2718d3ecc9f6d4a58a715fb2de602704
+  - enabled: 1
+    path: Assets/_scenes/ShipSceneServer.unity
+    guid: 4d1b473b6554249d49a31693b854df87
   m_configObjects: {}

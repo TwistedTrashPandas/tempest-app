@@ -13,7 +13,7 @@ float g_fTimestep;
 float g_fDampVel;
 float g_fMaxDist;
 
-[numthreads(256, 1, 1)]
+[numthreads(1024, 1, 1)]
 void UpdateParticles(uint3 id : SV_DispatchThreadID)
 {
 	// get idx of grid for every particle

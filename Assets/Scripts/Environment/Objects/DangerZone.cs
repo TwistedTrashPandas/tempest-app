@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using MastersOfTempest.ShipBL;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,7 +11,6 @@ namespace MastersOfTempest.Environment.Interacting
         {
             if (collision.gameObject.tag == "Ship")
             {
-
             }
         }
     }

@@ -117,9 +117,9 @@
 			float3 normal = normalize(tex2D(g_NormalTex2, i.texcoord) * alpha + tex2D(g_NormalTex1, i.texcoord) * (1.0 - alpha));
 			fixed4 colL = fixed4(BlinnPhong(_WorldSpaceLightPos0.xyz, i.normal, look), g_Color.a);
 
-			fixed4 col = (colL * colA)* tex2D(g_NoiseTex, i.texcoord_2).a * i.color;
+			fixed4 col = (colL * colA) * i.color;
 			UNITY_APPLY_FOG(i.fogCoord, col);
-
+			col.a *= tex2D(g_NoiseTex, i.texcoord_2).r;
 			return col;
 	}
 

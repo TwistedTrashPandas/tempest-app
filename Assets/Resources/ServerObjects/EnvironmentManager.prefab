@@ -57,7 +57,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vectorField: {fileID: 114404567317752372}
-  visualSpawner: {fileID: 0}
+  visualSpawner: {fileID: 114371213497830530}
 --- !u!114 &114371213497830530
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -69,6 +69,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed4f6f23c3809584abdce0e30c8823d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tornadoPrefab: {fileID: 1726956007735904, guid: 530d645634bb68d43b9b110b138843ec,
+    type: 2}
 --- !u!114 &114404567317752372
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -101,8 +103,11 @@ MonoBehaviour:
   vectorField: {fileID: 114404567317752372}
   damagingPrefabs:
   - {fileID: 1476894203371464, guid: e8c9d0a525a3e1b4fba9d4d419b35e72, type: 2}
-  supportingPrefabs: []
-  DangerzonesPrefabs: []
+  - {fileID: 1787456376747014, guid: abeac99c68381474e8f440ab8a83ddd3, type: 2}
+  supportingPrefabs:
+  - {fileID: 1787456376747014, guid: abeac99c68381474e8f440ab8a83ddd3, type: 2}
+  dangerzonesPrefabs: []
+  spawnRate: 1
 --- !u!114 &114801461701559052
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -129,4 +134,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16008c2fe3ba7634ea0a21cc3f094509, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  networkMessageType: 8
+  networkMessageType: 9

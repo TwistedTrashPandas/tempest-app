@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 114315063605312610}
   - component: {fileID: 33802898687387734}
   - component: {fileID: 23774516927882116}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Tornado
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100,7 +100,9 @@ MonoBehaviour:
   renderParticlesS: {fileID: 4800000, guid: 48749fd051690e34e80725bd55a4cbc7, type: 3}
   vectorField: {fileID: 114404567317752372, guid: 941dacf29dd13114da83072443e844b1,
     type: 2}
+  camPos: {fileID: 0}
   sortEach: 20
+  particelNumExp: 18
   g_fTimeDiff: 0
   g_fTimeStepTex: 0.1
   densityTexPrefix: diffuse_

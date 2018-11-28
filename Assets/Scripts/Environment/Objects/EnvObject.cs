@@ -7,6 +7,7 @@ namespace MastersOfTempest.Environment.Interacting
     public abstract class EnvObject : MonoBehaviour
     {
         public int instanceID { get; set; }
+        public int prefabNum { get; set; }        
         public EnvSpawner.EnvObjectType type { get; set; }
         private new Rigidbody rigidbody;
         
