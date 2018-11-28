@@ -10,12 +10,21 @@ namespace MastersOfTempest.Environment.Interacting
         private Vector3 forceDir;
         private float strength;
 
+        private void Start()
+        {
+            if (forceDir != null)
+                forceDir = Vector3.Normalize(forceDir);
+            else
+                forceDir = new Vector3(1, 0, 1);
+        }
+
         protected override void OnCollisionEnter(Collision collision)
         {
             if (collision.gameObject.tag == "Ship")
             {
                 Ship ship = collision.gameObject.GetComponent<Ship>();
-                ship.GetShipForceManipulator().AddForceAtPosition(collision.impulse, collision.contacts[0].point);
+                for(int i = 0; i< collision.contacts.Length;i++)
+                    ship.GetShipForceManipulator().AddForceAtPosition(forceDir * strength, collision.contacts[i].point);
             }
         }
     }

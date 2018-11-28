@@ -16,10 +16,10 @@ namespace MastersOfTempest.Environment.Interacting
             }
         }
 
+        // TODO: event for envspawner -> remove from list
         public void Explode()
         {
-
-
+            
         }
     }
 }

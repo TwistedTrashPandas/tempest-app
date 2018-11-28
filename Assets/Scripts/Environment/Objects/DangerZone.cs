@@ -11,6 +11,7 @@ namespace MastersOfTempest.Environment.Interacting
         {
             if (collision.gameObject.tag == "Ship")
             {
+                // handle interaction
             }
         }
     }

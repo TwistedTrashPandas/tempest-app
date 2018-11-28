@@ -16,6 +16,7 @@ namespace MastersOfTempest.Environment
 
         void Start()
         {
+            // initalize important scripts for environment + register for gamemaster
             vectorField = GetComponent<VectorField>();
             if (vectorField == null)
                 throw new System.InvalidOperationException("VectorField is not specified");
@@ -34,7 +35,7 @@ namespace MastersOfTempest.Environment
             envSpawner = GetComponent<EnvSpawner>();
             if (envSpawner == null)
                 throw new System.InvalidOperationException("Spawner for environment objects is not specified");
-            envSpawner.Initialize(gamemaster);
+            envSpawner.Initialize(gamemaster, vectorField);
             gamemaster.Register(this);
         }
     }

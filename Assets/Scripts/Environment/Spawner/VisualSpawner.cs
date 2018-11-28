@@ -19,6 +19,8 @@ namespace MastersOfTempest.Environment.VisualEffects
             if (tornadoPS == null)
                 throw new System.InvalidOperationException("TornadoPS.cs has to be attached to the tornado prefab");
             tornadoPS.vectorField = vectorField;
+
+            // only run tornado on client
             if (!GetComponent<ServerObject>().onServer)
             {
                 tornadoPS.gameObject.SetActive(true);

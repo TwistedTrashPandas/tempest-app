@@ -40,7 +40,7 @@ namespace MastersOfTempest
         public struct MessageEnvObject
         {
             public int instanceID;
-            public int prefabNum;
+            public int prefabNum; // for index in corresponding prefab array (in envspawner)
             public Vector3 position;
             public Vector3 localScale;
             public Quaternion orientation;
@@ -78,6 +78,7 @@ namespace MastersOfTempest
 
         IEnumerator SendEnvObjects()
         {
+            // send hz times per second
             while (true)
             {
                 string msg = JsonUtility.ToJson(new MessageAllEnvObjects(envManager.envSpawner.envObjects));
