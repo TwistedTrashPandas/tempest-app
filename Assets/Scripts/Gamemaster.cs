@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using MastersOfTempest.Networking;
 using MastersOfTempest.ShipBL;
+using MastersOfTempest.Environment;
 
 namespace MastersOfTempest
 {
@@ -13,6 +14,7 @@ namespace MastersOfTempest
     {
         private Ship ship;
         private List<Player> players;
+        private EnvironmentManager envManager;
 
         private void Awake()
         {
@@ -35,6 +37,15 @@ namespace MastersOfTempest
                 throw new InvalidOperationException($"Player object {nameof(player)} has already been registered!");
             }
             players.Add(player);
+        }
+
+        public void Register(EnvironmentManager envMng)
+        {
+            if (envManager!=null)
+            {
+                throw new InvalidOperationException("Game master already has an EnvironmentManager object registered!");
+            }
+            envManager = envMng;
         }
 
         public Ship GetShip()

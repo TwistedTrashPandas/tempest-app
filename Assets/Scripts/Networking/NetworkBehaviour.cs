@@ -31,7 +31,6 @@ namespace MastersOfTempest.Networking
             if (serverObject.onServer)
             {
                 ClientManager.Instance.serverMessageEvents[networkMessageType] += OnServerMessage;
-
                 // Wait for the initialize message
                 ClientManager.Instance.serverMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] += OnServerNetworkBehaviourInitialized;
             }
@@ -115,7 +114,6 @@ namespace MastersOfTempest.Networking
         private void OnServerMessage(string message, ulong steamID)
         {
             NetworkBehaviourMessage networkBehaviourMessage = JsonUtility.FromJson<NetworkBehaviourMessage>(message);
-
             // Call the function only if the message is for this instance
             if (serverObject.serverID == networkBehaviourMessage.serverID)
             {

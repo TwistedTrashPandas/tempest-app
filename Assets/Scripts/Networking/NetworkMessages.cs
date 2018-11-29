@@ -12,6 +12,7 @@
         NetworkBehaviourInitialized = 5,
         PushRigidbodyUp = 6,
         ForceManipulator = 7,
-        NoMessages = 8
+        NoMessages = 8,
+        EnvObjects = 9
     };
 }
