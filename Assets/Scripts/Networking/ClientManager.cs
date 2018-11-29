@@ -61,7 +61,7 @@ namespace MastersOfTempest.Networking
             else
             {
                 client = null;
-                Debug.LogWarning("Couldn't initialize Steam. Make sure that Steam is running.");
+                DialogBox.Show("Make sure that you are online and Steam is running.\nDo you want to exit the game?", true, true, Application.Quit, null);
             }
 
             // Create all the actions for incoming network messages
