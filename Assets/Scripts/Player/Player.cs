@@ -48,35 +48,6 @@ namespace MastersOfTempest
             ((ActionMadeEventArgs)e).Action.Execute(context);
         }
 
-        private void InitializeClientObjectWithOperatorControls()
-        {
-            var input = gameObject.AddComponent<SimpleInput>();
-            var qteDriver = gameObject.AddComponent<QTEDriver>();
-            input.FirstPersonCamera = FirstPersonCamera;
-            input.QTEDriver = qteDriver;
-            input.ActionMade += ExecutePlayerAction;
-            playerInput = input;
-
-            var qteRenderer = gameObject.AddComponent<QTESimpleUIRenderer>();
-            qteRenderer.Driver = qteDriver;
-            qteRenderer.InfoForUser = Text;
-        }
-
-        private void InitializeClientObjectWithNavigatorControls()
-        {
-            var input = gameObject.AddComponent<ApprenticeInput>();
-            var qteDriver = gameObject.AddComponent<QTEDriver>();
-            input.FirstPersonCamera = FirstPersonCamera;
-            input.InteractionMessage = Text;
-            input.QTEDriver = qteDriver;
-            input.ActionMade += ExecutePlayerAction;
-            playerInput = input;
-
-            var qteRenderer = gameObject.AddComponent<QTESimpleUIRenderer>();
-            qteRenderer.Driver = qteDriver;
-            qteRenderer.InfoForUser = Text;
-        }
-
         protected override void OnDestroyClient()
         {
             base.OnDestroyClient();

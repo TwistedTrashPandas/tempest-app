@@ -17,6 +17,12 @@ namespace MastersOfTempest.PlayerControls
 
         public bool Active { get; set; } = true;
 
+        private void Start()
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+
         void Update()
         {
             if (Active)

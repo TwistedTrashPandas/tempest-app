@@ -27,7 +27,10 @@ namespace MastersOfTempest.PlayerControls
 
         public abstract void Resume();
 
-        public abstract void Bootstrap(Player player);
+        public virtual void Bootstrap(Player player)
+        {
+            FirstPersonCamera = player.FirstPersonCamera;
+        }
     
         protected void TriggerActionEvent(ActionMadeEventArgs args)
         {

@@ -7,24 +7,63 @@ namespace MastersOfTempest.PlayerControls
 {
     public class SpectatorInput : PlayerInputController
     {
+        private bool isActive = true;
+        private float defaultSpeed = 3f;
+
+        private void Update()
+        {
+            if(isActive)
+            {
+                var speed = defaultSpeed;
+                if(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+                {
+                    speed *= 5;
+                }
+                if(Input.GetKey(KeyCode.W))
+                {
+                    transform.Translate(FirstPersonCamera.transform.forward * speed * Time.deltaTime);
+                }
+                else if(Input.GetKey(KeyCode.S))
+                {
+                    transform.Translate(-FirstPersonCamera.transform.forward * speed * Time.deltaTime);
+                }
+                if(Input.GetKey(KeyCode.D))
+                {
+                    transform.Translate(FirstPersonCamera.transform.right * speed * Time.deltaTime);
+                }
+                else if(Input.GetKey(KeyCode.A))
+                {
+                    transform.Translate(-FirstPersonCamera.transform.right * speed * Time.deltaTime);
+                }
+                if(Input.GetKey(KeyCode.Space))
+                {
+                    transform.Translate(FirstPersonCamera.transform.up * speed * Time.deltaTime);
+                }
+                else if(Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
+                {
+                    transform.Translate(-FirstPersonCamera.transform.up * speed * Time.deltaTime);
+                }
+            }
+        }
+
         public override void Bootstrap(Player player)
         {
-            throw new NotImplementedException();
+            base.Bootstrap(player);
         }
 
         public override void Interrupt()
         {
-            throw new NotImplementedException();
+            //We cannot interrupt specatator
         }
 
         public override void Resume()
         {
-            throw new NotImplementedException();
+            isActive = true;
         }
 
         public override void Suppress()
         {
-            throw new NotImplementedException();
+            isActive = false;
         }
     }
 }

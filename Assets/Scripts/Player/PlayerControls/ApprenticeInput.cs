@@ -122,7 +122,14 @@ namespace MastersOfTempest.PlayerControls
 
         public override void Bootstrap(Player player)
         {
-            throw new NotImplementedException();
+            base.Bootstrap(player);
+            InteractionMessage = player.Text;
+
+            QTEDriver = gameObject.AddComponent<QTEDriver>();
+
+            var qteRenderer = gameObject.AddComponent<QTESimpleUIRenderer>();
+            qteRenderer.Driver = QTEDriver;
+            qteRenderer.InfoForUser = player.Text;
         }
     }
 }
