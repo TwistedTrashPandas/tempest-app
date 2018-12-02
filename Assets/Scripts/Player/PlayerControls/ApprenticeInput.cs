@@ -13,11 +13,10 @@ namespace MastersOfTempest.PlayerControls
     public class ApprenticeInput : PlayerInputController
     {
         public QTEDriver QTEDriver;
-        public Camera FirstPersonCamera;
+
         public UnityEngine.UI.Text InteractionMessage;
 
         private const string InteractableTagName = "Interactable";
-        private CameraDirectionController CameraDirectionController;
 
         private KeyCode interactionKey = KeyCode.F;
 
@@ -27,14 +26,10 @@ namespace MastersOfTempest.PlayerControls
         private Transform currentlyLookedAt;
         private InteractablePart currentInteractable;
 
-        private void Awake()
-        {
-            CameraDirectionController = gameObject.AddComponent<CameraDirectionController>();
-            CameraDirectionController.FirstPersonCamera = FirstPersonCamera;
-        }
 
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
             SanityCheck();
 
             QTEDriver.Success += OnQTESuccess;
@@ -112,16 +107,11 @@ namespace MastersOfTempest.PlayerControls
             isActive = false;
         }
 
-
         private void SanityCheck()
         {
             if (QTEDriver == null)
             {
                 throw new InvalidOperationException($"{nameof(QTEDriver)} is not specified!");
-            }
-            if (FirstPersonCamera == null)
-            {
-                throw new InvalidOperationException($"{nameof(FirstPersonCamera)} is not specified!");
             }
             if (InteractionMessage == null)
             {

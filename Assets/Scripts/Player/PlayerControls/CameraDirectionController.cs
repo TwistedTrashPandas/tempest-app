@@ -21,8 +21,8 @@ namespace MastersOfTempest.PlayerControls
         {
             if (Active)
             {
-                yaw += speedH * Input.GetAxis("Horizontal");
-                pitch -= speedV * Input.GetAxis("Vertical");
+                yaw += speedH * Input.GetAxis("Mouse X");
+                pitch -= speedV * Input.GetAxis("Mouse Y");
 
                 FirstPersonCamera.transform.localEulerAngles = new Vector3(pitch, yaw, 0.0f);
             }

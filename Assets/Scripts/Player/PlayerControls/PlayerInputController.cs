@@ -6,7 +6,20 @@ namespace MastersOfTempest.PlayerControls
 
     public abstract class PlayerInputController : MonoBehaviour
     {
+        public Camera FirstPersonCamera;
+        protected CameraDirectionController CameraDirectionController;
+
         public event EventHandler ActionMade;
+
+        protected virtual void Start()
+        {
+            if (FirstPersonCamera == null)
+            {
+                throw new InvalidOperationException($"{nameof(FirstPersonCamera)} is not specified!");
+            }
+            CameraDirectionController = gameObject.AddComponent<CameraDirectionController>();
+            CameraDirectionController.FirstPersonCamera = FirstPersonCamera;
+        }
 
         public abstract void Interrupt();
 
