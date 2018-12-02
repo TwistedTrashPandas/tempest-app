@@ -37,11 +37,11 @@ namespace MastersOfTempest
         protected override void StartClient()
         {
             base.StartClient();
-            //todo: different initializations for different roles!
-            //InitializeClientObjectWithOperatorControls();
-            InitializeClientObjectWithNavigatorControls();
+            //Initialize player controllers based on the active role
+            playerInput = PlayerRoleExtensions.AddActiveRoleInputController(gameObject);
+            playerInput.Bootstrap(this);
+            playerInput.ActionMade += ExecutePlayerAction;
         }
-
 
         void ExecutePlayerAction(object sender, EventArgs e)
         {

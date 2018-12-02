@@ -27,6 +27,8 @@ namespace MastersOfTempest.PlayerControls
 
         public abstract void Resume();
 
+        public abstract void Bootstrap(Player player);
+    
         protected void TriggerActionEvent(ActionMadeEventArgs args)
         {
             ActionMade?.Invoke(this, args);

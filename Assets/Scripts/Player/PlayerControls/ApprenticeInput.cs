@@ -119,5 +119,10 @@ namespace MastersOfTempest.PlayerControls
             }
 
         }
+
+        public override void Bootstrap(Player player)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -7,6 +7,11 @@ namespace MastersOfTempest.PlayerControls
 {
     public class WizardInput : PlayerInputController
     {
+        public override void Bootstrap(Player player)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Interrupt()
         {
             throw new NotImplementedException();
