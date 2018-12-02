@@ -12,9 +12,8 @@ namespace MastersOfTempest.PlayerControls
     /// </summary>
     public class ApprenticeInput : PlayerInputController
     {
-        public QTEDriver QTEDriver;
-
-        public UnityEngine.UI.Text InteractionMessage;
+        private QTEDriver QTEDriver;
+        private UnityEngine.UI.Text InteractionMessage;
 
         private const string InteractableTagName = "Interactable";
 
