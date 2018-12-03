@@ -1,15 +1,14 @@
 ﻿using System;
-using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 using MastersOfTempest.PlayerControls.QTE;
+using UnityEngine;
 
 namespace MastersOfTempest.PlayerControls
 {
-    /// <summary>
-    /// Listens to user's keyboard input and moves the ship if player pressed 3 same keys in a row
-    /// </summary>
-    public class SimpleInput : PlayerInputController
+    public class WizardInput : PlayerInputController
     {
-        public QTEDriver QTEDriver;
+        private QTEDriver QTEDriver;
 
         private Array keyCodes;
         private KeyCode lastPressed;
@@ -25,8 +24,9 @@ namespace MastersOfTempest.PlayerControls
             keyCodes = Enum.GetValues(typeof(KeyCode));
         }
 
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
             SanityCheck();
             QTEDriver.Success += OnSuccess;
             QTEDriver.Fail += OnFail;
@@ -80,7 +80,7 @@ namespace MastersOfTempest.PlayerControls
             switch (key)
             {
                 case KeyCode.A: StartQTE(new ApplyForceOnShip(Vector3.left * 500f, exampleDuration)); break;
-                case KeyCode.D: StartQTE(new ApplyForceOnShip(Vector3.right * 500f, exampleDuration));  break;
+                case KeyCode.D: StartQTE(new ApplyForceOnShip(Vector3.right * 500f, exampleDuration)); break;
                 default: Debug.Log("Press A or D to get something happening"); break;
             }
         }
@@ -111,6 +111,18 @@ namespace MastersOfTempest.PlayerControls
             {
                 throw new InvalidOperationException($"{nameof(QTEDriver)} is not specified!");
             }
+        }
+
+        public override void Bootstrap(Player player)
+        {
+            base.Bootstrap(player);
+            
+
+            QTEDriver = gameObject.AddComponent<QTEDriver>();
+
+            var qteRenderer = gameObject.AddComponent<QTESimpleUIRenderer>();
+            qteRenderer.Driver = QTEDriver;
+            qteRenderer.InfoForUser = player.Text;
         }
     }
 }
