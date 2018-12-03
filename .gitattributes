@@ -1,12 +1,12 @@
-*.cs text eol=clrf
-*.meta text eol=clrf 
-*.unity text eol=clrf
-*.txt text eol=clrf
-*.asset text eol=clrf
-*.mat text eol=clrf
-*.shader text eol=clrf
-*.prefab text eol=clrf
-*.xml text eol=clrf
+*.cs text eol=crlf
+*.meta text eol=crlf
+*.unity text eol=crlf
+*.txt text eol=crlf
+*.asset text eol=crlf
+*.mat text eol=crlf
+*.shader text eol=crlf
+*.prefab text eol=crlf
+*.xml text eol=crlf
 
 *.png binary
 *.jpg binary 
