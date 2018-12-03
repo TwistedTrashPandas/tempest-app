@@ -49,7 +49,7 @@ namespace MastersOfTempest.Networking
             {
                 serverObject.transform.hasChanged = false;
                 string message = JsonUtility.ToJson(new MessageServerObject(serverObject));
-                ClientManager.Instance.SendToAllClients(message, NetworkMessageType.ServerObject, Facepunch.Steamworks.Networking.SendType.Unreliable);
+                ClientManager.Instance.SendToAllClients(message, NetworkMessageType.ServerObject, Facepunch.Steamworks.Networking.SendType.Reliable);
             }
         }
 

@@ -85,7 +85,7 @@ MonoBehaviour:
   f_cellSize: 1
   v3_dimensions: {x: 152, y: 312, z: 152}
   tex: {fileID: 0}
-  loadFromFile: 1
+  loadFromFile: 0
   vectorFieldFileNum: 999
   velScale: 30
   yVelScale: 1

@@ -83,8 +83,8 @@ namespace MastersOfTempest
             while (true)
             {
                 string msg = JsonUtility.ToJson(new MessageAllEnvObjects(envManager.envSpawner.envObjects));
-                SendToAllClients(msg, Facepunch.Steamworks.Networking.SendType.Unreliable);
-                yield return new WaitForSeconds(1.0f / GameServer.Instance.hz);
+                SendToAllClients(msg, Facepunch.Steamworks.Networking.SendType.Reliable);
+                yield return new WaitForSeconds(1.0f);
             }
         }
 
