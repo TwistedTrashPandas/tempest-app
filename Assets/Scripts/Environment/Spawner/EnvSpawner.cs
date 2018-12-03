@@ -64,12 +64,13 @@ namespace MastersOfTempest.Environment.Interacting
             if (onServer)
             {
                 vectorField = vf;
+                hz = 1.0f / GameServer.Instance.hz;
             }
             else
             {
                 envObjTransforms = new List<Transform>();
+                hz = 64f;
             }
-            hz = 1.0f / GameServer.Instance.hz;
             currServerTime = 0f;
             gamemaster = gm;
         }
