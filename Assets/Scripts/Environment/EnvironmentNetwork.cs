@@ -74,6 +74,7 @@ namespace MastersOfTempest
             if (envManager == null)
                 throw new System.InvalidOperationException("EnvironmentNetwork cannot operate without Environment Manager on the same object");
             StartCoroutine(SendEnvObjects());
+            envManager.envSpawner.StartSpawning();
         }
 
         IEnumerator SendEnvObjects()

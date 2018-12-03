@@ -124,3 +124,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93357bd337da71e499a3292309c54afc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  instanceID: 0
+  prefabNum: 0
+  relativeTargetPos: {x: 0, y: 0, z: 0}
+  type: 0
+  speed: 10
+  closestDistance: 25

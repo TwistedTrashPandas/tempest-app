@@ -15,10 +15,26 @@ namespace MastersOfTempest.Environment.Interacting
             Supporting
         };
 
+        public enum MoveType
+        {
+            Force,
+            Velocity,
+            Direct
+        };
+
         // spawn parameters 
         public float spawnRate;
-        public float damping_factor;
+        [Range(0f, 2f)]
+        public float damping_factor_vel;
+        [Range(0f, 100f)]
+        public float damping_factor_force;
+        public Vector3 maximumObjVelocity;
 
+        // for initializing a random target position around the ship
+        public float minRadius;
+        public float maxRadius;
+
+        public uint maxNumObjects;
         public VectorField vectorField;
         // all envObjects treated the same
         public List<EnvObject> envObjects { get; private set; }
@@ -27,25 +43,27 @@ namespace MastersOfTempest.Environment.Interacting
         public GameObject[] supportingPrefabs;
         public GameObject[] dangerzonesPrefabs;
 
+        public MoveType moveType;
+
         // TODO use currServerTime for synchronization 
         private float currServerTime;
         private float currFixedTime;
         private float hz;
+        private bool onServer;
         private Gamemaster gamemaster;
         private GameObject objectContainer;
         // last obj positions (extrapolate or interpolate ?)
         private List<Transform> envObjTransforms;
 
-        public void Initialize(Gamemaster gm, VectorField vf)
+        public void Initialize(Gamemaster gm, VectorField vf, bool server)
         {
             envObjects = new List<EnvObject>();
             objectContainer = new GameObject("EnvObjectContainer");
+            onServer = server;
             // test initialization for networking
-            if (GetComponent<ServerObject>().onServer)
+            if (onServer)
             {
                 vectorField = vf;
-                for (int i = 0; i < 100; i++)
-                    InstantiateNewObject(true, new Vector3(), Vector3.one, Quaternion.identity, EnvObjectType.Damaging, 0, 0);
             }
             else
             {
@@ -56,31 +74,103 @@ namespace MastersOfTempest.Environment.Interacting
             gamemaster = gm;
         }
 
-
         private void FixedUpdate()
         {
             // TODO: multiple implementations for behaviour
             // update all objects' velocity or add force by looking up value in vector grid if the spawner is on the server
-            if (GetComponent<ServerObject>().onServer)
+            if (onServer)
             {
-                for (int i = 0; i < envObjects.Count; i++)
+                switch (moveType)
                 {
-                    envObjects[i].AddForce(vectorField.GetVectorAtPos(envObjects[i].transform.position), new Vector3());
-                    //envObjects[i].SetVelocity(vectorField.GetVectorAtPos(envObjects[i].transform.position));
-                    //envObjects[i].DampVelocity(damping_factor);
+                    case MoveType.Direct:
+                        MoveAllDirectly();
+                        break;
+                    case MoveType.Force:
+                        AddForceToAll();
+                        break;
+                    case MoveType.Velocity:
+                        SetVelForAll();
+                        break;
+                    default:
+                        throw new System.InvalidOperationException("MoveType of Environment Spawner has to be set");
                 }
+                if (!Mathf.Approximately(damping_factor_force, 0f))
+                    DampForce();
+                if (!Mathf.Approximately(damping_factor_vel, 1f))
+                    DampVelocity();
             }
             else
             {
+                // "interpolate" objects on client
                 currFixedTime += Time.fixedDeltaTime;
                 if (currFixedTime >= hz)
                     currFixedTime -= hz;
                 for (int i = 0; i < envObjects.Count; i++)
                 {
-                    envObjects[i].gameObject.transform.position = Vector3.Lerp(envObjects[i].gameObject.transform.position, envObjTransforms[i].position, currFixedTime);
-                    envObjects[i].gameObject.transform.rotation = Quaternion.Lerp(envObjects[i].gameObject.transform.rotation, envObjTransforms[i].rotation, currFixedTime);
+                    envObjects[i].MoveRigidbodyTo(Vector3.Lerp(envObjects[i].gameObject.transform.position, envObjTransforms[i].position, currFixedTime));
+                    envObjects[i].RotateRigidbodyTo(Quaternion.Lerp(envObjects[i].gameObject.transform.rotation, envObjTransforms[i].rotation, currFixedTime));
                 }
             }
+        }
+
+        public void StartSpawning()
+        {
+            StartCoroutine(SpawnObject());
+        }
+
+        private IEnumerator SpawnObject()
+        {
+            if (envObjects.Count > maxNumObjects)
+                envObjects.RemoveAt(0);
+            InstantiateNewObject(true, new Vector3(), Vector3.one, Quaternion.identity, EnvObjectType.Damaging, 0, 0);
+            yield return new WaitForSeconds(spawnRate);
+            StartCoroutine(SpawnObject());
+        }
+
+        private void MoveAllDirectly()
+        {
+            Vector3 targetPos = gamemaster.GetShip().transform.position;
+            for (int i = 0; i < envObjects.Count; i++)
+            {
+                envObjects[i].MoveDirectly(targetPos);
+            }
+        }
+
+        private void AddForceToAll()
+        {
+            for (int i = 0; i < envObjects.Count; i++)
+            {
+                envObjects[i].AddForce(vectorField.GetVectorAtPos(envObjects[i].transform.position), new Vector3());
+            }
+        }
+
+        private void SetVelForAll()
+        {
+            for (int i = 0; i < envObjects.Count; i++)
+            {
+                envObjects[i].SetVelocity(vectorField.GetVectorAtPos(envObjects[i].transform.position));
+            }
+        }
+
+        private void DampVelocity()
+        {
+            for (int i = 0; i < envObjects.Count; i++)
+            {
+                envObjects[i].DampVelocity(damping_factor_vel);
+            }
+        }
+
+        private void DampForce()
+        {
+            for (int i = 0; i < envObjects.Count; i++)
+            {
+                envObjects[i].DampForce(damping_factor_force);
+            }
+        }
+
+        private void ClampVelocity()
+        {
+
         }
 
         // main functions for initializing an envobject of given type 
@@ -100,13 +190,19 @@ namespace MastersOfTempest.Environment.Interacting
             }
             envObjects[envObjects.Count - 1].transform.parent = objectContainer.transform;
             envObjects[envObjects.Count - 1].transform.localScale = localScale;
+            float alpha = Random.Range(0, 2 * Mathf.PI);
+            float beta = Mathf.Acos(Random.Range(-1f, 1f));
+            float sinBeta = Mathf.Sin(beta);
+            float radius = Random.Range(minRadius, maxRadius);
+            sinBeta *= radius;
+            envObjects[envObjects.Count - 1].relativeTargetPos = new Vector3(Mathf.Cos(alpha) * sinBeta, Mathf.Cos(beta) * radius, Mathf.Sin(alpha) * sinBeta);
             if (!onServer)
             {
                 //  set layer, instanceID (for deleting/updating objects) only for clients
                 envObjects[envObjects.Count - 1].gameObject.layer = 9;
                 envObjects[envObjects.Count - 1].instanceID = ID;
                 //  disable unnecessary components
-                Destroy(envObjects[envObjects.Count - 1].GetComponent<Rigidbody>());
+                envObjects[envObjects.Count - 1].GetComponent<Rigidbody>().isKinematic = true;
                 Destroy(envObjects[envObjects.Count - 1].GetComponent<Collider>());
                 envObjTransforms.Add(envObjects[envObjects.Count - 1].transform);
             }
@@ -128,7 +224,6 @@ namespace MastersOfTempest.Environment.Interacting
 
         public void UpdateEnvObjects(List<MessageEnvObject> objects, float serverTime)
         {
-            print(Time.fixedTime - serverTime);
             currServerTime = serverTime;
             for (int i = 0; i < objects.Count; i++)
             {

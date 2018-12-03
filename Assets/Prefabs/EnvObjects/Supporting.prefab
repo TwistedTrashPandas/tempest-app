@@ -80,3 +80,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f2a42397dc92ea48b81f478a0af2239, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  instanceID: 0
+  prefabNum: 0
+  type: 2
+  relativeTargetPos: {x: 0, y: 0, z: 0}
+  speed: 0
