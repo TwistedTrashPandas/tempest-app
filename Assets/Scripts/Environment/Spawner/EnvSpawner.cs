@@ -69,7 +69,7 @@ namespace MastersOfTempest.Environment.Interacting
             else
             {
                 envObjTransforms = new List<Transform>();
-                hz = 64f;
+                hz = 1f/64f;
             }
             currServerTime = 0f;
             gamemaster = gm;
