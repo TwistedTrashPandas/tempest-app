@@ -17,7 +17,7 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
 
         public override PlayerAction GetPlayerAction()
         {
-            throw new NotImplementedException();
+            return new SteerShip(SteerShip.SteeringDirection.Right);
         }
     }
 }
