@@ -2,6 +2,7 @@
 using MastersOfTempest.PlayerControls;
 using MastersOfTempest.Networking;
 using MastersOfTempest.PlayerControls.QTE;
+using UnityEngine;
 
 namespace MastersOfTempest
 {
@@ -9,12 +10,22 @@ namespace MastersOfTempest
     {
         //TODO: temporal solution, implement better UI management in future revisions
         public UnityEngine.UI.Text Text;
+        public Camera FirstPersonCamera;
         private Gamemaster context;
         private PlayerInputController playerInput;
 
         protected override void Start()
         {
             base.Start();
+            if (FirstPersonCamera == null)
+            {
+                throw new InvalidOperationException($"{nameof(FirstPersonCamera)} is not specified!");
+            }
+            if (Text == null)
+            {
+                throw new InvalidOperationException($"{nameof(Text)} is not specified!");
+            }
+
             context = FindObjectOfType<Gamemaster>();
             if (context == null)
             {
@@ -26,27 +37,15 @@ namespace MastersOfTempest
         protected override void StartClient()
         {
             base.StartClient();
-            //todo: different initializations for different roles!
-            InitializeClientObjectWithOperatorControls();
+            //Initialize player controllers based on the active role
+            playerInput = PlayerRoleExtensions.AddActiveRoleInputController(gameObject);
+            playerInput.Bootstrap(this);
+            playerInput.ActionMade += ExecutePlayerAction;
         }
-
 
         void ExecutePlayerAction(object sender, EventArgs e)
         {
             ((ActionMadeEventArgs)e).Action.Execute(context);
-        }
-
-        private void InitializeClientObjectWithOperatorControls()
-        {
-            var input = gameObject.AddComponent<SimpleInput>();
-            var qteDriver = gameObject.AddComponent<QTEDriver>();
-            input.QTEDriver = qteDriver;
-            input.ActionMade += ExecutePlayerAction;
-            playerInput = input;
-
-            var qteRenderer = gameObject.AddComponent<QTESimpleUIRenderer>();
-            qteRenderer.Driver = qteDriver;
-            qteRenderer.InfoForUser = Text;
         }
 
         protected override void OnDestroyClient()
