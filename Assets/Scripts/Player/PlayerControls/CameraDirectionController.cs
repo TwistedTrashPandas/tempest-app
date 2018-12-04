@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace MastersOfTempest.PlayerControls
 {
@@ -7,8 +8,7 @@ namespace MastersOfTempest.PlayerControls
     /// </summary>
     public class CameraDirectionController : MonoBehaviour
     {
-        public Camera FirstPersonCamera;
-
+        public Camera FirstPersonCamera { get; private set; }
         public float speedH = 2.0f;
         public float speedV = 2.0f;
 
@@ -16,6 +16,17 @@ namespace MastersOfTempest.PlayerControls
         private float pitch = 0.0f;
 
         public bool Active { get; set; } = true;
+
+        private void Awake()
+        {
+            FirstPersonCamera = Camera.main;
+            if (FirstPersonCamera == null)
+            {
+                throw new InvalidOperationException($"{nameof(FirstPersonCamera)} is not specified!");
+            }
+            //Set parent to the camera so that it moves with the player
+            FirstPersonCamera.transform.SetParent(this.transform, false);
+        }
 
         private void Start()
         {

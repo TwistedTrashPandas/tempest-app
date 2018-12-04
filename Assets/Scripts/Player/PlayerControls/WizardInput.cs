@@ -24,9 +24,8 @@ namespace MastersOfTempest.PlayerControls
             keyCodes = Enum.GetValues(typeof(KeyCode));
         }
 
-        protected override void Start()
+        protected void Start()
         {
-            base.Start();
             SanityCheck();
             QTEDriver.Success += OnSuccess;
             QTEDriver.Fail += OnFail;
@@ -113,16 +112,11 @@ namespace MastersOfTempest.PlayerControls
             }
         }
 
-        public override void Bootstrap(Player player)
+        public override void Bootstrap()
         {
-            base.Bootstrap(player);
-            
-
             QTEDriver = gameObject.AddComponent<QTEDriver>();
-
             var qteRenderer = gameObject.AddComponent<QTESimpleUIRenderer>();
             qteRenderer.Driver = QTEDriver;
-            qteRenderer.InfoForUser = player.Text;
         }
     }
 }
