@@ -21,9 +21,10 @@ namespace MastersOfTempest.Environment.VisualEffects
         /// sort all particles with respect to the camera position each "sortEach" timestep
         [Range(1, 100)]
         public int sortEach;
-
         [Range(15, 20)]
         public uint particelNumExp;
+        [Range(0f, 1f)]
+        public float dampVel;
 
         public float g_fTimeDiff;
         public float g_fTimeStepTex;
@@ -33,6 +34,7 @@ namespace MastersOfTempest.Environment.VisualEffects
         public int startIdx;
         public int endIdx;
         public int skipIdx;
+        public float[] maxVel;
 
         /// In and out Computer buffers for the shader
         private ComputeBuffer particleVelCB;
@@ -50,8 +52,6 @@ namespace MastersOfTempest.Environment.VisualEffects
         /// amount of particles
         private uint numberParticles;
         private float maxDist;
-        private float[] maxVel;
-        private float dampVel;
         /// arrays for particles
         private Vector3[] particlePos;
         private Vector3[] particleVel;
@@ -72,8 +72,10 @@ namespace MastersOfTempest.Environment.VisualEffects
 
         void Start()
         {
+            if (maxVel == null || maxVel.Length != 3)
+                throw new System.InvalidOperationException("initialize max Vel with 3 elements!");
+
             numberParticles = (uint)Mathf.Pow(2, particelNumExp);
-            maxVel = new float[3];
             counter = 0;
             rnd = new System.Random();
             particlePos = new Vector3[numberParticles];
@@ -135,10 +137,6 @@ namespace MastersOfTempest.Environment.VisualEffects
             dims[2] = temp.z;
             dims[3] = Mathf.RoundToInt(vectorField.GetCellSize());
             maxDist = temp.x * vectorField.GetCellSize() * 3f;
-            maxVel[0] = dims[3] * 100f;
-            maxVel[1] = dims[3] * 40f;
-            maxVel[2] = dims[3] * 100f;
-            dampVel = 0.999f;
             float[] center = new float[3];
             center[0] = (temp.x - 1) * 0.5f * dims[3];
             center[1] = (temp.y - 1) * 0.5f * dims[3];

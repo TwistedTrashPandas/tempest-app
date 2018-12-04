@@ -46,7 +46,7 @@ void UpdateParticles(uint3 id : SV_DispatchThreadID)
 	// update velocity and positions accordingly
 	float dims = g_i3Dimensions[1] * g_i3Dimensions[2];
 	particleVelRW[id.x] *= g_fDampVel;
-	particleVelRW[id.x] += vectorFieldIn[min(idx.x * dims + idx.y * g_i3Dimensions[2] + idx.z, dims*g_i3Dimensions[0])] * g_fTimestep * 200.0f;
+	particleVelRW[id.x] += vectorFieldIn[min(idx.x * dims + idx.y * g_i3Dimensions[2] + idx.z, dims*g_i3Dimensions[0])] * g_fTimestep;
 	particleVelRW[id.x].y = max(-g_fMaxVel.y, min(g_fMaxVel.y, particleVelRW[id.x].y));
 	
 	float2 tempVel = float2(particleVelRW[id.x].x, particleVelRW[id.x].z);

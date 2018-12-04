@@ -35,7 +35,7 @@ namespace MastersOfTempest.Environment
             envSpawner = GetComponent<EnvSpawner>();
             if (envSpawner == null)
                 throw new System.InvalidOperationException("Spawner for environment objects is not specified");
-            envSpawner.Initialize(gamemaster, vectorField);
+            envSpawner.Initialize(gamemaster, vectorField, GetComponent<ServerObject>().onServer);
             gamemaster.Register(this);
         }
     }
