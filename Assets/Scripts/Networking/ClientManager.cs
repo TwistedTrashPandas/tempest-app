@@ -28,6 +28,9 @@ namespace MastersOfTempest.Networking
 
         void Awake()
         {
+            // Make sure that the plugins are found in both editor and build
+            System.Environment.SetEnvironmentVariable("PATH", Application.dataPath + "/Plugins/", System.EnvironmentVariableTarget.Process);
+
             if (Instance == null)
             {
                 Instance = this;
