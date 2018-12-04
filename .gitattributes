@@ -1,0 +1,17 @@
+*.cs text eol=crlf
+*.meta text eol=crlf
+*.unity text eol=crlf
+*.txt text eol=crlf
+*.asset text eol=crlf
+*.mat text eol=crlf
+*.shader text eol=crlf
+*.prefab text eol=crlf
+*.xml text eol=crlf
+
+*.png binary
+*.jpg binary 
+*.tif binary
+*.dll binary
+*.blend binary
+*.fbx binary
+
