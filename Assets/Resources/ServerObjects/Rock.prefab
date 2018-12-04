@@ -24,6 +24,7 @@ GameObject:
   - component: {fileID: 65130192109209252}
   - component: {fileID: 54334168285859978}
   - component: {fileID: 114263723997430558}
+  - component: {fileID: 114334480994139150}
   m_Layer: 10
   m_Name: Rock
   m_TagString: Untagged
@@ -130,3 +131,18 @@ MonoBehaviour:
   type: 0
   speed: 10
   closestDistance: 25
+--- !u!114 &114334480994139150
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1476894203371464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resourceName: Rock
+  onServer: 1
+  serverID: 0
+  lastUpdate: 0

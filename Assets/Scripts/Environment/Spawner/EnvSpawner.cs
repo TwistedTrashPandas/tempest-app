@@ -65,11 +65,12 @@ namespace MastersOfTempest.Environment.Interacting
             {
                 vectorField = vf;
                 hz = 1.0f / GameServer.Instance.hz;
+                StartSpawning();
             }
             else
             {
                 envObjTransforms = new List<Transform>();
-                hz = 1f/64f;
+                hz = 1f / 64f;
             }
             currServerTime = 0f;
             gamemaster = gm;
@@ -100,7 +101,7 @@ namespace MastersOfTempest.Environment.Interacting
                 if (!Mathf.Approximately(damping_factor_vel, 1f))
                     DampVelocity();
             }
-            else
+            /*else
             {
                 // "interpolate" objects on client
                 currFixedTime += Time.fixedDeltaTime;
@@ -111,7 +112,7 @@ namespace MastersOfTempest.Environment.Interacting
                     envObjects[i].MoveRigidbodyTo(Vector3.Lerp(envObjects[i].gameObject.transform.position, envObjTransforms[i].position, currFixedTime));
                     envObjects[i].RotateRigidbodyTo(Quaternion.Lerp(envObjects[i].gameObject.transform.rotation, envObjTransforms[i].rotation, currFixedTime));
                 }
-            }
+            }*/
         }
 
         public void StartSpawning()
@@ -189,7 +190,7 @@ namespace MastersOfTempest.Environment.Interacting
                     envObjects.Add(GameObject.Instantiate(supportingPrefabs[prefabNum], position, orientation).GetComponent<EnvObject>());
                     break;
             }
-            envObjects[envObjects.Count - 1].transform.parent = objectContainer.transform;
+            //envObjects[envObjects.Count - 1].transform.parent = objectContainer.transform;
             envObjects[envObjects.Count - 1].transform.localScale = localScale;
             float alpha = Random.Range(0, 2 * Mathf.PI);
             float beta = Mathf.Acos(Random.Range(-1f, 1f));
