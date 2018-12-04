@@ -128,7 +128,7 @@ namespace MastersOfTempest.Environment
                         float diffX = v2_rotCenter.x - i;
                         float diffZ = v2_rotCenter.y - j;
                         float hypotenuse = Mathf.Sqrt(diffX * diffX + diffZ * diffZ);
-                        v3s_vectors[i, k, j] = new Vector3(-diffZ / hypotenuse, y_vel, diffX / hypotenuse) * (velScale * strModifier);
+                        v3s_vectors[i, k, j] = new Vector3(-diffZ / hypotenuse - (i - v2_rotCenter.x)/160f,  y_vel, diffX / hypotenuse - (j - v2_rotCenter.y) / 160f) * (velScale * strModifier);
                         v3s_vectors[i, k, j].Scale(new Vector3(UnityEngine.Random.Range(minScale, maxScale),
                             UnityEngine.Random.Range(minScale, maxScale), UnityEngine.Random.Range(minScale, maxScale)));
                     }
