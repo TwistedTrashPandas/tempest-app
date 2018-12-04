@@ -15,7 +15,28 @@ namespace MastersOfTempest.PlayerControls
         private float yaw = 0.0f;
         private float pitch = 0.0f;
 
-        public bool Active { get; set; } = true;
+        private bool isActive = true;
+        public bool Active
+        {
+            get
+            {
+                return isActive;
+            }
+            set
+            {
+                isActive = value;
+                if(value)
+                {
+                    Cursor.lockState = CursorLockMode.Locked;
+                    Cursor.visible = false;
+                }
+                else 
+                {
+                    Cursor.lockState = CursorLockMode.Confined;
+                    Cursor.visible = true;
+                }
+            }
+        }
 
         private void Awake()
         {
@@ -26,12 +47,7 @@ namespace MastersOfTempest.PlayerControls
             }
             //Set parent to the camera so that it moves with the player
             FirstPersonCamera.transform.SetParent(this.transform, false);
-        }
-
-        private void Start()
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            Active = true;
         }
 
         void Update()
