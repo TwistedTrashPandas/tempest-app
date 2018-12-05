@@ -38,20 +38,27 @@ namespace MastersOfTempest.Networking
             {
                 foreach (ServerObject serverObject in serverObjects)
                 {
-                    SendMessageServerObject(serverObject);
+                    SendMessageServerObject(serverObject, Facepunch.Steamworks.Networking.SendType.Unreliable);
                 }
 
                 yield return new WaitForSeconds(1.0f / hz);
             }
         }
 
-        public void SendMessageServerObject(ServerObject serverObject)
+        public void RegisterServerObject (ServerObject serverObject)
+        {
+            // Make sure that objects are spawned on the server (with UDP it could happen that they don't spawn)
+            SendMessageServerObject(serverObject, Facepunch.Steamworks.Networking.SendType.Reliable);
+            serverObjects.AddLast(serverObject);
+        }
+
+        public void SendMessageServerObject(ServerObject serverObject, Facepunch.Steamworks.Networking.SendType sendType)
         {
             if (serverObject.transform.hasChanged)
             {
                 serverObject.transform.hasChanged = false;
                 string message = JsonUtility.ToJson(new MessageServerObject(serverObject));
-                ClientManager.Instance.SendToAllClients(message, NetworkMessageType.ServerObject, Facepunch.Steamworks.Networking.SendType.Unreliable);
+                ClientManager.Instance.SendToAllClients(message, NetworkMessageType.ServerObject, sendType);
             }
         }
 

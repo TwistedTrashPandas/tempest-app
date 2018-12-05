@@ -26,7 +26,7 @@ namespace MastersOfTempest.Networking
                 serverID = transform.GetInstanceID();
 
                 // Register to game server
-                GameServer.Instance.serverObjects.AddLast(this);
+                GameServer.Instance.RegisterServerObject(this);
             }
         }
 
