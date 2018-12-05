@@ -28,6 +28,8 @@ namespace MastersOfTempest.Networking
         void Start()
         {
             StartCoroutine(ServerUpdate());
+
+            ClientManager.Instance.serverMessageEvents[NetworkMessageType.PingPong] += OnMessagePingPong;
         }
 
         IEnumerator ServerUpdate()
@@ -57,6 +59,16 @@ namespace MastersOfTempest.Networking
         {
             string message = JsonUtility.ToJson(new MessageDestroyServerObject(serverObject));
             ClientManager.Instance.SendToAllClients(message, NetworkMessageType.DestroyGameObject, Facepunch.Steamworks.Networking.SendType.Reliable);
+        }
+
+        void OnMessagePingPong(string message, ulong steamID)
+        {
+            ClientManager.Instance.SendToClient(steamID, message, NetworkMessageType.PingPong, Facepunch.Steamworks.Networking.SendType.Unreliable);
+        }
+
+        void OnDestroy()
+        {
+            ClientManager.Instance.serverMessageEvents[NetworkMessageType.PingPong] -= OnMessagePingPong;
         }
     }
 }

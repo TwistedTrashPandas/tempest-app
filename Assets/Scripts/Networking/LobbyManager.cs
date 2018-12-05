@@ -122,7 +122,8 @@ namespace MastersOfTempest.Networking
             }
             else
             {
-                Debug.LogError("Failed to create lobby");
+                Debug.LogError("Failed to create lobby. Trying to recreate the default lobby...");
+                CreateDefaultLobby();
             }
         }
 
@@ -144,7 +145,7 @@ namespace MastersOfTempest.Networking
             Debug.Log("Got invitation to the lobby " + lobbyID + " from user " + otherUserID);
             lobbyIDToJoin = lobbyID;
             string message = "Player " + Client.Instance.Friends.Get(otherUserID).Name + " invited you to a lobby.\nDo you want to join?";
-            DialogBox.Show(message, AcceptLobbyInvitation, null);
+            DialogBox.Show(message, true, true, AcceptLobbyInvitation, null);
         }
 
         void AcceptLobbyInvitation()

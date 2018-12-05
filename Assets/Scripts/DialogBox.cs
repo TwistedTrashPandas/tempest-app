@@ -11,10 +11,12 @@ namespace MastersOfTempest
         public delegate void OnButtonClick();
 
         public Text text;
+        public Button buttonYes;
+        public Button buttonNo;
         public OnButtonClick onYes;
         public OnButtonClick onNo;
 
-        public static void Show(string text, OnButtonClick onYes, OnButtonClick onNo)
+        public static void Show(string text, bool showYesButton, bool showNoButton, OnButtonClick onYes, OnButtonClick onNo)
         {
             Canvas canvas = FindObjectOfType<Canvas>();
 
@@ -23,6 +25,8 @@ namespace MastersOfTempest
                 GameObject dialogBoxPrefab = Resources.Load<GameObject>("Dialog Box");
                 DialogBox dialogBox = Instantiate(dialogBoxPrefab, canvas.transform).GetComponent<DialogBox>();
                 dialogBox.text.text = text;
+                dialogBox.buttonYes.gameObject.SetActive(showYesButton);
+                dialogBox.buttonNo.gameObject.SetActive(showNoButton);
                 dialogBox.onYes = onYes;
                 dialogBox.onNo = onNo;
             }
@@ -49,6 +53,11 @@ namespace MastersOfTempest
                 onNo.Invoke();
             }
 
+            Destroy(gameObject);
+        }
+
+        public void Close()
+        {
             Destroy(gameObject);
         }
     }
