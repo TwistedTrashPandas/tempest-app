@@ -28,6 +28,9 @@ namespace MastersOfTempest.Networking
 
         void Awake()
         {
+            // Make sure that the plugins are found in both editor and build
+            System.Environment.SetEnvironmentVariable("PATH", Application.dataPath + "/Plugins/", System.EnvironmentVariableTarget.Process);
+
             if (Instance == null)
             {
                 Instance = this;
@@ -61,7 +64,7 @@ namespace MastersOfTempest.Networking
             else
             {
                 client = null;
-                Debug.LogWarning("Couldn't initialize Steam. Make sure that Steam is running.");
+                DialogBox.Show("Make sure that you are online and Steam is running.\nDo you want to exit the game?", true, true, Application.Quit, null);
             }
 
             // Create all the actions for incoming network messages
