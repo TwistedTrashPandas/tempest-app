@@ -18,8 +18,7 @@ namespace MastersOfTempest.Networking
         void Start()
         {
             ClientManager.Instance.clientMessageEvents[NetworkMessageType.ServerObject] += OnMessageServerObject;
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.ServerObjectList] += OnMessageServerObjectList;
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.DestroyServerObject] += OnMessageDestroyGameObject;
+            ClientManager.Instance.clientMessageEvents[NetworkMessageType.DestroyGameObject] += OnMessageDestroyGameObject;
             ClientManager.Instance.clientMessageEvents[NetworkMessageType.PingPong] += OnMessagePingPong;
 
             // Wait a bit before sending the message
@@ -66,7 +65,7 @@ namespace MastersOfTempest.Networking
             if (serverObject.lastUpdate <= messageServerObject.time)
             {
                 // Update values only if the UDP packet values are newer
-                serverObject.name = messageServerObject.name + "\t\t\t(" + messageServerObject.instanceID + ")";
+                serverObject.name = messageServerObject.name + "\t\t(" + messageServerObject.instanceID + ")";
                 serverObject.lastUpdate = messageServerObject.time;
 
                 // Update the transform
@@ -77,16 +76,6 @@ namespace MastersOfTempest.Networking
                 {
                     serverObject.transform.SetParent(objectsFromServer[messageServerObject.parentInstanceID].transform, false);
                 }
-            }
-        }
-
-        void OnMessageServerObjectList (string message, ulong steamID)
-        {
-            MessageServerObjectList messageServerObjectList = JsonUtility.FromJson<MessageServerObjectList>(message);
-
-            foreach (string m in messageServerObjectList.messages)
-            {
-                OnMessageServerObject(m, steamID);
             }
         }
 
@@ -109,8 +98,7 @@ namespace MastersOfTempest.Networking
         void OnDestroy()
         {
             ClientManager.Instance.clientMessageEvents[NetworkMessageType.ServerObject] -= OnMessageServerObject;
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.ServerObjectList] -= OnMessageServerObjectList;
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.DestroyServerObject] -= OnMessageDestroyGameObject;
+            ClientManager.Instance.clientMessageEvents[NetworkMessageType.DestroyGameObject] -= OnMessageDestroyGameObject;
             ClientManager.Instance.clientMessageEvents[NetworkMessageType.PingPong] -= OnMessagePingPong;
         }
     }

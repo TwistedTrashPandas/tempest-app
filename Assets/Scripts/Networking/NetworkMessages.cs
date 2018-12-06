@@ -8,12 +8,11 @@
         LobbyChat = 1,
         LobbyStartGame = 2,
         ServerObject = 3,
-        DestroyServerObject = 4,
+        DestroyGameObject = 4,
         NetworkBehaviourInitialized = 5,
         PingPong = 6,
         ForceManipulator = 7,
         NoMessages = 8,
-        EnvObjects = 9,
-        ServerObjectList = 10,
+        EnvObjects = 9
     };
 }
