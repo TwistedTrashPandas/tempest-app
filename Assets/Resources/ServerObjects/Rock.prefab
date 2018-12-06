@@ -129,7 +129,7 @@ MonoBehaviour:
   prefabNum: 0
   relativeTargetPos: {x: 0, y: 0, z: 0}
   type: 0
-  speed: 10
+  speed: 30
   closestDistance: 25
 --- !u!114 &114334480994139150
 MonoBehaviour:

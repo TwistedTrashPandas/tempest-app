@@ -28,7 +28,10 @@ namespace MastersOfTempest.Environment.Interacting
             if (!pastShip)
             {
                 if (Vector3.Distance(transform.position, targetPos) > closestDistance)
-                    rigidbody.MovePosition(transform.position + (targetPos + relativeTargetPos - transform.position).normalized * speed * Time.fixedDeltaTime);
+                {
+                    AddForce((targetPos + relativeTargetPos - transform.position).normalized * speed, Vector3.zero);
+                }
+                   // rigidbody.MovePosition(transform.position + (targetPos + relativeTargetPos - transform.position).normalized * speed * Time.fixedDeltaTime);
                 else
                 {
                     pastShip = true;
@@ -37,8 +40,15 @@ namespace MastersOfTempest.Environment.Interacting
             }
             else
             {
-                rigidbody.MovePosition(transform.position + lastDirection * speed * Time.fixedDeltaTime);
+                AddForce(lastDirection * speed, Vector3.zero);
+                //rigidbody.MovePosition(transform.position + lastDirection * speed * Time.fixedDeltaTime);
             }
+        }
+
+        public void ClampVelocity(float maxVel)
+        {
+            if (rigidbody.velocity.magnitude > maxVel)
+                rigidbody.velocity = rigidbody.velocity.normalized * maxVel;
         }
 
         public void MoveRigidbodyTo(Vector3 pos)

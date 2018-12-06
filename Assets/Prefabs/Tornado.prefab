@@ -103,7 +103,7 @@ MonoBehaviour:
   camPos: {fileID: 0}
   sortEach: 20
   particelNumExp: 18
-  dampVel: 0.994
+  dampVel: 0.999
   g_fTimeDiff: 0
   g_fTimeStepTex: 0.1
   densityTexPrefix: diffuse_

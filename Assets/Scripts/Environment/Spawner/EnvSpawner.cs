@@ -19,7 +19,8 @@ namespace MastersOfTempest.Environment.Interacting
         {
             Force,
             Velocity,
-            Direct
+            Direct, 
+            ForceDirect
         };
 
         // spawn parameters 
@@ -28,7 +29,7 @@ namespace MastersOfTempest.Environment.Interacting
         public float damping_factor_vel;
         [Range(0f, 100f)]
         public float damping_factor_force;
-        public Vector3 maximumObjVelocity;
+        public float maximumObjVelocity;
 
         // for initializing a random target position around the ship
         public float minRadius;
@@ -93,6 +94,10 @@ namespace MastersOfTempest.Environment.Interacting
                     case MoveType.Velocity:
                         SetVelForAll();
                         break;
+                    case MoveType.ForceDirect:
+                        MoveAllDirectly();
+                        AddForceToAll();
+                        break;
                     default:
                         throw new System.InvalidOperationException("MoveType of Environment Spawner has to be set");
                 }
@@ -100,6 +105,7 @@ namespace MastersOfTempest.Environment.Interacting
                     DampForce();
                 if (!Mathf.Approximately(damping_factor_vel, 1f))
                     DampVelocity();
+                ClampVelocity();
             }
             /*else
             {
@@ -172,7 +178,10 @@ namespace MastersOfTempest.Environment.Interacting
 
         private void ClampVelocity()
         {
-
+            for (int i = 0; i < envObjects.Count; i++)
+            {
+                envObjects[i].ClampVelocity(maximumObjVelocity);
+            }
         }
 
         // main functions for initializing an envobject of given type 

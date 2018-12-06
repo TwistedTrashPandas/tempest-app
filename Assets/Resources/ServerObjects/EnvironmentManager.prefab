@@ -84,10 +84,10 @@ MonoBehaviour:
   f_cellSize: 1
   v3_dimensions: {x: 152, y: 312, z: 152}
   tex: {fileID: 0}
-  loadFromFile: 0
+  loadFromFile: 1
   vectorFieldFileNum: 999
-  velScale: 30
-  yVelScale: 1
+  velScale: 100
+  yVelScale: 0.5
 --- !u!114 &114458285926744006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -102,7 +102,7 @@ MonoBehaviour:
   spawnRate: 1
   damping_factor_vel: 0.99
   damping_factor_force: 0
-  maximumObjVelocity: {x: 0, y: 0, z: 0}
+  maximumObjVelocity: 50
   minRadius: 10
   maxRadius: 20
   maxNumObjects: 200
@@ -113,7 +113,7 @@ MonoBehaviour:
   supportingPrefabs:
   - {fileID: 1787456376747014, guid: abeac99c68381474e8f440ab8a83ddd3, type: 2}
   dangerzonesPrefabs: []
-  moveType: 2
+  moveType: 3
 --- !u!114 &114801461701559052
 MonoBehaviour:
   m_ObjectHideFlags: 1
