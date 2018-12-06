@@ -63,10 +63,11 @@ namespace MastersOfTempest.Networking
                 // Update values only if the UDP packet values are newer
                 serverObject.name = messageServerObject.name + "\t\t(" + messageServerObject.instanceID + ")";
                 serverObject.lastUpdate = messageServerObject.time;
-                serverObject.transform.localPosition = messageServerObject.localPosition;
-                serverObject.transform.localRotation = messageServerObject.localRotation;
-                serverObject.transform.localScale = messageServerObject.localScale;
 
+                // Update the transform
+                serverObject.UpdateTransformFromMessageServerObject(messageServerObject);
+
+                // Update parent if possible
                 if (messageServerObject.hasParent && objectsFromServer.ContainsKey(messageServerObject.parentInstanceID))
                 {
                     serverObject.transform.SetParent(objectsFromServer[messageServerObject.parentInstanceID].transform, false);

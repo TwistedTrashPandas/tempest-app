@@ -12,6 +12,16 @@ namespace MastersOfTempest.Networking
         public int serverID = 0;
         public float lastUpdate = 0;
 
+        [Header("Client Parameters")]
+        public bool interpolateOnClient = true;
+
+        [SerializeField]
+        private MessageServerObject currentMessage;
+        [SerializeField]
+        private MessageServerObject lastMessage;
+        [SerializeField]
+        private float timeSinceLastUpdate = 0;
+
         void Start()
         {
             if (onServer)
@@ -30,6 +40,26 @@ namespace MastersOfTempest.Networking
             }
         }
 
+        void Update()
+        {
+            if (!onServer && interpolateOnClient)
+            {
+                // Make sure that both messages are valid
+                if (currentMessage.instanceID == serverID && lastMessage.instanceID == serverID)
+                {
+                    // Interpolate between the transform from the last and the current message based on the time that passed since the last message
+                    // This introduces a bit of latency but does not require any prediction
+                    float dt = currentMessage.time - lastMessage.time;
+                    float interpolationFactor = timeSinceLastUpdate / dt;
+                    transform.localPosition = Vector3.Lerp(lastMessage.localPosition, currentMessage.localPosition, interpolationFactor);
+                    transform.localRotation = Quaternion.Lerp(lastMessage.localRotation, currentMessage.localRotation, interpolationFactor);
+                    transform.localScale = Vector3.Lerp(lastMessage.localScale, currentMessage.localScale, interpolationFactor);
+
+                    timeSinceLastUpdate += Time.deltaTime;
+                }
+            }
+        }
+
         void OnDestroy()
         {
             if (onServer)
@@ -39,10 +69,31 @@ namespace MastersOfTempest.Networking
                 GameServer.Instance.SendMessageDestroyServerObject(this);
             }
         }
+
+        public void UpdateTransformFromMessageServerObject (MessageServerObject messageServerObject)
+        {
+            if (!onServer)
+            {
+                if (interpolateOnClient)
+                {
+                    // Save data for interpolation
+                    lastMessage = currentMessage;
+                    currentMessage = messageServerObject;
+                    timeSinceLastUpdate = 0;
+                }
+                else
+                {
+                    // Directly update the transform
+                    transform.localPosition = messageServerObject.localPosition;
+                    transform.localRotation = messageServerObject.localRotation;
+                    transform.localScale = messageServerObject.localScale;
+                }
+            }
+        }
     }
 
     [System.Serializable]
-    struct MessageServerObject
+    public struct MessageServerObject
     {
         public float time;
         public string name;
@@ -78,7 +129,7 @@ namespace MastersOfTempest.Networking
     }
 
     [System.Serializable]
-    struct MessageDestroyServerObject
+    public struct MessageDestroyServerObject
     {
         public int instanceID;
 
