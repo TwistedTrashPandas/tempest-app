@@ -11,7 +11,15 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
         {
             get 
             {
-                throw new NotImplementedException();
+                return new Rune[] {Rune.Fire, Rune.Water, Rune.Ice, Rune.Wind};
+            }
+        }
+
+        public override String Name
+        {
+            get 
+            {
+                return "Left halfwind";
             }
         }
 

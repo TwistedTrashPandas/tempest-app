@@ -9,15 +9,23 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
     {
         public override Rune[] SpellSequence
         {
+            get
+            {
+                return new Rune[] { Rune.Wind, Rune.Ice, Rune.Wind, Rune.Wind };
+            }
+        }
+
+        public override String Name
+        {
             get 
             {
-                throw new NotImplementedException();
+                return "Arcane insight";
             }
         }
 
         public override PlayerAction GetPlayerAction()
         {
-            throw new NotImplementedException();
+            return new SuperVision();
         }
     }
 }

@@ -11,13 +11,21 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
         {
             get
             {
-                throw new NotImplementedException();
+                return new Rune[] { Rune.Fire, Rune.Water, Rune.Fire, Rune.Water };
+            }
+        }
+
+        public override String Name
+        {
+            get 
+            {
+                return "Shield";
             }
         }
 
         public override PlayerAction GetPlayerAction()
         {
-            throw new NotImplementedException();
+            return new ShieldShip();
         }
     }
 }
