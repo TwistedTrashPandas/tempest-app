@@ -10,10 +10,28 @@ namespace MastersOfTempest.Networking
         // Use the gameobject instance id from the server to keep track of the objects
         public Dictionary<int, ServerObject> objectsFromServer = new Dictionary<int, ServerObject>();
 
+        public float pingsPerSec = 1;
+        public float ping = 0;
+
+        private float lastPingTime = 0;
+
         void Start()
         {
             ClientManager.Instance.clientMessageEvents[NetworkMessageType.ServerObject] += OnMessageServerObject;
             ClientManager.Instance.clientMessageEvents[NetworkMessageType.DestroyGameObject] += OnMessageDestroyGameObject;
+            ClientManager.Instance.clientMessageEvents[NetworkMessageType.PingPong] += OnMessagePingPong;
+
+            // Wait a bit before sending the message
+            lastPingTime = Time.time + pingsPerSec;
+        }
+
+        void Update()
+        {
+            if (Time.time - lastPingTime > (1.0f / pingsPerSec))
+            {
+                ClientManager.Instance.SendToServer(Time.time.ToString(), NetworkMessageType.PingPong, Facepunch.Steamworks.Networking.SendType.Unreliable);
+                lastPingTime = Time.time;
+            }
         }
 
         void OnMessageServerObject(string message, ulong steamID)
@@ -67,10 +85,16 @@ namespace MastersOfTempest.Networking
             }
         }
 
+        void OnMessagePingPong(string message, ulong steamID)
+        {
+            ping = Time.time - float.Parse(message);
+        }
+
         void OnDestroy()
         {
             ClientManager.Instance.clientMessageEvents[NetworkMessageType.ServerObject] -= OnMessageServerObject;
             ClientManager.Instance.clientMessageEvents[NetworkMessageType.DestroyGameObject] -= OnMessageDestroyGameObject;
+            ClientManager.Instance.clientMessageEvents[NetworkMessageType.PingPong] -= OnMessagePingPong;
         }
     }
 }

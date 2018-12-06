@@ -10,7 +10,7 @@
         ServerObject = 3,
         DestroyGameObject = 4,
         NetworkBehaviourInitialized = 5,
-        PushRigidbodyUp = 6,
+        PingPong = 6,
         ForceManipulator = 7,
         NoMessages = 8,
         EnvObjects = 9
