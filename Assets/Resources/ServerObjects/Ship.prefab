@@ -295,9 +295,11 @@ GameObject:
   - component: {fileID: 4809405030206934}
   - component: {fileID: 33720056548056822}
   - component: {fileID: 23311595084598214}
+  - component: {fileID: 136682792734011132}
+  - component: {fileID: 114157638872992546}
   m_Layer: 0
   m_Name: Balloon
-  m_TagString: Untagged
+  m_TagString: Interactable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1822,6 +1824,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   networkMessageType: 8
+--- !u!114 &114157638872992546
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1605906132649114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 519da00260c394479b5e3675aa9c789f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114449933113175548
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1849,3 +1862,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   networkMessageType: 7
+--- !u!136 &136682792734011132
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1605906132649114}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.01
+  m_Height: 0.019999994
+  m_Direction: 1
+  m_Center: {x: -0.000000001877197, y: -0.00000000791624, z: -0.000000007450581}

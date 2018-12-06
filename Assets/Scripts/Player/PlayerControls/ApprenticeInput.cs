@@ -49,7 +49,7 @@ namespace MastersOfTempest.PlayerControls
                         if(currentlyLookedAt != hit.transform)
                         {
                             currentlyLookedAt = hit.transform;
-                            currentInteractable = currentInteractable.GetComponent<InteractablePart>();
+                            currentInteractable = currentlyLookedAt.GetComponent<InteractablePart>();
                             interactionMessage.text = $"Press {interactionKey} to {currentInteractable.GetResultDescription()}";
                         }
                         if (Input.GetKeyDown(interactionKey))
