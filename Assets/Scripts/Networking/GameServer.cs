@@ -7,7 +7,10 @@ namespace MastersOfTempest.Networking
 {
     public class GameServer : MonoBehaviour
     {
-        public float hz = 64;
+        [Header("Server Parameters")]
+        public float hz = 16;
+        [Tooltip("Will not send objects if they didn't change their transform. Enabling can cause teleportation for objects that start moving after being static.")]
+        public bool onlySendChangedTransfroms = true;
 
         public static GameServer Instance = null;
         public LinkedList<ServerObject> serverObjects = new LinkedList<ServerObject>();
@@ -36,12 +39,12 @@ namespace MastersOfTempest.Networking
         {
             while (true)
             {
+                yield return new WaitForSeconds(1.0f / hz);
+
                 foreach (ServerObject serverObject in serverObjects)
                 {
                     SendMessageServerObject(serverObject, Facepunch.Steamworks.Networking.SendType.Unreliable);
                 }
-
-                yield return new WaitForSeconds(1.0f / hz);
             }
         }
 
@@ -54,7 +57,7 @@ namespace MastersOfTempest.Networking
 
         public void SendMessageServerObject(ServerObject serverObject, Facepunch.Steamworks.Networking.SendType sendType)
         {
-            if (serverObject.transform.hasChanged)
+            if (!onlySendChangedTransfroms || serverObject.transform.hasChanged)
             {
                 serverObject.transform.hasChanged = false;
                 string message = JsonUtility.ToJson(new MessageServerObject(serverObject));

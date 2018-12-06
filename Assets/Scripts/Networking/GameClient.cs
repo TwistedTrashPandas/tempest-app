@@ -50,9 +50,13 @@ namespace MastersOfTempest.Networking
 
                     // Overwrite the layer so that the server camera does not see this object as well
                     tmp.onServer = false;
-                    tmp.lastUpdate = messageServerObject.time;
                     tmp.serverID = messageServerObject.instanceID;
                     tmp.gameObject.layer = LayerMask.NameToLayer("Client");
+
+                    // Set the transform after spawn
+                    tmp.transform.localPosition = messageServerObject.localPosition;
+                    tmp.transform.localRotation = messageServerObject.localRotation;
+                    tmp.transform.localScale = messageServerObject.localScale;
                 }
             }
 

@@ -15,12 +15,11 @@ namespace MastersOfTempest.Networking
         [Header("Client Parameters")]
         public bool interpolateOnClient = true;
 
-        [SerializeField]
+        // Interpolation variables
         private MessageServerObject currentMessage;
-        [SerializeField]
         private MessageServerObject lastMessage;
-        [SerializeField]
-        private float timeSinceLastUpdate = 0;
+        private float timeSinceLastMessage = 0;
+        private uint messageCount = 0;
 
         void Start()
         {
@@ -44,18 +43,21 @@ namespace MastersOfTempest.Networking
         {
             if (!onServer && interpolateOnClient)
             {
-                // Make sure that both messages are valid
-                if (currentMessage.instanceID == serverID && lastMessage.instanceID == serverID)
+                // Make sure that both messages exist
+                if (messageCount > 1)
                 {
                     // Interpolate between the transform from the last and the current message based on the time that passed since the last message
                     // This introduces a bit of latency but does not require any prediction
                     float dt = currentMessage.time - lastMessage.time;
-                    float interpolationFactor = timeSinceLastUpdate / dt;
-                    transform.localPosition = Vector3.Lerp(lastMessage.localPosition, currentMessage.localPosition, interpolationFactor);
-                    transform.localRotation = Quaternion.Lerp(lastMessage.localRotation, currentMessage.localRotation, interpolationFactor);
-                    transform.localScale = Vector3.Lerp(lastMessage.localScale, currentMessage.localScale, interpolationFactor);
 
-                    timeSinceLastUpdate += Time.deltaTime;
+                    if (dt > 0)
+                    {
+                        float interpolationFactor = timeSinceLastMessage / dt;
+                        transform.localPosition = Vector3.Lerp(lastMessage.localPosition, currentMessage.localPosition, interpolationFactor);
+                        transform.localRotation = Quaternion.Lerp(lastMessage.localRotation, currentMessage.localRotation, interpolationFactor);
+                        transform.localScale = Vector3.Lerp(lastMessage.localScale, currentMessage.localScale, interpolationFactor);
+                        timeSinceLastMessage += Time.deltaTime;
+                    }
                 }
             }
         }
@@ -79,7 +81,8 @@ namespace MastersOfTempest.Networking
                     // Save data for interpolation
                     lastMessage = currentMessage;
                     currentMessage = messageServerObject;
-                    timeSinceLastUpdate = 0;
+                    timeSinceLastMessage = 0;
+                    messageCount++;
                 }
                 else
                 {
