@@ -35,7 +35,7 @@ namespace MastersOfTempest.Networking
                 serverID = transform.GetInstanceID();
 
                 // Register to game server
-                GameServer.Instance.RegisterServerObject(this);
+                GameServer.Instance.RegisterAndSendMessageServerObject(this);
             }
         }
 
@@ -129,6 +129,12 @@ namespace MastersOfTempest.Networking
             localRotation = serverObject.transform.localRotation;
             localScale = serverObject.transform.localScale;
         }
+    }
+
+    [System.Serializable]
+    struct MessageServerObjectList
+    {
+        public List<string> messages;
     }
 
     [System.Serializable]
