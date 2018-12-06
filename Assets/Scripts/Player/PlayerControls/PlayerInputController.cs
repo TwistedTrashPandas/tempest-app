@@ -3,14 +3,13 @@ using UnityEngine;
 
 namespace MastersOfTempest.PlayerControls
 {
-
     public abstract class PlayerInputController : MonoBehaviour
     {
         protected CameraDirectionController CameraDirectionController;
 
         public event EventHandler ActionMade;
 
-        private void Awake() 
+        protected virtual void Awake() 
         {
             CameraDirectionController = gameObject.AddComponent<CameraDirectionController>();
         }
