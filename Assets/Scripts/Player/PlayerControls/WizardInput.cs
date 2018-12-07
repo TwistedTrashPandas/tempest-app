@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using MastersOfTempest.PlayerControls.QTE;
+using MastersOfTempest.PlayerControls.Spellcasting;
 using UnityEngine;
 
 namespace MastersOfTempest.PlayerControls
@@ -9,7 +10,7 @@ namespace MastersOfTempest.PlayerControls
     public class WizardInput : PlayerInputController
     {
         private QTEDriver QTEDriver;
-
+        private SpellcastingController spellcastingController;
         private Array keyCodes;
         private KeyCode lastPressed;
         private int counter;
@@ -19,17 +20,18 @@ namespace MastersOfTempest.PlayerControls
         private CoroutineCancellationToken currentCancellationToken;
         private bool isActive = true;
 
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
             keyCodes = Enum.GetValues(typeof(KeyCode));
         }
 
-        protected override void Start()
+        protected void Start()
         {
-            base.Start();
             SanityCheck();
             QTEDriver.Success += OnSuccess;
             QTEDriver.Fail += OnFail;
+            spellcastingController.SpellCasted += OnSpellCasted;
         }
 
         public override void Interrupt()
@@ -51,39 +53,14 @@ namespace MastersOfTempest.PlayerControls
         {
             if (isActive)
             {
-                foreach (KeyCode vKey in keyCodes)
+                if(Input.GetKeyDown(KeyCode.F))
                 {
-                    if (Input.GetKeyDown(vKey))
-                    {
-                        if (lastPressed == vKey)
-                        {
-                            ++counter;
-                        }
-                        else
-                        {
-                            counter = 1;
-                            lastPressed = vKey;
-                        }
-                    }
-                }
-                if (counter == triggerAmount)
-                {
-                    KeyPressedEnoughTimes(lastPressed);
-                    counter = 0;
+                    spellcastingController.Active = !spellcastingController.Active;
+                    CameraDirectionController.Active = !CameraDirectionController.Active;
                 }
             }
         }
 
-        private void KeyPressedEnoughTimes(KeyCode key)
-        {
-            const float exampleDuration = .5f;
-            switch (key)
-            {
-                case KeyCode.A: StartQTE(new ApplyForceOnShip(Vector3.left * 500f, exampleDuration)); break;
-                case KeyCode.D: StartQTE(new ApplyForceOnShip(Vector3.right * 500f, exampleDuration)); break;
-                default: Debug.Log("Press A or D to get something happening"); break;
-            }
-        }
 
         private void StartQTE(PlayerAction action)
         {
@@ -111,18 +88,31 @@ namespace MastersOfTempest.PlayerControls
             {
                 throw new InvalidOperationException($"{nameof(QTEDriver)} is not specified!");
             }
+            if (spellcastingController == null)
+            {
+                throw new InvalidOperationException($"{nameof(spellcastingController)} is not specified!");
+            }
         }
 
-        public override void Bootstrap(Player player)
+        public override void Bootstrap()
         {
-            base.Bootstrap(player);
-            
-
             QTEDriver = gameObject.AddComponent<QTEDriver>();
-
             var qteRenderer = gameObject.AddComponent<QTESimpleUIRenderer>();
             qteRenderer.Driver = QTEDriver;
-            qteRenderer.InfoForUser = player.Text;
+            spellcastingController = gameObject.AddComponent<SpellcastingController>();
+            gameObject.AddComponent<SpellReferenceInfo>();
+        }
+
+        private void OnSpellCasted(object sender, EventArgs args)
+        {
+            var spellArgs = (SpellCastedEventArgs) args;
+            Debug.Log($"Spell {spellArgs.Spell.Name} casted!");
+          
+            spellcastingController.Active = false;
+            CameraDirectionController.Active = true;
+            var spellAction = spellArgs.Spell.GetPlayerAction();
+            TriggerActionEvent(new ActionMadeEventArgs(spellAction));
+            StartQTE(spellAction);
         }
     }
 }

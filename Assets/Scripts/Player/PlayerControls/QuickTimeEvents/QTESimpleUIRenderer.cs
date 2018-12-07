@@ -1,4 +1,5 @@
 ﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,10 +12,13 @@ namespace MastersOfTempest.PlayerControls.QTE
     public class QTESimpleUIRenderer : MonoBehaviour
     {
         public QTEDriver Driver;
-        public Text InfoForUser;
+
+        private const string InfoForUserPrefabPath = "UIPrefabs/SimpleQTERender/Hint";
+        private TMP_Text infoForUser;
 
         private void Start()
         {
+            infoForUser = UIManager.GetInstance().SpawnUIElement<TMP_Text>(InfoForUserPrefabPath);
             SanityCheck();
             Driver.Start += OnQTEStart;
             Driver.End += OnQTEEnd;
@@ -37,34 +41,34 @@ namespace MastersOfTempest.PlayerControls.QTE
         private void OnQTENewKey(object sender, EventArgs e)
         {
             var args = (QTENewKeyEventArgs)e;
-            InfoForUser.text = $"PRESS THE KEY \"{args.AwaitedKey}\" QUICK! YOU HAVE ONLY {args.TimeToReact} SECONDS!";
+            infoForUser.text = $"PRESS THE KEY \"{args.AwaitedKey}\" QUICK! YOU HAVE ONLY {args.TimeToReact} SECONDS!";
         }
 
 
         private void OnQTEFail(object sender, EventArgs e)
         {
-            InfoForUser.text = "WROOONG";
+            infoForUser.text = "WROOONG";
             Debug.Log("QTE failed");
         }
 
 
         private void OnQTESuccess(object sender, EventArgs e)
         {
-            InfoForUser.text = "GOOD JOB";
+            infoForUser.text = "GOOD JOB";
             Debug.Log("QTE success");
         }
 
 
         private void OnQTEEnd(object sender, EventArgs e)
         {
-            InfoForUser.text = "END";
+            infoForUser.text = "END";
             Debug.Log("QTE finished");
         }
 
 
         private void OnQTEStart(object sender, EventArgs e)
         {
-            InfoForUser.text = "START";
+            infoForUser.text = "START";
             Debug.Log("QTE started");
         }
 
@@ -74,11 +78,10 @@ namespace MastersOfTempest.PlayerControls.QTE
             {
                 throw new InvalidOperationException($"{nameof(Driver)} is not specified!");
             }
-            if (InfoForUser == null)
+            if (infoForUser == null)
             {
-                throw new InvalidOperationException($"{nameof(InfoForUser)} is not specified!");
+                throw new InvalidOperationException($"{nameof(infoForUser)} is not specified!");
             }
         }
     }
-
 }

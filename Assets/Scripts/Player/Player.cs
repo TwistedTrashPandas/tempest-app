@@ -8,23 +8,16 @@ namespace MastersOfTempest
 {
     public class Player : NetworkBehaviour
     {
-        //TODO: temporal solution, implement better UI management in future revisions
-        public UnityEngine.UI.Text Text;
-        public Camera FirstPersonCamera;
+        /*TODO:
+            Think about avatar objects for players. Most probably we will need to tell server 
+            to spawn an avatar for the other players.
+         */
         private Gamemaster context;
         private PlayerInputController playerInput;
 
         protected override void Start()
         {
             base.Start();
-            if (FirstPersonCamera == null)
-            {
-                throw new InvalidOperationException($"{nameof(FirstPersonCamera)} is not specified!");
-            }
-            if (Text == null)
-            {
-                throw new InvalidOperationException($"{nameof(Text)} is not specified!");
-            }
 
             context = FindObjectOfType<Gamemaster>();
             if (context == null)
@@ -39,7 +32,7 @@ namespace MastersOfTempest
             base.StartClient();
             //Initialize player controllers based on the active role
             playerInput = PlayerRoleExtensions.AddActiveRoleInputController(gameObject);
-            playerInput.Bootstrap(this);
+            playerInput.Bootstrap();
             playerInput.ActionMade += ExecutePlayerAction;
         }
 
