@@ -11,6 +11,8 @@ namespace MastersOfTempest.ShipBL
         private Gamemaster context;
         private ForceManilpulator forceManipulator;
 
+        private ShipStatus currentStatus;
+
         private void Awake()
         {
             forceManipulator = GetComponent<ForceManilpulator>();

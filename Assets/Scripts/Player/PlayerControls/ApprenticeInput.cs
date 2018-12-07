@@ -1,6 +1,7 @@
 ﻿using System;
 using MastersOfTempest.PlayerControls.QTE;
 using MastersOfTempest.ShipBL;
+using TMPro;
 using UnityEngine;
 
 namespace MastersOfTempest.PlayerControls
@@ -12,8 +13,8 @@ namespace MastersOfTempest.PlayerControls
     /// </summary>
     public class ApprenticeInput : PlayerInputController
     {
+        private const string InteractionMessagePrefabName = "UIPrefabs/Apprentice/InteractionMessage";
         private QTEDriver QTEDriver;
-        private UnityEngine.UI.Text InteractionMessage;
 
         private const string InteractableTagName = "Interactable";
 
@@ -24,11 +25,11 @@ namespace MastersOfTempest.PlayerControls
         private bool isActive = true;
         private Transform currentlyLookedAt;
         private InteractablePart currentInteractable;
+        private TMP_Text interactionMessage;
+        private Camera firstPersonCamera;
 
-
-        protected override void Start()
+        protected void Start()
         {
-            base.Start();
             SanityCheck();
 
             QTEDriver.Success += OnQTESuccess;
@@ -40,7 +41,7 @@ namespace MastersOfTempest.PlayerControls
             if(isActive)
             {
                 RaycastHit hit;
-                var ray = FirstPersonCamera.ViewportPointToRay(new Vector3(.5f, .5f, 0f));
+                var ray = firstPersonCamera.ViewportPointToRay(new Vector3(.5f, .5f, 0f));
                 if (Physics.Raycast(ray, out hit))
                 {
                     if (hit.transform.CompareTag(InteractableTagName))
@@ -48,8 +49,8 @@ namespace MastersOfTempest.PlayerControls
                         if(currentlyLookedAt != hit.transform)
                         {
                             currentlyLookedAt = hit.transform;
-                            currentInteractable = currentInteractable.GetComponent<InteractablePart>();
-                            InteractionMessage.text = $"Press {interactionKey} to {currentInteractable.GetResultDescription()}";
+                            currentInteractable = currentlyLookedAt.GetComponent<InteractablePart>();
+                            interactionMessage.text = $"Press {interactionKey} to {currentInteractable.GetResultDescription()}";
                         }
                         if (Input.GetKeyDown(interactionKey))
                         {
@@ -62,7 +63,7 @@ namespace MastersOfTempest.PlayerControls
                 else
                 {
                     currentlyLookedAt = null;
-                    InteractionMessage.text = "";
+                    interactionMessage.text = "";
                 }
             }
         }
@@ -112,23 +113,24 @@ namespace MastersOfTempest.PlayerControls
             {
                 throw new InvalidOperationException($"{nameof(QTEDriver)} is not specified!");
             }
-            if (InteractionMessage == null)
+            if (interactionMessage == null)
             {
-                throw new InvalidOperationException($"{nameof(InteractionMessage)} is not specified!");
+                throw new InvalidOperationException($"{nameof(interactionMessage)} is not specified!");
             }
 
         }
 
-        public override void Bootstrap(Player player)
+        public override void Bootstrap()
         {
-            base.Bootstrap(player);
-            InteractionMessage = player.Text;
-
+            //Setup the QTE driver
             QTEDriver = gameObject.AddComponent<QTEDriver>();
-
+            //Add renderer for the QTE events
             var qteRenderer = gameObject.AddComponent<QTESimpleUIRenderer>();
             qteRenderer.Driver = QTEDriver;
-            qteRenderer.InfoForUser = player.Text;
+            //Set up camera that is used to determine interactable objects
+            firstPersonCamera = CameraDirectionController.FirstPersonCamera;
+            //Create a message UI element to show hints to player
+            interactionMessage = UIManager.GetInstance().SpawnUIElement<TMP_Text>(InteractionMessagePrefabName);
         }
     }
 }
