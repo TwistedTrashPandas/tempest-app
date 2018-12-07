@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 4541291788162234}
   - component: {fileID: 114034535450140022}
   - component: {fileID: 114458285926744006}
-  - component: {fileID: 114867766791507582}
   - component: {fileID: 114371213497830530}
   - component: {fileID: 114801461701559052}
   - component: {fileID: 114404567317752372}
@@ -86,8 +85,9 @@ MonoBehaviour:
   v3_dimensions: {x: 152, y: 312, z: 152}
   tex: {fileID: 0}
   loadFromFile: 1
-  velScale: 10
-  yVelScale: 0.05
+  vectorFieldFileNum: 999
+  velScale: 100
+  yVelScale: 0.5
 --- !u!114 &114458285926744006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -99,7 +99,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b481b83ab7320c43aa7cabceab2dbc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damping_factor: 0.9
+  spawnRate: 1
+  damping_factor_vel: 0.99
+  damping_factor_force: 0
+  maximumObjVelocity: 50
+  minRadius: 10
+  maxRadius: 20
+  maxNumObjects: 200
   vectorField: {fileID: 114404567317752372}
   damagingPrefabs:
   - {fileID: 1476894203371464, guid: e8c9d0a525a3e1b4fba9d4d419b35e72, type: 2}
@@ -107,7 +113,7 @@ MonoBehaviour:
   supportingPrefabs:
   - {fileID: 1787456376747014, guid: abeac99c68381474e8f440ab8a83ddd3, type: 2}
   dangerzonesPrefabs: []
-  spawnRate: 1
+  moveType: 3
 --- !u!114 &114801461701559052
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -123,15 +129,3 @@ MonoBehaviour:
   onServer: 1
   serverID: 0
   lastUpdate: 0
---- !u!114 &114867766791507582
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1947543315551510}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 16008c2fe3ba7634ea0a21cc3f094509, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  networkMessageType: 9

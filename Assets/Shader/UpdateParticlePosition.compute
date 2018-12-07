@@ -38,15 +38,10 @@ void UpdateParticles(uint3 id : SV_DispatchThreadID)
 		idx.x = (int)((x_proj * 0.5f + 0.5f) * (g_i3Dimensions.x - 1));
 		idx.z = (int)((z_proj * 0.5f + 0.5f) * (g_i3Dimensions.z - 1));
 	}
-	else
-	{
-		idx.x = min(g_i3Dimensions.x - 1, max(idx.x, 0));
-		idx.z = min(g_i3Dimensions.z - 1, max(idx.z, 0));
-	}
 	// update velocity and positions accordingly
 	float dims = g_i3Dimensions[1] * g_i3Dimensions[2];
 	particleVelRW[id.x] *= g_fDampVel;
-	particleVelRW[id.x] += vectorFieldIn[min(idx.x * dims + idx.y * g_i3Dimensions[2] + idx.z, dims*g_i3Dimensions[0])] * g_fTimestep * 200.0f;
+	particleVelRW[id.x] += vectorFieldIn[min(idx.x * dims + idx.y * g_i3Dimensions[2] + idx.z, dims*g_i3Dimensions[0])] * g_fTimestep;
 	particleVelRW[id.x].y = max(-g_fMaxVel.y, min(g_fMaxVel.y, particleVelRW[id.x].y));
 	
 	float2 tempVel = float2(particleVelRW[id.x].x, particleVelRW[id.x].z);
@@ -61,7 +56,7 @@ void UpdateParticles(uint3 id : SV_DispatchThreadID)
 	//particleVelRW[id.x].xz = normalize(particleVelRW[id.x].xz) * min(g_fMaxVel.x, vel_magn);
 
 	if (distance(particlePosRW[id.x].xz, g_vCenter.xz) > g_fMaxDist || particlePosRW[id.x].y > g_i3Dimensions[1] * g_i3Dimensions.w) {
-		particlePosRW[id.x].xz = g_fRandPos.xz * particlePosRW[id.x].xz / 2.0f + g_vCenter.xz;
+		particlePosRW[id.x].xz = g_fRandPos.xz * particlePosRW[id.x].xz / 8.0f + g_vCenter.xz;
 		particlePosRW[id.x].y = g_fRandPos.y;
 	}
 }

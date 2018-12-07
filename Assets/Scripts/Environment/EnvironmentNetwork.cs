@@ -74,6 +74,7 @@ namespace MastersOfTempest
             if (envManager == null)
                 throw new System.InvalidOperationException("EnvironmentNetwork cannot operate without Environment Manager on the same object");
             StartCoroutine(SendEnvObjects());
+            envManager.envSpawner.StartSpawning();
         }
 
         IEnumerator SendEnvObjects()
@@ -83,7 +84,7 @@ namespace MastersOfTempest
             {
                 string msg = JsonUtility.ToJson(new MessageAllEnvObjects(envManager.envSpawner.envObjects));
                 SendToAllClients(msg, Facepunch.Steamworks.Networking.SendType.Reliable);
-                yield return new WaitForSeconds(1.0f / GameServer.Instance.hz);
+                yield return new WaitForSeconds(1.0f);
             }
         }
 
