@@ -9,7 +9,7 @@ namespace MastersOfTempest.PlayerControls
     {
         private bool isActive = true;
         private float defaultSpeed = 3f;
-
+        private Camera FirstPersonCamera;
         private void Update()
         {
             if(isActive)
@@ -46,9 +46,13 @@ namespace MastersOfTempest.PlayerControls
             }
         }
 
-        public override void Bootstrap(Player player)
+        public override void Bootstrap()
         {
-            base.Bootstrap(player);
+            FirstPersonCamera = CameraDirectionController.FirstPersonCamera;
+            if (FirstPersonCamera == null)
+            {
+                throw new InvalidOperationException($"{nameof(FirstPersonCamera)} is not specified!");
+            }
         }
 
         public override void Interrupt()

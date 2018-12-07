@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 4152302671853028}
   - component: {fileID: 33828846471913144}
   - component: {fileID: 23519280939533318}
-  - component: {fileID: 64205735703696130}
   - component: {fileID: 114508878345409366}
   m_Layer: 10
   m_Name: Floor
@@ -84,20 +83,6 @@ MeshFilter:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1148015206012266}
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!64 &64205735703696130
-MeshCollider:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1148015206012266}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 14
-  m_SkinWidth: 0.01
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!114 &114508878345409366
 MonoBehaviour:
