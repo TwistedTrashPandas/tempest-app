@@ -81,13 +81,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c00f619167f3b444e86ec3225496e04e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  f_cellSize: 1
+  f_cellSize: 2
   v3_dimensions: {x: 152, y: 312, z: 152}
-  tex: {fileID: 0}
   loadFromFile: 1
   vectorFieldFileNum: 999
-  velScale: 100
-  yVelScale: 0.5
+  velScale: 30
+  yVelScale: 0.75
 --- !u!114 &114458285926744006
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -105,14 +104,14 @@ MonoBehaviour:
   maximumObjVelocity: 50
   minRadius: 10
   maxRadius: 20
-  maxNumObjects: 200
+  maxNumObjects: 50
   vectorField: {fileID: 114404567317752372}
   damagingPrefabs:
   - {fileID: 1476894203371464, guid: e8c9d0a525a3e1b4fba9d4d419b35e72, type: 2}
-  - {fileID: 1787456376747014, guid: abeac99c68381474e8f440ab8a83ddd3, type: 2}
   supportingPrefabs:
   - {fileID: 1787456376747014, guid: abeac99c68381474e8f440ab8a83ddd3, type: 2}
-  dangerzonesPrefabs: []
+  dangerzonesPrefabs:
+  - {fileID: 1202199791458096, guid: 961a3386c9e651c4b86b0edd6a7b053a, type: 2}
   moveType: 3
 --- !u!114 &114801461701559052
 MonoBehaviour:
@@ -129,3 +128,4 @@ MonoBehaviour:
   onServer: 1
   serverID: 0
   lastUpdate: 0
+  interpolateOnClient: 1

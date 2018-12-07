@@ -112,6 +112,6 @@ MonoBehaviour:
   endIdx: 10
   skipIdx: 1
   maxVel:
-  - 100
-  - 100
+  - 30
+  - 30
   - 100

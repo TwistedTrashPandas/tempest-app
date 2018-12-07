@@ -19,7 +19,7 @@ namespace MastersOfTempest.Environment.Interacting
         {
             Force,
             Velocity,
-            Direct, 
+            Direct,
             ForceDirect
         };
 
@@ -126,11 +126,23 @@ namespace MastersOfTempest.Environment.Interacting
             StartCoroutine(SpawnObject());
         }
 
+        private Vector3 GetRandomPointOnSphere()
+        {
+            float alpha = Random.Range(0, 2 * Mathf.PI);
+            float beta = Mathf.Acos(Random.Range(-1f, 1f));
+            float sinBeta = Mathf.Sin(beta);
+            float radius = Random.Range(minRadius, maxRadius);
+            sinBeta *= radius;
+            return new Vector3(Mathf.Cos(alpha) * sinBeta, Mathf.Cos(beta) * radius, Mathf.Sin(alpha) * sinBeta);
+        }
+
         private IEnumerator SpawnObject()
         {
             if (envObjects.Count > maxNumObjects)
                 envObjects.RemoveAt(0);
-            InstantiateNewObject(true, new Vector3(), Vector3.one, Quaternion.identity, EnvObjectType.Damaging, 0, 0);
+            Vector3 centerPos = vectorField.GetCenter();
+            centerPos.y = 0f;
+            InstantiateNewObject(true, centerPos, Vector3.one, Quaternion.identity, EnvObjectType.Damaging, 0, 0);
             yield return new WaitForSeconds(spawnRate);
             StartCoroutine(SpawnObject());
         }
@@ -187,6 +199,8 @@ namespace MastersOfTempest.Environment.Interacting
         // main functions for initializing an envobject of given type 
         private void InstantiateNewObject(bool onServer, Vector3 position, Vector3 localScale, Quaternion orientation, EnvObjectType type = EnvObjectType.Damaging, int ID = 0, int prefabNum = 0)
         {
+            Vector3 randOffset = GetRandomPointOnSphere();
+            position += randOffset;
             switch (type)
             {
                 case EnvObjectType.Damaging:
@@ -201,12 +215,7 @@ namespace MastersOfTempest.Environment.Interacting
             }
             //envObjects[envObjects.Count - 1].transform.parent = objectContainer.transform;
             envObjects[envObjects.Count - 1].transform.localScale = localScale;
-            float alpha = Random.Range(0, 2 * Mathf.PI);
-            float beta = Mathf.Acos(Random.Range(-1f, 1f));
-            float sinBeta = Mathf.Sin(beta);
-            float radius = Random.Range(minRadius, maxRadius);
-            sinBeta *= radius;
-            envObjects[envObjects.Count - 1].relativeTargetPos = new Vector3(Mathf.Cos(alpha) * sinBeta, Mathf.Cos(beta) * radius, Mathf.Sin(alpha) * sinBeta);
+            envObjects[envObjects.Count - 1].relativeTargetPos = GetRandomPointOnSphere();
             if (!onServer)
             {
                 //  set layer, instanceID (for deleting/updating objects) only for clients

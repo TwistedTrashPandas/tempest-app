@@ -14,7 +14,6 @@ namespace MastersOfTempest.Environment
         /// actual values
         public Vector3[,,] v3s_vectors;
         /// 3D texture for shader (vector field)
-        public Texture3D tex;
         public bool loadFromFile;
         public int vectorFieldFileNum;
 
@@ -45,6 +44,8 @@ namespace MastersOfTempest.Environment
                 LoadVectorFieldFromFile(vectorFieldFileNum);
             else
                 InitializeVectorField();
+            int nx = v3_dimensions[0], ny = v3_dimensions[1], nz = v3_dimensions[2];
+            v2_rotCenter = new Vector2((nx - 1f) / 2f, (nz - 1f) / 2f);
         }
 
         // decompresses and loads uni file for the vectorfield
@@ -60,10 +61,10 @@ namespace MastersOfTempest.Environment
             currentVelFile = file_name;
             inf = new FileInfo(file_name);
             byte[] buffer = FileHandling.ReadFile(inf, header_size + grid_size + 4);
-            v3s_vectors = new Vector3[v3_dimensions[0], v3_dimensions[1], v3_dimensions[2]];
 
             // convert bytes to vectors
             uint start_idx = 4;
+            float y_vel = 1.0f * yVelScale;
             for (uint i = start_idx; i < 320 - start_idx; i++)
             {
                 for (uint j = start_idx; j < 160 - start_idx; j++)
@@ -72,20 +73,21 @@ namespace MastersOfTempest.Environment
                     {
                         uint start_index = header_size + 4 + ((i) * 160 + (j) * 160 * 320 + (k)) * 12;
                         float x = BitConverter.ToSingle(buffer, (int)start_index);
-                        float y = BitConverter.ToSingle(buffer, (int)start_index + 4) * yVelScale;
+                        float y = y_vel;// BitConverter.ToSingle(buffer, (int)start_index + 4) * yVelScale;
                         float z = BitConverter.ToSingle(buffer, (int)start_index + 8);
 
                         v3s_vectors[k - start_idx, i - start_idx, j - start_idx] = new Vector3(x, y, z) * velScale;
                     }
                 }
             }
+            RefineBorders();
         }
 
         private void InitializeVectorField()
         {
             float y_vel = 1.0f* yVelScale, minScale = 0.85f, maxScale = 1.15f;
             int nx = v3_dimensions[0], ny = v3_dimensions[1], nz = v3_dimensions[2];
-            float middleOffset = nx / 128f;
+            float middleOffset = nx / 160f;
             v2_rotCenter = new Vector2((nx - 1f) / 2f, (nz - 1f) / 2f);
             Vector2 midOffset = new Vector2((nx - 1f) / 4f, (nz - 1f) / 4f);
             /*Vector2 midOffset_1 = new Vector2((nx - 1f) / 4f, (nz - 1f) / 4f);
@@ -132,6 +134,32 @@ namespace MastersOfTempest.Environment
                         v3s_vectors[i, k, j] = new Vector3(-diffZ / hypotenuse - (i - v2_rotCenter.x)/160f,  y_vel, diffX / hypotenuse - (j - v2_rotCenter.y) / 160f) * (velScale * strModifier);
                         v3s_vectors[i, k, j].Scale(new Vector3(UnityEngine.Random.Range(minScale, maxScale),
                             UnityEngine.Random.Range(minScale, maxScale), UnityEngine.Random.Range(minScale, maxScale)));
+                    }
+                }
+            }
+        }
+
+        private void RefineBorders()
+        {
+            float y_vel = 1.0f * yVelScale;
+            int nx = v3_dimensions[0], ny = v3_dimensions[1], nz = v3_dimensions[2];
+            v2_rotCenter = new Vector2((nx - 1f) / 2f, (nz - 1f) / 2f);
+            for (int k = 0; k < ny; k+= 1)
+            {
+                for (int i = 0; i < nx; i++)
+                {
+                    for (int j = 0; j < nz; j++)
+                    {
+                        if (i == 0 || j == 0 || j == nz - 1 || i == nx - 1)
+                        {
+                            float diffX = v2_rotCenter.x - i;
+                            float diffZ = v2_rotCenter.y - j;
+                            float hypotenuse = Mathf.Sqrt(diffX * diffX + diffZ * diffZ);
+                            float magn = v3s_vectors[i, k, j].magnitude;
+                            v3s_vectors[i, k, j] /= magn;
+                            v3s_vectors[i, k, j] = new Vector3(-diffZ / hypotenuse - (i - v2_rotCenter.x) / 160f, 0f, diffX / hypotenuse - (j - v2_rotCenter.y) / 160f).normalized * magn;
+                            v3s_vectors[i, k, j].y = y_vel * velScale;
+                        }
                     }
                 }
             }
