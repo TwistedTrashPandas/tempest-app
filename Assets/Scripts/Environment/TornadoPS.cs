@@ -85,7 +85,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             {
                 float x = Random.Range(0f, vectorField.GetDimensions()[0] * vectorField.GetCellSize());
                 float z = Random.Range(0f, vectorField.GetDimensions()[2] * vectorField.GetCellSize());
-                float y = Random.Range(-vectorField.GetDimensions()[1] * vectorField.GetCellSize() * 0.2f, vectorField.GetDimensions()[1] * vectorField.GetCellSize());
+                float y =Random.Range(-vectorField.GetDimensions()[1] * vectorField.GetCellSize() * 0.2f, vectorField.GetDimensions()[1] * vectorField.GetCellSize());
                 particlePos[i] = new Vector3(x, y, z);
                 particleIdx[i] = i;
             }
@@ -201,9 +201,9 @@ namespace MastersOfTempest.Environment.VisualEffects
             float dt = Time.deltaTime;
             particlesCS.SetFloat("g_fTimestep", dt);
             float[] randPos = new float[3];
-            randPos[0] = (rnd.Next(0, 2) * 2 - 1f) * (0.25f + (float)rnd.NextDouble() * 0.5f);
-            randPos[1] = rnd.Next(0, 2);
-            randPos[2] = (rnd.Next(0, 2) * 2 - 1f) * (0.25f + (float)rnd.NextDouble() * 0.5f);
+            randPos[0] = Random.Range(-1f, 1f);//(rnd.Next(0, 2) * 2 - 1f) * (0.25f + (float)rnd.NextDouble() * 0.5f);
+            randPos[1] = Random.Range(-1f, 1f);
+            randPos[2] = Random.Range(-1f, 1f);//(rnd.Next(0, 2) * 2 - 1f) * (0.25f + (float)rnd.NextDouble() * 0.5f);
             particlesCS.SetFloats("g_fRandPos", randPos);
 
             particlesCS.Dispatch(kernelP, Mathf.CeilToInt(numberParticles / 256f), 1, 1);
