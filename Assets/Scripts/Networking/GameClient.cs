@@ -22,9 +22,9 @@ namespace MastersOfTempest.Networking
             ClientManager.Instance.clientMessageEvents[NetworkMessageType.DestroyServerObject] += OnMessageDestroyServerObject;
             ClientManager.Instance.clientMessageEvents[NetworkMessageType.PingPong] += OnMessagePingPong;
 
-            // Send a message to start the server
-            byte[] data = System.Text.Encoding.UTF8.GetBytes("StartServer");
-            ClientManager.Instance.SendToServer(data, NetworkMessageType.StartServer, Facepunch.Steamworks.Networking.SendType.Reliable);
+            // Send a message to initialize the server
+            byte[] data = System.Text.Encoding.UTF8.GetBytes("InitializeServer");
+            ClientManager.Instance.SendToServer(data, NetworkMessageType.InitializeServer, Facepunch.Steamworks.Networking.SendType.Reliable);
 
             // Wait a bit before sending the message
             lastPingTime = Time.time + pingsPerSec;

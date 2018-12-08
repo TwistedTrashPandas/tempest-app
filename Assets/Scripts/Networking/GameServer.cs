@@ -14,7 +14,8 @@ namespace MastersOfTempest.Networking
         public static GameServer Instance = null;
         public LinkedList<ServerObject> serverObjects = new LinkedList<ServerObject>();
 
-        private int numClientsReadyForStartServer = 0;
+        private bool initialized = false;
+        private int numClientsReadyForInitialization = 0;
 
         void Awake()
         {
@@ -31,7 +32,7 @@ namespace MastersOfTempest.Networking
 
         void Start()
         {
-            ClientManager.Instance.serverMessageEvents[NetworkMessageType.StartServer] += OnMessageStartServer;
+            ClientManager.Instance.serverMessageEvents[NetworkMessageType.InitializeServer] += OnMessageInitializeServer;
             ClientManager.Instance.serverMessageEvents[NetworkMessageType.PingPong] += OnMessagePingPong;
         }
 
@@ -41,9 +42,6 @@ namespace MastersOfTempest.Networking
         /// <returns></returns>
         IEnumerator ServerUpdate()
         {
-            // Send all objects once to make sure that they have spawned
-            SendAllServerObjects(Facepunch.Steamworks.Networking.SendType.Reliable);
-
             while (true)
             {
                 yield return new WaitForSeconds(1.0f / hz);
@@ -96,9 +94,13 @@ namespace MastersOfTempest.Networking
 
         public void RegisterAndSendMessageServerObject (ServerObject serverObject)
         {
-            // Make sure that objects are spawned on the server (with UDP it could happen that they don't spawn)
-            byte[] data = ByteSerializer.GetBytes(new MessageServerObject(serverObject));
-            ClientManager.Instance.SendToAllClients(data, NetworkMessageType.ServerObject, Facepunch.Steamworks.Networking.SendType.Reliable);
+            if (initialized)
+            {
+                // Make sure that objects are spawned on the server (with UDP it could happen that they don't spawn)
+                byte[] data = ByteSerializer.GetBytes(new MessageServerObject(serverObject));
+                ClientManager.Instance.SendToAllClients(data, NetworkMessageType.ServerObject, Facepunch.Steamworks.Networking.SendType.Reliable);
+            }
+
             serverObjects.AddLast(serverObject);
         }
 
@@ -108,15 +110,17 @@ namespace MastersOfTempest.Networking
             ClientManager.Instance.SendToAllClients(data, NetworkMessageType.DestroyServerObject, Facepunch.Steamworks.Networking.SendType.Reliable);
         }
 
-        void OnMessageStartServer(byte[] data, ulong steamID)
+        void OnMessageInitializeServer(byte[] data, ulong steamID)
         {
-            // Only start the server if all the clients have loaded the scene and sent a message
-            numClientsReadyForStartServer++;
+            // Only initialize the server if all the clients have loaded the scene and sent the message
+            numClientsReadyForInitialization++;
 
-            if (numClientsReadyForStartServer == ClientManager.Instance.GetClientCount())
+            if (numClientsReadyForInitialization == ClientManager.Instance.GetClientCount())
             {
+                initialized = true;
                 StartCoroutine(ServerUpdate());
-                ClientManager.Instance.serverMessageEvents[NetworkMessageType.StartServer] -= OnMessageStartServer;
+                SendAllServerObjects(Facepunch.Steamworks.Networking.SendType.Reliable);
+                ClientManager.Instance.serverMessageEvents[NetworkMessageType.InitializeServer] -= OnMessageInitializeServer;
             }
         }
 
