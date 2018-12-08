@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Facepunch.Steamworks;
 
 namespace MastersOfTempest.Networking
 {
@@ -14,6 +13,9 @@ namespace MastersOfTempest.Networking
 
         public static GameServer Instance = null;
         public LinkedList<ServerObject> serverObjects = new LinkedList<ServerObject>();
+
+        private bool initialized = false;
+        private int numClientsReadyForInitialization = 0;
 
         void Awake()
         {
@@ -30,8 +32,7 @@ namespace MastersOfTempest.Networking
 
         void Start()
         {
-            StartCoroutine(ServerUpdate());
-
+            ClientManager.Instance.serverMessageEvents[NetworkMessageType.InitializeServer] += OnMessageInitializeServer;
             ClientManager.Instance.serverMessageEvents[NetworkMessageType.PingPong] += OnMessagePingPong;
         }
 
@@ -45,72 +46,87 @@ namespace MastersOfTempest.Networking
             {
                 yield return new WaitForSeconds(1.0f / hz);
 
-                // Save all server object messages that need to be sended into one pool
-                LinkedList<MessageServerObject> messagesToSend = new LinkedList<MessageServerObject>();
+                SendAllServerObjects(Facepunch.Steamworks.Networking.SendType.Unreliable);
+            }
+        }
 
-                foreach (ServerObject serverObject in serverObjects)
+        private void SendAllServerObjects (Facepunch.Steamworks.Networking.SendType sendType)
+        {
+            // Save all server object messages that need to be sended into one pool
+            LinkedList<MessageServerObject> messagesToSend = new LinkedList<MessageServerObject>();
+
+            foreach (ServerObject serverObject in serverObjects)
+            {
+                if (!onlySendChangedTransfroms || serverObject.transform.hasChanged)
                 {
-                    if (!onlySendChangedTransfroms || serverObject.transform.hasChanged)
+                    serverObject.transform.hasChanged = false;
+                    messagesToSend.AddLast(new MessageServerObject(serverObject));
+                }
+            }
+
+            // Create and send server object list messages until the pool is empty
+            while (messagesToSend.Count > 0)
+            {
+                // Make sure that the message is small enough to fit into the UDP packet (1200 bytes)
+                MessageServerObjectList messageServerObjectList = new MessageServerObjectList();
+                messageServerObjectList.messages = new MessageServerObject[10];
+                messageServerObjectList.count = 0;
+
+                for (int i = 0; i < messageServerObjectList.messages.Length; i++)
+                {
+                    if (messagesToSend.Count > 0)
                     {
-                        serverObject.transform.hasChanged = false;
-                        messagesToSend.AddLast(new MessageServerObject(serverObject));
+                        messageServerObjectList.messages[i] = messagesToSend.Last.Value;
+                        messageServerObjectList.count++;
+                        messagesToSend.RemoveLast();
+                    }
+                    else
+                    {
+                        break;
                     }
                 }
 
-                // Create and send server object list messages until the pool is empty
-                while (messagesToSend.Count > 0)
-                {
-                    MessageServerObjectList messageServerObjectList = new MessageServerObjectList();
-                    messageServerObjectList.messages = new List<string>();
-
-                    // Make sure that the message is small enough to fit into the UDP packet (1200 bytes)
-                    while (messagesToSend.Count > 0)
-                    {
-                        // Add a message from the pool in order to check the size of the message
-                        string tmp = JsonUtility.ToJson(messagesToSend.Last.Value);
-                        messageServerObjectList.messages.Add(tmp);
-
-                        // Get the size of the message
-                        string json = JsonUtility.ToJson(messageServerObjectList);
-                        byte[] data = System.Text.Encoding.UTF8.GetBytes(json);
-
-                        if (data.Length > 1200)
-                        {
-                            // The message is too big, remove the last message, send it and create a new one
-                            messageServerObjectList.messages.Remove(tmp);
-                            break;
-                        }
-                        else
-                        {
-                            // Remove the message from the pool and add the next message
-                            messagesToSend.RemoveLast();
-                        }
-                    }
-
-                    // Send the message to all clients
-                    string message = JsonUtility.ToJson(messageServerObjectList);
-                    ClientManager.Instance.SendToAllClients(message, NetworkMessageType.ServerObjectList, Facepunch.Steamworks.Networking.SendType.Unreliable);
-                }
+                // Send the message to all clients
+                byte[] data = ByteSerializer.GetBytes(messageServerObjectList);
+                ClientManager.Instance.SendToAllClients(data, NetworkMessageType.ServerObjectList, sendType);
             }
         }
 
         public void RegisterAndSendMessageServerObject (ServerObject serverObject)
         {
-            // Make sure that objects are spawned on the server (with UDP it could happen that they don't spawn)
-            string message = JsonUtility.ToJson(new MessageServerObject(serverObject));
-            ClientManager.Instance.SendToAllClients(message, NetworkMessageType.ServerObject, Facepunch.Steamworks.Networking.SendType.Reliable);
+            if (initialized)
+            {
+                // Make sure that objects are spawned on the server (with UDP it could happen that they don't spawn)
+                byte[] data = ByteSerializer.GetBytes(new MessageServerObject(serverObject));
+                ClientManager.Instance.SendToAllClients(data, NetworkMessageType.ServerObject, Facepunch.Steamworks.Networking.SendType.Reliable);
+            }
+
             serverObjects.AddLast(serverObject);
         }
 
         public void SendMessageDestroyServerObject(ServerObject serverObject)
         {
-            string message = JsonUtility.ToJson(new MessageDestroyServerObject(serverObject));
-            ClientManager.Instance.SendToAllClients(message, NetworkMessageType.DestroyServerObject, Facepunch.Steamworks.Networking.SendType.Reliable);
+            byte[] data = System.BitConverter.GetBytes(serverObject.serverID);
+            ClientManager.Instance.SendToAllClients(data, NetworkMessageType.DestroyServerObject, Facepunch.Steamworks.Networking.SendType.Reliable);
         }
 
-        void OnMessagePingPong(string message, ulong steamID)
+        void OnMessageInitializeServer(byte[] data, ulong steamID)
         {
-            ClientManager.Instance.SendToClient(steamID, message, NetworkMessageType.PingPong, Facepunch.Steamworks.Networking.SendType.Unreliable);
+            // Only initialize the server if all the clients have loaded the scene and sent the message
+            numClientsReadyForInitialization++;
+
+            if (numClientsReadyForInitialization == ClientManager.Instance.GetClientCount())
+            {
+                initialized = true;
+                StartCoroutine(ServerUpdate());
+                SendAllServerObjects(Facepunch.Steamworks.Networking.SendType.Reliable);
+                ClientManager.Instance.serverMessageEvents[NetworkMessageType.InitializeServer] -= OnMessageInitializeServer;
+            }
+        }
+
+        void OnMessagePingPong(byte[] data, ulong steamID)
+        {
+            ClientManager.Instance.SendToClient(steamID, data, NetworkMessageType.PingPong, Facepunch.Steamworks.Networking.SendType.Unreliable);
         }
 
         void OnDestroy()

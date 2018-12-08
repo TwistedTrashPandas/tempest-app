@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Runtime.InteropServices;
 
 namespace MastersOfTempest.Networking
 {
@@ -14,6 +16,8 @@ namespace MastersOfTempest.Networking
 
         [Header("Client Parameters")]
         public bool interpolateOnClient = true;
+        public bool removeCollider = true;
+        public bool removeRigidbody = true;
 
         // Interpolation variables
         private MessageServerObject currentMessage;
@@ -36,6 +40,11 @@ namespace MastersOfTempest.Networking
 
                 // Register to game server
                 GameServer.Instance.RegisterAndSendMessageServerObject(this);
+            }
+            else
+            {
+                // Remove collider / rigidbody on the client because it is not needed most of the time
+                RemoveColliderAndRigidbody();
             }
         }
 
@@ -62,17 +71,30 @@ namespace MastersOfTempest.Networking
             }
         }
 
-        void OnDestroy()
+        private void RemoveColliderAndRigidbody ()
         {
-            if (onServer)
+            if (removeCollider)
             {
-                // Send destroy message
-                GameServer.Instance.serverObjects.Remove(this);
-                GameServer.Instance.SendMessageDestroyServerObject(this);
+                Collider collider = GetComponent<Collider>();
+
+                if (collider != null)
+                {
+                    Destroy(collider);
+                }
+            }
+
+            if (removeRigidbody)
+            {
+                Rigidbody rigidbody = GetComponent<Rigidbody>();
+
+                if (rigidbody != null)
+                {
+                    Destroy(rigidbody);
+                }
             }
         }
 
-        public void UpdateTransformFromMessageServerObject (MessageServerObject messageServerObject)
+        public void UpdateTransformFromMessageServerObject(MessageServerObject messageServerObject)
         {
             if (!onServer)
             {
@@ -93,20 +115,33 @@ namespace MastersOfTempest.Networking
                 }
             }
         }
+
+        void OnDestroy()
+        {
+            if (onServer)
+            {
+                // Send destroy message
+                GameServer.Instance.serverObjects.Remove(this);
+                GameServer.Instance.SendMessageDestroyServerObject(this);
+            }
+        }
     }
 
-    [System.Serializable]
+    [StructLayout(LayoutKind.Sequential)]
     public struct MessageServerObject
     {
-        public float time;
-        public string name;
-        public string resourceName;
-        public bool hasParent;
-        public int parentInstanceID;
-        public int instanceID;
-        public Vector3 localPosition;
-        public Quaternion localRotation;
-        public Vector3 localScale;
+        public float time;                                          // 4 bytes
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 24)]
+        public string name;                                         // 24 bytes
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 36)]
+        public string resourceName;                                 // 36 bytes
+        public bool hasParent;                                      // 4 byte
+        public int parentInstanceID;                                // 4 bytes
+        public int instanceID;                                      // 4 bytes
+        public Vector3 localPosition;                               // 12 bytes
+        public Quaternion localRotation;                            // 16 bytes
+        public Vector3 localScale;                                  // 12 bytes
+                                                                    // 116 bytes
 
         public MessageServerObject(ServerObject serverObject)
         {
@@ -131,20 +166,12 @@ namespace MastersOfTempest.Networking
         }
     }
 
-    [System.Serializable]
+    [StructLayout(LayoutKind.Sequential)]
     struct MessageServerObjectList
     {
-        public List<string> messages;
-    }
-
-    [System.Serializable]
-    public struct MessageDestroyServerObject
-    {
-        public int instanceID;
-
-        public MessageDestroyServerObject(ServerObject serverObject)
-        {
-            instanceID = serverObject.transform.GetInstanceID();
-        }
+        public int count;                                           // 4 bytes
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
+        public MessageServerObject[] messages;                      // 1160 bytes
+                                                                    // 1164 bytes
     }
 }
