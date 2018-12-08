@@ -16,6 +16,8 @@ namespace MastersOfTempest.Networking
 
         [Header("Client Parameters")]
         public bool interpolateOnClient = true;
+        public bool removeCollider = true;
+        public bool removeRigidbody = true;
 
         // Interpolation variables
         private MessageServerObject currentMessage;
@@ -38,6 +40,11 @@ namespace MastersOfTempest.Networking
 
                 // Register to game server
                 GameServer.Instance.RegisterAndSendMessageServerObject(this);
+            }
+            else
+            {
+                // Remove collider / rigidbody on the client because it is not needed most of the time
+                RemoveColliderAndRigidbody();
             }
         }
 
@@ -64,13 +71,26 @@ namespace MastersOfTempest.Networking
             }
         }
 
-        void OnDestroy()
+        private void RemoveColliderAndRigidbody ()
         {
-            if (onServer)
+            if (removeCollider)
             {
-                // Send destroy message
-                GameServer.Instance.serverObjects.Remove(this);
-                GameServer.Instance.SendMessageDestroyServerObject(this);
+                Collider collider = GetComponent<Collider>();
+
+                if (collider != null)
+                {
+                    Destroy(collider);
+                }
+            }
+
+            if (removeRigidbody)
+            {
+                Rigidbody rigidbody = GetComponent<Rigidbody>();
+
+                if (rigidbody != null)
+                {
+                    Destroy(rigidbody);
+                }
             }
         }
 
@@ -93,6 +113,16 @@ namespace MastersOfTempest.Networking
                     transform.localRotation = messageServerObject.localRotation;
                     transform.localScale = messageServerObject.localScale;
                 }
+            }
+        }
+
+        void OnDestroy()
+        {
+            if (onServer)
+            {
+                // Send destroy message
+                GameServer.Instance.serverObjects.Remove(this);
+                GameServer.Instance.SendMessageDestroyServerObject(this);
             }
         }
     }
