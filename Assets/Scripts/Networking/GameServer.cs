@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Facepunch.Steamworks;
 
 namespace MastersOfTempest.Networking
 {
@@ -14,6 +13,8 @@ namespace MastersOfTempest.Networking
 
         public static GameServer Instance = null;
         public LinkedList<ServerObject> serverObjects = new LinkedList<ServerObject>();
+
+        private int numClientsReadyForStartServer = 0;
 
         void Awake()
         {
@@ -30,8 +31,7 @@ namespace MastersOfTempest.Networking
 
         void Start()
         {
-            StartCoroutine(ServerUpdate());
-
+            ClientManager.Instance.serverMessageEvents[NetworkMessageType.StartServer] += OnMessageStartServer;
             ClientManager.Instance.serverMessageEvents[NetworkMessageType.PingPong] += OnMessagePingPong;
         }
 
@@ -41,48 +41,56 @@ namespace MastersOfTempest.Networking
         /// <returns></returns>
         IEnumerator ServerUpdate()
         {
+            // Send all objects once to make sure that they have spawned
+            SendAllServerObjects(Facepunch.Steamworks.Networking.SendType.Reliable);
+
             while (true)
             {
                 yield return new WaitForSeconds(1.0f / hz);
 
-                // Save all server object messages that need to be sended into one pool
-                LinkedList<MessageServerObject> messagesToSend = new LinkedList<MessageServerObject>();
+                SendAllServerObjects(Facepunch.Steamworks.Networking.SendType.Unreliable);
+            }
+        }
 
-                foreach (ServerObject serverObject in serverObjects)
+        private void SendAllServerObjects (Facepunch.Steamworks.Networking.SendType sendType)
+        {
+            // Save all server object messages that need to be sended into one pool
+            LinkedList<MessageServerObject> messagesToSend = new LinkedList<MessageServerObject>();
+
+            foreach (ServerObject serverObject in serverObjects)
+            {
+                if (!onlySendChangedTransfroms || serverObject.transform.hasChanged)
                 {
-                    if (!onlySendChangedTransfroms || serverObject.transform.hasChanged)
+                    serverObject.transform.hasChanged = false;
+                    messagesToSend.AddLast(new MessageServerObject(serverObject));
+                }
+            }
+
+            // Create and send server object list messages until the pool is empty
+            while (messagesToSend.Count > 0)
+            {
+                // Make sure that the message is small enough to fit into the UDP packet (1200 bytes)
+                MessageServerObjectList messageServerObjectList = new MessageServerObjectList();
+                messageServerObjectList.messages = new MessageServerObject[10];
+                messageServerObjectList.count = 0;
+
+                for (int i = 0; i < messageServerObjectList.messages.Length; i++)
+                {
+                    if (messagesToSend.Count > 0)
                     {
-                        serverObject.transform.hasChanged = false;
-                        messagesToSend.AddLast(new MessageServerObject(serverObject));
+                        messageServerObjectList.messages[i] = messagesToSend.Last.Value;
+                        messageServerObjectList.count++;
+                        messagesToSend.RemoveLast();
+                    }
+                    else
+                    {
+                        break;
                     }
                 }
 
-                // Create and send server object list messages until the pool is empty
-                while (messagesToSend.Count > 0)
-                {
-                    // Make sure that the message is small enough to fit into the UDP packet (1200 bytes)
-                    MessageServerObjectList messageServerObjectList = new MessageServerObjectList();
-                    messageServerObjectList.messages = new MessageServerObject[10];
-                    messageServerObjectList.count = 0;
-
-                    for (int i = 0; i < messageServerObjectList.messages.Length; i++)
-                    {
-                        if (messagesToSend.Count > 0)
-                        {
-                            messageServerObjectList.messages[i] = messagesToSend.Last.Value;
-                            messageServerObjectList.count++;
-                            messagesToSend.RemoveLast();
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-
-                    // Send the message to all clients
-                    byte[] data = ByteSerializer.GetBytes(messageServerObjectList);
-                    ClientManager.Instance.SendToAllClients(data, NetworkMessageType.ServerObjectList, Facepunch.Steamworks.Networking.SendType.Unreliable);
-                }
+                // Send the message to all clients
+                byte[] data = ByteSerializer.GetBytes(messageServerObjectList);
+                ClientManager.Instance.SendToAllClients(data, NetworkMessageType.ServerObjectList, sendType);
             }
         }
 
@@ -96,8 +104,20 @@ namespace MastersOfTempest.Networking
 
         public void SendMessageDestroyServerObject(ServerObject serverObject)
         {
-            byte[] data = ByteSerializer.GetBytes(new MessageDestroyServerObject(serverObject));
+            byte[] data = System.BitConverter.GetBytes(serverObject.serverID);
             ClientManager.Instance.SendToAllClients(data, NetworkMessageType.DestroyServerObject, Facepunch.Steamworks.Networking.SendType.Reliable);
+        }
+
+        void OnMessageStartServer(byte[] data, ulong steamID)
+        {
+            // Only start the server if all the clients have loaded the scene and sent a message
+            numClientsReadyForStartServer++;
+
+            if (numClientsReadyForStartServer == ClientManager.Instance.GetClientCount())
+            {
+                StartCoroutine(ServerUpdate());
+                ClientManager.Instance.serverMessageEvents[NetworkMessageType.StartServer] -= OnMessageStartServer;
+            }
         }
 
         void OnMessagePingPong(byte[] data, ulong steamID)

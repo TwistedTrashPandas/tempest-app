@@ -136,21 +136,12 @@ namespace MastersOfTempest.Networking
         }
     }
 
+    [StructLayout(LayoutKind.Sequential)]
     struct MessageServerObjectList
     {
         public int count;                                           // 4 bytes
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
         public MessageServerObject[] messages;                      // 1160 bytes
                                                                     // 1164 bytes
-    }
-
-    public struct MessageDestroyServerObject
-    {
-        public int instanceID;
-
-        public MessageDestroyServerObject(ServerObject serverObject)
-        {
-            instanceID = serverObject.transform.GetInstanceID();
-        }
     }
 }

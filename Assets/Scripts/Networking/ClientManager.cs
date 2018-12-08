@@ -191,6 +191,11 @@ namespace MastersOfTempest.Networking
             SendToClient(client.Lobby.Owner, data, serverMessagesOffset + (int)networkMessageType, sendType);
         }
 
+        public int GetClientCount ()
+        {
+            return client.Lobby.NumMembers;
+        }
+
         void OnDestroy()
         {
             if (client != null)

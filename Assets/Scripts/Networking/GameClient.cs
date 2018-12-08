@@ -19,8 +19,12 @@ namespace MastersOfTempest.Networking
         {
             ClientManager.Instance.clientMessageEvents[NetworkMessageType.ServerObject] += OnMessageServerObject;
             ClientManager.Instance.clientMessageEvents[NetworkMessageType.ServerObjectList] += OnMessageServerObjectList;
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.DestroyServerObject] += OnMessageDestroyGameObject;
+            ClientManager.Instance.clientMessageEvents[NetworkMessageType.DestroyServerObject] += OnMessageDestroyServerObject;
             ClientManager.Instance.clientMessageEvents[NetworkMessageType.PingPong] += OnMessagePingPong;
+
+            // Send a message to start the server
+            byte[] data = System.Text.Encoding.UTF8.GetBytes("StartServer");
+            ClientManager.Instance.SendToServer(data, NetworkMessageType.StartServer, Facepunch.Steamworks.Networking.SendType.Reliable);
 
             // Wait a bit before sending the message
             lastPingTime = Time.time + pingsPerSec;
@@ -40,8 +44,6 @@ namespace MastersOfTempest.Networking
         {
             MessageServerObject messageServerObject = ByteSerializer.FromBytes<MessageServerObject>(data);
             UpdateServerObject(messageServerObject);
-
-            Debug.Log(messageServerObject.name);
         }
 
         void UpdateServerObject(MessageServerObject messageServerObject)
@@ -97,14 +99,14 @@ namespace MastersOfTempest.Networking
             }
         }
 
-        void OnMessageDestroyGameObject(byte[] data, ulong steamID)
+        void OnMessageDestroyServerObject(byte[] data, ulong steamID)
         {
-            MessageDestroyServerObject messageDestroyServerObject = ByteSerializer.FromBytes<MessageDestroyServerObject>(data);
+            int serverIDToDestroy = System.BitConverter.ToInt32(data, 0);
 
-            if (objectsFromServer.ContainsKey(messageDestroyServerObject.instanceID))
+            if (objectsFromServer.ContainsKey(serverIDToDestroy))
             {
-                Destroy(objectsFromServer[messageDestroyServerObject.instanceID].gameObject);
-                objectsFromServer.Remove(messageDestroyServerObject.instanceID);
+                Destroy(objectsFromServer[serverIDToDestroy].gameObject);
+                objectsFromServer.Remove(serverIDToDestroy);
             }
         }
 
@@ -117,7 +119,7 @@ namespace MastersOfTempest.Networking
         {
             ClientManager.Instance.clientMessageEvents[NetworkMessageType.ServerObject] -= OnMessageServerObject;
             ClientManager.Instance.clientMessageEvents[NetworkMessageType.ServerObjectList] -= OnMessageServerObjectList;
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.DestroyServerObject] -= OnMessageDestroyGameObject;
+            ClientManager.Instance.clientMessageEvents[NetworkMessageType.DestroyServerObject] -= OnMessageDestroyServerObject;
             ClientManager.Instance.clientMessageEvents[NetworkMessageType.PingPong] -= OnMessagePingPong;
         }
     }

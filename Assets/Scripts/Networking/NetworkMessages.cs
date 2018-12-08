@@ -15,5 +15,6 @@
         NoMessages = 8,
         EnvObjects = 9,
         ServerObjectList = 10,
+        StartServer = 11,
     };
 }

@@ -5,10 +5,12 @@ namespace MastersOfTempest.Networking
     [RequireComponent(typeof(ServerObject))]
     public class NetworkBehaviour : MonoBehaviour
     {
+        public NetworkMessageType networkMessageType = NetworkMessageType.Empty;
+
         protected bool initialized = false;
         protected ServerObject serverObject;
 
-        public NetworkMessageType networkMessageType = NetworkMessageType.Empty;
+        private int numClientsReadyForInitialization = 0;
 
         [System.Serializable]
         private struct NetworkBehaviourMessage
@@ -97,10 +99,17 @@ namespace MastersOfTempest.Networking
 
             if (!initialized && (serverObject.serverID == initializedServerObjectID))
             {
-                initialized = true;
-                ClientManager.Instance.SendToClient(steamID, data, NetworkMessageType.NetworkBehaviourInitialized, Facepunch.Steamworks.Networking.SendType.Reliable);
-                ClientManager.Instance.serverMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] -= OnServerNetworkBehaviourInitialized;
-                StartServer();
+                // Count how many clients are ready for the initialization
+                numClientsReadyForInitialization++;
+
+                if (numClientsReadyForInitialization == ClientManager.Instance.GetClientCount())
+                {
+                    // All clients are ready to be initialized, send a message to initialize all of them at the same time
+                    initialized = true;
+                    ClientManager.Instance.SendToAllClients(data, NetworkMessageType.NetworkBehaviourInitialized, Facepunch.Steamworks.Networking.SendType.Reliable);
+                    ClientManager.Instance.serverMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] -= OnServerNetworkBehaviourInitialized;
+                    StartServer();
+                }
             }
         }
 
