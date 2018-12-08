@@ -30,15 +30,22 @@ namespace MastersOfTempest.Networking
         {
             if (Time.time - lastPingTime > (1.0f / pingsPerSec))
             {
-                ClientManager.Instance.SendToServer(Time.time.ToString(), NetworkMessageType.PingPong, Facepunch.Steamworks.Networking.SendType.Unreliable);
+                byte[] data = System.BitConverter.GetBytes(Time.time);
+                ClientManager.Instance.SendToServer(data, NetworkMessageType.PingPong, Facepunch.Steamworks.Networking.SendType.Unreliable);
                 lastPingTime = Time.time;
             }
         }
 
-        void OnMessageServerObject(string message, ulong steamID)
+        void OnMessageServerObject(byte[] data, ulong steamID)
         {
-            MessageServerObject messageServerObject = JsonUtility.FromJson<MessageServerObject>(message);
+            MessageServerObject messageServerObject = ByteSerializer.FromBytes<MessageServerObject>(data);
+            UpdateServerObject(messageServerObject);
 
+            Debug.Log(messageServerObject.name);
+        }
+
+        void UpdateServerObject(MessageServerObject messageServerObject)
+        {
             // Create a new object if it doesn't exist yet
             if (!objectsFromServer.ContainsKey(messageServerObject.instanceID))
             {
@@ -66,7 +73,7 @@ namespace MastersOfTempest.Networking
             if (serverObject.lastUpdate <= messageServerObject.time)
             {
                 // Update values only if the UDP packet values are newer
-                serverObject.name = messageServerObject.name + "\t\t\t(" + messageServerObject.instanceID + ")";
+                serverObject.name = messageServerObject.name + "\t\t(" + messageServerObject.instanceID + ")";
                 serverObject.lastUpdate = messageServerObject.time;
 
                 // Update the transform
@@ -80,30 +87,30 @@ namespace MastersOfTempest.Networking
             }
         }
 
-        void OnMessageServerObjectList (string message, ulong steamID)
+        void OnMessageServerObjectList (byte[] data, ulong steamID)
         {
-            MessageServerObjectList messageServerObjectList = JsonUtility.FromJson<MessageServerObjectList>(message);
+            MessageServerObjectList messageServerObjectList = ByteSerializer.FromBytes<MessageServerObjectList>(data);
 
-            foreach (string m in messageServerObjectList.messages)
+            for (int i = 0; i < messageServerObjectList.count; i++)
             {
-                OnMessageServerObject(m, steamID);
+                UpdateServerObject(messageServerObjectList.messages[i]);
             }
         }
 
-        void OnMessageDestroyGameObject(string message, ulong steamID)
+        void OnMessageDestroyGameObject(byte[] data, ulong steamID)
         {
-            MessageDestroyServerObject destroyTransformMessage = JsonUtility.FromJson<MessageDestroyServerObject>(message);
+            MessageDestroyServerObject messageDestroyServerObject = ByteSerializer.FromBytes<MessageDestroyServerObject>(data);
 
-            if (objectsFromServer.ContainsKey(destroyTransformMessage.instanceID))
+            if (objectsFromServer.ContainsKey(messageDestroyServerObject.instanceID))
             {
-                Destroy(objectsFromServer[destroyTransformMessage.instanceID].gameObject);
-                objectsFromServer.Remove(destroyTransformMessage.instanceID);
+                Destroy(objectsFromServer[messageDestroyServerObject.instanceID].gameObject);
+                objectsFromServer.Remove(messageDestroyServerObject.instanceID);
             }
         }
 
-        void OnMessagePingPong(string message, ulong steamID)
+        void OnMessagePingPong(byte[] data, ulong steamID)
         {
-            ping = Time.time - float.Parse(message);
+            ping = Time.time - System.BitConverter.ToSingle(data, 0);
         }
 
         void OnDestroy()

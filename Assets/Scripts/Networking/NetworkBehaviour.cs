@@ -46,7 +46,8 @@ namespace MastersOfTempest.Networking
                 ClientManager.Instance.clientMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] += OnClientNetworkBehaviourInitialized;
 
                 // Begin the initialization, tell the server that this object is ready
-                ClientManager.Instance.SendToServer(serverObject.serverID.ToString(), NetworkMessageType.NetworkBehaviourInitialized, Facepunch.Steamworks.Networking.SendType.Reliable);
+                byte[] data = System.BitConverter.GetBytes(serverObject.serverID);
+                ClientManager.Instance.SendToServer(data, NetworkMessageType.NetworkBehaviourInitialized, Facepunch.Steamworks.Networking.SendType.Reliable);
             }
 
             if (networkMessageType == NetworkMessageType.Empty)
@@ -90,20 +91,24 @@ namespace MastersOfTempest.Networking
             // To be overwritten by the superclass
         }
 
-        private void OnServerNetworkBehaviourInitialized(string message, ulong steamID)
+        private void OnServerNetworkBehaviourInitialized(byte[] data, ulong steamID)
         {
-            if (!initialized && (serverObject.serverID == int.Parse(message)))
+            int initializedServerObjectID = System.BitConverter.ToInt32(data, 0);
+
+            if (!initialized && (serverObject.serverID == initializedServerObjectID))
             {
                 initialized = true;
-                ClientManager.Instance.SendToClient(steamID, serverObject.serverID.ToString(), NetworkMessageType.NetworkBehaviourInitialized, Facepunch.Steamworks.Networking.SendType.Reliable);
+                ClientManager.Instance.SendToClient(steamID, data, NetworkMessageType.NetworkBehaviourInitialized, Facepunch.Steamworks.Networking.SendType.Reliable);
                 ClientManager.Instance.serverMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] -= OnServerNetworkBehaviourInitialized;
                 StartServer();
             }
         }
 
-        private void OnClientNetworkBehaviourInitialized(string message, ulong steamID)
+        private void OnClientNetworkBehaviourInitialized(byte[] data, ulong steamID)
         {
-            if (!initialized && (serverObject.serverID == int.Parse(message)))
+            int initializedServerObjectID = System.BitConverter.ToInt32(data, 0);
+
+            if (!initialized && (serverObject.serverID == initializedServerObjectID))
             {
                 initialized = true;
                 ClientManager.Instance.clientMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] -= OnClientNetworkBehaviourInitialized;
@@ -111,9 +116,11 @@ namespace MastersOfTempest.Networking
             }
         }
 
-        private void OnServerMessage(string message, ulong steamID)
+        private void OnServerMessage(byte[] data, ulong steamID)
         {
+            string message = System.Text.Encoding.UTF8.GetString(data);
             NetworkBehaviourMessage networkBehaviourMessage = JsonUtility.FromJson<NetworkBehaviourMessage>(message);
+
             // Call the function only if the message is for this instance
             if (serverObject.serverID == networkBehaviourMessage.serverID)
             {
@@ -121,8 +128,9 @@ namespace MastersOfTempest.Networking
             }
         }
 
-        private void OnClientMessage(string message, ulong steamID)
+        private void OnClientMessage(byte[] data, ulong steamID)
         {
+            string message = System.Text.Encoding.UTF8.GetString(data);
             NetworkBehaviourMessage networkBehaviourMessage = JsonUtility.FromJson<NetworkBehaviourMessage>(message);
 
             // Call the function only if the message is for this instance
@@ -145,19 +153,22 @@ namespace MastersOfTempest.Networking
         protected void SendToServer(string message, Facepunch.Steamworks.Networking.SendType sendType = Facepunch.Steamworks.Networking.SendType.Reliable)
         {
             NetworkBehaviourMessage networkBehaviourMessage = new NetworkBehaviourMessage(serverObject.serverID, message);
-            ClientManager.Instance.SendToServer(JsonUtility.ToJson(networkBehaviourMessage), networkMessageType, sendType);
+            byte[] data = System.Text.Encoding.UTF8.GetBytes(JsonUtility.ToJson(networkBehaviourMessage));
+            ClientManager.Instance.SendToServer(data, networkMessageType, sendType);
         }
 
         protected void SendToClient(ulong steamID, string message, Facepunch.Steamworks.Networking.SendType sendType = Facepunch.Steamworks.Networking.SendType.Reliable)
         {
             NetworkBehaviourMessage networkBehaviourMessage = new NetworkBehaviourMessage(serverObject.serverID, message);
-            ClientManager.Instance.SendToClient(steamID, JsonUtility.ToJson(networkBehaviourMessage), networkMessageType, sendType);
+            byte[] data = System.Text.Encoding.UTF8.GetBytes(JsonUtility.ToJson(networkBehaviourMessage));
+            ClientManager.Instance.SendToClient(steamID, data, networkMessageType, sendType);
         }
 
         protected void SendToAllClients(string message, Facepunch.Steamworks.Networking.SendType sendType = Facepunch.Steamworks.Networking.SendType.Reliable)
         {
             NetworkBehaviourMessage networkBehaviourMessage = new NetworkBehaviourMessage(serverObject.serverID, message);
-            ClientManager.Instance.SendToAllClients(JsonUtility.ToJson(networkBehaviourMessage), networkMessageType, sendType);
+            byte[] data = System.Text.Encoding.UTF8.GetBytes(JsonUtility.ToJson(networkBehaviourMessage));
+            ClientManager.Instance.SendToAllClients(data, networkMessageType, sendType);
         }
 
         protected void OnDestroy()
