@@ -7,7 +7,6 @@ namespace MastersOfTempest.Environment.Interacting
     public class EnvObject : MonoBehaviour
     {
         public int instanceID;
-        public int prefabNum;
         public Vector3 relativeTargetPos;
         public EnvSpawner.EnvObjectType type;
         public float speed;

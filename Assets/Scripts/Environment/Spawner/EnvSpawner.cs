@@ -12,7 +12,7 @@ namespace MastersOfTempest.Environment.Interacting
         {
             Damaging,
             DangerZone,
-            Supporting, 
+            Supporting,
             Null
         };
 
@@ -23,6 +23,10 @@ namespace MastersOfTempest.Environment.Interacting
         [Range(0f, 100f)]
         public float dampingFactorForce;
         public float maximumObjVelocity;
+
+        public float spawnProbD;
+        public float spawnProbS;
+        public float spawnProbZ;
 
         // for initializing a random target position around the ship
         public float minRadiusT;
@@ -42,28 +46,31 @@ namespace MastersOfTempest.Environment.Interacting
         public GameObject[] dangerzonesPrefabs;
 
         public MoveType moveType;
+        public GameObject objectContainer;
 
         // TODO use currServerTime for synchronization 
+
+        private float spawnProbSum;
         private float currServerTime;
         private float currFixedTime;
         private float hz;
         private bool onServer;
         private Gamemaster gamemaster;
-        private GameObject objectContainer;
         // last obj positions (extrapolate or interpolate ?)
         private List<Transform> envObjTransforms;
 
         public void Initialize(Gamemaster gm, VectorField vf, bool server)
         {
             envObjects = new List<EnvObject>();
-            objectContainer = new GameObject("EnvObjectContainer");
             onServer = server;
             // test initialization for networking
             if (onServer)
             {
                 vectorField = vf;
+                objectContainer = GameObject.Instantiate(objectContainer);
                 hz = 1.0f / GameServer.Instance.hz;
                 StartSpawning();
+                objectContainer.layer = 9;
             }
             else
             {
@@ -71,7 +78,9 @@ namespace MastersOfTempest.Environment.Interacting
                 hz = 1f / 64f;
             }
             currServerTime = 0f;
+            objectContainer.layer = 10;
             gamemaster = gm;
+            spawnProbSum = spawnProbD + spawnProbS + spawnProbZ;
         }
 
         private void FixedUpdate()
@@ -133,7 +142,21 @@ namespace MastersOfTempest.Environment.Interacting
                 envObjects.RemoveAt(0);
             Vector3 centerPos = vectorField.GetCenter();
             centerPos.y = 0f;
-            InstantiateNewObject(true, centerPos, Vector3.one, Quaternion.identity, EnvObjectType.Damaging, 0, 0);
+            EnvObjectType type;
+            float randomType = Random.Range(0f, spawnProbSum);
+
+            // randomly select type of envObject
+            if (randomType < spawnProbD)
+                type = EnvObjectType.Damaging;
+            else
+            {
+                if (randomType < spawnProbS + spawnProbD)
+                    type = EnvObjectType.Supporting;
+                else
+                    type = EnvObjectType.DangerZone;
+            }
+
+            InstantiateNewObject(true, centerPos, Vector3.one, Quaternion.identity, type, 0);
             yield return new WaitForSeconds(spawnRate);
             StartCoroutine(SpawnObject());
         }
@@ -170,41 +193,32 @@ namespace MastersOfTempest.Environment.Interacting
         }
 
         // main functions for initializing an envobject of given type 
-        private void InstantiateNewObject(bool onServer, Vector3 position, Vector3 localScale, Quaternion orientation, EnvObjectType type = EnvObjectType.Damaging, int ID = 0, int prefabNum = 0)
+        private void InstantiateNewObject(bool onServer, Vector3 position, Vector3 localScale, Quaternion orientation, EnvObjectType type = EnvObjectType.Damaging, int ID = 0)
         {
             Vector3 randOffset = GetRandomPointOnSphere(minRadiusS, maxRadiusS);
             position += randOffset;
-            switch (type)
             {
-                case EnvObjectType.Damaging:
-                    envObjects.Add(GameObject.Instantiate(damagingPrefabs[prefabNum], position, orientation).GetComponent<EnvObject>());
-                    break;
-                case EnvObjectType.DangerZone:
-                    envObjects.Add(GameObject.Instantiate(dangerzonesPrefabs[prefabNum], position, orientation).GetComponent<EnvObject>());
-                    break;
-                case EnvObjectType.Supporting:
-                    envObjects.Add(GameObject.Instantiate(supportingPrefabs[prefabNum], position, orientation).GetComponent<EnvObject>());
-                    break;
+                int prefabNum = 0;
+                switch (type)
+                {
+                    case EnvObjectType.Damaging:
+                        prefabNum = Mathf.FloorToInt(Random.Range(0f, damagingPrefabs.Length-Mathf.Epsilon));
+                        envObjects.Add(GameObject.Instantiate(damagingPrefabs[prefabNum], position, orientation).GetComponent<EnvObject>());
+                        break;
+                    case EnvObjectType.DangerZone:
+                        prefabNum =  Mathf.FloorToInt( Random.Range(0f, dangerzonesPrefabs.Length - Mathf.Epsilon));
+                        envObjects.Add(GameObject.Instantiate(dangerzonesPrefabs[prefabNum], position, orientation).GetComponent<EnvObject>());
+                        break;
+                    case EnvObjectType.Supporting:
+                        prefabNum = Mathf.FloorToInt(Random.Range(0f, supportingPrefabs.Length - Mathf.Epsilon));
+                        envObjects.Add(GameObject.Instantiate(supportingPrefabs[prefabNum], position, orientation).GetComponent<EnvObject>());
+                        break;
+                }
+                envObjects[envObjects.Count - 1].transform.parent = objectContainer.transform;
+                envObjects[envObjects.Count - 1].relativeTargetPos = GetRandomPointOnSphere(minRadiusT, maxRadiusT);
+                // prefabnumber only important for client to choose correct prefab for initialization
+                envObjects[envObjects.Count - 1].moveType = moveType;
             }
-            //envObjects[envObjects.Count - 1].transform.parent = objectContainer.transform;
-            envObjects[envObjects.Count - 1].relativeTargetPos = GetRandomPointOnSphere(minRadiusT, maxRadiusT);
-            // prefabnumber only important for client to choose correct prefab for initialization
-            envObjects[envObjects.Count - 1].prefabNum = prefabNum;
-            envObjects[envObjects.Count - 1].moveType = moveType;
-
-
-            /* if (!onServer)
-             {
-                 //  set layer, instanceID (for deleting/updating objects) only for clients
-                 envObjects[envObjects.Count - 1].gameObject.layer = 9;
-                 envObjects[envObjects.Count - 1].instanceID = ID;
-                 //  disable unnecessary components
-                 envObjects[envObjects.Count - 1].GetComponent<Rigidbody>().isKinematic = true;
-                 Destroy(envObjects[envObjects.Count - 1].GetComponent<Collider>());
-                 envObjTransforms.Add(envObjects[envObjects.Count - 1].transform);
-             }
-             else
-             {*/
         }
 
         private void UpdateTransform(MessageEnvObject obj, int idx)
@@ -224,7 +238,7 @@ namespace MastersOfTempest.Environment.Interacting
                 //  less objects on client than on server currently -> create new object
                 if (envObjects.Count <= i)
                 {
-                    InstantiateNewObject(false, objects[i].position, objects[i].localScale, objects[i].orientation, objects[i].type, objects[i].instanceID, objects[i].prefabNum);
+                    InstantiateNewObject(false, objects[i].position, objects[i].localScale, objects[i].orientation, objects[i].type, objects[i].instanceID);
                 }
                 else
                 {

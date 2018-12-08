@@ -28,10 +28,10 @@ namespace MastersOfTempest
             public MessageAllEnvObjects(List<EnvObject> objects)
             {
                 envObjects = new List<MessageEnvObject>();
-                for (int i = 0; i < objects.Count; i++)
+                /*for (int i = 0; i < objects.Count; i++)
                 {
-                    envObjects.Add(new MessageEnvObject(objects[i].transform, objects[i].type, objects[i].prefabNum));
-                }
+                    envObjects.Add(new MessageEnvObject(objects[i].transform, objects[i].type, objects[i]));
+                }*/
                 lastUpdate = Time.fixedTime;
             }
         };
