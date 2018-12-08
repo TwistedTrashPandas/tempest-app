@@ -121,7 +121,7 @@ namespace MastersOfTempest.Networking
             if (onServer)
             {
                 // Send destroy message
-                GameServer.Instance.serverObjects.Remove(this);
+                GameServer.Instance.RemoveServerObject(this);
                 GameServer.Instance.SendMessageDestroyServerObject(this);
             }
         }

@@ -15,6 +15,6 @@
         NoMessages = 8,
         EnvObjects = 9,
         ServerObjectList = 10,
-        InitializeServer = 11,
+        ClientReadyForInitialization = 11,
     };
 }

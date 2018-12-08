@@ -23,8 +23,8 @@ namespace MastersOfTempest.Networking
             ClientManager.Instance.clientMessageEvents[NetworkMessageType.PingPong] += OnMessagePingPong;
 
             // Send a message to initialize the server
-            byte[] data = System.Text.Encoding.UTF8.GetBytes("InitializeServer");
-            ClientManager.Instance.SendToServer(data, NetworkMessageType.InitializeServer, Facepunch.Steamworks.Networking.SendType.Reliable);
+            byte[] data = System.Text.Encoding.UTF8.GetBytes("ClientReadyForInitialization");
+            ClientManager.Instance.SendToServer(data, NetworkMessageType.ClientReadyForInitialization, Facepunch.Steamworks.Networking.SendType.Reliable);
 
             // Wait a bit before sending the message
             lastPingTime = Time.time + pingsPerSec;

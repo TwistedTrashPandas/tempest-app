@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace MastersOfTempest.Networking
 {
@@ -10,7 +11,7 @@ namespace MastersOfTempest.Networking
         protected bool initialized = false;
         protected ServerObject serverObject;
 
-        private int numClientsReadyForInitialization = 0;
+        private HashSet<ulong> clientsReadyForInitialization = new HashSet<ulong>();
 
         [System.Serializable]
         private struct NetworkBehaviourMessage
@@ -44,6 +45,7 @@ namespace MastersOfTempest.Networking
                 ClientManager.Instance.clientMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] += OnClientNetworkBehaviourInitialized;
 
                 // Begin the initialization, tell the server that this object is ready
+                // This is important because the NetworkBehaviour on the server has to be sure that this object spawned and listens to messages from the server
                 byte[] data = System.BitConverter.GetBytes(serverObject.serverID);
                 ClientManager.Instance.SendToServer(data, NetworkMessageType.NetworkBehaviourInitialized, Facepunch.Steamworks.Networking.SendType.Reliable);
             }
@@ -52,16 +54,6 @@ namespace MastersOfTempest.Networking
             {
                 Debug.LogError("NetworkMessageType of " + gameObject.name + " should not be Empty!\nDid you forget to add a new type in NetworkMessages.cs?");
             }
-        }
-
-        protected virtual void StartServer()
-        {
-            // To be overwritten by the superclass
-        }
-
-        protected virtual void StartClient()
-        {
-            // To be overwritten by the superclass
         }
 
         protected virtual void Update()
@@ -79,26 +71,28 @@ namespace MastersOfTempest.Networking
             }
         }
 
-        protected virtual void UpdateServer()
-        {
-            // To be overwritten by the superclass
-        }
-
-        protected virtual void UpdateClient()
-        {
-            // To be overwritten by the superclass
-        }
-
         private void OnServerNetworkBehaviourInitialized(byte[] data, ulong steamID)
         {
             int initializedServerObjectID = System.BitConverter.ToInt32(data, 0);
 
             if (!initialized && (serverObject.serverID == initializedServerObjectID))
             {
-                // Count how many clients are ready for the initialization
-                numClientsReadyForInitialization++;
+                // Only initialize if all clients are ready
+                bool allClientsReady = true;
+                clientsReadyForInitialization.Add(steamID);
 
-                if (numClientsReadyForInitialization == ClientManager.Instance.GetClientCount())
+                ulong[] lobbyMemberIDs = ClientManager.Instance.GetLobbyMemberIDs();
+
+                foreach (ulong id in lobbyMemberIDs)
+                {
+                    if (!clientsReadyForInitialization.Contains(id))
+                    {
+                        allClientsReady = false;
+                        break;
+                    }
+                }
+
+                if (allClientsReady)
                 {
                     // All clients are ready to be initialized, send a message to initialize all of them at the same time
                     initialized = true;
@@ -145,16 +139,6 @@ namespace MastersOfTempest.Networking
             }
         }
 
-        protected virtual void OnServerReceivedMessage(string message, ulong steamID)
-        {
-            // To be overwritten by the superclass
-        }
-
-        protected virtual void OnClientReceivedMessage(string message, ulong steamID)
-        {
-            // To be overwritten by the superclass
-        }
-
         protected void SendToServer(string message, Facepunch.Steamworks.Networking.SendType sendType = Facepunch.Steamworks.Networking.SendType.Reliable)
         {
             NetworkBehaviourMessage networkBehaviourMessage = new NetworkBehaviourMessage(serverObject.serverID, message);
@@ -190,14 +174,44 @@ namespace MastersOfTempest.Networking
             }
         }
 
+        protected virtual void StartServer()
+        {
+            // To be overwritten by the subclass
+        }
+
+        protected virtual void StartClient()
+        {
+            // To be overwritten by the subclass
+        }
+
+        protected virtual void UpdateServer()
+        {
+            // To be overwritten by the subclass
+        }
+
+        protected virtual void UpdateClient()
+        {
+            // To be overwritten by the subclass
+        }
+
+        protected virtual void OnServerReceivedMessage(string message, ulong steamID)
+        {
+            // To be overwritten by the subclass
+        }
+
+        protected virtual void OnClientReceivedMessage(string message, ulong steamID)
+        {
+            // To be overwritten by the subclass
+        }
+
         protected virtual void OnDestroyServer()
         {
-            // To be overwritten by the superclass
+            // To be overwritten by the subclass
         }
 
         protected virtual void OnDestroyClient()
         {
-            // To be overwritten by the superclass
+            // To be overwritten by the subclass
         }
     }
 }

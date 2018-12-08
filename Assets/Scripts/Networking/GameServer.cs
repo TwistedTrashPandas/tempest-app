@@ -6,16 +6,17 @@ namespace MastersOfTempest.Networking
 {
     public class GameServer : MonoBehaviour
     {
+        public static GameServer Instance = null;
+
         [Header("Server Parameters")]
         public float hz = 16;
         [Tooltip("Will not send objects if they didn't change their transform. Enabling can cause teleportation for objects that start moving after being static.")]
-        public bool onlySendChangedTransfroms = true;
+        [SerializeField]
+        private bool onlySendChanges = true;
 
-        public static GameServer Instance = null;
-        public LinkedList<ServerObject> serverObjects = new LinkedList<ServerObject>();
-
-        private bool initialized = false;
-        private int numClientsReadyForInitialization = 0;
+        private LinkedList<ServerObject> serverObjects = new LinkedList<ServerObject>();
+        private HashSet<ulong> clientsReadyForInitialization = new HashSet<ulong>();
+        private bool allClientsInitialized = false;
 
         void Awake()
         {
@@ -32,7 +33,10 @@ namespace MastersOfTempest.Networking
 
         void Start()
         {
-            ClientManager.Instance.serverMessageEvents[NetworkMessageType.InitializeServer] += OnMessageInitializeServer;
+            // Pause everything until all clients are initialized
+            Time.timeScale = 0;
+
+            ClientManager.Instance.serverMessageEvents[NetworkMessageType.ClientReadyForInitialization] += OnMessageClientReadyForInitialization;
             ClientManager.Instance.serverMessageEvents[NetworkMessageType.PingPong] += OnMessagePingPong;
         }
 
@@ -42,22 +46,24 @@ namespace MastersOfTempest.Networking
         /// <returns></returns>
         IEnumerator ServerUpdate()
         {
+            Time.timeScale = 1;
+
             while (true)
             {
                 yield return new WaitForSeconds(1.0f / hz);
 
-                SendAllServerObjects(Facepunch.Steamworks.Networking.SendType.Unreliable);
+                SendAllServerObjects(onlySendChanges, Facepunch.Steamworks.Networking.SendType.Unreliable);
             }
         }
 
-        private void SendAllServerObjects (Facepunch.Steamworks.Networking.SendType sendType)
+        private void SendAllServerObjects (bool onlySendChangedTransforms, Facepunch.Steamworks.Networking.SendType sendType)
         {
             // Save all server object messages that need to be sended into one pool
             LinkedList<MessageServerObject> messagesToSend = new LinkedList<MessageServerObject>();
 
             foreach (ServerObject serverObject in serverObjects)
             {
-                if (!onlySendChangedTransfroms || serverObject.transform.hasChanged)
+                if (!onlySendChangedTransforms || serverObject.transform.hasChanged)
                 {
                     serverObject.transform.hasChanged = false;
                     messagesToSend.AddLast(new MessageServerObject(serverObject));
@@ -94,7 +100,7 @@ namespace MastersOfTempest.Networking
 
         public void RegisterAndSendMessageServerObject (ServerObject serverObject)
         {
-            if (initialized)
+            if (allClientsInitialized)
             {
                 // Make sure that objects are spawned on the server (with UDP it could happen that they don't spawn)
                 byte[] data = ByteSerializer.GetBytes(new MessageServerObject(serverObject));
@@ -104,23 +110,42 @@ namespace MastersOfTempest.Networking
             serverObjects.AddLast(serverObject);
         }
 
+        public void RemoveServerObject (ServerObject serverObject)
+        {
+            serverObjects.Remove(serverObject);
+        }
+
         public void SendMessageDestroyServerObject(ServerObject serverObject)
         {
             byte[] data = System.BitConverter.GetBytes(serverObject.serverID);
             ClientManager.Instance.SendToAllClients(data, NetworkMessageType.DestroyServerObject, Facepunch.Steamworks.Networking.SendType.Reliable);
         }
 
-        void OnMessageInitializeServer(byte[] data, ulong steamID)
+        void OnMessageClientReadyForInitialization(byte[] data, ulong steamID)
         {
-            // Only initialize the server if all the clients have loaded the scene and sent the message
-            numClientsReadyForInitialization++;
+            // Only start the server loop if all the clients have loaded the scene and sent the message
+            bool allClientsReady = true;
+            clientsReadyForInitialization.Add(steamID);
 
-            if (numClientsReadyForInitialization == ClientManager.Instance.GetClientCount())
+            ulong[] lobbyMemberIDs = ClientManager.Instance.GetLobbyMemberIDs();
+
+            foreach (ulong id in lobbyMemberIDs)
             {
-                initialized = true;
+                if (!clientsReadyForInitialization.Contains(id))
+                {
+                    allClientsReady = false;
+                    break;
+                }
+            }
+
+            if (allClientsReady)
+            {
+                allClientsInitialized = true;
                 StartCoroutine(ServerUpdate());
-                SendAllServerObjects(Facepunch.Steamworks.Networking.SendType.Reliable);
-                ClientManager.Instance.serverMessageEvents[NetworkMessageType.InitializeServer] -= OnMessageInitializeServer;
+
+                // Make sure that all the objects on the server are spawned for all clients
+                SendAllServerObjects(false, Facepunch.Steamworks.Networking.SendType.Reliable);
+                ClientManager.Instance.serverMessageEvents[NetworkMessageType.ClientReadyForInitialization] -= OnMessageClientReadyForInitialization;
             }
         }
 
