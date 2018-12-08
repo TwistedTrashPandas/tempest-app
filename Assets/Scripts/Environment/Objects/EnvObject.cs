@@ -12,6 +12,7 @@ namespace MastersOfTempest.Environment.Interacting
         public EnvSpawner.EnvObjectType type;
         public float speed;
         public float closestDistance; // distance until which the objects will pursue the target position
+        public MoveType moveType;
         private bool pastShip;
         private Vector3 lastDirection;
         protected new Rigidbody rigidbody;
@@ -21,6 +22,28 @@ namespace MastersOfTempest.Environment.Interacting
             rigidbody = GetComponent<Rigidbody>();
             if (rigidbody == null)
                 throw new System.InvalidOperationException("EnvObject cannot operate without Rigidbody on the same object.");
+        }
+
+        public void MoveNext(Vector3 targetPos, Vector3 vectorVal)
+        {
+            switch (moveType)
+            {
+                case MoveType.Direct:
+                    MoveDirectly(targetPos);
+                    break;
+                case MoveType.Force:
+                    AddForce(vectorVal, new Vector3());
+                    break;
+                case MoveType.Velocity:
+                    SetVelocity(vectorVal);
+                    break;
+                case MoveType.ForceDirect:
+                    MoveDirectly(targetPos);
+                    AddForce(vectorVal, new Vector3());
+                    break;
+                default:
+                    throw new System.InvalidOperationException("MoveType of Environment Spawner has to be set");
+            }
         }
 
         public void MoveDirectly(Vector3 targetPos)

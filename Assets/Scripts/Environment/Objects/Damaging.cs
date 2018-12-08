@@ -7,6 +7,8 @@ namespace MastersOfTempest.Environment.Interacting
 {
     public class Damaging : EnvObject
     {
+        public float damage;
+
         protected override void OnCollisionEnter(Collision collision)
         {
             if (collision.gameObject.tag == "Ship")

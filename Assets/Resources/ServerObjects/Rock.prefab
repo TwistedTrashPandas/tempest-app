@@ -129,8 +129,9 @@ MonoBehaviour:
   prefabNum: 0
   relativeTargetPos: {x: 0, y: 0, z: 0}
   type: 0
-  speed: 20
+  speed: 50
   closestDistance: 25
+  moveType: 0
 --- !u!114 &114334480994139150
 MonoBehaviour:
   m_ObjectHideFlags: 1

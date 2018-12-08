@@ -7,8 +7,8 @@ namespace MastersOfTempest.Environment.Interacting
 {
     public class Supporting : EnvObject
     {
-        private Vector3 forceDir;
-        private float strength;
+        public Vector3 forceDir;
+        public float strength;
 
         private void Start()
         {

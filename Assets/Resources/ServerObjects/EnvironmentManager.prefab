@@ -99,11 +99,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnRate: 1
-  damping_factor_vel: 0.99
-  damping_factor_force: 0
+  dampingFactorVel: 0.99
+  dampingFactorForce: 0
   maximumObjVelocity: 50
-  minRadius: 10
-  maxRadius: 20
+  minRadiusT: 10
+  maxRadiusT: 20
+  minRadiusS: 20
+  maxRadiusS: 30
   maxNumObjects: 50
   vectorField: {fileID: 114404567317752372}
   damagingPrefabs:

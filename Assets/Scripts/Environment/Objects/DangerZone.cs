@@ -11,7 +11,9 @@ namespace MastersOfTempest.Environment.Interacting
         {
             if (collision.gameObject.tag == "Ship")
             {
-                // handle interaction
+                // handle interaction (e.g., set status of ship to freezing)
+                Ship ship = collision.gameObject.GetComponent<Ship>();
+                ship.GetCurrenStatus().Condition = ShipCondition.Freezing;
             }
         }
     }

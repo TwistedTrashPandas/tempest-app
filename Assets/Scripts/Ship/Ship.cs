@@ -38,5 +38,10 @@ namespace MastersOfTempest.ShipBL
         {
             return forceManipulator;
         }
+
+        public ShipStatus GetCurrenStatus()
+        {
+            return currentStatus;
+        }
     }
 }

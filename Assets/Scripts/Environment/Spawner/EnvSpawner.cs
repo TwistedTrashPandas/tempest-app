@@ -12,28 +12,25 @@ namespace MastersOfTempest.Environment.Interacting
         {
             Damaging,
             DangerZone,
-            Supporting
-        };
-
-        public enum MoveType
-        {
-            Force,
-            Velocity,
-            Direct,
-            ForceDirect
+            Supporting, 
+            Null
         };
 
         // spawn parameters 
         public float spawnRate;
         [Range(0f, 2f)]
-        public float damping_factor_vel;
+        public float dampingFactorVel;
         [Range(0f, 100f)]
-        public float damping_factor_force;
+        public float dampingFactorForce;
         public float maximumObjVelocity;
 
         // for initializing a random target position around the ship
-        public float minRadius;
-        public float maxRadius;
+        public float minRadiusT;
+        public float maxRadiusT;
+
+        // for initializing a random spawn position around the center of the tornado
+        public float minRadiusS;
+        public float maxRadiusS;
 
         public uint maxNumObjects;
         public VectorField vectorField;
@@ -83,29 +80,24 @@ namespace MastersOfTempest.Environment.Interacting
             // update all objects' velocity or add force by looking up value in vector grid if the spawner is on the server
             if (onServer)
             {
-                switch (moveType)
+                Vector3 targetPos = gamemaster.GetShip().transform.position;
+                for (int i = envObjects.Count - 1; i >= 0; i--)
                 {
-                    case MoveType.Direct:
-                        MoveAllDirectly();
-                        break;
-                    case MoveType.Force:
-                        AddForceToAll();
-                        break;
-                    case MoveType.Velocity:
-                        SetVelForAll();
-                        break;
-                    case MoveType.ForceDirect:
-                        MoveAllDirectly();
-                        AddForceToAll();
-                        break;
-                    default:
-                        throw new System.InvalidOperationException("MoveType of Environment Spawner has to be set");
+                    if (envObjects[i] == null)
+                    {
+                        envObjects.RemoveAt(i);
+                        continue;
+                    }
+                    else
+                    {
+                        envObjects[i].MoveNext(targetPos, vectorField.GetVectorAtPos(envObjects[i].transform.position));
+                        if (!Mathf.Approximately(dampingFactorForce, 0f))
+                            DampForce(i);
+                        if (!Mathf.Approximately(dampingFactorVel, 1f))
+                            DampVelocity(i);
+                        ClampVelocity(i);
+                    }
                 }
-                if (!Mathf.Approximately(damping_factor_force, 0f))
-                    DampForce();
-                if (!Mathf.Approximately(damping_factor_vel, 1f))
-                    DampVelocity();
-                ClampVelocity();
             }
             /*else
             {
@@ -121,12 +113,7 @@ namespace MastersOfTempest.Environment.Interacting
             }*/
         }
 
-        public void StartSpawning()
-        {
-            StartCoroutine(SpawnObject());
-        }
-
-        private Vector3 GetRandomPointOnSphere()
+        private Vector3 GetRandomPointOnSphere(float minRadius, float maxRadius)
         {
             float alpha = Random.Range(0, 2 * Mathf.PI);
             float beta = Mathf.Acos(Random.Range(-1f, 1f));
@@ -136,6 +123,10 @@ namespace MastersOfTempest.Environment.Interacting
             return new Vector3(Mathf.Cos(alpha) * sinBeta, Mathf.Cos(beta) * radius, Mathf.Sin(alpha) * sinBeta);
         }
 
+        public void StartSpawning()
+        {
+            StartCoroutine(SpawnObject());
+        }
         private IEnumerator SpawnObject()
         {
             if (envObjects.Count > maxNumObjects)
@@ -147,59 +138,41 @@ namespace MastersOfTempest.Environment.Interacting
             StartCoroutine(SpawnObject());
         }
 
-        private void MoveAllDirectly()
+        /*
+        private void MoveAllDirectly(int idx, Vector3 targetPos)
         {
-            Vector3 targetPos = gamemaster.GetShip().transform.position;
-            for (int i = 0; i < envObjects.Count; i++)
-            {
-                envObjects[i].MoveDirectly(targetPos);
-            }
+            envObjects[idx].MoveDirectly(targetPos);
         }
 
-        private void AddForceToAll()
+        private void AddForceToAll(int idx)
         {
-            for (int i = 0; i < envObjects.Count; i++)
-            {
-                envObjects[i].AddForce(vectorField.GetVectorAtPos(envObjects[i].transform.position), new Vector3());
-            }
+            envObjects[idx].AddForce(vectorField.GetVectorAtPos(envObjects[idx].transform.position), new Vector3());
         }
 
-        private void SetVelForAll()
+        private void SetVelForAll(int idx)
         {
-            for (int i = 0; i < envObjects.Count; i++)
-            {
-                envObjects[i].SetVelocity(vectorField.GetVectorAtPos(envObjects[i].transform.position));
-            }
+            envObjects[idx].SetVelocity(vectorField.GetVectorAtPos(envObjects[idx].transform.position));
+        }*/
+
+        private void DampVelocity(int idx)
+        {
+            envObjects[idx].DampVelocity(dampingFactorVel);
         }
 
-        private void DampVelocity()
+        private void DampForce(int idx)
         {
-            for (int i = 0; i < envObjects.Count; i++)
-            {
-                envObjects[i].DampVelocity(damping_factor_vel);
-            }
+            envObjects[idx].DampForce(dampingFactorForce);
         }
 
-        private void DampForce()
+        private void ClampVelocity(int idx)
         {
-            for (int i = 0; i < envObjects.Count; i++)
-            {
-                envObjects[i].DampForce(damping_factor_force);
-            }
-        }
-
-        private void ClampVelocity()
-        {
-            for (int i = 0; i < envObjects.Count; i++)
-            {
-                envObjects[i].ClampVelocity(maximumObjVelocity);
-            }
+            envObjects[idx].ClampVelocity(maximumObjVelocity);
         }
 
         // main functions for initializing an envobject of given type 
         private void InstantiateNewObject(bool onServer, Vector3 position, Vector3 localScale, Quaternion orientation, EnvObjectType type = EnvObjectType.Damaging, int ID = 0, int prefabNum = 0)
         {
-            Vector3 randOffset = GetRandomPointOnSphere();
+            Vector3 randOffset = GetRandomPointOnSphere(minRadiusS, maxRadiusS);
             position += randOffset;
             switch (type)
             {
@@ -214,23 +187,24 @@ namespace MastersOfTempest.Environment.Interacting
                     break;
             }
             //envObjects[envObjects.Count - 1].transform.parent = objectContainer.transform;
-            envObjects[envObjects.Count - 1].transform.localScale = localScale;
-            envObjects[envObjects.Count - 1].relativeTargetPos = GetRandomPointOnSphere();
-            if (!onServer)
-            {
-                //  set layer, instanceID (for deleting/updating objects) only for clients
-                envObjects[envObjects.Count - 1].gameObject.layer = 9;
-                envObjects[envObjects.Count - 1].instanceID = ID;
-                //  disable unnecessary components
-                envObjects[envObjects.Count - 1].GetComponent<Rigidbody>().isKinematic = true;
-                Destroy(envObjects[envObjects.Count - 1].GetComponent<Collider>());
-                envObjTransforms.Add(envObjects[envObjects.Count - 1].transform);
-            }
-            else
-            {
-                // prefabnumber only important for client to choose correct prefab for initialization
-                envObjects[envObjects.Count - 1].prefabNum = prefabNum;
-            }
+            envObjects[envObjects.Count - 1].relativeTargetPos = GetRandomPointOnSphere(minRadiusT, maxRadiusT);
+            // prefabnumber only important for client to choose correct prefab for initialization
+            envObjects[envObjects.Count - 1].prefabNum = prefabNum;
+            envObjects[envObjects.Count - 1].moveType = moveType;
+
+
+            /* if (!onServer)
+             {
+                 //  set layer, instanceID (for deleting/updating objects) only for clients
+                 envObjects[envObjects.Count - 1].gameObject.layer = 9;
+                 envObjects[envObjects.Count - 1].instanceID = ID;
+                 //  disable unnecessary components
+                 envObjects[envObjects.Count - 1].GetComponent<Rigidbody>().isKinematic = true;
+                 Destroy(envObjects[envObjects.Count - 1].GetComponent<Collider>());
+                 envObjTransforms.Add(envObjects[envObjects.Count - 1].transform);
+             }
+             else
+             {*/
         }
 
         private void UpdateTransform(MessageEnvObject obj, int idx)
