@@ -42,7 +42,7 @@ namespace MastersOfTempest.Networking
 
             ClientManager.Instance.serverMessageEvents[NetworkMessageType.NetworkBehaviour] += OnMessageNetworkBehaviour;
             ClientManager.Instance.serverMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] += OnMessageNetworkBehaviourInitialized;
-            ClientManager.Instance.serverMessageEvents[NetworkMessageType.ReadyForInitialization] += OnMessageReadyForInitialization;
+            ClientManager.Instance.serverMessageEvents[NetworkMessageType.Initialization] += OnMessageInitialization;
             ClientManager.Instance.serverMessageEvents[NetworkMessageType.PingPong] += OnMessagePingPong;
         }
 
@@ -127,7 +127,7 @@ namespace MastersOfTempest.Networking
             ClientManager.Instance.SendToAllClients(data, NetworkMessageType.DestroyServerObject, Facepunch.Steamworks.Networking.SendType.Reliable);
         }
 
-        void OnMessageReadyForInitialization(byte[] data, ulong steamID)
+        void OnMessageInitialization(byte[] data, ulong steamID)
         {
             // Only start the server loop if all the clients have loaded the scene and sent the message
             bool allClientsReady = true;
@@ -149,12 +149,13 @@ namespace MastersOfTempest.Networking
                 allClientsInitialized = true;
                 StartCoroutine(ServerUpdate());
 
-                // Answer to all the clients that the initialization started
-                ClientManager.Instance.SendToAllClients(data, NetworkMessageType.ReadyForInitialization, Facepunch.Steamworks.Networking.SendType.Reliable);
-
                 // Make sure that all the objects on the server are spawned for all clients
                 SendAllServerObjects(false, Facepunch.Steamworks.Networking.SendType.Reliable);
-                ClientManager.Instance.serverMessageEvents[NetworkMessageType.ReadyForInitialization] -= OnMessageReadyForInitialization;
+                ClientManager.Instance.serverMessageEvents[NetworkMessageType.Initialization] -= OnMessageInitialization;
+
+                // Answer to all the clients that the initialization finished
+                // This works because the messages are reliable and in order (meaning all the objects on the client must have spawned when this message arrives)
+                ClientManager.Instance.SendToAllClients(data, NetworkMessageType.Initialization, Facepunch.Steamworks.Networking.SendType.Reliable);
             }
         }
 

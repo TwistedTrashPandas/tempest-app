@@ -45,9 +45,9 @@ namespace MastersOfTempest.Networking
             ClientManager.Instance.clientMessageEvents[NetworkMessageType.PingPong] += OnMessagePingPong;
             ClientManager.Instance.clientMessageEvents[NetworkMessageType.NetworkBehaviour] += OnMessageNetworkBehaviour;
             ClientManager.Instance.clientMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] += OnMessageNetworkBehaviourInitialized;
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.ReadyForInitialization] += OnMessageReadyForInitialization;
+            ClientManager.Instance.clientMessageEvents[NetworkMessageType.Initialization] += OnMessageInitialization;
 
-            StartCoroutine(SendReadyForInitializationMessage());
+            StartCoroutine(SendInitializationMessage());
         }
 
         void Update()
@@ -60,24 +60,24 @@ namespace MastersOfTempest.Networking
             }
         }
 
-        IEnumerator SendReadyForInitializationMessage ()
+        IEnumerator SendInitializationMessage ()
         {
             while (!initialized)
             {
                 // Send a message to initialize the server
-                byte[] data = System.Text.Encoding.UTF8.GetBytes("ReadyForInitialization");
-                ClientManager.Instance.SendToServer(data, NetworkMessageType.ReadyForInitialization, Facepunch.Steamworks.Networking.SendType.Reliable);
+                byte[] data = System.Text.Encoding.UTF8.GetBytes("Initialization");
+                ClientManager.Instance.SendToServer(data, NetworkMessageType.Initialization, Facepunch.Steamworks.Networking.SendType.Reliable);
 
                 yield return new WaitForSecondsRealtime(0.5f);
             }
         }
 
-        void OnMessageReadyForInitialization(byte[] data, ulong steamID)
+        void OnMessageInitialization(byte[] data, ulong steamID)
         {
             if (!initialized)
             {
                 initialized = true;
-                ClientManager.Instance.clientMessageEvents[NetworkMessageType.ReadyForInitialization] -= OnMessageReadyForInitialization;
+                ClientManager.Instance.clientMessageEvents[NetworkMessageType.Initialization] -= OnMessageInitialization;
             }
         }
 
