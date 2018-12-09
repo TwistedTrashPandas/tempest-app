@@ -17,8 +17,8 @@ namespace MastersOfTempest.Networking
 
         [Header("Client Parameters")]
         public bool interpolateOnClient = true;
-        public bool removeCollider = true;
-        public bool removeRigidbody = true;
+        public bool removeChildColliders = true;
+        public bool removeChildRigidbodies = true;
 
         // Interpolation variables
         private MessageServerObject currentMessage;
@@ -39,13 +39,18 @@ namespace MastersOfTempest.Networking
                 // Set server ID
                 serverID = transform.GetInstanceID();
 
+                // Set layer, also for children
+                SetLayerOfThisGameObjectAndAllChildren("Server");
+
                 // Register to game server
                 GameServer.Instance.RegisterAndSendMessageServerObject(this);
             }
             else
             {
+                SetLayerOfThisGameObjectAndAllChildren("Client");
+
                 // Remove collider / rigidbody on the client because it is not needed most of the time
-                RemoveColliderAndRigidbody();
+                RemoveCollidersAndRigidbodies();
             }
         }
 
@@ -73,25 +78,25 @@ namespace MastersOfTempest.Networking
             }
         }
 
-        private void RemoveColliderAndRigidbody ()
+        private void RemoveCollidersAndRigidbodies ()
         {
-            if (removeCollider)
+            if (removeChildColliders)
             {
-                Collider collider = GetComponent<Collider>();
+                Collider[] colliders = GetComponentsInChildren<Collider>();
 
-                if (collider != null)
+                foreach (Collider c in colliders)
                 {
-                    Destroy(collider);
+                    Destroy(c);
                 }
             }
 
-            if (removeRigidbody)
+            if (removeChildRigidbodies)
             {
-                Rigidbody rigidbody = GetComponent<Rigidbody>();
+                Rigidbody[] rigidbodies = GetComponentsInChildren<Rigidbody>();
 
-                if (rigidbody != null)
+                foreach (Rigidbody r in rigidbodies)
                 {
-                    Destroy(rigidbody);
+                    Destroy(r);
                 }
             }
         }
@@ -116,6 +121,20 @@ namespace MastersOfTempest.Networking
                     transform.localScale = messageServerObject.localScale;
                 }
             }
+        }
+
+        public void SetLayerOfThisGameObjectAndAllChildren (string layer)
+        {
+            int layerToSet = LayerMask.NameToLayer(layer);
+
+            Transform[] children = GetComponentsInChildren<Transform>();
+
+            foreach (Transform child in children)
+            {
+                child.gameObject.layer = layerToSet;
+            }
+
+            gameObject.layer = layerToSet;
         }
 
         void OnDestroy()
