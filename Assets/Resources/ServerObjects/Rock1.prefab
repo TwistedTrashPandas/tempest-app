@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33464802738986784}
   - component: {fileID: 23878881247835754}
   - component: {fileID: 64200190200822486}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58,7 +58,7 @@ GameObject:
   - component: {fileID: 33870052639026452}
   - component: {fileID: 23439622956892072}
   - component: {fileID: 64501938997647188}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: rock1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -85,7 +85,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1546148992265784}
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -7.4016495, y: 2.1905146, z: -0.6300001}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 100, y: 99.99997, z: 99.99997}
   m_Children:
   - {fileID: 4481979250451742}

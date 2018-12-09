@@ -40,7 +40,7 @@ GameObject:
   - component: {fileID: 33949966426625648}
   - component: {fileID: 23285818189450480}
   - component: {fileID: 64569697933252736}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cube.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58,7 +58,7 @@ GameObject:
   - component: {fileID: 33423727474922214}
   - component: {fileID: 23945504109893582}
   - component: {fileID: 64350213029495738}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: rock3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -76,7 +76,7 @@ GameObject:
   - component: {fileID: 33968537503548098}
   - component: {fileID: 23702860379259284}
   - component: {fileID: 64081213986274424}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cube.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}

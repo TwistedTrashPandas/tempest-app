@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33065849541267770}
   - component: {fileID: 23489137778397190}
   - component: {fileID: 64664211057081988}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Cube.001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   - component: {fileID: 33125468744585520}
   - component: {fileID: 23753329158176766}
   - component: {fileID: 64204500868853938}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: rock2
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4486839283889782}
   - component: {fileID: 33016696521864994}
   - component: {fileID: 23636427884530144}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4837020898636462}
   - component: {fileID: 33210610885538022}
   - component: {fileID: 23730459719856190}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: SailBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 4770868399617612}
   - component: {fileID: 33571349131670534}
   - component: {fileID: 23710399831556068}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: SideSailRightSmall1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ GameObject:
   - component: {fileID: 4618771653569664}
   - component: {fileID: 33517931812151458}
   - component: {fileID: 23363411125227254}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: SideSailRightSmall2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 4835975517407868}
   - component: {fileID: 33183834657702518}
   - component: {fileID: 23869327861825994}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: UpperDeckFront
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -106,7 +106,7 @@ GameObject:
   - component: {fileID: 4861139560915214}
   - component: {fileID: 33535601143402484}
   - component: {fileID: 23768907027873238}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: SideSailLeftBig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -123,7 +123,7 @@ GameObject:
   - component: {fileID: 4733018279875086}
   - component: {fileID: 33404893203650704}
   - component: {fileID: 23259156089221430}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Underdeck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -140,7 +140,7 @@ GameObject:
   - component: {fileID: 4558337251786696}
   - component: {fileID: 33323154358042860}
   - component: {fileID: 23785616809734106}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Crownest2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -157,7 +157,7 @@ GameObject:
   - component: {fileID: 4530978903738068}
   - component: {fileID: 33080608920850492}
   - component: {fileID: 23089334698906448}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Mast2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -176,7 +176,7 @@ GameObject:
   - component: {fileID: 114739895200692124}
   - component: {fileID: 114095990914788750}
   - component: {fileID: 54704845781409872}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Ship
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -193,7 +193,7 @@ GameObject:
   - component: {fileID: 4829890088817120}
   - component: {fileID: 33638224870552552}
   - component: {fileID: 23948820047342454}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Ship
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -210,7 +210,7 @@ GameObject:
   - component: {fileID: 4996899583897006}
   - component: {fileID: 33400347063654134}
   - component: {fileID: 23654901051146574}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: SideSailRightBig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -227,7 +227,7 @@ GameObject:
   - component: {fileID: 4095354809049198}
   - component: {fileID: 33543907983561814}
   - component: {fileID: 23194390266202206}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Mast1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -244,7 +244,7 @@ GameObject:
   - component: {fileID: 4985516294377740}
   - component: {fileID: 33685089401820508}
   - component: {fileID: 23275035730532150}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Tornado
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -261,7 +261,7 @@ GameObject:
   - component: {fileID: 4850150745476996}
   - component: {fileID: 33211388363942918}
   - component: {fileID: 23735267582765634}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: UpperDeckBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -278,7 +278,7 @@ GameObject:
   - component: {fileID: 4597442349821168}
   - component: {fileID: 33198294644469904}
   - component: {fileID: 23879926538091540}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: SailFront
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -297,7 +297,7 @@ GameObject:
   - component: {fileID: 23311595084598214}
   - component: {fileID: 136682792734011132}
   - component: {fileID: 114157638872992546}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Balloon
   m_TagString: Interactable
   m_Icon: {fileID: 0}
@@ -314,7 +314,7 @@ GameObject:
   - component: {fileID: 4660386071868516}
   - component: {fileID: 33623977984880556}
   - component: {fileID: 23842690637800956}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: SideSailLeftSmall1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -331,7 +331,7 @@ GameObject:
   - component: {fileID: 4233331240596964}
   - component: {fileID: 33447955627857146}
   - component: {fileID: 23783895188558022}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Upperdeck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -348,7 +348,7 @@ GameObject:
   - component: {fileID: 4813604739984616}
   - component: {fileID: 33714966316299400}
   - component: {fileID: 23064505670748586}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Galion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -365,7 +365,7 @@ GameObject:
   - component: {fileID: 4966400217336820}
   - component: {fileID: 33697330110721402}
   - component: {fileID: 23521940220369794}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: SideSailLeftSmall2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -382,7 +382,7 @@ GameObject:
   - component: {fileID: 4919393896425632}
   - component: {fileID: 33362816375548662}
   - component: {fileID: 23142801444086256}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: HelperCircle2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -399,7 +399,7 @@ GameObject:
   - component: {fileID: 4791982821416200}
   - component: {fileID: 33934684785249858}
   - component: {fileID: 23783551121680778}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Crownest1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -416,7 +416,7 @@ GameObject:
   - component: {fileID: 4065408922919470}
   - component: {fileID: 33119850924343084}
   - component: {fileID: 23512881176858288}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: HeloerCircle3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -433,7 +433,7 @@ GameObject:
   - component: {fileID: 4926619474663962}
   - component: {fileID: 33598531358703842}
   - component: {fileID: 23591190786758104}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: HelperCircle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1823,7 +1823,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06e31ad85a1214a6ebc9e7d5980a6cc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  networkMessageType: 8
 --- !u!114 &114157638872992546
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1850,6 +1849,9 @@ MonoBehaviour:
   onServer: 1
   serverID: 0
   lastUpdate: 0
+  interpolateOnClient: 1
+  removeCollider: 1
+  removeRigidbody: 1
 --- !u!114 &114739895200692124
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1861,7 +1863,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c6fbf6ed4a5348f6bdf98199eb8825b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  networkMessageType: 7
 --- !u!136 &136682792734011132
 CapsuleCollider:
   m_ObjectHideFlags: 1
