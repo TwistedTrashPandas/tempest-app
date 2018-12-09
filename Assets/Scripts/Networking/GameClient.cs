@@ -18,6 +18,9 @@ namespace MastersOfTempest.Networking
         private Dictionary<int, System.Action<byte[], ulong>> clientNetworkBehaviourEvents = new Dictionary<int, System.Action<byte[], ulong>>();
         private Dictionary<int, System.Action<ulong>> clientNetworkBehaviourInitializedEvents = new Dictionary<int, System.Action<ulong>>();
 
+        // Make it possible to let other scripts subscribe to these events
+        private System.Action clientInitializedEvents;
+
         [SerializeField]
         private bool initialized = false;
         [SerializeField]
@@ -77,6 +80,7 @@ namespace MastersOfTempest.Networking
             if (!initialized)
             {
                 initialized = true;
+                clientInitializedEvents.Invoke();
                 ClientManager.Instance.clientMessageEvents[NetworkMessageType.Initialization] -= OnMessageInitialization;
             }
         }
@@ -188,6 +192,21 @@ namespace MastersOfTempest.Networking
         {
             clientNetworkBehaviourEvents.Remove(serverID);
             clientNetworkBehaviourInitializedEvents.Remove(serverID);
+        }
+
+        /// <summary>
+        /// Add an action that is called when the client is initialized.
+        /// Make sure that you unsubscribe and that the object with this script is on the client.
+        /// </summary>
+        /// <param name="clientInitializedAction">The action to be called</param>
+        public void SubscribeToClientInitializedAction(System.Action clientInitializedAction)
+        {
+            clientInitializedEvents += clientInitializedAction;
+        }
+
+        public void UnsubscribeFromClientInitializedAction(System.Action clientInitializedAction)
+        {
+            clientInitializedEvents -= clientInitializedAction;
         }
 
         public bool IsInitialized ()

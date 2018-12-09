@@ -22,6 +22,9 @@ namespace MastersOfTempest.Networking
         private Dictionary<int, System.Action<byte[], ulong>> serverNetworkBehaviourEvents = new Dictionary<int, System.Action<byte[], ulong>>();
         private Dictionary<int, System.Action<ulong>> serverNetworkBehaviourInitializedEvents = new Dictionary<int, System.Action<ulong>>();
 
+        // Make it possible to let other scripts subscribe to these events
+        private System.Action serverInitializedEvents;
+
         void Awake()
         {
             if (Instance == null)
@@ -169,7 +172,6 @@ namespace MastersOfTempest.Networking
             if (allClientsReady)
             {
                 allClientsInitialized = true;
-                StartCoroutine(ServerUpdate());
 
                 // Make sure that all the objects on the server are spawned for all clients
                 SendAllServerObjects(false, Facepunch.Steamworks.Networking.SendType.Reliable);
@@ -178,6 +180,10 @@ namespace MastersOfTempest.Networking
                 // Answer to all the clients that the initialization finished
                 // This works because the messages are reliable and in order (meaning all the objects on the client must have spawned when this message arrives)
                 ClientManager.Instance.SendToAllClients(data, NetworkMessageType.Initialization, Facepunch.Steamworks.Networking.SendType.Reliable);
+
+                // Start the server loop and invoke all subscribed actions
+                StartCoroutine(ServerUpdate());
+                serverInitializedEvents.Invoke();
             }
         }
 
@@ -214,6 +220,21 @@ namespace MastersOfTempest.Networking
         {
             serverNetworkBehaviourEvents.Remove(serverID);
             serverNetworkBehaviourInitializedEvents.Remove(serverID);
+        }
+
+        /// <summary>
+        /// Add an action that is called when the server is initialized.
+        /// Make sure that you unsubscribe and that the object with this script is on the server.
+        /// </summary>
+        /// <param name="clientInitializedAction">The action to be called</param>
+        public void SubscribeToServerInitializedAction(System.Action serverInitializedAction)
+        {
+            serverInitializedEvents += serverInitializedAction;
+        }
+
+        public void UnsubscribeFromServerInitializedAction(System.Action serverInitializedAction)
+        {
+            serverInitializedEvents -= serverInitializedAction;
         }
 
         void OnDestroy()

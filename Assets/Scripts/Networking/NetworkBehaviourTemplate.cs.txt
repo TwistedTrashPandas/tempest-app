@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using MastersOfTempest.Networking;
 
-namespace MasterOfTempest
+namespace MastersOfTempest
 {
     // Use this class for custom networking messages between the client and the server
     // Requires a ServerObject to be attached to this gameObject

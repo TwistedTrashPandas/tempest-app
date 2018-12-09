@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using MastersOfTempest.Networking;
 
-namespace MasterOfTempest
+namespace MastersOfTempest
 {
     public class CubeNetworkBehaviour : NetworkBehaviour
     {
