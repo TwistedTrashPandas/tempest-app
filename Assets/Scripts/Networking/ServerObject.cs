@@ -24,7 +24,7 @@ namespace MastersOfTempest.Networking
         private MessageServerObject currentMessage;
         private MessageServerObject lastMessage;
         private float timeSinceLastMessage = 0;
-        private uint messageCount = 0;
+        private uint receivedMessageCount = 0;
 
         void Start()
         {
@@ -54,11 +54,12 @@ namespace MastersOfTempest.Networking
             if (!onServer && interpolateOnClient)
             {
                 // Make sure that both messages exist
-                if (messageCount > 1)
+                if (receivedMessageCount > 1)
                 {
                     // Interpolate between the transform from the last and the current message based on the time that passed since the last message
                     // This introduces a bit of latency but does not require any prediction
-                    float dt = currentMessage.time - lastMessage.time;
+                    // Also make sure that the interpolation does not take too long if the time between the messages is long
+                    float dt = Mathf.Min(currentMessage.time - lastMessage.time, 1);
 
                     if (dt > 0)
                     {
@@ -105,7 +106,7 @@ namespace MastersOfTempest.Networking
                     lastMessage = currentMessage;
                     currentMessage = messageServerObject;
                     timeSinceLastMessage = 0;
-                    messageCount++;
+                    receivedMessageCount++;
                 }
                 else
                 {
