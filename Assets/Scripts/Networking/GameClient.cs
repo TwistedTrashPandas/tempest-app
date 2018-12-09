@@ -13,9 +13,6 @@ namespace MastersOfTempest.Networking
         public Dictionary<int, ServerObject> objectsFromServer = new Dictionary<int, ServerObject>();
 
         public float pingsPerSec = 1;
-        public float ping = 0;
-
-        private float lastPingTime = 0;
 
         // Handles all the incoming network behaviour messages from the server network behaviours
         private Dictionary<int, System.Action<byte[], ulong>> clientNetworkBehaviourEvents = new Dictionary<int, System.Action<byte[], ulong>>();
@@ -23,6 +20,9 @@ namespace MastersOfTempest.Networking
 
         [SerializeField]
         private bool initialized = false;
+        [SerializeField]
+        private float ping = 0;
+        private float lastPingTime = 0;
 
         private void Awake()
         {
@@ -193,6 +193,11 @@ namespace MastersOfTempest.Networking
         public bool IsInitialized ()
         {
             return initialized;
+        }
+
+        public float GetPing ()
+        {
+            return ping;
         }
 
         void OnDestroy()

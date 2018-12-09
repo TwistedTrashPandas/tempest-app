@@ -62,22 +62,44 @@ namespace MastersOfTempest.Networking
             }
         }
 
+        private int GetHierarchyDepthOfTransform (Transform transform, int depth)
+        {
+            if (transform.parent != null)
+            {
+                return GetHierarchyDepthOfTransform(transform.parent, 1 + depth);
+            }
+
+            return depth;
+        }
+
         private void SendAllServerObjects (bool onlySendChangedTransforms, Facepunch.Steamworks.Networking.SendType sendType)
         {
             // Save all server object messages that need to be sended into one pool
-            LinkedList<MessageServerObject> messagesToSend = new LinkedList<MessageServerObject>();
+            // Sort the pool by the depth of the transform in the hierarchy
+            // This makes sure that parents are instantiated before their children
+            List<KeyValuePair<int, ServerObject>> serverObjectsToSend = new List<KeyValuePair<int, ServerObject>>();
 
             foreach (ServerObject serverObject in serverObjects)
             {
                 if (!onlySendChangedTransforms || serverObject.transform.hasChanged)
                 {
                     serverObject.transform.hasChanged = false;
-                    messagesToSend.AddLast(new MessageServerObject(serverObject));
+                    KeyValuePair<int, ServerObject> serverObjectToAdd = new KeyValuePair<int, ServerObject>(GetHierarchyDepthOfTransform(serverObject.transform, 0), serverObject);
+                    serverObjectsToSend.Add(serverObjectToAdd);
                 }
             }
 
+            // Sort by the depth of the transform
+            serverObjectsToSend.Sort
+            (
+                delegate (KeyValuePair<int, ServerObject> a, KeyValuePair<int, ServerObject> b)
+                {
+                    return a.Key - b.Key;
+                }
+            );
+
             // Create and send server object list messages until the pool is empty
-            while (messagesToSend.Count > 0)
+            while (serverObjectsToSend.Count > 0)
             {
                 // Make sure that the message is small enough to fit into the UDP packet (1200 bytes)
                 MessageServerObjectList messageServerObjectList = new MessageServerObjectList();
@@ -86,11 +108,11 @@ namespace MastersOfTempest.Networking
 
                 for (int i = 0; i < messageServerObjectList.messages.Length; i++)
                 {
-                    if (messagesToSend.Count > 0)
+                    if (serverObjectsToSend.Count > 0)
                     {
-                        messageServerObjectList.messages[i] = messagesToSend.Last.Value;
+                        messageServerObjectList.messages[i] = new MessageServerObject(serverObjectsToSend[0].Value);
                         messageServerObjectList.count++;
-                        messagesToSend.RemoveLast();
+                        serverObjectsToSend.RemoveAt(0);
                     }
                     else
                     {
