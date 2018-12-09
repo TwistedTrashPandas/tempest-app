@@ -26,14 +26,6 @@ namespace MastersOfTempest.Environment.VisualEffects
         [Range(0f, 1f)]
         public float dampVel;
 
-        public float g_fTimeDiff;
-        public float g_fTimeStepTex;
-
-        public string densityTexPrefix;
-        public string normalTexPrefix;
-        public int startIdx;
-        public int endIdx;
-        public int skipIdx;
         public float[] maxVel;
 
         /// In and out Computer buffers for the shader
@@ -56,8 +48,6 @@ namespace MastersOfTempest.Environment.VisualEffects
         private Vector3[] particlePos;
         private Vector3[] particleVel;
         private Texture2D partTex;
-        private Texture2D[] densityTextures;
-        private Texture2D[] normalTextures;
         private int[] particleIdx;
 
         private Material material;
@@ -92,28 +82,9 @@ namespace MastersOfTempest.Environment.VisualEffects
             material = GetComponent<MeshRenderer>().material;
             initBuffers();
             CreateMesh();
-            LoadTextures();
             camPos = Camera.main.transform;
-            StartCoroutine(UpdateTextures());
             partTex = GenNoiseTexture.Gen2DTexture(1024, 1024);
             // GetComponent<Renderer>().material.SetTexture("g_NoiseTex", partTex);
-        }
-
-        private void LoadTextures()
-        {
-            densityTextures = new Texture2D[(endIdx - startIdx) / skipIdx];
-            normalTextures = new Texture2D[(endIdx - startIdx) / skipIdx];
-            for (int i = startIdx; i < endIdx; i += skipIdx)
-            {
-                string filepath = Application.dataPath + "/UniFiles/DensityTextures/" + densityTexPrefix + i.ToString("D" + 4) + ".png";
-                byte[] buffer = Tools.FileHandling.ReadFile(filepath);
-                densityTextures[(i - startIdx) / skipIdx] = new Texture2D(720, 1024);
-                densityTextures[(i - startIdx) / skipIdx].LoadImage(buffer);
-                filepath = Application.dataPath + "/UniFiles/NormalTextures/" + normalTexPrefix + i.ToString("D" + 4) + ".png";
-                buffer = Tools.FileHandling.ReadFile(filepath);
-                normalTextures[(i - startIdx) / skipIdx] = new Texture2D(720, 1024);
-                normalTextures[(i - startIdx) / skipIdx].LoadImage(buffer);
-            }
         }
 
         private void initBuffers()
@@ -160,6 +131,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             vectorFieldCBIn.SetData(vectorField.GetVectorField());
             particlePosCB.SetData(particlePos);
             particleinitialPosCB.SetData(particlePos);
+            particleinitialPosCB.SetData(particlePos);
             particleVelCB.SetData(particleVel);
             indicesCB.SetData(idcs);
             indicesRCB.SetData(idcs);
@@ -173,27 +145,6 @@ namespace MastersOfTempest.Environment.VisualEffects
             material.SetBuffer("g_vVertices", particlePosCB);
             material.SetBuffer("g_vInitialWorldPos", particleinitialPosCB);
             material.SetBuffer("g_iIndices", indicesCB);
-            material.SetFloat("g_fTimeStepTex", g_fTimeStepTex);
-        }
-
-        IEnumerator UpdateTextures()
-        {
-            while (true)
-            {
-                Vector3 look =- camPos.position + vectorField.GetCenter();
-                look.y = 0;
-                look = Vector3.Normalize(look);
-                float angle =Mathf.Rad2Deg * (Mathf.Atan2(look.x, look.z) - Mathf.Atan2(0f, 1f));
-                angle = (angle < 0f) ? 360f+angle : angle;
-                int idx = Mathf.FloorToInt(angle / 5f);
-                material.SetTexture("g_Tex1", densityTextures[idx % densityTextures.Length]);
-                material.SetTexture("g_Tex2", densityTextures[(idx + 1) % densityTextures.Length]);
-                material.SetTexture("g_NormalTex1", normalTextures[idx % densityTextures.Length]);
-                material.SetTexture("g_NormalTex2", normalTextures[(idx + 1) % densityTextures.Length]);
-                material.SetFloat("g_fTimeDiff", (angle-idx*5f)/5f * g_fTimeStepTex);
-                material.SetFloat("g_fTimeStepTex", g_fTimeStepTex);
-                yield return new WaitForSeconds(g_fTimeStepTex);
-            }
         }
 
         private void UpdateParticles()

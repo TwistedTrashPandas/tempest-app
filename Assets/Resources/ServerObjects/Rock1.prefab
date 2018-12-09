@@ -247,7 +247,7 @@ MonoBehaviour:
   instanceID: 0
   relativeTargetPos: {x: 0, y: 0, z: 0}
   type: 0
-  speed: 50
+  speed: 35
   closestDistance: 25
   moveType: 0
   damage: 0
@@ -267,5 +267,5 @@ MonoBehaviour:
   serverID: 0
   lastUpdate: 0
   interpolateOnClient: 1
-  removeCollider: 1
-  removeRigidbody: 1
+  removeChildColliders: 1
+  removeChildRigidbodies: 1

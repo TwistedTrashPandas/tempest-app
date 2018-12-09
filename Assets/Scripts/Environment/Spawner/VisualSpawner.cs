@@ -10,25 +10,32 @@ namespace MastersOfTempest.Environment.VisualEffects
         public GameObject tornadoPrefab;
         private TornadoPS tornadoPS;
 
+        public GameObject tornadoTexPrefab;
+        private SetTornadoTexture tornadoTex;
+
         public void Initialize(VectorField vectorField)
         {
-            if (tornadoPrefab == null)
-                throw new System.InvalidOperationException("Tornado prefab can't be null");
-            GameObject temp = GameObject.Instantiate(tornadoPrefab);
-            tornadoPS = temp.GetComponent<TornadoPS>();
-            if (tornadoPS == null)
-                throw new System.InvalidOperationException("TornadoPS.cs has to be attached to the tornado prefab");
-            tornadoPS.vectorField = vectorField;
-
-            // only run tornado on client
             if (!GetComponent<ServerObject>().onServer)
             {
-                tornadoPS.gameObject.SetActive(true);
+                if (tornadoPrefab == null)
+                    throw new System.InvalidOperationException("Tornado prefab can't be null");
+                GameObject temp = GameObject.Instantiate(tornadoPrefab);
+                tornadoPS = temp.GetComponent<TornadoPS>();
+                if (tornadoPS == null)
+                    throw new System.InvalidOperationException("TornadoPS.cs has to be attached to the tornado prefab");
+                tornadoPS.vectorField = vectorField;
+
+                if (tornadoTexPrefab == null)
+                    throw new System.InvalidOperationException("TornadoTex prefab can't be null");
+                temp = GameObject.Instantiate(tornadoTexPrefab);
+                tornadoTex = temp.GetComponent<SetTornadoTexture>();
+                if (tornadoPS == null)
+                    throw new System.InvalidOperationException("SetTornadoTexture.cs has to be attached to the tornadoTex prefab");
+                tornadoTex.vectorField = vectorField;
+                tornadoTex.camPos = Camera.main.transform;
+                // only run tornado on client
                 tornadoPS.gameObject.layer = 9;
-            }
-            else
-            {
-                Destroy(tornadoPS.gameObject);
+                tornadoTex.gameObject.layer = 9;
             }
         }
     }

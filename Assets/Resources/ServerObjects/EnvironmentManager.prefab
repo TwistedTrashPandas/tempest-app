@@ -70,6 +70,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tornadoPrefab: {fileID: 1726956007735904, guid: 530d645634bb68d43b9b110b138843ec,
     type: 2}
+  tornadoTexPrefab: {fileID: 1598541368082440, guid: 7e3e1d09affcc294382fdf827144ec32,
+    type: 2}
 --- !u!114 &114404567317752372
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -119,10 +121,8 @@ MonoBehaviour:
   - {fileID: 1787456376747014, guid: abeac99c68381474e8f440ab8a83ddd3, type: 2}
   dangerzonesPrefabs:
   - {fileID: 1202199791458096, guid: 961a3386c9e651c4b86b0edd6a7b053a, type: 2}
-  moveType: 1
+  moveType: 3
   objectContainerPrefab: {fileID: 1334662344385884, guid: cfec9bd99247e5e4784599f46b23cc50,
-    type: 2}
-  objectContainer: {fileID: 1334662344385884, guid: cfec9bd99247e5e4784599f46b23cc50,
     type: 2}
 --- !u!114 &114801461701559052
 MonoBehaviour:
@@ -140,5 +140,5 @@ MonoBehaviour:
   serverID: 0
   lastUpdate: 0
   interpolateOnClient: 1
-  removeCollider: 0
-  removeRigidbody: 0
+  removeChildColliders: 1
+  removeChildRigidbodies: 1
