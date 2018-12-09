@@ -113,11 +113,13 @@ MonoBehaviour:
   vectorField: {fileID: 114404567317752372}
   damagingPrefabs:
   - {fileID: 1476894203371464, guid: e8c9d0a525a3e1b4fba9d4d419b35e72, type: 2}
+  - {fileID: 1473021519196324, guid: d2ea04b96bcf76a4abf3fcf4663245d4, type: 2}
+  - {fileID: 1451282214639288, guid: 45662c2cd8889d74f825b663d26232c5, type: 2}
   supportingPrefabs:
   - {fileID: 1787456376747014, guid: abeac99c68381474e8f440ab8a83ddd3, type: 2}
   dangerzonesPrefabs:
   - {fileID: 1202199791458096, guid: 961a3386c9e651c4b86b0edd6a7b053a, type: 2}
-  moveType: 3
+  moveType: 1
   objectContainer: {fileID: 1334662344385884, guid: cfec9bd99247e5e4784599f46b23cc50,
     type: 2}
 --- !u!114 &114801461701559052
@@ -136,3 +138,5 @@ MonoBehaviour:
   serverID: 0
   lastUpdate: 0
   interpolateOnClient: 1
+  removeCollider: 0
+  removeRigidbody: 0

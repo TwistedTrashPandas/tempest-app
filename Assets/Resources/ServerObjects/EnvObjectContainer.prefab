@@ -56,3 +56,5 @@ MonoBehaviour:
   serverID: 0
   lastUpdate: 0
   interpolateOnClient: 1
+  removeCollider: 1
+  removeRigidbody: 1

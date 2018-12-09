@@ -90,7 +90,8 @@ namespace MastersOfTempest.Environment.Interacting
 
         public void AddForce(Vector3 force, Vector3 pos)
         {
-            rigidbody.AddForceAtPosition(force, rigidbody.transform.position);
+            rigidbody.AddForceAtPosition(force, transform.position);
+            //rigidbody.AddForce(force);
         }
 
         public void DampVelocity(float damping_factor)
