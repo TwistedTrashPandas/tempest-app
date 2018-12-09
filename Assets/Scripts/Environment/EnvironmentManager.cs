@@ -7,36 +7,51 @@ using MastersOfTempest.Networking;
 
 namespace MastersOfTempest.Environment
 {
-    public class EnvironmentManager : MonoBehaviour
+    public class EnvironmentManager : NetworkBehaviour
     {
         public VectorField vectorField;
         public VisualSpawner visualSpawner;
         public EnvSpawner envSpawner { get; private set; }
         private Gamemaster gamemaster;
 
-        void Start()
+        protected override void StartServer()
+        {
+            Initialize();
+        }
+
+        protected override void StartClient()
+        {
+            Initialize();
+        }
+
+        private void Initialize()
         {
             // initalize important scripts for environment + register for gamemaster
             vectorField = GetComponent<VectorField>();
             if (vectorField == null)
                 throw new System.InvalidOperationException("VectorField is not specified");
-
-            visualSpawner = GetComponent<VisualSpawner>();
-            if (visualSpawner == null)
-                throw new System.InvalidOperationException("Spawner for visual effects is not specified");
-            visualSpawner.Initialize(vectorField);
-
-            gamemaster = FindObjectOfType<Gamemaster>();
-            if (gamemaster == null)
+            
+            if (serverObject.onServer)
             {
-                throw new System.InvalidOperationException("EnvironmentManager cannot operate without Gamemaster in the same scene!");
-            }
+                gamemaster = FindObjectOfType<Gamemaster>();
+                if (gamemaster == null)
+                {
+                    throw new System.InvalidOperationException("EnvironmentManager cannot operate without Gamemaster in the same scene!");
+                }
 
-            envSpawner = GetComponent<EnvSpawner>();
-            if (envSpawner == null)
-                throw new System.InvalidOperationException("Spawner for environment objects is not specified");
-            envSpawner.Initialize(gamemaster, vectorField, GetComponent<ServerObject>().onServer);
-            gamemaster.Register(this);
+                envSpawner = GetComponent<EnvSpawner>();
+                if (envSpawner == null)
+                    throw new System.InvalidOperationException("Spawner for environment objects is not specified");
+                envSpawner.Initialize(gamemaster, vectorField, GetComponent<ServerObject>().onServer);
+                gamemaster.Register(this);
+            }
+            else
+            {
+                visualSpawner = GetComponent<VisualSpawner>();
+                if (visualSpawner == null)
+                    throw new System.InvalidOperationException("Spawner for visual effects is not specified");
+                visualSpawner.Initialize(vectorField);
+            }
         }
     }
 }

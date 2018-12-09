@@ -120,6 +120,8 @@ MonoBehaviour:
   dangerzonesPrefabs:
   - {fileID: 1202199791458096, guid: 961a3386c9e651c4b86b0edd6a7b053a, type: 2}
   moveType: 1
+  objectContainerPrefab: {fileID: 1334662344385884, guid: cfec9bd99247e5e4784599f46b23cc50,
+    type: 2}
   objectContainer: {fileID: 1334662344385884, guid: cfec9bd99247e5e4784599f46b23cc50,
     type: 2}
 --- !u!114 &114801461701559052
