@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
@@ -29,9 +30,7 @@ namespace MastersOfTempest.Networking
                 GameClient.Instance.AddNetworkBehaviourEvents(serverObject.serverID, OnClientReceivedMessageRaw, OnClientNetworkBehaviourInitialized);
 
                 // Begin the initialization, tell the server that this object is ready
-                // This is important because the NetworkBehaviour on the server has to be sure that this object spawned and listens to messages from the server
-                byte[] data = System.BitConverter.GetBytes(serverObject.serverID);
-                ClientManager.Instance.SendToServer(data, NetworkMessageType.NetworkBehaviourInitialized, Facepunch.Steamworks.Networking.SendType.Reliable);
+                StartCoroutine(SendNetworkBehaviourInitializedMessage());
             }
         }
 
@@ -48,6 +47,20 @@ namespace MastersOfTempest.Networking
                     UpdateClient();
                 }
             }
+        }
+
+        IEnumerator SendNetworkBehaviourInitializedMessage ()
+        {
+            while (!GameClient.Instance.IsInitialized())
+            {
+                // Wait until all objects from the server spawned before sending the initialized message
+                // The NetworkBehaviour could otherwise try to access objects that did not spawn yet
+                yield return new WaitForEndOfFrame();
+            }
+
+            // The NetworkBehaviour on the server has to be sure that this object spawned and listens to messages from the server
+            byte[] data = System.BitConverter.GetBytes(serverObject.serverID);
+            ClientManager.Instance.SendToServer(data, NetworkMessageType.NetworkBehaviourInitialized, Facepunch.Steamworks.Networking.SendType.Reliable);
         }
 
         private void OnServerNetworkBehaviourInitialized(ulong steamID)

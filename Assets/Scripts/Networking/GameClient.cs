@@ -190,6 +190,11 @@ namespace MastersOfTempest.Networking
             clientNetworkBehaviourInitializedEvents.Remove(serverID);
         }
 
+        public bool IsInitialized ()
+        {
+            return initialized;
+        }
+
         void OnDestroy()
         {
             ClientManager.Instance.clientMessageEvents[NetworkMessageType.ServerObject] -= OnMessageServerObject;
