@@ -10,6 +10,6 @@
         DestroyServerObject,
         NetworkBehaviour,
         NetworkBehaviourInitialized,
-        ClientReadyForInitialization
+        ReadyForInitialization
     };
 }

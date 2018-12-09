@@ -42,7 +42,7 @@ namespace MastersOfTempest.Networking
 
             ClientManager.Instance.serverMessageEvents[NetworkMessageType.NetworkBehaviour] += OnMessageNetworkBehaviour;
             ClientManager.Instance.serverMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] += OnMessageNetworkBehaviourInitialized;
-            ClientManager.Instance.serverMessageEvents[NetworkMessageType.ClientReadyForInitialization] += OnMessageClientReadyForInitialization;
+            ClientManager.Instance.serverMessageEvents[NetworkMessageType.ReadyForInitialization] += OnMessageReadyForInitialization;
             ClientManager.Instance.serverMessageEvents[NetworkMessageType.PingPong] += OnMessagePingPong;
         }
 
@@ -56,7 +56,7 @@ namespace MastersOfTempest.Networking
 
             while (true)
             {
-                yield return new WaitForSeconds(1.0f / hz);
+                yield return new WaitForSecondsRealtime(1.0f / hz);
 
                 SendAllServerObjects(onlySendChanges, Facepunch.Steamworks.Networking.SendType.Unreliable);
             }
@@ -127,7 +127,7 @@ namespace MastersOfTempest.Networking
             ClientManager.Instance.SendToAllClients(data, NetworkMessageType.DestroyServerObject, Facepunch.Steamworks.Networking.SendType.Reliable);
         }
 
-        void OnMessageClientReadyForInitialization(byte[] data, ulong steamID)
+        void OnMessageReadyForInitialization(byte[] data, ulong steamID)
         {
             // Only start the server loop if all the clients have loaded the scene and sent the message
             bool allClientsReady = true;
@@ -149,9 +149,12 @@ namespace MastersOfTempest.Networking
                 allClientsInitialized = true;
                 StartCoroutine(ServerUpdate());
 
+                // Answer to all the clients that the initialization started
+                ClientManager.Instance.SendToAllClients(data, NetworkMessageType.ReadyForInitialization, Facepunch.Steamworks.Networking.SendType.Reliable);
+
                 // Make sure that all the objects on the server are spawned for all clients
                 SendAllServerObjects(false, Facepunch.Steamworks.Networking.SendType.Reliable);
-                ClientManager.Instance.serverMessageEvents[NetworkMessageType.ClientReadyForInitialization] -= OnMessageClientReadyForInitialization;
+                ClientManager.Instance.serverMessageEvents[NetworkMessageType.ReadyForInitialization] -= OnMessageReadyForInitialization;
             }
         }
 

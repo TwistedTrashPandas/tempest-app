@@ -21,6 +21,9 @@ namespace MastersOfTempest.Networking
         private Dictionary<int, System.Action<byte[], ulong>> clientNetworkBehaviourEvents = new Dictionary<int, System.Action<byte[], ulong>>();
         private Dictionary<int, System.Action<ulong>> clientNetworkBehaviourInitializedEvents = new Dictionary<int, System.Action<ulong>>();
 
+        [SerializeField]
+        private bool initialized = false;
+
         private void Awake()
         {
             if (Instance == null)
@@ -42,13 +45,9 @@ namespace MastersOfTempest.Networking
             ClientManager.Instance.clientMessageEvents[NetworkMessageType.PingPong] += OnMessagePingPong;
             ClientManager.Instance.clientMessageEvents[NetworkMessageType.NetworkBehaviour] += OnMessageNetworkBehaviour;
             ClientManager.Instance.clientMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] += OnMessageNetworkBehaviourInitialized;
+            ClientManager.Instance.clientMessageEvents[NetworkMessageType.ReadyForInitialization] += OnMessageReadyForInitialization;
 
-            // Send a message to initialize the server
-            byte[] data = System.Text.Encoding.UTF8.GetBytes("ClientReadyForInitialization");
-            ClientManager.Instance.SendToServer(data, NetworkMessageType.ClientReadyForInitialization, Facepunch.Steamworks.Networking.SendType.Reliable);
-
-            // Wait a bit before sending the message
-            lastPingTime = Time.time + pingsPerSec;
+            StartCoroutine(SendReadyForInitializationMessage());
         }
 
         void Update()
@@ -58,6 +57,27 @@ namespace MastersOfTempest.Networking
                 byte[] data = System.BitConverter.GetBytes(Time.time);
                 ClientManager.Instance.SendToServer(data, NetworkMessageType.PingPong, Facepunch.Steamworks.Networking.SendType.Unreliable);
                 lastPingTime = Time.time;
+            }
+        }
+
+        IEnumerator SendReadyForInitializationMessage ()
+        {
+            while (!initialized)
+            {
+                // Send a message to initialize the server
+                byte[] data = System.Text.Encoding.UTF8.GetBytes("ReadyForInitialization");
+                ClientManager.Instance.SendToServer(data, NetworkMessageType.ReadyForInitialization, Facepunch.Steamworks.Networking.SendType.Reliable);
+
+                yield return new WaitForSecondsRealtime(0.5f);
+            }
+        }
+
+        void OnMessageReadyForInitialization(byte[] data, ulong steamID)
+        {
+            if (!initialized)
+            {
+                initialized = true;
+                ClientManager.Instance.clientMessageEvents[NetworkMessageType.ReadyForInitialization] -= OnMessageReadyForInitialization;
             }
         }
 
