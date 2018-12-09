@@ -191,9 +191,9 @@ namespace MastersOfTempest.Networking
             SendToClient(client.Lobby.Owner, data, serverMessagesOffset + (int)networkMessageType, sendType);
         }
 
-        public int GetClientCount ()
+        public ulong[] GetLobbyMemberIDs()
         {
-            return client.Lobby.NumMembers;
+            return client.Lobby.GetMemberIDs();
         }
 
         void OnDestroy()
