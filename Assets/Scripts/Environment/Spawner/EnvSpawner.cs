@@ -46,7 +46,7 @@ namespace MastersOfTempest.Environment.Interacting
         public GameObject[] dangerzonesPrefabs;
 
         public MoveType moveType;
-        public GameObject objectContainer;
+        public GameObject objectContainerPrefab;
 
         // TODO use currServerTime for synchronization 
 
@@ -58,6 +58,7 @@ namespace MastersOfTempest.Environment.Interacting
         private Gamemaster gamemaster;
         // last obj positions (extrapolate or interpolate ?)
         private List<Transform> envObjTransforms;
+        private GameObject objectContainer;
 
         public void Initialize(Gamemaster gm, VectorField vf, bool server)
         {
@@ -67,18 +68,15 @@ namespace MastersOfTempest.Environment.Interacting
             if (onServer)
             {
                 vectorField = vf;
-                objectContainer = GameObject.Instantiate(objectContainer);
+                objectContainer = GameObject.Instantiate(objectContainerPrefab);
                 hz = 1.0f / GameServer.Instance.hz;
                 StartSpawning();
-                objectContainer.layer = 9;
             }
             else
             {
                 envObjTransforms = new List<Transform>();
                 hz = 1f / 64f;
             }
-            currServerTime = 0f;
-            objectContainer.layer = 10;
             gamemaster = gm;
             spawnProbSum = spawnProbD + spawnProbS + spawnProbZ;
         }
@@ -136,8 +134,10 @@ namespace MastersOfTempest.Environment.Interacting
         {
             StartCoroutine(SpawnObject());
         }
+
         private IEnumerator SpawnObject()
         {
+            yield return new WaitForSeconds(spawnRate);
             if (envObjects.Count > maxNumObjects)
                 envObjects.RemoveAt(0);
             Vector3 centerPos = vectorField.GetCenter();
@@ -157,7 +157,6 @@ namespace MastersOfTempest.Environment.Interacting
             }
 
             InstantiateNewObject(true, centerPos, Vector3.one, Quaternion.identity, type, 0);
-            yield return new WaitForSeconds(spawnRate);
             StartCoroutine(SpawnObject());
         }
 
@@ -202,11 +201,11 @@ namespace MastersOfTempest.Environment.Interacting
                 switch (type)
                 {
                     case EnvObjectType.Damaging:
-                        prefabNum = Mathf.FloorToInt(Random.Range(0f, damagingPrefabs.Length-Mathf.Epsilon));
+                        prefabNum = Mathf.FloorToInt(Random.Range(0f, damagingPrefabs.Length - Mathf.Epsilon));
                         envObjects.Add(GameObject.Instantiate(damagingPrefabs[prefabNum], position, orientation).GetComponent<EnvObject>());
                         break;
                     case EnvObjectType.DangerZone:
-                        prefabNum =  Mathf.FloorToInt( Random.Range(0f, dangerzonesPrefabs.Length - Mathf.Epsilon));
+                        prefabNum = Mathf.FloorToInt(Random.Range(0f, dangerzonesPrefabs.Length - Mathf.Epsilon));
                         envObjects.Add(GameObject.Instantiate(dangerzonesPrefabs[prefabNum], position, orientation).GetComponent<EnvObject>());
                         break;
                     case EnvObjectType.Supporting:

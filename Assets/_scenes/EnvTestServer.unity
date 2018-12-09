@@ -225,7 +225,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hz: 64
-  onlySendChangedTransfroms: 1
+  onlySendChanges: 1
 --- !u!4 &369288692
 Transform:
   m_ObjectHideFlags: 0
@@ -277,6 +277,11 @@ Prefab:
     - target: {fileID: 4541291788162234, guid: 941dacf29dd13114da83072443e844b1, type: 2}
       propertyPath: m_RootOrder
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114458285926744006, guid: 941dacf29dd13114da83072443e844b1,
+        type: 2}
+      propertyPath: objectContainer
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 941dacf29dd13114da83072443e844b1, type: 2}
