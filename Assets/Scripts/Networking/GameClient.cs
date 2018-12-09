@@ -123,9 +123,16 @@ namespace MastersOfTempest.Networking
                 serverObject.UpdateTransformFromMessageServerObject(messageServerObject);
 
                 // Update parent if possible
-                if (messageServerObject.hasParent && objectsFromServer.ContainsKey(messageServerObject.parentInstanceID))
+                if (messageServerObject.hasParent)
                 {
-                    serverObject.transform.SetParent(objectsFromServer[messageServerObject.parentInstanceID].transform, false);
+                    if (objectsFromServer.ContainsKey(messageServerObject.parentInstanceID))
+                    {
+                        serverObject.transform.SetParent(objectsFromServer[messageServerObject.parentInstanceID].transform, false);
+                    }
+                }
+                else
+                {
+                    serverObject.transform.SetParent(null);
                 }
             }
         }
