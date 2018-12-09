@@ -1,29 +1,17 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using UnityEngine;
 
 namespace MastersOfTempest.Networking
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(ServerObject))]
     public class NetworkBehaviour : MonoBehaviour
     {
-        public NetworkMessageType networkMessageType = NetworkMessageType.Empty;
-
         protected bool initialized = false;
         protected ServerObject serverObject;
 
-        private int numClientsReadyForInitialization = 0;
-
-        [System.Serializable]
-        private struct NetworkBehaviourMessage
-        {
-            public int serverID;
-            public string message;
-
-            public NetworkBehaviourMessage(int serverID, string message)
-            {
-                this.serverID = serverID;
-                this.message = message;
-            }
-        };
+        private HashSet<ulong> clientsReadyForInitialization = new HashSet<ulong>();
 
         protected virtual void Start()
         {
@@ -32,36 +20,19 @@ namespace MastersOfTempest.Networking
 
             if (serverObject.onServer)
             {
-                ClientManager.Instance.serverMessageEvents[networkMessageType] += OnServerMessage;
-                // Wait for the initialize message
-                ClientManager.Instance.serverMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] += OnServerNetworkBehaviourInitialized;
+                // NetworkBehaviour messages are managed by the GameClient and GameServer, add the handlers for the mesaages
+                // The serverID is the same as the instance ID of the transform but might not have been set on the server object yet
+                GameServer.Instance.AddNetworkBehaviourEvents(transform.GetInstanceID(), OnServerReceivedMessageRaw, OnServerNetworkBehaviourInitialized);
             }
             else
             {
-                ClientManager.Instance.clientMessageEvents[networkMessageType] += OnClientMessage;
-
-                // Wait for the initialize message
-                ClientManager.Instance.clientMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] += OnClientNetworkBehaviourInitialized;
+                GameClient.Instance.AddNetworkBehaviourEvents(serverObject.serverID, OnClientReceivedMessageRaw, OnClientNetworkBehaviourInitialized);
 
                 // Begin the initialization, tell the server that this object is ready
+                // This is important because the NetworkBehaviour on the server has to be sure that this object spawned and listens to messages from the server
                 byte[] data = System.BitConverter.GetBytes(serverObject.serverID);
                 ClientManager.Instance.SendToServer(data, NetworkMessageType.NetworkBehaviourInitialized, Facepunch.Steamworks.Networking.SendType.Reliable);
             }
-
-            if (networkMessageType == NetworkMessageType.Empty)
-            {
-                Debug.LogError("NetworkMessageType of " + gameObject.name + " should not be Empty!\nDid you forget to add a new type in NetworkMessages.cs?");
-            }
-        }
-
-        protected virtual void StartServer()
-        {
-            // To be overwritten by the superclass
-        }
-
-        protected virtual void StartClient()
-        {
-            // To be overwritten by the superclass
         }
 
         protected virtual void Update()
@@ -79,125 +50,163 @@ namespace MastersOfTempest.Networking
             }
         }
 
-        protected virtual void UpdateServer()
+        private void OnServerNetworkBehaviourInitialized(ulong steamID)
         {
-            // To be overwritten by the superclass
-        }
-
-        protected virtual void UpdateClient()
-        {
-            // To be overwritten by the superclass
-        }
-
-        private void OnServerNetworkBehaviourInitialized(byte[] data, ulong steamID)
-        {
-            int initializedServerObjectID = System.BitConverter.ToInt32(data, 0);
-
-            if (!initialized && (serverObject.serverID == initializedServerObjectID))
+            if (!initialized)
             {
-                // Count how many clients are ready for the initialization
-                numClientsReadyForInitialization++;
+                // Only initialize if all clients are ready
+                bool allClientsReady = true;
+                clientsReadyForInitialization.Add(steamID);
 
-                if (numClientsReadyForInitialization == ClientManager.Instance.GetClientCount())
+                ulong[] lobbyMemberIDs = ClientManager.Instance.GetLobbyMemberIDs();
+
+                foreach (ulong id in lobbyMemberIDs)
+                {
+                    if (!clientsReadyForInitialization.Contains(id))
+                    {
+                        allClientsReady = false;
+                        break;
+                    }
+                }
+
+                if (allClientsReady)
                 {
                     // All clients are ready to be initialized, send a message to initialize all of them at the same time
                     initialized = true;
+                    byte[] data = System.BitConverter.GetBytes(serverObject.serverID);
                     ClientManager.Instance.SendToAllClients(data, NetworkMessageType.NetworkBehaviourInitialized, Facepunch.Steamworks.Networking.SendType.Reliable);
-                    ClientManager.Instance.serverMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] -= OnServerNetworkBehaviourInitialized;
                     StartServer();
                 }
             }
         }
 
-        private void OnClientNetworkBehaviourInitialized(byte[] data, ulong steamID)
+        private void OnClientNetworkBehaviourInitialized(ulong steamID)
         {
-            int initializedServerObjectID = System.BitConverter.ToInt32(data, 0);
-
-            if (!initialized && (serverObject.serverID == initializedServerObjectID))
+            if (!initialized)
             {
                 initialized = true;
-                ClientManager.Instance.clientMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] -= OnClientNetworkBehaviourInitialized;
                 StartClient();
             }
         }
 
-        private void OnServerMessage(byte[] data, ulong steamID)
+        // Can be overridden by the subclass in order to access the bytes directly
+        protected virtual void OnServerReceivedMessageRaw(byte[] data, ulong steamID)
         {
             string message = System.Text.Encoding.UTF8.GetString(data);
-            NetworkBehaviourMessage networkBehaviourMessage = JsonUtility.FromJson<NetworkBehaviourMessage>(message);
-
-            // Call the function only if the message is for this instance
-            if (serverObject.serverID == networkBehaviourMessage.serverID)
-            {
-                OnServerReceivedMessage(networkBehaviourMessage.message, steamID);
-            }
+            OnServerReceivedMessage(message, steamID);
         }
 
-        private void OnClientMessage(byte[] data, ulong steamID)
+        // Can be overridden by the subclass in order to access the bytes directly
+        protected virtual void OnClientReceivedMessageRaw(byte[] data, ulong steamID)
         {
             string message = System.Text.Encoding.UTF8.GetString(data);
-            NetworkBehaviourMessage networkBehaviourMessage = JsonUtility.FromJson<NetworkBehaviourMessage>(message);
-
-            // Call the function only if the message is for this instance
-            if (serverObject.serverID == networkBehaviourMessage.serverID)
-            {
-                OnClientReceivedMessage(networkBehaviourMessage.message, steamID);
-            }
+            OnClientReceivedMessage(message, steamID);
         }
 
-        protected virtual void OnServerReceivedMessage(string message, ulong steamID)
+        protected void SendToServer(byte[] data, Facepunch.Steamworks.Networking.SendType sendType)
         {
-            // To be overwritten by the superclass
-        }
-
-        protected virtual void OnClientReceivedMessage(string message, ulong steamID)
-        {
-            // To be overwritten by the superclass
+            NetworkBehaviourMessage networkBehaviourMessage = new NetworkBehaviourMessage(serverObject.serverID, data);
+            ClientManager.Instance.SendToServer(ByteSerializer.GetBytes(networkBehaviourMessage), NetworkMessageType.NetworkBehaviour, sendType);
         }
 
         protected void SendToServer(string message, Facepunch.Steamworks.Networking.SendType sendType = Facepunch.Steamworks.Networking.SendType.Reliable)
         {
-            NetworkBehaviourMessage networkBehaviourMessage = new NetworkBehaviourMessage(serverObject.serverID, message);
-            byte[] data = System.Text.Encoding.UTF8.GetBytes(JsonUtility.ToJson(networkBehaviourMessage));
-            ClientManager.Instance.SendToServer(data, networkMessageType, sendType);
+            SendToServer(System.Text.Encoding.UTF8.GetBytes(message), sendType);
+        }
+
+        protected void SendToClient(ulong steamID, byte[] data, Facepunch.Steamworks.Networking.SendType sendType)
+        {
+            NetworkBehaviourMessage networkBehaviourMessage = new NetworkBehaviourMessage(serverObject.serverID, data);
+            ClientManager.Instance.SendToClient(steamID, ByteSerializer.GetBytes(networkBehaviourMessage), NetworkMessageType.NetworkBehaviour, sendType);
         }
 
         protected void SendToClient(ulong steamID, string message, Facepunch.Steamworks.Networking.SendType sendType = Facepunch.Steamworks.Networking.SendType.Reliable)
         {
-            NetworkBehaviourMessage networkBehaviourMessage = new NetworkBehaviourMessage(serverObject.serverID, message);
-            byte[] data = System.Text.Encoding.UTF8.GetBytes(JsonUtility.ToJson(networkBehaviourMessage));
-            ClientManager.Instance.SendToClient(steamID, data, networkMessageType, sendType);
+            SendToClient(steamID, System.Text.Encoding.UTF8.GetBytes(message), sendType);
+        }
+
+        protected void SendToAllClients(byte[] data, Facepunch.Steamworks.Networking.SendType sendType)
+        {
+            NetworkBehaviourMessage networkBehaviourMessage = new NetworkBehaviourMessage(serverObject.serverID, data);
+            ClientManager.Instance.SendToAllClients(ByteSerializer.GetBytes(networkBehaviourMessage), NetworkMessageType.NetworkBehaviour, sendType);
         }
 
         protected void SendToAllClients(string message, Facepunch.Steamworks.Networking.SendType sendType = Facepunch.Steamworks.Networking.SendType.Reliable)
         {
-            NetworkBehaviourMessage networkBehaviourMessage = new NetworkBehaviourMessage(serverObject.serverID, message);
-            byte[] data = System.Text.Encoding.UTF8.GetBytes(JsonUtility.ToJson(networkBehaviourMessage));
-            ClientManager.Instance.SendToAllClients(data, networkMessageType, sendType);
+            SendToAllClients(System.Text.Encoding.UTF8.GetBytes(message), sendType);
         }
 
         protected void OnDestroy()
         {
             if (serverObject.onServer)
             {
-                ClientManager.Instance.serverMessageEvents[networkMessageType] -= OnServerMessage;
+                GameServer.Instance.RemoveNetworkBehaviourEvents(serverObject.serverID);
                 OnDestroyServer();
             }
             else
             {
-                ClientManager.Instance.clientMessageEvents[networkMessageType] -= OnClientMessage;
+                GameClient.Instance.RemoveNetworkBehaviourEvents(serverObject.serverID);
                 OnDestroyClient();
             }
         }
 
+        protected virtual void StartServer()
+        {
+            // To be overwritten by the subclass
+        }
+
+        protected virtual void StartClient()
+        {
+            // To be overwritten by the subclass
+        }
+
+        protected virtual void UpdateServer()
+        {
+            // To be overwritten by the subclass
+        }
+
+        protected virtual void UpdateClient()
+        {
+            // To be overwritten by the subclass
+        }
+
+        protected virtual void OnServerReceivedMessage(string message, ulong steamID)
+        {
+            // To be overwritten by the subclass
+        }
+
+        protected virtual void OnClientReceivedMessage(string message, ulong steamID)
+        {
+            // To be overwritten by the subclass
+        }
+
         protected virtual void OnDestroyServer()
         {
-            // To be overwritten by the superclass
+            // To be overwritten by the subclass
         }
 
         protected virtual void OnDestroyClient()
         {
-            // To be overwritten by the superclass
+            // To be overwritten by the subclass
         }
     }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct NetworkBehaviourMessage
+    {
+        public int serverID;                                        // 4 bytes
+        public int dataLength;                                      // 4 bytes
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 1192)]
+        public byte[] data;                                         // 1192 bytes
+                                                                    // 1200 bytes
+
+        public NetworkBehaviourMessage(int serverID, byte[] data)
+        {
+            this.serverID = serverID;
+
+            this.data = new byte[1192];
+            System.Array.Copy(data, this.data, data.Length);
+            this.dataLength = data.Length;
+        }
+    };
 }
