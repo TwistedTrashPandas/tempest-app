@@ -8,6 +8,7 @@ namespace MastersOfTempest.Networking
 {
     public class ServerObject : MonoBehaviour
     {
+        [Tooltip("Cannot be longer than 36 characters!")]
         public string resourceName = "";
 
         public bool onServer = true;
@@ -163,6 +164,11 @@ namespace MastersOfTempest.Networking
             localPosition = serverObject.transform.localPosition;
             localRotation = serverObject.transform.localRotation;
             localScale = serverObject.transform.localScale;
+
+            if (serverObject.resourceName.Length > 36)
+            {
+                Debug.LogError("Resource name on " + serverObject.name + " is but cannot be longer than 36 characters!");
+            }
         }
     }
 
