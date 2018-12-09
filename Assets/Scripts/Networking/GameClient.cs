@@ -7,6 +7,8 @@ namespace MastersOfTempest.Networking
 {
     public class GameClient : MonoBehaviour
     {
+        public static GameClient Instance = null;
+
         // Use the gameobject instance id from the server to keep track of the objects
         public Dictionary<int, ServerObject> objectsFromServer = new Dictionary<int, ServerObject>();
 
@@ -15,12 +17,31 @@ namespace MastersOfTempest.Networking
 
         private float lastPingTime = 0;
 
+        // Handles all the incoming network behaviour messages from the server network behaviours
+        private Dictionary<int, System.Action<byte[], ulong>> clientNetworkBehaviourEvents = new Dictionary<int, System.Action<byte[], ulong>>();
+        private Dictionary<int, System.Action<ulong>> clientNetworkBehaviourInitializedEvents = new Dictionary<int, System.Action<ulong>>();
+
+        private void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else
+            {
+                Debug.LogError(nameof(GameClient) + " cannot have multiple instances!");
+                Destroy(gameObject);
+            }
+        }
+
         void Start()
         {
             ClientManager.Instance.clientMessageEvents[NetworkMessageType.ServerObject] += OnMessageServerObject;
             ClientManager.Instance.clientMessageEvents[NetworkMessageType.ServerObjectList] += OnMessageServerObjectList;
             ClientManager.Instance.clientMessageEvents[NetworkMessageType.DestroyServerObject] += OnMessageDestroyServerObject;
             ClientManager.Instance.clientMessageEvents[NetworkMessageType.PingPong] += OnMessagePingPong;
+            ClientManager.Instance.clientMessageEvents[NetworkMessageType.NetworkBehaviour] += OnMessageNetworkBehaviour;
+            ClientManager.Instance.clientMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] += OnMessageNetworkBehaviourInitialized;
 
             // Send a message to initialize the server
             byte[] data = System.Text.Encoding.UTF8.GetBytes("ClientReadyForInitialization");
@@ -115,12 +136,44 @@ namespace MastersOfTempest.Networking
             ping = Time.time - System.BitConverter.ToSingle(data, 0);
         }
 
+        void OnMessageNetworkBehaviour(byte[] data, ulong steamID)
+        {
+            NetworkBehaviourMessage message = ByteSerializer.FromBytes<NetworkBehaviourMessage>(data);
+            byte[] messageData = new byte[message.dataLength];
+            System.Array.Copy(message.data, messageData, message.dataLength);
+
+            if (clientNetworkBehaviourEvents.ContainsKey(message.serverID))
+            {
+                clientNetworkBehaviourEvents[message.serverID].Invoke(messageData, steamID);
+            }
+        }
+
+        void OnMessageNetworkBehaviourInitialized(byte[] data, ulong steamID)
+        {
+            int serverID = System.BitConverter.ToInt32(data, 0);
+            clientNetworkBehaviourInitializedEvents[serverID].Invoke(steamID);
+        }
+
+        public void AddNetworkBehaviourEvents(int serverID, System.Action<byte[], ulong> behaviourAction, System.Action<ulong> initializedAction)
+        {
+            clientNetworkBehaviourEvents[serverID] = behaviourAction;
+            clientNetworkBehaviourInitializedEvents[serverID] = initializedAction;
+        }
+
+        public void RemoveNetworkBehaviourEvents(int serverID)
+        {
+            clientNetworkBehaviourEvents.Remove(serverID);
+            clientNetworkBehaviourInitializedEvents.Remove(serverID);
+        }
+
         void OnDestroy()
         {
             ClientManager.Instance.clientMessageEvents[NetworkMessageType.ServerObject] -= OnMessageServerObject;
             ClientManager.Instance.clientMessageEvents[NetworkMessageType.ServerObjectList] -= OnMessageServerObjectList;
             ClientManager.Instance.clientMessageEvents[NetworkMessageType.DestroyServerObject] -= OnMessageDestroyServerObject;
             ClientManager.Instance.clientMessageEvents[NetworkMessageType.PingPong] -= OnMessagePingPong;
+            ClientManager.Instance.clientMessageEvents[NetworkMessageType.NetworkBehaviour] -= OnMessageNetworkBehaviour;
+            ClientManager.Instance.clientMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] -= OnMessageNetworkBehaviourInitialized;
         }
     }
 }

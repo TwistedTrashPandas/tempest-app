@@ -18,6 +18,10 @@ namespace MastersOfTempest.Networking
         private HashSet<ulong> clientsReadyForInitialization = new HashSet<ulong>();
         private bool allClientsInitialized = false;
 
+        // Handles all the incoming network behaviour messages from the client network behaviours
+        private Dictionary<int, System.Action<byte[], ulong>> serverNetworkBehaviourEvents = new Dictionary<int, System.Action<byte[], ulong>>();
+        private Dictionary<int, System.Action<ulong>> serverNetworkBehaviourInitializedEvents = new Dictionary<int, System.Action<ulong>>();
+
         void Awake()
         {
             if (Instance == null)
@@ -36,6 +40,8 @@ namespace MastersOfTempest.Networking
             // Pause everything until all clients are initialized
             Time.timeScale = 0;
 
+            ClientManager.Instance.serverMessageEvents[NetworkMessageType.NetworkBehaviour] += OnMessageNetworkBehaviour;
+            ClientManager.Instance.serverMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] += OnMessageNetworkBehaviourInitialized;
             ClientManager.Instance.serverMessageEvents[NetworkMessageType.ClientReadyForInitialization] += OnMessageClientReadyForInitialization;
             ClientManager.Instance.serverMessageEvents[NetworkMessageType.PingPong] += OnMessagePingPong;
         }
@@ -154,8 +160,40 @@ namespace MastersOfTempest.Networking
             ClientManager.Instance.SendToClient(steamID, data, NetworkMessageType.PingPong, Facepunch.Steamworks.Networking.SendType.Unreliable);
         }
 
+        void OnMessageNetworkBehaviour(byte[] data, ulong steamID)
+        {
+            NetworkBehaviourMessage message = ByteSerializer.FromBytes<NetworkBehaviourMessage>(data);
+            byte[] messageData = new byte[message.dataLength];
+            System.Array.Copy(message.data, messageData, message.dataLength);
+
+            if (serverNetworkBehaviourEvents.ContainsKey(message.serverID))
+            {
+                serverNetworkBehaviourEvents[message.serverID].Invoke(messageData, steamID);
+            }
+        }
+
+        void OnMessageNetworkBehaviourInitialized(byte[] data, ulong steamID)
+        {
+            int serverID = System.BitConverter.ToInt32(data, 0);
+            serverNetworkBehaviourInitializedEvents[serverID].Invoke(steamID);
+        }
+
+        public void AddNetworkBehaviourEvents(int serverID, System.Action<byte[], ulong> behaviourAction, System.Action<ulong> initializedAction)
+        {
+            serverNetworkBehaviourEvents[serverID] = behaviourAction;
+            serverNetworkBehaviourInitializedEvents[serverID] = initializedAction;
+        }
+
+        public void RemoveNetworkBehaviourEvents(int serverID)
+        {
+            serverNetworkBehaviourEvents.Remove(serverID);
+            serverNetworkBehaviourInitializedEvents.Remove(serverID);
+        }
+
         void OnDestroy()
         {
+            ClientManager.Instance.serverMessageEvents[NetworkMessageType.NetworkBehaviour] -= OnMessageNetworkBehaviour;
+            ClientManager.Instance.serverMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] -= OnMessageNetworkBehaviourInitialized;
             ClientManager.Instance.serverMessageEvents[NetworkMessageType.PingPong] -= OnMessagePingPong;
         }
     }

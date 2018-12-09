@@ -16,5 +16,7 @@
         EnvObjects = 9,
         ServerObjectList = 10,
         ClientReadyForInitialization = 11,
+        CubeNetworkBehaviour = 12,
+        NetworkBehaviour = 13
     };
 }
