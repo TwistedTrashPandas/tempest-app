@@ -20,8 +20,8 @@ namespace MastersOfTempest.Networking
         public bool debugServerMessages = false;
 
         // Dynamically let other classes subscribe to these events
-        public Dictionary<NetworkMessageType, System.Action<string, ulong>> clientMessageEvents;
-        public Dictionary<NetworkMessageType, System.Action<string, ulong>> serverMessageEvents;
+        public Dictionary<NetworkMessageType, System.Action<byte[], ulong>> clientMessageEvents;
+        public Dictionary<NetworkMessageType, System.Action<byte[], ulong>> serverMessageEvents;
 
         private Client client;
         private int serverMessagesOffset = 0;
@@ -68,8 +68,8 @@ namespace MastersOfTempest.Networking
             }
 
             // Create all the actions for incoming network messages
-            clientMessageEvents = new Dictionary<NetworkMessageType, System.Action<string, ulong>>();
-            serverMessageEvents = new Dictionary<NetworkMessageType, System.Action<string, ulong>>();
+            clientMessageEvents = new Dictionary<NetworkMessageType, System.Action<byte[], ulong>>();
+            serverMessageEvents = new Dictionary<NetworkMessageType, System.Action<byte[], ulong>>();
 
             System.Array types = System.Enum.GetValues(typeof(NetworkMessageType));
             serverMessagesOffset = types.Length;
@@ -79,11 +79,11 @@ namespace MastersOfTempest.Networking
             {
                 // Listen to messages for the client
                 client.Networking.SetListenChannel((int)type, true);
-                clientMessageEvents[type] = new System.Action<string, ulong>(DebugClientMessageEvent);
+                clientMessageEvents[type] = new System.Action<byte[], ulong>(DebugClientMessageEvent);
 
                 // Listen to all messages for the server with an offset -> know which messages are for the server
                 client.Networking.SetListenChannel(serverMessagesOffset + (int)type, true);
-                serverMessageEvents[type] = new System.Action<string, ulong>(DebugServerMessageEvent);
+                serverMessageEvents[type] = new System.Action<byte[], ulong>(DebugServerMessageEvent);
             }
 
             client.Networking.OnIncomingConnection += OnIncomingConnection;
@@ -101,19 +101,21 @@ namespace MastersOfTempest.Networking
             }
         }
 
-        void DebugClientMessageEvent(string message, ulong steamID)
+        void DebugClientMessageEvent(byte[] data, ulong steamID)
         {
             if (debugClientMessages)
             {
-                Debug.Log("Client received message from " + steamID + ":\n" + message);
+                string message = System.Text.Encoding.UTF8.GetString(data);
+                Debug.Log("Client received " + data.Length + " bytes from " + steamID + ":\n" + message);
             }
         }
 
-        void DebugServerMessageEvent(string message, ulong steamID)
+        void DebugServerMessageEvent(byte[] data, ulong steamID)
         {
             if (debugServerMessages)
             {
-                Debug.Log("Server received message from " + steamID + ":\n" + message);
+                string message = System.Text.Encoding.UTF8.GetString(data);
+                Debug.Log("Server received " + data.Length + " bytes from " + steamID + ":\n" + message);
             }
         }
 
@@ -131,19 +133,20 @@ namespace MastersOfTempest.Networking
         // This is where all the messages are received and delegated to the respective events
         void OnP2PData(ulong steamID, byte[] data, int dataLength, int channel)
         {
-            string message = System.Text.Encoding.UTF8.GetString(data, 0, dataLength);
+            byte[] trimmedData = new byte[dataLength];
+            System.Array.Copy(data, trimmedData, dataLength);
 
             if (channel < serverMessagesOffset)
             {
                 // The message is for the client
                 NetworkMessageType messageType = (NetworkMessageType)channel;
-                clientMessageEvents[messageType].Invoke(message, steamID);
+                clientMessageEvents[messageType].Invoke(trimmedData, steamID);
             }
             else
             {
                 // The message is for the server (which is running on this client)
                 NetworkMessageType messageType = (NetworkMessageType)(channel - serverMessagesOffset);
-                serverMessageEvents[messageType].Invoke(message, steamID);
+                serverMessageEvents[messageType].Invoke(trimmedData, steamID);
             }
         }
 
@@ -163,16 +166,15 @@ namespace MastersOfTempest.Networking
             }
         }
 
-        public void SendToClient(ulong steamID, string message, NetworkMessageType networkMessageType, Facepunch.Steamworks.Networking.SendType sendType)
+        public void SendToClient(ulong steamID, byte[] data, NetworkMessageType networkMessageType, Facepunch.Steamworks.Networking.SendType sendType)
         {
-            SendToClient(steamID, System.Text.Encoding.UTF8.GetBytes(message), (int)networkMessageType, sendType);
+            SendToClient(steamID, data, (int)networkMessageType, sendType);
         }
 
-        public void SendToAllClients(string message, NetworkMessageType networkMessageType, Facepunch.Steamworks.Networking.SendType sendType)
+        public void SendToAllClients(byte[] data, NetworkMessageType networkMessageType, Facepunch.Steamworks.Networking.SendType sendType)
         {
             if (client != null)
             {
-                byte[] data = System.Text.Encoding.UTF8.GetBytes(message);
                 ulong[] lobbyMemberIDs = client.Lobby.GetMemberIDs();
 
                 foreach (ulong steamID in lobbyMemberIDs)
@@ -182,11 +184,16 @@ namespace MastersOfTempest.Networking
             }
         }
 
-        public void SendToServer(string message, NetworkMessageType networkMessageType, Facepunch.Steamworks.Networking.SendType sendType)
+        public void SendToServer(byte[] data, NetworkMessageType networkMessageType, Facepunch.Steamworks.Networking.SendType sendType)
         {
             // Messages for the server are sent on a different channel than messages for a client
             // This way the client knows if the incoming message is for him as a client or him as a server
-            SendToClient(client.Lobby.Owner, System.Text.Encoding.UTF8.GetBytes(message), serverMessagesOffset + (int)networkMessageType, sendType);
+            SendToClient(client.Lobby.Owner, data, serverMessagesOffset + (int)networkMessageType, sendType);
+        }
+
+        public int GetClientCount ()
+        {
+            return client.Lobby.NumMembers;
         }
 
         void OnDestroy()

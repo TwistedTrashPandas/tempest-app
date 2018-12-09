@@ -78,7 +78,8 @@ namespace MastersOfTempest.Networking
                         if (everyoneReady)
                         {
                             // Send the game start message only once
-                            ClientManager.Instance.SendToAllClients("Start Game", NetworkMessageType.LobbyStartGame, Facepunch.Steamworks.Networking.SendType.Reliable);
+                            byte[] data = System.Text.Encoding.UTF8.GetBytes("LobbyStartGame");
+                            ClientManager.Instance.SendToAllClients(data, NetworkMessageType.LobbyStartGame, Facepunch.Steamworks.Networking.SendType.Reliable);
                             gameStarted = true;
                         }
                     }
@@ -102,7 +103,7 @@ namespace MastersOfTempest.Networking
             Client.Instance.Lobby.Name = Client.Instance.Username + "'s Lobby";
         }
 
-        void OnMessageLobbyStartGame(string message, ulong steamID)
+        void OnMessageLobbyStartGame(byte[] data, ulong steamID)
         {
             // Load client scene
             UnityEngine.SceneManagement.SceneManager.LoadScene(clientSceneName);

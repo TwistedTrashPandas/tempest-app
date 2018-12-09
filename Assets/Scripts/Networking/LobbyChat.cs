@@ -16,14 +16,16 @@ namespace MastersOfTempest.Networking
             ClientManager.Instance.clientMessageEvents[NetworkMessageType.LobbyChat] += OnMessageLobbyChat;
         }
 
-        void OnMessageLobbyChat(string message, ulong steamID)
+        void OnMessageLobbyChat(byte[] data, ulong steamID)
         {
+            string message = System.Text.Encoding.UTF8.GetString(data);
             textChat.text += "<color=grey>[" + Client.Instance.Friends.Get(steamID).Name + "]: </color>" + message + "\n";
         }
 
         public void SendChatMessage()
         {
-            ClientManager.Instance.SendToAllClients(inputFieldChat.text, NetworkMessageType.LobbyChat, Facepunch.Steamworks.Networking.SendType.Reliable);
+            byte[] data = System.Text.Encoding.UTF8.GetBytes(inputFieldChat.text);
+            ClientManager.Instance.SendToAllClients(data, NetworkMessageType.LobbyChat, Facepunch.Steamworks.Networking.SendType.Reliable);
 
             inputFieldChat.text = "";
             inputFieldChat.ActivateInputField();
