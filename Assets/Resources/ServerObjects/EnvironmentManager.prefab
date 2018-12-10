@@ -122,8 +122,6 @@ MonoBehaviour:
   moveType: 1
   objectContainerPrefab: {fileID: 1334662344385884, guid: cfec9bd99247e5e4784599f46b23cc50,
     type: 2}
-  objectContainer: {fileID: 1334662344385884, guid: cfec9bd99247e5e4784599f46b23cc50,
-    type: 2}
 --- !u!114 &114801461701559052
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -136,9 +134,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resourceName: EnvironmentManager
+  resourceID: 4
   onServer: 1
   serverID: 0
   lastUpdate: 0
   interpolateOnClient: 1
-  removeCollider: 0
-  removeRigidbody: 0
+  removeChildColliders: 1
+  removeChildRigidbodies: 1

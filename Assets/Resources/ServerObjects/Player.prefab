@@ -52,7 +52,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a42a63c06c484875b696b3733ae734d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  networkMessageType: 8
 --- !u!114 &114666818938547430
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -65,6 +64,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resourceName: Player
+  resourceID: 8
   onServer: 1
   serverID: 0
   lastUpdate: 0
+  interpolateOnClient: 1
+  removeChildColliders: 1
+  removeChildRigidbodies: 1

@@ -263,9 +263,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resourceName: Rock2
+  resourceID: 10
   onServer: 1
   serverID: 0
   lastUpdate: 0
   interpolateOnClient: 1
-  removeCollider: 1
-  removeRigidbody: 1
+  removeChildColliders: 1
+  removeChildRigidbodies: 1

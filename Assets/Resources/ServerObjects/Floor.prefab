@@ -96,6 +96,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resourceName: Floor
+  resourceID: 6
   onServer: 1
   serverID: 0
   lastUpdate: 0
+  interpolateOnClient: 1
+  removeChildColliders: 1
+  removeChildRigidbodies: 1

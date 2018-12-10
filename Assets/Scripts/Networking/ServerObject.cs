@@ -8,9 +8,8 @@ namespace MastersOfTempest.Networking
 {
     public class ServerObject : MonoBehaviour
     {
-        [Tooltip("Cannot be longer than 36 characters!")]
-        public string resourceName = "";
-
+        [ReadOnly]
+        public int resourceID = -1;
         public bool onServer = true;
         public int serverID = 0;
         public float lastUpdate = 0;
@@ -30,10 +29,10 @@ namespace MastersOfTempest.Networking
         {
             if (onServer)
             {
-                // Check if the resource name is valid
-                if (Resources.Load<GameObject>("ServerObjects/" + resourceName) == null)
+                // Check if the resource id is valid
+                if (resourceID < 0)
                 {
-                    Debug.LogError("Cannot find resource \"" + resourceName + "\" of gameobject " + name);
+                    Debug.LogError("Resource id " + resourceID + " is not valid for ServerObject " + gameObject.name);
                 }
 
                 // Set server ID
@@ -148,21 +147,21 @@ namespace MastersOfTempest.Networking
         }
     }
 
+    // We could not send the name to save data for better performance
     [StructLayout(LayoutKind.Sequential)]
     public struct MessageServerObject
     {
         public float time;                                          // 4 bytes
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 24)]
         public string name;                                         // 24 bytes
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 36)]
-        public string resourceName;                                 // 36 bytes
+        public int resourceID;                                      // 4 bytes
         public bool hasParent;                                      // 4 byte
         public int parentInstanceID;                                // 4 bytes
         public int instanceID;                                      // 4 bytes
         public Vector3 localPosition;                               // 12 bytes
         public Quaternion localRotation;                            // 16 bytes
         public Vector3 localScale;                                  // 12 bytes
-                                                                    // 116 bytes
+                                                                    // 84 bytes
 
         public MessageServerObject(ServerObject serverObject)
         {
@@ -179,16 +178,11 @@ namespace MastersOfTempest.Networking
 
             time = serverObject.lastUpdate = Time.time;
             name = serverObject.name;
-            resourceName = serverObject.resourceName;
+            resourceID = serverObject.resourceID;
             instanceID = serverObject.transform.GetInstanceID();
             localPosition = serverObject.transform.localPosition;
             localRotation = serverObject.transform.localRotation;
             localScale = serverObject.transform.localScale;
-
-            if (serverObject.resourceName.Length > 36)
-            {
-                Debug.LogError("Resource name on " + serverObject.name + " is but cannot be longer than 36 characters!");
-            }
         }
     }
 
@@ -196,8 +190,8 @@ namespace MastersOfTempest.Networking
     struct MessageServerObjectList
     {
         public int count;                                           // 4 bytes
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
-        public MessageServerObject[] messages;                      // 1160 bytes
-                                                                    // 1164 bytes
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 14)]
+        public MessageServerObject[] messages;                      // 840 bytes
+                                                                    // 1180 bytes
     }
 }

@@ -82,11 +82,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   instanceID: 0
-  prefabNum: 0
   relativeTargetPos: {x: 0, y: 0, z: 0}
   type: 2
   speed: 0
   closestDistance: 0
+  moveType: 0
+  forceDir: {x: 0, y: 0, z: 0}
+  strength: 0
 --- !u!114 &114173168290297202
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -99,7 +101,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resourceName: Supporting
+  resourceID: 13
   onServer: 1
   serverID: 0
   lastUpdate: 0
   interpolateOnClient: 1
+  removeChildColliders: 1
+  removeChildRigidbodies: 1

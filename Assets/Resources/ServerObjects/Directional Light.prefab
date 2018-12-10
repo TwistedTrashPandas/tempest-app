@@ -90,6 +90,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resourceName: Directional Light
+  resourceID: 2
   onServer: 1
   serverID: 0
   lastUpdate: 0
+  interpolateOnClient: 1
+  removeChildColliders: 1
+  removeChildRigidbodies: 1
