@@ -42,13 +42,13 @@ namespace MastersOfTempest.Networking
 
         void Start()
         {
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.ServerObject] += OnMessageServerObject;
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.ServerObjectList] += OnMessageServerObjectList;
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.DestroyServerObject] += OnMessageDestroyServerObject;
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.PingPong] += OnMessagePingPong;
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.NetworkBehaviour] += OnMessageNetworkBehaviour;
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] += OnMessageNetworkBehaviourInitialized;
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.Initialization] += OnMessageInitialization;
+            NetworkManager.Instance.clientMessageEvents[NetworkMessageType.ServerObject] += OnMessageServerObject;
+            NetworkManager.Instance.clientMessageEvents[NetworkMessageType.ServerObjectList] += OnMessageServerObjectList;
+            NetworkManager.Instance.clientMessageEvents[NetworkMessageType.DestroyServerObject] += OnMessageDestroyServerObject;
+            NetworkManager.Instance.clientMessageEvents[NetworkMessageType.PingPong] += OnMessagePingPong;
+            NetworkManager.Instance.clientMessageEvents[NetworkMessageType.NetworkBehaviour] += OnMessageNetworkBehaviour;
+            NetworkManager.Instance.clientMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] += OnMessageNetworkBehaviourInitialized;
+            NetworkManager.Instance.clientMessageEvents[NetworkMessageType.Initialization] += OnMessageInitialization;
 
             StartCoroutine(SendInitializationMessage());
         }
@@ -58,7 +58,7 @@ namespace MastersOfTempest.Networking
             if (Time.time - lastPingTime > (1.0f / pingsPerSec))
             {
                 byte[] data = System.BitConverter.GetBytes(Time.time);
-                ClientManager.Instance.SendToServer(data, NetworkMessageType.PingPong, Facepunch.Steamworks.Networking.SendType.Unreliable);
+                NetworkManager.Instance.SendToServer(data, NetworkMessageType.PingPong, Facepunch.Steamworks.Networking.SendType.Unreliable);
                 lastPingTime = Time.time;
             }
         }
@@ -69,7 +69,7 @@ namespace MastersOfTempest.Networking
             {
                 // Send a message to initialize the server
                 byte[] data = System.Text.Encoding.UTF8.GetBytes("Initialization");
-                ClientManager.Instance.SendToServer(data, NetworkMessageType.Initialization, Facepunch.Steamworks.Networking.SendType.Reliable);
+                NetworkManager.Instance.SendToServer(data, NetworkMessageType.Initialization, Facepunch.Steamworks.Networking.SendType.Reliable);
 
                 yield return new WaitForSecondsRealtime(0.5f);
             }
@@ -81,7 +81,7 @@ namespace MastersOfTempest.Networking
             {
                 initialized = true;
                 clientInitializedEvents?.Invoke();
-                ClientManager.Instance.clientMessageEvents[NetworkMessageType.Initialization] -= OnMessageInitialization;
+                NetworkManager.Instance.clientMessageEvents[NetworkMessageType.Initialization] -= OnMessageInitialization;
             }
         }
 
@@ -221,12 +221,12 @@ namespace MastersOfTempest.Networking
 
         void OnDestroy()
         {
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.ServerObject] -= OnMessageServerObject;
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.ServerObjectList] -= OnMessageServerObjectList;
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.DestroyServerObject] -= OnMessageDestroyServerObject;
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.PingPong] -= OnMessagePingPong;
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.NetworkBehaviour] -= OnMessageNetworkBehaviour;
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] -= OnMessageNetworkBehaviourInitialized;
+            NetworkManager.Instance.clientMessageEvents[NetworkMessageType.ServerObject] -= OnMessageServerObject;
+            NetworkManager.Instance.clientMessageEvents[NetworkMessageType.ServerObjectList] -= OnMessageServerObjectList;
+            NetworkManager.Instance.clientMessageEvents[NetworkMessageType.DestroyServerObject] -= OnMessageDestroyServerObject;
+            NetworkManager.Instance.clientMessageEvents[NetworkMessageType.PingPong] -= OnMessagePingPong;
+            NetworkManager.Instance.clientMessageEvents[NetworkMessageType.NetworkBehaviour] -= OnMessageNetworkBehaviour;
+            NetworkManager.Instance.clientMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] -= OnMessageNetworkBehaviourInitialized;
         }
     }
 }

@@ -60,7 +60,7 @@ namespace MastersOfTempest.Networking
 
             // The NetworkBehaviour on the server has to be sure that this object spawned and listens to messages from the server
             byte[] data = System.BitConverter.GetBytes(serverObject.serverID);
-            ClientManager.Instance.SendToServer(data, NetworkMessageType.NetworkBehaviourInitialized, Facepunch.Steamworks.Networking.SendType.Reliable);
+            NetworkManager.Instance.SendToServer(data, NetworkMessageType.NetworkBehaviourInitialized, Facepunch.Steamworks.Networking.SendType.Reliable);
         }
 
         private void OnServerNetworkBehaviourInitialized(ulong steamID)
@@ -71,7 +71,7 @@ namespace MastersOfTempest.Networking
                 bool allClientsReady = true;
                 clientsReadyForInitialization.Add(steamID);
 
-                ulong[] lobbyMemberIDs = ClientManager.Instance.GetLobbyMemberIDs();
+                ulong[] lobbyMemberIDs = NetworkManager.Instance.GetLobbyMemberIDs();
 
                 foreach (ulong id in lobbyMemberIDs)
                 {
@@ -87,7 +87,7 @@ namespace MastersOfTempest.Networking
                     // All clients are ready to be initialized, send a message to initialize all of them at the same time
                     initialized = true;
                     byte[] data = System.BitConverter.GetBytes(serverObject.serverID);
-                    ClientManager.Instance.SendToAllClients(data, NetworkMessageType.NetworkBehaviourInitialized, Facepunch.Steamworks.Networking.SendType.Reliable);
+                    NetworkManager.Instance.SendToAllClients(data, NetworkMessageType.NetworkBehaviourInitialized, Facepunch.Steamworks.Networking.SendType.Reliable);
                     StartServer();
                 }
             }
@@ -119,7 +119,7 @@ namespace MastersOfTempest.Networking
         protected void SendToServer(byte[] data, Facepunch.Steamworks.Networking.SendType sendType)
         {
             NetworkBehaviourMessage networkBehaviourMessage = new NetworkBehaviourMessage(serverObject.serverID, data);
-            ClientManager.Instance.SendToServer(ByteSerializer.GetBytes(networkBehaviourMessage), NetworkMessageType.NetworkBehaviour, sendType);
+            NetworkManager.Instance.SendToServer(ByteSerializer.GetBytes(networkBehaviourMessage), NetworkMessageType.NetworkBehaviour, sendType);
         }
 
         protected void SendToServer(string message, Facepunch.Steamworks.Networking.SendType sendType = Facepunch.Steamworks.Networking.SendType.Reliable)
@@ -130,7 +130,7 @@ namespace MastersOfTempest.Networking
         protected void SendToClient(ulong steamID, byte[] data, Facepunch.Steamworks.Networking.SendType sendType)
         {
             NetworkBehaviourMessage networkBehaviourMessage = new NetworkBehaviourMessage(serverObject.serverID, data);
-            ClientManager.Instance.SendToClient(steamID, ByteSerializer.GetBytes(networkBehaviourMessage), NetworkMessageType.NetworkBehaviour, sendType);
+            NetworkManager.Instance.SendToClient(steamID, ByteSerializer.GetBytes(networkBehaviourMessage), NetworkMessageType.NetworkBehaviour, sendType);
         }
 
         protected void SendToClient(ulong steamID, string message, Facepunch.Steamworks.Networking.SendType sendType = Facepunch.Steamworks.Networking.SendType.Reliable)
@@ -141,7 +141,7 @@ namespace MastersOfTempest.Networking
         protected void SendToAllClients(byte[] data, Facepunch.Steamworks.Networking.SendType sendType)
         {
             NetworkBehaviourMessage networkBehaviourMessage = new NetworkBehaviourMessage(serverObject.serverID, data);
-            ClientManager.Instance.SendToAllClients(ByteSerializer.GetBytes(networkBehaviourMessage), NetworkMessageType.NetworkBehaviour, sendType);
+            NetworkManager.Instance.SendToAllClients(ByteSerializer.GetBytes(networkBehaviourMessage), NetworkMessageType.NetworkBehaviour, sendType);
         }
 
         protected void SendToAllClients(string message, Facepunch.Steamworks.Networking.SendType sendType = Facepunch.Steamworks.Networking.SendType.Reliable)

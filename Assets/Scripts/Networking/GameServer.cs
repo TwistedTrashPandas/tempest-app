@@ -43,10 +43,10 @@ namespace MastersOfTempest.Networking
             // Pause everything until all clients are initialized
             Time.timeScale = 0;
 
-            ClientManager.Instance.serverMessageEvents[NetworkMessageType.NetworkBehaviour] += OnMessageNetworkBehaviour;
-            ClientManager.Instance.serverMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] += OnMessageNetworkBehaviourInitialized;
-            ClientManager.Instance.serverMessageEvents[NetworkMessageType.Initialization] += OnMessageInitialization;
-            ClientManager.Instance.serverMessageEvents[NetworkMessageType.PingPong] += OnMessagePingPong;
+            NetworkManager.Instance.serverMessageEvents[NetworkMessageType.NetworkBehaviour] += OnMessageNetworkBehaviour;
+            NetworkManager.Instance.serverMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] += OnMessageNetworkBehaviourInitialized;
+            NetworkManager.Instance.serverMessageEvents[NetworkMessageType.Initialization] += OnMessageInitialization;
+            NetworkManager.Instance.serverMessageEvents[NetworkMessageType.PingPong] += OnMessagePingPong;
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace MastersOfTempest.Networking
 
                 // Send the message to all clients
                 byte[] data = ByteSerializer.GetBytes(messageServerObjectList);
-                ClientManager.Instance.SendToAllClients(data, NetworkMessageType.ServerObjectList, sendType);
+                NetworkManager.Instance.SendToAllClients(data, NetworkMessageType.ServerObjectList, sendType);
             }
         }
 
@@ -135,7 +135,7 @@ namespace MastersOfTempest.Networking
             {
                 // Make sure that objects are spawned on the server (with UDP it could happen that they don't spawn)
                 byte[] data = ByteSerializer.GetBytes(new MessageServerObject(serverObject));
-                ClientManager.Instance.SendToAllClients(data, NetworkMessageType.ServerObject, Facepunch.Steamworks.Networking.SendType.Reliable);
+                NetworkManager.Instance.SendToAllClients(data, NetworkMessageType.ServerObject, Facepunch.Steamworks.Networking.SendType.Reliable);
             }
 
             serverObjects.AddLast(serverObject);
@@ -149,7 +149,7 @@ namespace MastersOfTempest.Networking
         public void SendMessageDestroyServerObject(ServerObject serverObject)
         {
             byte[] data = System.BitConverter.GetBytes(serverObject.serverID);
-            ClientManager.Instance.SendToAllClients(data, NetworkMessageType.DestroyServerObject, Facepunch.Steamworks.Networking.SendType.Reliable);
+            NetworkManager.Instance.SendToAllClients(data, NetworkMessageType.DestroyServerObject, Facepunch.Steamworks.Networking.SendType.Reliable);
         }
 
         void OnMessageInitialization(byte[] data, ulong steamID)
@@ -158,7 +158,7 @@ namespace MastersOfTempest.Networking
             bool allClientsReady = true;
             clientsReadyForInitialization.Add(steamID);
 
-            ulong[] lobbyMemberIDs = ClientManager.Instance.GetLobbyMemberIDs();
+            ulong[] lobbyMemberIDs = NetworkManager.Instance.GetLobbyMemberIDs();
 
             foreach (ulong id in lobbyMemberIDs)
             {
@@ -175,11 +175,11 @@ namespace MastersOfTempest.Networking
 
                 // Make sure that all the objects on the server are spawned for all clients
                 SendAllServerObjects(false, Facepunch.Steamworks.Networking.SendType.Reliable);
-                ClientManager.Instance.serverMessageEvents[NetworkMessageType.Initialization] -= OnMessageInitialization;
+                NetworkManager.Instance.serverMessageEvents[NetworkMessageType.Initialization] -= OnMessageInitialization;
 
                 // Answer to all the clients that the initialization finished
                 // This works because the messages are reliable and in order (meaning all the objects on the client must have spawned when this message arrives)
-                ClientManager.Instance.SendToAllClients(data, NetworkMessageType.Initialization, Facepunch.Steamworks.Networking.SendType.Reliable);
+                NetworkManager.Instance.SendToAllClients(data, NetworkMessageType.Initialization, Facepunch.Steamworks.Networking.SendType.Reliable);
 
                 // Start the server loop and invoke all subscribed actions
                 StartCoroutine(ServerUpdate());
@@ -189,7 +189,7 @@ namespace MastersOfTempest.Networking
 
         void OnMessagePingPong(byte[] data, ulong steamID)
         {
-            ClientManager.Instance.SendToClient(steamID, data, NetworkMessageType.PingPong, Facepunch.Steamworks.Networking.SendType.Unreliable);
+            NetworkManager.Instance.SendToClient(steamID, data, NetworkMessageType.PingPong, Facepunch.Steamworks.Networking.SendType.Unreliable);
         }
 
         void OnMessageNetworkBehaviour(byte[] data, ulong steamID)
@@ -239,9 +239,9 @@ namespace MastersOfTempest.Networking
 
         void OnDestroy()
         {
-            ClientManager.Instance.serverMessageEvents[NetworkMessageType.NetworkBehaviour] -= OnMessageNetworkBehaviour;
-            ClientManager.Instance.serverMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] -= OnMessageNetworkBehaviourInitialized;
-            ClientManager.Instance.serverMessageEvents[NetworkMessageType.PingPong] -= OnMessagePingPong;
+            NetworkManager.Instance.serverMessageEvents[NetworkMessageType.NetworkBehaviour] -= OnMessageNetworkBehaviour;
+            NetworkManager.Instance.serverMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] -= OnMessageNetworkBehaviourInitialized;
+            NetworkManager.Instance.serverMessageEvents[NetworkMessageType.PingPong] -= OnMessagePingPong;
         }
     }
 }
