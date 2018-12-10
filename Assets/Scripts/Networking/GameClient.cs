@@ -13,16 +13,19 @@ namespace MastersOfTempest.Networking
         public Dictionary<int, ServerObject> objectsFromServer = new Dictionary<int, ServerObject>();
 
         public float pingsPerSec = 1;
-        public float ping = 0;
-
-        private float lastPingTime = 0;
 
         // Handles all the incoming network behaviour messages from the server network behaviours
         private Dictionary<int, System.Action<byte[], ulong>> clientNetworkBehaviourEvents = new Dictionary<int, System.Action<byte[], ulong>>();
         private Dictionary<int, System.Action<ulong>> clientNetworkBehaviourInitializedEvents = new Dictionary<int, System.Action<ulong>>();
 
+        // Make it possible to let other scripts subscribe to these events
+        private System.Action clientInitializedEvents;
+
         [SerializeField]
         private bool initialized = false;
+        [SerializeField]
+        private float ping = 0;
+        private float lastPingTime = 0;
 
         private void Awake()
         {
@@ -39,15 +42,15 @@ namespace MastersOfTempest.Networking
 
         void Start()
         {
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.ServerObject] += OnMessageServerObject;
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.ServerObjectList] += OnMessageServerObjectList;
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.DestroyServerObject] += OnMessageDestroyServerObject;
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.PingPong] += OnMessagePingPong;
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.NetworkBehaviour] += OnMessageNetworkBehaviour;
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] += OnMessageNetworkBehaviourInitialized;
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.ReadyForInitialization] += OnMessageReadyForInitialization;
+            NetworkManager.Instance.clientMessageEvents[NetworkMessageType.ServerObject] += OnMessageServerObject;
+            NetworkManager.Instance.clientMessageEvents[NetworkMessageType.ServerObjectList] += OnMessageServerObjectList;
+            NetworkManager.Instance.clientMessageEvents[NetworkMessageType.DestroyServerObject] += OnMessageDestroyServerObject;
+            NetworkManager.Instance.clientMessageEvents[NetworkMessageType.PingPong] += OnMessagePingPong;
+            NetworkManager.Instance.clientMessageEvents[NetworkMessageType.NetworkBehaviour] += OnMessageNetworkBehaviour;
+            NetworkManager.Instance.clientMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] += OnMessageNetworkBehaviourInitialized;
+            NetworkManager.Instance.clientMessageEvents[NetworkMessageType.Initialization] += OnMessageInitialization;
 
-            StartCoroutine(SendReadyForInitializationMessage());
+            StartCoroutine(SendInitializationMessage());
         }
 
         void Update()
@@ -55,29 +58,30 @@ namespace MastersOfTempest.Networking
             if (Time.time - lastPingTime > (1.0f / pingsPerSec))
             {
                 byte[] data = System.BitConverter.GetBytes(Time.time);
-                ClientManager.Instance.SendToServer(data, NetworkMessageType.PingPong, Facepunch.Steamworks.Networking.SendType.Unreliable);
+                NetworkManager.Instance.SendToServer(data, NetworkMessageType.PingPong, Facepunch.Steamworks.Networking.SendType.Unreliable);
                 lastPingTime = Time.time;
             }
         }
 
-        IEnumerator SendReadyForInitializationMessage ()
+        IEnumerator SendInitializationMessage ()
         {
             while (!initialized)
             {
                 // Send a message to initialize the server
-                byte[] data = System.Text.Encoding.UTF8.GetBytes("ReadyForInitialization");
-                ClientManager.Instance.SendToServer(data, NetworkMessageType.ReadyForInitialization, Facepunch.Steamworks.Networking.SendType.Reliable);
+                byte[] data = System.Text.Encoding.UTF8.GetBytes("Initialization");
+                NetworkManager.Instance.SendToServer(data, NetworkMessageType.Initialization, Facepunch.Steamworks.Networking.SendType.Reliable);
 
                 yield return new WaitForSecondsRealtime(0.5f);
             }
         }
 
-        void OnMessageReadyForInitialization(byte[] data, ulong steamID)
+        void OnMessageInitialization(byte[] data, ulong steamID)
         {
             if (!initialized)
             {
                 initialized = true;
-                ClientManager.Instance.clientMessageEvents[NetworkMessageType.ReadyForInitialization] -= OnMessageReadyForInitialization;
+                clientInitializedEvents?.Invoke();
+                NetworkManager.Instance.clientMessageEvents[NetworkMessageType.Initialization] -= OnMessageInitialization;
             }
         }
 
@@ -113,7 +117,7 @@ namespace MastersOfTempest.Networking
             if (serverObject.lastUpdate <= messageServerObject.time)
             {
                 // Update values only if the UDP packet values are newer
-                serverObject.name = messageServerObject.name + "\t\t(" + messageServerObject.instanceID + ")";
+                serverObject.name = "[" + messageServerObject.instanceID + "]\t" + messageServerObject.name;
                 serverObject.lastUpdate = messageServerObject.time;
 
                 // Update the transform
@@ -190,14 +194,39 @@ namespace MastersOfTempest.Networking
             clientNetworkBehaviourInitializedEvents.Remove(serverID);
         }
 
+        /// <summary>
+        /// Add an action that is called when the client is initialized.
+        /// Make sure that you unsubscribe and that the object with this script is on the client.
+        /// </summary>
+        /// <param name="clientInitializedAction">The action to be called</param>
+        public void SubscribeToClientInitializedAction(System.Action clientInitializedAction)
+        {
+            clientInitializedEvents += clientInitializedAction;
+        }
+
+        public void UnsubscribeFromClientInitializedAction(System.Action clientInitializedAction)
+        {
+            clientInitializedEvents -= clientInitializedAction;
+        }
+
+        public bool IsInitialized ()
+        {
+            return initialized;
+        }
+
+        public float GetPing ()
+        {
+            return ping;
+        }
+
         void OnDestroy()
         {
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.ServerObject] -= OnMessageServerObject;
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.ServerObjectList] -= OnMessageServerObjectList;
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.DestroyServerObject] -= OnMessageDestroyServerObject;
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.PingPong] -= OnMessagePingPong;
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.NetworkBehaviour] -= OnMessageNetworkBehaviour;
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] -= OnMessageNetworkBehaviourInitialized;
+            NetworkManager.Instance.clientMessageEvents[NetworkMessageType.ServerObject] -= OnMessageServerObject;
+            NetworkManager.Instance.clientMessageEvents[NetworkMessageType.ServerObjectList] -= OnMessageServerObjectList;
+            NetworkManager.Instance.clientMessageEvents[NetworkMessageType.DestroyServerObject] -= OnMessageDestroyServerObject;
+            NetworkManager.Instance.clientMessageEvents[NetworkMessageType.PingPong] -= OnMessagePingPong;
+            NetworkManager.Instance.clientMessageEvents[NetworkMessageType.NetworkBehaviour] -= OnMessageNetworkBehaviour;
+            NetworkManager.Instance.clientMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] -= OnMessageNetworkBehaviourInitialized;
         }
     }
 }

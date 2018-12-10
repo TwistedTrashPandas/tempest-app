@@ -10,9 +10,9 @@ namespace MastersOfTempest.Networking
     //  3. Handles all the networking messages
     //  4. Disposes and shuts down Steam on close
 
-    public class ClientManager : MonoBehaviour
+    public class NetworkManager : MonoBehaviour
     {
-        public static ClientManager Instance = null;
+        public static NetworkManager Instance = null;
 
         // The app id should be 480 for testing purposes
         public uint appId = 480;
@@ -38,7 +38,8 @@ namespace MastersOfTempest.Networking
             }
             else
             {
-                Debug.LogError("There already is an instance of the ClientManager!");
+                Debug.LogError(nameof(NetworkManager) + " cannot have multiple instances!");
+                Destroy(gameObject);
             }
 
             // Configurate facepunch steamworks sdk

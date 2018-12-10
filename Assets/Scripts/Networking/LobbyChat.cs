@@ -13,7 +13,7 @@ namespace MastersOfTempest.Networking
 
         void Start()
         {
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.LobbyChat] += OnMessageLobbyChat;
+            NetworkManager.Instance.clientMessageEvents[NetworkMessageType.LobbyChat] += OnMessageLobbyChat;
         }
 
         void OnMessageLobbyChat(byte[] data, ulong steamID)
@@ -25,7 +25,7 @@ namespace MastersOfTempest.Networking
         public void SendChatMessage()
         {
             byte[] data = System.Text.Encoding.UTF8.GetBytes(inputFieldChat.text);
-            ClientManager.Instance.SendToAllClients(data, NetworkMessageType.LobbyChat, Facepunch.Steamworks.Networking.SendType.Reliable);
+            NetworkManager.Instance.SendToAllClients(data, NetworkMessageType.LobbyChat, Facepunch.Steamworks.Networking.SendType.Reliable);
 
             inputFieldChat.text = "";
             inputFieldChat.ActivateInputField();
@@ -35,7 +35,7 @@ namespace MastersOfTempest.Networking
 
         void OnDestroy()
         {
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.LobbyChat] -= OnMessageLobbyChat;
+            NetworkManager.Instance.clientMessageEvents[NetworkMessageType.LobbyChat] -= OnMessageLobbyChat;
         }
     }
 }
