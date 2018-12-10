@@ -139,6 +139,7 @@ namespace MastersOfTempest.Networking
             foreach (ulong steamID in lobbyMemberIDs)
             {
                 lobbyAvatars[steamID] = InstantiateLobbyAvatar(Client.Instance.Friends.Get(steamID));
+                lobbyAvatars[steamID].Refresh();
             }
 
             textLobby.text = Client.Instance.Lobby.Name;
