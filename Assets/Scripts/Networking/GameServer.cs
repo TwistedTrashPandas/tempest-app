@@ -106,7 +106,7 @@ namespace MastersOfTempest.Networking
             {
                 // Make sure that the message is small enough to fit into the UDP packet (1200 bytes)
                 MessageServerObjectList messageServerObjectList = new MessageServerObjectList();
-                messageServerObjectList.messages = new MessageServerObject[10];
+                messageServerObjectList.messages = new MessageServerObject[14];
                 messageServerObjectList.count = 0;
 
                 for (int i = 0; i < messageServerObjectList.messages.Length; i++)

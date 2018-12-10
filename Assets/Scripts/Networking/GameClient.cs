@@ -9,14 +9,17 @@ namespace MastersOfTempest.Networking
     {
         public static GameClient Instance = null;
 
-        // Use the gameobject instance id from the server to keep track of the objects
-        public Dictionary<int, ServerObject> objectsFromServer = new Dictionary<int, ServerObject>();
-
         public float pingsPerSec = 1;
+
+        // Stores all the server object prefabs based on their resource id
+        private Dictionary<int, GameObject> serverObjectPrefabs = new Dictionary<int, GameObject>();
 
         // Handles all the incoming network behaviour messages from the server network behaviours
         private Dictionary<int, System.Action<byte[], ulong>> clientNetworkBehaviourEvents = new Dictionary<int, System.Action<byte[], ulong>>();
         private Dictionary<int, System.Action<ulong>> clientNetworkBehaviourInitializedEvents = new Dictionary<int, System.Action<ulong>>();
+
+        // Use the gameobject instance id from the server to keep track of the objects
+        private Dictionary<int, ServerObject> objectsFromServer = new Dictionary<int, ServerObject>();
 
         // Make it possible to let other scripts subscribe to these events
         private System.Action clientInitializedEvents;
@@ -37,6 +40,21 @@ namespace MastersOfTempest.Networking
             {
                 Debug.LogError(nameof(GameClient) + " cannot have multiple instances!");
                 Destroy(gameObject);
+            }
+
+            // Load all the prefabs for server objects
+            ServerObject[] serverObjectResources = Resources.LoadAll<ServerObject>("ServerObjects/");
+
+            foreach (ServerObject s in serverObjectResources)
+            {
+                if (s.resourceID >= 0 && !serverObjectPrefabs.ContainsKey(s.resourceID))
+                {
+                    serverObjectPrefabs[s.resourceID] = s.gameObject;
+                }
+                else
+                {
+                    Debug.LogError("Server object " + s.name + " does not have a valid resource id!");
+                }
             }
         }
 
@@ -99,8 +117,7 @@ namespace MastersOfTempest.Networking
                 // Make sure that the parent exists already if it has one
                 if (!messageServerObject.hasParent || objectsFromServer.ContainsKey(messageServerObject.parentInstanceID))
                 {
-                    GameObject resource = Resources.Load<GameObject>("ServerObjects/" + messageServerObject.resourceName);
-                    ServerObject tmp = Instantiate(resource).GetComponent<ServerObject>();
+                    ServerObject tmp = Instantiate(serverObjectPrefabs[messageServerObject.resourceID]).GetComponent<ServerObject>();
                     objectsFromServer[messageServerObject.instanceID] = tmp;
 
                     // Set attributes, also update transform after spawn

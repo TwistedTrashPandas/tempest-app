@@ -109,13 +109,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceName: Cube
+  resourceID: 0
   onServer: 1
   serverID: 0
   lastUpdate: 0
   interpolateOnClient: 1
-  removeCollider: 1
-  removeRigidbody: 1
+  removeChildColliders: 1
+  removeChildRigidbodies: 1
 --- !u!114 &114515986793166176
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -127,7 +127,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 370baa69c70f4d841b423d5e7e5abfd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  networkMessageType: 12
   inputsPerSec: 60
   movementSpeed: 30
   jumpHeight: 7
