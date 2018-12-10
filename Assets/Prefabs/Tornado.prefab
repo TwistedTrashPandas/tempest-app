@@ -102,15 +102,8 @@ MonoBehaviour:
     type: 2}
   camPos: {fileID: 0}
   sortEach: 20
-  particelNumExp: 19
+  particelNumExp: 18
   dampVel: 0.999
-  g_fTimeDiff: 0
-  g_fTimeStepTex: 0.1
-  densityTexPrefix: diffuse_
-  normalTexPrefix: normal_
-  startIdx: 0
-  endIdx: 5
-  skipIdx: 1
   maxVel:
   - 30
   - 30

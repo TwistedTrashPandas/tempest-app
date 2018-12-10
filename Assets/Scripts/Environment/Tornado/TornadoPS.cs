@@ -36,6 +36,11 @@ namespace MastersOfTempest.Environment.VisualEffects
         private ComputeBuffer indicesRCB;
         private ComputeBuffer vectorFieldCBIn;
 
+        private ComputeBuffer argsBuffer1;
+        private ComputeBuffer argsBuffer2;        
+        private ComputeBuffer argsBuffer3;        
+        private ComputeBuffer argsBuffer4;        
+
         /// kernel for computeshader
         private int kernelP;
         private int kernelS;
@@ -91,6 +96,34 @@ namespace MastersOfTempest.Environment.VisualEffects
             indicesCB = new ComputeBuffer((int)numberParticles, 4);
             indicesRCB = new ComputeBuffer((int)numberParticles, 4);
             vectorFieldCBIn = new ComputeBuffer(vectorField.GetAmountOfElements(), 12);
+            argsBuffer1 = new ComputeBuffer(3, 4, ComputeBufferType.IndirectArguments);
+            argsBuffer2 = new ComputeBuffer(3, 4, ComputeBufferType.IndirectArguments);
+            argsBuffer3 = new ComputeBuffer(3, 4, ComputeBufferType.IndirectArguments);
+            argsBuffer4 = new ComputeBuffer(3, 4, ComputeBufferType.IndirectArguments);
+
+            int[] args1 = new int[3];
+            args1[0] = Mathf.CeilToInt(numberParticles / 1024f);
+            args1[1] = 1;
+            args1[2] = 1;
+            argsBuffer1.SetData(args1);
+
+            int[] args2 = new int[3];
+            args2[0] = (int)((numberParticles / BLOCK_SIZE));
+            args2[1] = 1;
+            args2[2] = 1;
+            argsBuffer2.SetData(args2);
+
+            int[] args3 = new int[3];
+            args3[0] = (int)(BLOCK_SIZE / TRANSPOSE_BLOCK_SIZE);
+            args3[1] = (int)((numberParticles / BLOCK_SIZE) / TRANSPOSE_BLOCK_SIZE);
+            args3[2] = 1;
+            argsBuffer3.SetData(args3);
+
+            int[] args4 = new int[3];
+            args4[1] = (int)(BLOCK_SIZE / TRANSPOSE_BLOCK_SIZE);
+            args4[0] = (int)((numberParticles / BLOCK_SIZE) / TRANSPOSE_BLOCK_SIZE);
+            args4[2] = 1;
+            argsBuffer4.SetData(args4);
             //  get corresponding kernel index
             kernelP = particlesCS.FindKernel("UpdateParticles");
             kernelS = sortCS.FindKernel("BitonicSort");
@@ -151,8 +184,10 @@ namespace MastersOfTempest.Environment.VisualEffects
             randPos[1] = Random.Range(-1f, 1f);
             randPos[2] = Random.Range(-1f, 1f);//(rnd.Next(0, 2) * 2 - 1f) * (0.25f + (float)rnd.NextDouble() * 0.5f);
             particlesCS.SetFloats("g_fRandPos", randPos);
+            
+            particlesCS.DispatchIndirect(kernelP, argsBuffer1);            
+            // particlesCS.Dispatch(kernelP, Mathf.CeilToInt(numberParticles / 1024f), 1, 1);
 
-            particlesCS.Dispatch(kernelP, Mathf.CeilToInt(numberParticles / 256f), 1, 1);
             material.SetBuffer("g_vVertices", particlePosCB);
         }
 
@@ -171,7 +206,8 @@ namespace MastersOfTempest.Environment.VisualEffects
             {
                 sortCS.SetInt("k", k);
                 sortCS.SetInt("g_iStage_2", k);
-                sortCS.Dispatch(kernelS, groups, 1, 1);
+                //sortCS.Dispatch(kernelS, groups, 1, 1);
+                sortCS.DispatchIndirect(kernelS, argsBuffer2);
             }
             uint width = BLOCK_SIZE;
             uint height = (numberParticles / BLOCK_SIZE);
@@ -185,21 +221,25 @@ namespace MastersOfTempest.Environment.VisualEffects
                 sortCS.SetInt("g_iHeight", (int)height);
                 sortCS.SetBuffer(kernelT, "indicesRW", indicesRCB);
                 sortCS.SetBuffer(kernelT, "indices", indicesCB);
-                sortCS.Dispatch(kernelT, (int)(width / TRANSPOSE_BLOCK_SIZE), (int)(height / TRANSPOSE_BLOCK_SIZE), 1);
+                sortCS.DispatchIndirect(kernelT, argsBuffer3);
+                //sortCS.Dispatch(kernelT, (int)(width / TRANSPOSE_BLOCK_SIZE), (int)(height / TRANSPOSE_BLOCK_SIZE), 1);
                 
                 sortCS.SetBuffer(kernelS, "indicesRW", indicesRCB);
-                sortCS.Dispatch(kernelS, groups, 1, 1);
-
+                sortCS.DispatchIndirect(kernelS, argsBuffer2);
+                //sortCS.Dispatch(kernelS, groups, 1, 1);
+                
                 sortCS.SetInt("k", (int)BLOCK_SIZE);
                 sortCS.SetInt("g_iStage_2", (int)k);
                 sortCS.SetInt("g_iWidth", (int)height);
                 sortCS.SetInt("g_iHeight", (int)width);
                 sortCS.SetBuffer(kernelT, "indicesRW", indicesCB);
                 sortCS.SetBuffer(kernelT, "indices", indicesRCB);
-                sortCS.Dispatch(kernelT, (int)(height / TRANSPOSE_BLOCK_SIZE), (int)(width / TRANSPOSE_BLOCK_SIZE), 1);
-
+                sortCS.DispatchIndirect(kernelT, argsBuffer4);
+                //sortCS.Dispatch(kernelT, (int)(height / TRANSPOSE_BLOCK_SIZE), (int)(width / TRANSPOSE_BLOCK_SIZE), 1);
+                
                 sortCS.SetBuffer(kernelS, "indicesRW", indicesCB);
-                sortCS.Dispatch(kernelS, groups, 1, 1);
+                sortCS.DispatchIndirect(kernelS, argsBuffer2);
+               // sortCS.Dispatch(kernelS, groups, 1, 1);
             }
         }
 

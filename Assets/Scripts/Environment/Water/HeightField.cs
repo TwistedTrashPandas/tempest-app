@@ -382,7 +382,7 @@ public class HeightField : MonoBehaviour
         if (waterMode == WaterMode.Obstacles || waterMode == WaterMode.ReflAndObstcl)
             environment = new uint[width * depth];
 
-        inOutCounter = (inOutCounter + 1) % 2;
+        inOutCounter = (inOutCounter + 1) % 2;        
     }
 
     private void updateVertices()
