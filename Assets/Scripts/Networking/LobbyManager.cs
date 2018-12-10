@@ -35,16 +35,15 @@ namespace MastersOfTempest.Networking
 
                 // Create a lobby that the player is in when the game starts
                 CreateDefaultLobby();
+                Client.Instance.Lobby.SetMemberData("Ready", ready.ToString());
 
                 StartCoroutine(RefreshLobby());
+                StartCoroutine(CheckForEveryoneReady());
             }
             else
             {
                 Debug.LogError("Client instance is null!");
             }
-
-            Client.Instance.Lobby.SetMemberData("Ready", ready.ToString());
-            StartCoroutine(CheckForEveryoneReady());
         }
 
         IEnumerator CheckForEveryoneReady()
@@ -191,7 +190,7 @@ namespace MastersOfTempest.Networking
                     if (!friendsToStay.ContainsKey(friend.Id))
                     {
                         // A new friend is now online
-                        InstantiateFriendAvatar(friend, layoutFriends, true);
+                        InstantiateFriendAvatar(friend, layoutFriends, true, false);
                     }
 
                     // This friend should not be removed later
@@ -231,7 +230,7 @@ namespace MastersOfTempest.Networking
                 {
                     // A new lobby member joined, activate ready outline
                     SteamFriend friend = Client.Instance.Friends.Get(steamID);
-                    InstantiateFriendAvatar(friend, layoutLobby, false).imageReadyOutline.gameObject.SetActive(true);
+                    InstantiateFriendAvatar(friend, layoutLobby, false, true);
                 }
 
                 // This lobby member should not be removed later
@@ -248,12 +247,13 @@ namespace MastersOfTempest.Networking
             }
         }
 
-        FriendAvatar InstantiateFriendAvatar(SteamFriend friend, Transform parent, bool inviteable)
+        FriendAvatar InstantiateFriendAvatar(SteamFriend friend, Transform parent, bool inviteable, bool showReadyOutline)
         {
             FriendAvatar tmp = Instantiate(friendPrefab, parent, false).GetComponent<FriendAvatar>();
             tmp.gameObject.name = friend.Name;
             tmp.steamID = friend.Id;
             tmp.buttonInvite.gameObject.SetActive(inviteable);
+            tmp.imageReadyOutline.gameObject.SetActive(showReadyOutline);
 
             Client.Instance.Friends.GetAvatar(Friends.AvatarSize.Large, friend.Id, tmp.OnImage);
 
