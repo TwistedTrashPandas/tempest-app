@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 114387051452160936}
   - component: {fileID: 114744619911421248}
   m_Layer: 5
-  m_Name: Friend
+  m_Name: FriendAvatar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -405,9 +405,6 @@ MonoBehaviour:
   steamID: 0
   avatar: {fileID: 114387051452160936}
   imageNameBackground: {fileID: 114038332110388612}
-  imageReadyOutline: {fileID: 114131397435470204}
-  buttonInvite: {fileID: 114514664022010190}
-  textRole: {fileID: 114252264856222284}
   textName: {fileID: 114296601583080550}
 --- !u!222 &222066567760418464
 CanvasRenderer:

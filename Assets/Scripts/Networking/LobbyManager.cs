@@ -7,7 +7,8 @@ namespace MastersOfTempest.Networking
 {
     public class LobbyManager : MonoBehaviour
     {
-        public GameObject friendPrefab;
+        public GameObject friendAvatarPrefab;
+        public GameObject lobbyAvatarPrefab;
 
         public Transform layoutLobby;
         public Transform layoutFriends;
@@ -24,7 +25,7 @@ namespace MastersOfTempest.Networking
         public string serverSceneName = "Server";
         public string clientSceneName = "Client";
 
-        private Dictionary<ulong, FriendAvatar> lobbyAvatars = new Dictionary<ulong, FriendAvatar>();
+        private Dictionary<ulong, LobbyAvatar> lobbyAvatars = new Dictionary<ulong, LobbyAvatar>();
 
         private ulong lobbyIDToJoin;
         private bool gameStarted = false;
@@ -58,7 +59,7 @@ namespace MastersOfTempest.Networking
             if (stateChange == Lobby.MemberStateChange.Entered)
             {
                 // Create avatar for this user
-                lobbyAvatars[steamID] = InstantiateFriendAvatar(Client.Instance.Friends.Get(steamID), layoutLobby, false, true, true);
+                lobbyAvatars[steamID] = InstantiateLobbyAvatar(Client.Instance.Friends.Get(steamID));
             }
             else
             {
@@ -125,7 +126,7 @@ namespace MastersOfTempest.Networking
         private void InitializeLobby()
         {
             // Destroy the old lobby
-            foreach (FriendAvatar lobbyAvatar in lobbyAvatars.Values)
+            foreach (LobbyAvatar lobbyAvatar in lobbyAvatars.Values)
             {
                 Destroy(lobbyAvatar.gameObject);
             }
@@ -137,7 +138,7 @@ namespace MastersOfTempest.Networking
             // Spawn all members of the new lobby
             foreach (ulong steamID in lobbyMemberIDs)
             {
-                lobbyAvatars[steamID] = InstantiateFriendAvatar(Client.Instance.Friends.Get(steamID), layoutLobby, false, true, true);
+                lobbyAvatars[steamID] = InstantiateLobbyAvatar(Client.Instance.Friends.Get(steamID));
             }
 
             textLobby.text = Client.Instance.Lobby.Name;
@@ -156,7 +157,7 @@ namespace MastersOfTempest.Networking
                 {
                     bool everyoneReady = true;
 
-                    foreach (FriendAvatar lobbyAvatar in lobbyAvatars.Values)
+                    foreach (LobbyAvatar lobbyAvatar in lobbyAvatars.Values)
                     {
                         if (!lobbyAvatar.ready)
                         {
@@ -211,7 +212,7 @@ namespace MastersOfTempest.Networking
                         if (!friendsToStay.ContainsKey(friend.Id))
                         {
                             // A new friend is now online
-                            InstantiateFriendAvatar(friend, layoutFriends, true, false, false);
+                            InstantiateFriendAvatar(friend);
                         }
 
                         // This friend should not be removed later
@@ -230,17 +231,19 @@ namespace MastersOfTempest.Networking
             }
         }
 
-        private FriendAvatar InstantiateFriendAvatar(SteamFriend friend, Transform parent, bool inviteable, bool showReadyOutline, bool showPlayerRole)
+        private FriendAvatar InstantiateFriendAvatar(SteamFriend friend)
         {
-            FriendAvatar tmp = Instantiate(friendPrefab, parent, false).GetComponent<FriendAvatar>();
+            FriendAvatar tmp = Instantiate(friendAvatarPrefab, layoutFriends, false).GetComponent<FriendAvatar>();
             tmp.gameObject.name = friend.Name;
             tmp.steamID = friend.Id;
-            tmp.buttonInvite.gameObject.SetActive(inviteable);
-            tmp.imageReadyOutline.gameObject.SetActive(showReadyOutline);
-            tmp.textRole.gameObject.SetActive(showPlayerRole);
+            return tmp;
+        }
 
-            Client.Instance.Friends.GetAvatar(Friends.AvatarSize.Large, friend.Id, tmp.OnImage);
-
+        private LobbyAvatar InstantiateLobbyAvatar(SteamFriend friend)
+        {
+            LobbyAvatar tmp = Instantiate(lobbyAvatarPrefab, layoutLobby, false).GetComponent<LobbyAvatar>();
+            tmp.gameObject.name = friend.Name;
+            tmp.steamID = friend.Id;
             return tmp;
         }
 
@@ -249,7 +252,7 @@ namespace MastersOfTempest.Networking
             selectWizardButton.interactable = true;
             selectApprenticeButton.interactable = true;
 
-            foreach (FriendAvatar lobbyAvatar in lobbyAvatars.Values)
+            foreach (LobbyAvatar lobbyAvatar in lobbyAvatars.Values)
             {
                 if (lobbyAvatar.role == PlayerControls.PlayerRole.Wizard)
                 {

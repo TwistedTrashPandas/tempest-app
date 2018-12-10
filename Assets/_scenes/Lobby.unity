@@ -2723,7 +2723,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae1ecda9eca0c9b499da455b86cfe932, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  friendPrefab: {fileID: 1223667611855650, guid: d392a89a0357f4e44ba8801edfbc4d1f,
+  friendAvatarPrefab: {fileID: 1223667611855650, guid: d392a89a0357f4e44ba8801edfbc4d1f,
+    type: 2}
+  lobbyAvatarPrefab: {fileID: 1541954860999060, guid: 3d1a5d96118289b42a25fe5890eb98d7,
     type: 2}
   layoutLobby: {fileID: 537718611}
   layoutFriends: {fileID: 1819350275}
