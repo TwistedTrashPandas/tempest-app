@@ -1845,7 +1845,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceName: Ship
   resourceID: 12
   onServer: 1
   serverID: 0
