@@ -41,7 +41,7 @@ namespace MastersOfTempest.Networking
                 Client.Instance.Lobby.OnLobbyStateChanged += OnLobbyStateChanged;
                 Client.Instance.Lobby.OnLobbyMemberDataUpdated += OnLobbyMemberDataUpdated;
 
-                NetworkManager.Instance.clientMessageEvents[NetworkMessageType.LobbyStartGame] += OnMessageLobbyStartGame;
+                NetworkManager.Instance.clientMessageEvents[NetworkMessageType.StartGame] += OnMessageLobbyStartGame;
 
                 // Create a lobby that the player is in when the game starts
                 CreateDefaultLobby();
@@ -171,7 +171,7 @@ namespace MastersOfTempest.Networking
                     {
                         // Send the game start message only once
                         byte[] data = System.Text.Encoding.UTF8.GetBytes("LobbyStartGame");
-                        NetworkManager.Instance.SendToAllClients(data, NetworkMessageType.LobbyStartGame, Facepunch.Steamworks.Networking.SendType.Reliable);
+                        NetworkManager.Instance.SendToAllClients(data, NetworkMessageType.StartGame, Facepunch.Steamworks.Networking.SendType.Reliable);
                         gameStarted = true;
                     }
                 }
@@ -276,7 +276,7 @@ namespace MastersOfTempest.Networking
                 Client.Instance.Lobby.OnLobbyMemberDataUpdated -= OnLobbyMemberDataUpdated;
                 Client.Instance.Lobby.OnLobbyStateChanged -= OnLobbyStateChanged;
 
-                NetworkManager.Instance.clientMessageEvents[NetworkMessageType.LobbyStartGame] -= OnMessageLobbyStartGame;
+                NetworkManager.Instance.clientMessageEvents[NetworkMessageType.StartGame] -= OnMessageLobbyStartGame;
             }
         }
     }
