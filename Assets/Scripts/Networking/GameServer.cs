@@ -183,7 +183,7 @@ namespace MastersOfTempest.Networking
 
                 // Start the server loop and invoke all subscribed actions
                 StartCoroutine(ServerUpdate());
-                serverInitializedEvents.Invoke();
+                serverInitializedEvents?.Invoke();
             }
         }
 

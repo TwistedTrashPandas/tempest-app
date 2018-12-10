@@ -80,7 +80,7 @@ namespace MastersOfTempest.Networking
             if (!initialized)
             {
                 initialized = true;
-                clientInitializedEvents.Invoke();
+                clientInitializedEvents?.Invoke();
                 ClientManager.Instance.clientMessageEvents[NetworkMessageType.Initialization] -= OnMessageInitialization;
             }
         }
@@ -117,7 +117,7 @@ namespace MastersOfTempest.Networking
             if (serverObject.lastUpdate <= messageServerObject.time)
             {
                 // Update values only if the UDP packet values are newer
-                serverObject.name = messageServerObject.name + "\t\t(" + messageServerObject.instanceID + ")";
+                serverObject.name = "[" + messageServerObject.instanceID + "]\t" + messageServerObject.name;
                 serverObject.lastUpdate = messageServerObject.time;
 
                 // Update the transform
