@@ -68,7 +68,6 @@ namespace MastersOfTempest.Environment.VisualEffects
             look = Vector3.Normalize(look);
             float angle = Mathf.Rad2Deg * (Mathf.Atan2(look.x, look.z) - Mathf.Atan2(0f, 1f));
             angle = (angle < 0f) ? 360f + angle : angle;
-            print(angle);
             transform.localRotation = Quaternion.Euler(90f, 180f + angle, 0f);
         }
 

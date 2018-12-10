@@ -47,7 +47,6 @@ namespace MastersOfTempest.Environment.VisualEffects
         /// arrays for particles
         private Vector3[] particlePos;
         private Vector3[] particleVel;
-        private Texture2D partTex;
         private int[] particleIdx;
 
         private Material material;
@@ -57,9 +56,7 @@ namespace MastersOfTempest.Environment.VisualEffects
 
         const uint BLOCK_SIZE = 1024;
         const uint TRANSPOSE_BLOCK_SIZE = 32;
-
-        System.Random rnd = new System.Random();
-
+        
         void Start()
         {
             if (maxVel == null || maxVel.Length != 3)
@@ -67,7 +64,6 @@ namespace MastersOfTempest.Environment.VisualEffects
 
             numberParticles = (uint)Mathf.Pow(2, particelNumExp);
             counter = 0;
-            rnd = new System.Random();
             particlePos = new Vector3[numberParticles];
             particleVel = new Vector3[numberParticles];
             particleIdx = new int[numberParticles];
@@ -83,7 +79,6 @@ namespace MastersOfTempest.Environment.VisualEffects
             initBuffers();
             CreateMesh();
             camPos = Camera.main.transform;
-            partTex = GenNoiseTexture.Gen2DTexture(1024, 1024);
             // GetComponent<Renderer>().material.SetTexture("g_NoiseTex", partTex);
         }
 
