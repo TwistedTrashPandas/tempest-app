@@ -3,39 +3,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Facepunch.Steamworks;
 
 namespace MastersOfTempest.PlayerControls
 {
-    [RequireComponent(typeof(UnityEngine.UI.Dropdown))]
     public class PlayerRoleSelector : MonoBehaviour
     {
-        private Dropdown dropdown;
-
-        private void Awake()
+        public void SelectWizard ()
         {
-            dropdown = GetComponent<Dropdown>();
-            
-            var options = new List<string>();
-            foreach(PlayerRole role in Enum.GetValues(typeof(PlayerRole)))
-            {
-                options.Insert((int) role, role.GetUserFriendlyName());
-            }
-            dropdown.AddOptions(options);
+            SetRole(PlayerRole.Wizard);
         }
 
-        private void OnEnable()
+        public void SelectApprentice ()
         {
-            dropdown.onValueChanged.AddListener(OnDropdownChanged);
+            SetRole(PlayerRole.Apprentice);
         }
 
-        private void Start()
+        public void SelectSpectator ()
         {
-            dropdown.value = (int) PlayerRoleExtensions.GetCurrentRole();
+            SetRole(PlayerRole.Spectator);
         }
 
-        private void OnDropdownChanged(int newValue)
+        private void SetRole (PlayerRole playerRole)
         {
-            ((PlayerRole) newValue).SetPlayerRoleAsActive();
+            PlayerRoleExtensions.SetPlayerRoleAsActive(playerRole);
+            Client.Instance.Lobby.SetMemberData("Role", "" + (int)playerRole);
         }
     }
 }
