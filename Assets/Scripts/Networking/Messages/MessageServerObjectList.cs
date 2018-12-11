@@ -5,7 +5,6 @@ using System.Runtime.InteropServices;
 
 namespace MastersOfTempest.Networking
 {
-    [StructLayout(LayoutKind.Sequential)]
     struct MessageServerObjectList
     {
         public int count;                                           // 4 bytes

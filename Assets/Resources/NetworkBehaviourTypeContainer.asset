@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   networkBehaviourTypeFullNames:
   - MastersOfTempest.Networking.Test.MoveNetworkBehaviour
-  - MastersOfTempest.Networking.Test.ExpandNetworkBehaviour
+  - MastersOfTempest.Networking.Test.ExpandSplitNetworkBehaviour
   - MastersOfTempest.Environment.EnvironmentManager
   - MastersOfTempest.Gamemaster
   - MastersOfTempest.Player

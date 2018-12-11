@@ -6,11 +6,11 @@ namespace MastersOfTempest.Networking.Test
 {
     public class ExpandSplitNetworkBehaviour : NetworkBehaviour
     {
-        private struct CubeOtherNetworkMessage
+        private struct MessageExpandSplit
         {
             public bool expand;
 
-            public CubeOtherNetworkMessage (bool expand)
+            public MessageExpandSplit (bool expand)
             {
                 this.expand = expand;
             }
@@ -20,13 +20,13 @@ namespace MastersOfTempest.Networking.Test
         {
             if (Input.GetKeyDown(KeyCode.Return))
             {
-                CubeOtherNetworkMessage message = new CubeOtherNetworkMessage(true);
+                MessageExpandSplit message = new MessageExpandSplit(true);
                 SendToServer(ByteSerializer.GetBytes(message), Facepunch.Steamworks.Networking.SendType.Reliable);
             }
 
             if (Input.GetKeyDown(KeyCode.Backspace))
             {
-                CubeOtherNetworkMessage message = new CubeOtherNetworkMessage(false);
+                MessageExpandSplit message = new MessageExpandSplit(false);
                 SendToServer(ByteSerializer.GetBytes(message), Facepunch.Steamworks.Networking.SendType.Reliable);
             }
         }
@@ -35,9 +35,9 @@ namespace MastersOfTempest.Networking.Test
         {
             if (serverObject.onServer)
             {
-                CubeOtherNetworkMessage cubeOtherNetworkMessage = ByteSerializer.FromBytes<CubeOtherNetworkMessage>(data);
+                MessageExpandSplit message = ByteSerializer.FromBytes<MessageExpandSplit>(data);
 
-                if (cubeOtherNetworkMessage.expand)
+                if (message.expand)
                 {
                     transform.localScale += Vector3.one;
                 }

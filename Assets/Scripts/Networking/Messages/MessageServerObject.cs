@@ -6,7 +6,6 @@ using System.Runtime.InteropServices;
 namespace MastersOfTempest.Networking
 {
     // We could not send the name to save data for better performance
-    [StructLayout(LayoutKind.Sequential)]
     public struct MessageServerObject
     {
         public float time;                                          // 4 bytes

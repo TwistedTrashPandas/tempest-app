@@ -5,7 +5,6 @@ using System.Runtime.InteropServices;
 
 namespace MastersOfTempest.Networking
 {
-    [StructLayout(LayoutKind.Sequential)]
     public struct MessageNetworkBehaviour
     {
         public int serverID;                                        // 4 bytes
