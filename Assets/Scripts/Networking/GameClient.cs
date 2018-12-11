@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Facepunch.Steamworks;
+using UnityEngine.SceneManagement;
 
 namespace MastersOfTempest.Networking
 {
@@ -114,17 +114,15 @@ namespace MastersOfTempest.Networking
                 if (!messageServerObject.hasParent || objectsFromServer.ContainsKey(messageServerObject.parentInstanceID))
                 {
                     // Switch active scene so that instantiate creates the object as part of the client scene
-                    UnityEngine.SceneManagement.SceneManager.SetActiveScene(gameObject.scene);
+                    Scene previouslyActiveScene = SceneManager.GetActiveScene();
+                    SceneManager.SetActiveScene(gameObject.scene);
 
                     // Instantiate the object
                     ServerObject tmp = Instantiate(serverObjectPrefabs[messageServerObject.resourceID]).GetComponent<ServerObject>();
                     objectsFromServer[messageServerObject.instanceID] = tmp;
 
-                    // Switch active scene back to the server scene
-                    if (GameServer.Instance != null)
-                    {
-                        UnityEngine.SceneManagement.SceneManager.SetActiveScene(GameServer.Instance.gameObject.scene);
-                    }
+                    // Switch back to the previously active scene
+                    SceneManager.SetActiveScene(previouslyActiveScene);
 
                     // Set attributes, also update transform after spawn
                     tmp.onServer = false;

@@ -39,9 +39,6 @@ namespace MastersOfTempest.Networking
             // Pause everything until all clients are initialized
             Time.timeScale = 0;
 
-            // Instantiate should create objects in the server scene by default
-            UnityEngine.SceneManagement.SceneManager.SetActiveScene(gameObject.scene);
-
             NetworkManager.Instance.serverMessageEvents[NetworkMessageType.NetworkBehaviour] += OnMessageNetworkBehaviour;
             NetworkManager.Instance.serverMessageEvents[NetworkMessageType.NetworkBehaviourInitialized] += OnMessageNetworkBehaviourInitialized;
             NetworkManager.Instance.serverMessageEvents[NetworkMessageType.Initialization] += OnMessageInitialization;

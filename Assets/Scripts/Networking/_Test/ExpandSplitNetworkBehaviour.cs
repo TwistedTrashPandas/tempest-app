@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace MastersOfTempest.Networking.Test
 {
@@ -45,7 +46,12 @@ namespace MastersOfTempest.Networking.Test
                 {
                     // Make smaller and duplicate this object
                     transform.localScale *= 0.5f;
+
+                    // Duplicate the object on the server scene
+                    Scene previouslyActiveScene = SceneManager.GetActiveScene();
+                    SceneManager.SetActiveScene(GameServer.Instance.gameObject.scene);
                     Instantiate(gameObject, transform.parent, true);
+                    SceneManager.SetActiveScene(previouslyActiveScene);
                 }
             }
         }
