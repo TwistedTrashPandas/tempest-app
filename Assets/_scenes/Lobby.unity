@@ -534,7 +534,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1004535761}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.97786456
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1092,6 +1092,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b013c2d11ed6cb4db82b31da068a900, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  networkBehaviourManager: {fileID: 11400000, guid: e3f957e7fd924d944bae72a2fdb3d7e7,
+    type: 2}
   appId: 480
   debugClientMessages: 0
   debugServerMessages: 0
@@ -2457,7 +2459,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1328014539}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.8333333
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
