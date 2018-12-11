@@ -55,7 +55,7 @@ namespace MastersOfTempest.Networking
             }
 
             // The NetworkBehaviour on the server has to be sure that this object spawned and listens to messages from the server
-            NetworkBehaviourInitializedMessage message = new NetworkBehaviourInitializedMessage(serverObject.serverID, typeId);
+            MessageNetworkBehaviourInitialized message = new MessageNetworkBehaviourInitialized(serverObject.serverID, typeId);
             NetworkManager.Instance.SendToServer(ByteSerializer.GetBytes(message), NetworkMessageType.NetworkBehaviourInitialized, Facepunch.Steamworks.Networking.SendType.Reliable);
         }
 
@@ -84,7 +84,7 @@ namespace MastersOfTempest.Networking
                     {
                         // All clients are ready to be initialized, send a message to initialize all of them at the same time
                         initialized = true;
-                        NetworkBehaviourInitializedMessage message = new NetworkBehaviourInitializedMessage(serverObject.serverID, typeId);
+                        MessageNetworkBehaviourInitialized message = new MessageNetworkBehaviourInitialized(serverObject.serverID, typeId);
                         NetworkManager.Instance.SendToAllClients(ByteSerializer.GetBytes(message), NetworkMessageType.NetworkBehaviourInitialized, Facepunch.Steamworks.Networking.SendType.Reliable);
                         StartServer();
                     }
@@ -119,8 +119,8 @@ namespace MastersOfTempest.Networking
 
         protected void SendToServer(byte[] data, Facepunch.Steamworks.Networking.SendType sendType)
         {
-            NetworkBehaviourMessage networkBehaviourMessage = new NetworkBehaviourMessage(serverObject.serverID, typeId, data);
-            NetworkManager.Instance.SendToServer(ByteSerializer.GetBytes(networkBehaviourMessage), NetworkMessageType.NetworkBehaviour, sendType);
+            MessageNetworkBehaviour message = new MessageNetworkBehaviour(serverObject.serverID, typeId, data);
+            NetworkManager.Instance.SendToServer(ByteSerializer.GetBytes(message), NetworkMessageType.NetworkBehaviour, sendType);
         }
 
         protected void SendToServer(string message, Facepunch.Steamworks.Networking.SendType sendType = Facepunch.Steamworks.Networking.SendType.Reliable)
@@ -130,8 +130,8 @@ namespace MastersOfTempest.Networking
 
         protected void SendToClient(ulong steamID, byte[] data, Facepunch.Steamworks.Networking.SendType sendType)
         {
-            NetworkBehaviourMessage networkBehaviourMessage = new NetworkBehaviourMessage(serverObject.serverID, typeId, data);
-            NetworkManager.Instance.SendToClient(steamID, ByteSerializer.GetBytes(networkBehaviourMessage), NetworkMessageType.NetworkBehaviour, sendType);
+            MessageNetworkBehaviour message = new MessageNetworkBehaviour(serverObject.serverID, typeId, data);
+            NetworkManager.Instance.SendToClient(steamID, ByteSerializer.GetBytes(message), NetworkMessageType.NetworkBehaviour, sendType);
         }
 
         protected void SendToClient(ulong steamID, string message, Facepunch.Steamworks.Networking.SendType sendType = Facepunch.Steamworks.Networking.SendType.Reliable)
@@ -141,8 +141,8 @@ namespace MastersOfTempest.Networking
 
         protected void SendToAllClients(byte[] data, Facepunch.Steamworks.Networking.SendType sendType)
         {
-            NetworkBehaviourMessage networkBehaviourMessage = new NetworkBehaviourMessage(serverObject.serverID, typeId, data);
-            NetworkManager.Instance.SendToAllClients(ByteSerializer.GetBytes(networkBehaviourMessage), NetworkMessageType.NetworkBehaviour, sendType);
+            MessageNetworkBehaviour message = new MessageNetworkBehaviour(serverObject.serverID, typeId, data);
+            NetworkManager.Instance.SendToAllClients(ByteSerializer.GetBytes(message), NetworkMessageType.NetworkBehaviour, sendType);
         }
 
         protected void SendToAllClients(string message, Facepunch.Steamworks.Networking.SendType sendType = Facepunch.Steamworks.Networking.SendType.Reliable)
@@ -204,40 +204,4 @@ namespace MastersOfTempest.Networking
             // To be overwritten by the subclass
         }
     }
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct NetworkBehaviourInitializedMessage
-    {
-        public int serverID;                                        // 4 bytes
-        public int typeID;                                          // 4 bytes
-                                                                    // 8 bytes
-
-        public NetworkBehaviourInitializedMessage (int serverID, int typeID)
-        {
-            this.serverID = serverID;
-            this.typeID = typeID;
-        }
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct NetworkBehaviourMessage
-    {
-        public int serverID;                                        // 4 bytes
-        public int typeID;                                          // 4 bytes
-        public int dataLength;                                      // 4 bytes
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 1188)]
-        public byte[] data;                                         // 1188 bytes
-                                                                    // 1200 bytes
-
-        public NetworkBehaviourMessage(int serverID, int typeID, byte[] data)
-        {
-            this.serverID = serverID;
-            this.typeID = typeID;
-
-            // TODO: check if a variable size works (saves data)
-            this.data = new byte[1188];
-            System.Array.Copy(data, this.data, data.Length);
-            this.dataLength = data.Length;
-        }
-    };
 }

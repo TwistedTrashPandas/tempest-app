@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MastersOfTempest.Networking.Test
 {
-    public class ExpandNetworkBehaviour : NetworkBehaviour
+    public class ExpandSplitNetworkBehaviour : NetworkBehaviour
     {
         private struct CubeOtherNetworkMessage
         {
@@ -16,16 +16,17 @@ namespace MastersOfTempest.Networking.Test
             }
         };
 
-        protected override void StartClient()
-        {
-
-        }
-
         protected override void UpdateClient()
         {
             if (Input.GetKeyDown(KeyCode.Return))
             {
                 CubeOtherNetworkMessage message = new CubeOtherNetworkMessage(true);
+                SendToServer(ByteSerializer.GetBytes(message), Facepunch.Steamworks.Networking.SendType.Reliable);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Backspace))
+            {
+                CubeOtherNetworkMessage message = new CubeOtherNetworkMessage(false);
                 SendToServer(ByteSerializer.GetBytes(message), Facepunch.Steamworks.Networking.SendType.Reliable);
             }
         }
@@ -39,6 +40,12 @@ namespace MastersOfTempest.Networking.Test
                 if (cubeOtherNetworkMessage.expand)
                 {
                     transform.localScale += Vector3.one;
+                }
+                else
+                {
+                    // Make smaller and duplicate this object
+                    transform.localScale *= 0.5f;
+                    Instantiate(gameObject, transform.parent, true);
                 }
             }
         }

@@ -190,7 +190,7 @@ namespace MastersOfTempest.Networking
 
         void OnMessageNetworkBehaviour(byte[] data, ulong steamID)
         {
-            NetworkBehaviourMessage message = ByteSerializer.FromBytes<NetworkBehaviourMessage>(data);
+            MessageNetworkBehaviour message = ByteSerializer.FromBytes<MessageNetworkBehaviour>(data);
             byte[] messageData = new byte[message.dataLength];
             System.Array.Copy(message.data, messageData, message.dataLength);
 
@@ -199,7 +199,7 @@ namespace MastersOfTempest.Networking
 
         void OnMessageNetworkBehaviourInitialized(byte[] data, ulong steamID)
         {
-            NetworkBehaviourInitializedMessage message = ByteSerializer.FromBytes<NetworkBehaviourInitializedMessage>(data);
+            MessageNetworkBehaviourInitialized message = ByteSerializer.FromBytes<MessageNetworkBehaviourInitialized>(data);
             serverObjects[message.serverID].HandleNetworkBehaviourInitializedMessage(message.typeID, steamID);
         }
 
