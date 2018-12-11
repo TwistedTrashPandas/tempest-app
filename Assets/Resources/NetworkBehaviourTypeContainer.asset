@@ -8,10 +8,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e5f958e0072df643946ffce6505013d, type: 3}
-  m_Name: NetworkBehaviourManager
+  m_Script: {fileID: 11500000, guid: 38ad8f704ba72ad4e99247aba2d93ee4, type: 3}
+  m_Name: NetworkBehaviourTypeContainer
   m_EditorClassIdentifier: 
-  typeIdToTypeName:
+  networkBehaviourTypeFullNames:
   - MastersOfTempest.Networking.Test.MoveNetworkBehaviour
   - MastersOfTempest.Networking.Test.ExpandNetworkBehaviour
   - MastersOfTempest.Environment.EnvironmentManager

@@ -14,8 +14,8 @@ namespace MastersOfTempest.Networking
     {
         public static NetworkManager Instance = null;
 
-        // Let other classes acces the data from the manager through this script
-        public NetworkBehaviourManager networkBehaviourManager;
+        // Let other classes acces the data from the type container through this script
+        public NetworkBehaviourTypeContainer networkBehaviourTypeContainer;
 
         // The app id should be 480 for testing purposes
         public uint appId = 480;
