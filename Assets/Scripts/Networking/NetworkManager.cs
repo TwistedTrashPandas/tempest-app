@@ -14,6 +14,9 @@ namespace MastersOfTempest.Networking
     {
         public static NetworkManager Instance = null;
 
+        // Let other classes acces the data from the manager through this script
+        public NetworkBehaviourManager networkBehaviourManager;
+
         // The app id should be 480 for testing purposes
         public uint appId = 480;
         public bool debugClientMessages = false;

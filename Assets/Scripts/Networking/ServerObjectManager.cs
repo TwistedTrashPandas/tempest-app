@@ -4,44 +4,48 @@ using UnityEngine;
 using UnityEditor;
 using MastersOfTempest.Networking;
 
-public class ServerObjectManager
+namespace MastersOfTempest.Networking
 {
-    [InitializeOnLoadMethod]
-    static void AssignServerObjectResourceIDs()
+    public class ServerObjectManager
     {
-        // Assign a resource id to each server object but make sure not to change already assigned ids
-        ServerObject[] serverObjectResources = Resources.LoadAll<ServerObject>("ServerObjects/");
-
-        Dictionary<int, ServerObject> alreadyAssignedResourceIDs = new Dictionary<int, ServerObject>();
-
-        foreach (ServerObject s in serverObjectResources)
+        [InitializeOnLoadMethod]
+        static void AssignServerObjectResourceIDs()
         {
-            if (s.resourceID >= 0 && !alreadyAssignedResourceIDs.ContainsKey(s.resourceID))
-            {
-                // Valid id, add it to the set
-                alreadyAssignedResourceIDs[s.resourceID] = s;
-            }
-            else
-            {
-                // Duplicated id or no id set
-                s.resourceID = -1;
-            }
-        }
+            // Assign a resource id to each server object but make sure not to change already assigned ids
+            ServerObject[] serverObjectResources = Resources.LoadAll<ServerObject>("ServerObjects/");
 
-        int nextIdToAssign = 0;
+            Dictionary<int, ServerObject> alreadyAssignedResourceIDs = new Dictionary<int, ServerObject>();
 
-        foreach (ServerObject s in serverObjectResources)
-        {
-            while (alreadyAssignedResourceIDs.ContainsKey(nextIdToAssign))
+            foreach (ServerObject s in serverObjectResources)
             {
-                nextIdToAssign++;
+                if (s.resourceID >= 0 && !alreadyAssignedResourceIDs.ContainsKey(s.resourceID))
+                {
+                    // Valid id, add it to the set
+                    alreadyAssignedResourceIDs[s.resourceID] = s;
+                }
+                else
+                {
+                    // Duplicated id or no id set
+                    s.resourceID = -1;
+                }
             }
 
-            if (s.resourceID == -1)
+            int nextIdToAssign = 0;
+
+            foreach (ServerObject s in serverObjectResources)
             {
-                s.resourceID = nextIdToAssign;
-                EditorUtility.SetDirty(s);
-                nextIdToAssign++;
+                while (alreadyAssignedResourceIDs.ContainsKey(nextIdToAssign))
+                {
+                    nextIdToAssign++;
+                }
+
+                if (s.resourceID == -1)
+                {
+                    // Assign the id and make sure that changes to this prefab are saved
+                    s.resourceID = nextIdToAssign;
+                    EditorUtility.SetDirty(s);
+                    nextIdToAssign++;
+                }
             }
         }
     }

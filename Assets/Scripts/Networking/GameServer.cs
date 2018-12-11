@@ -14,13 +14,9 @@ namespace MastersOfTempest.Networking
         [SerializeField]
         private bool onlySendChanges = true;
 
-        private LinkedList<ServerObject> serverObjects = new LinkedList<ServerObject>();
+        private Dictionary<int, ServerObject> serverObjects = new Dictionary<int, ServerObject>();
         private HashSet<ulong> clientsReadyForInitialization = new HashSet<ulong>();
         private bool allClientsInitialized = false;
-
-        // Handles all the incoming network behaviour messages from the client network behaviours
-        private Dictionary<int, System.Action<byte[], ulong>> serverNetworkBehaviourEvents = new Dictionary<int, System.Action<byte[], ulong>>();
-        private Dictionary<int, System.Action<ulong>> serverNetworkBehaviourInitializedEvents = new Dictionary<int, System.Action<ulong>>();
 
         // Make it possible to let other scripts subscribe to these events
         private System.Action serverInitializedEvents;
@@ -82,7 +78,7 @@ namespace MastersOfTempest.Networking
             // This makes sure that parents are instantiated before their children
             List<KeyValuePair<int, ServerObject>> serverObjectsToSend = new List<KeyValuePair<int, ServerObject>>();
 
-            foreach (ServerObject serverObject in serverObjects)
+            foreach (ServerObject serverObject in serverObjects.Values)
             {
                 if (!onlySendChangedTransforms || serverObject.transform.hasChanged)
                 {
@@ -138,12 +134,12 @@ namespace MastersOfTempest.Networking
                 NetworkManager.Instance.SendToAllClients(data, NetworkMessageType.ServerObject, Facepunch.Steamworks.Networking.SendType.Reliable);
             }
 
-            serverObjects.AddLast(serverObject);
+            serverObjects.Add(serverObject.serverID, serverObject);
         }
 
         public void RemoveServerObject (ServerObject serverObject)
         {
-            serverObjects.Remove(serverObject);
+            serverObjects.Remove(serverObject.serverID);
         }
 
         public void SendMessageDestroyServerObject(ServerObject serverObject)
@@ -198,28 +194,13 @@ namespace MastersOfTempest.Networking
             byte[] messageData = new byte[message.dataLength];
             System.Array.Copy(message.data, messageData, message.dataLength);
 
-            if (serverNetworkBehaviourEvents.ContainsKey(message.serverID))
-            {
-                serverNetworkBehaviourEvents[message.serverID].Invoke(messageData, steamID);
-            }
+            serverObjects[message.serverID].HandleNetworkBehaviourMessage(message.typeID, message.data, steamID);
         }
 
         void OnMessageNetworkBehaviourInitialized(byte[] data, ulong steamID)
         {
-            int serverID = System.BitConverter.ToInt32(data, 0);
-            serverNetworkBehaviourInitializedEvents[serverID].Invoke(steamID);
-        }
-
-        public void AddNetworkBehaviourEvents(int serverID, System.Action<byte[], ulong> behaviourAction, System.Action<ulong> initializedAction)
-        {
-            serverNetworkBehaviourEvents[serverID] = behaviourAction;
-            serverNetworkBehaviourInitializedEvents[serverID] = initializedAction;
-        }
-
-        public void RemoveNetworkBehaviourEvents(int serverID)
-        {
-            serverNetworkBehaviourEvents.Remove(serverID);
-            serverNetworkBehaviourInitializedEvents.Remove(serverID);
+            NetworkBehaviourInitializedMessage message = ByteSerializer.FromBytes<NetworkBehaviourInitializedMessage>(data);
+            serverObjects[message.serverID].HandleNetworkBehaviourInitializedMessage(message.typeID, steamID);
         }
 
         /// <summary>
