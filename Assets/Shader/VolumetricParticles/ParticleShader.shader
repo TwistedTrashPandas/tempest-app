@@ -23,6 +23,8 @@
 		#include "UnityCG.cginc"
 		#include "AutoLight.cginc"
 		#include "Lighting.cginc"
+		#include "structs.cginc"
+		#include "common.cginc"
 
 		StructuredBuffer<float3> g_vVertices : register(t0);
 		StructuredBuffer<float3> g_vInitialWorldPos : register(t1);
@@ -42,9 +44,17 @@
 		sampler2D g_NormalTex1;
 		sampler2D g_NormalTex2;
 
-		static const float g_fTimeScale = 1.f;
-		static const float PI = 3.14159265f;
+		static const float g_fCloudExtinctionCoeff = 100;
+
+		// Minimal cloud transparancy not flushed to zero
+		static const float g_fTransparencyThreshold = 0.01;
+
+		// Fraction of the particle cut off distance which serves as
+		// a transition region from particles to flat clouds
 		static const float g_fParticleToFlatMorphRatio = 0.2;
+
+		static const float g_fTimeScale = 1.f;
+		static const float2 g_f2CloudDensitySamplingScale = float2(1.f / 200000.f, 1.f / 20000.f);
 		static const float4 OPTICAL_DEPTH_LUT_DIM = float4(64, 32, 64, 32);
 
 		#define FLT_MAX 3.402823466e+38f
@@ -69,82 +79,6 @@
 				#pragma geometry geom
 				#pragma fragment frag
 				#pragma target 2.0
-
-		struct SParticleAttribs
-		{
-			float3 f3Pos;
-			float fSize;
-			float fRndAzimuthBias;
-			float fDensity;
-		};
-
-		struct SCloudCellAttribs
-		{
-			float3 f3Center;
-			float fSize;
-
-			float3 f3Normal;
-			uint uiNumActiveLayers;
-
-			float3 f3Tangent;
-			float fDensity;
-
-			float3 f3Bitangent;
-			float fMorphFadeout;
-
-			uint uiPackedLocation;
-		};
-
-		struct SGlobalCloudAttribs
-		{
-			uint uiInnerRingDim;
-			uint uiRingExtension;
-			uint uiRingDimension;
-			uint uiNumRings;
-
-			uint uiMaxLayers;
-			uint uiNumCells;
-			uint uiMaxParticles;
-			uint uiDownscaleFactor;
-
-			float fCloudDensityThreshold;
-			float fCloudThickness;
-			float fCloudAltitude;
-			float fParticleCutOffDist;
-
-			float fTime;
-			float fCloudVolumeDensity;
-			float2 f2LiSpCloudDensityDim;
-
-			uint uiBackBufferWidth;
-			uint uiBackBufferHeight;
-			uint uiDownscaledBackBufferWidth;
-			uint uiDownscaledBackBufferHeight;
-
-			float fBackBufferWidth;
-			float fBackBufferHeight;
-			float fDownscaledBackBufferWidth;
-			float fDownscaledBackBufferHeight;
-
-			float fTileTexWidth;
-			float fTileTexHeight;
-			uint uiLiSpFirstListIndTexDim;
-			uint uiNumCascades;
-
-			float4 f4Parameter;
-
-			float fScatteringCoeff;
-			float fAttenuationCoeff;
-			uint uiNumParticleLayers;
-			uint uiDensityGenerationMethod;
-
-			bool bVolumetricBlending;
-			float3 f3Dummy;
-
-			float4 f4TilingFrustumPlanes[6];
-			matrix mParticleTiling;  // Transform from view space to light projection space
-		};
-
 
 	struct appdata {
 		uint id : SV_VertexID;
@@ -176,124 +110,39 @@
 		UNITY_VERTEX_OUTPUT_STEREO
 	};
 
+	Texture2DArray<float>  g_tex2DLightSpaceDepthMap_t0 : register(t0);
+	Texture2DArray<float>  g_tex2DLiSpCloudTransparency : register(t0);
+	Texture2DArray<float2> g_tex2DLiSpCloudMinMaxDepth  : register(t1);
+	Texture2D<float>       g_tex2DCloudDensity          : register(t1);
+	Texture2D<float3>      g_tex2DWhiteNoise            : register(t3);
+	Texture3D<float>       g_tex3DNoise                 : register(t4);
+	Texture2D<float>       g_tex2MaxDensityMip          : register(t3);
+	StructuredBuffer<uint> g_PackedCellLocations        : register(t0);
 	StructuredBuffer<SCloudCellAttribs> g_CloudCells    : register(t2);
-	StructuredBuffer<SParticleAttribs>  g_Particles : register(t3);
-	Texture3D<float>	g_tex3DNoise                 : register(t4);
-	Texture3D<float2>	g_tex3DParticleDensityLUT    : register(t10);
+	StructuredBuffer<SParticleAttribs>  g_Particles     : register(t3);
+	Texture2D<float3>       g_tex2DAmbientSkylight               : register(t7);
+	StructuredBuffer<uint>              g_VisibleParticleFlags   : register(t6);
+	StructuredBuffer<SCloudParticleLighting> g_ParticlesLighting : register(t7);
+	Texture2DArray<float>   g_tex2DLightSpCloudTransparency      : register(t6);
+	Texture2DArray<float2>  g_tex2DLightSpCloudMinMaxDepth       : register(t7);
+	Texture2D<int>          g_tex2DFirstKnot                     : register(t8);
+	StructuredBuffer<SParticleListKnot> g_TiledParticlesList     : register(t9);
+	StructuredBuffer<uint>  g_ParticleOrder                      : register(t11);
+	Buffer<uint>            g_ValidCellsCounter                  : register(t0);
+	StructuredBuffer<uint>  g_ValidCellsUnorderedList            : register(t1);
+	StructuredBuffer<uint>  g_ValidParticlesUnorderedList        : register(t1);
+	StructuredBuffer<uint>  g_SortedParticlesOrder               : register(t0);
+	Texture3D<float2>       g_tex3DParticleDensityLUT    : register(t10);
 	Texture3D<float>        g_tex3DSingleScatteringInParticleLUT   : register(t11);
 	Texture3D<float>        g_tex3DMultipleScatteringInParticleLUT : register(t12);
 
+
+	SamplerState MyLinearClampSampler : register(s0);
 	SamplerState MyLinearRepeatSampler : register(s1);
 
 	static SGlobalCloudAttribs g_GlobalCloudAttribs;
 
-
-	float2 UVToProj(in float2 f2UV)
-	{
-		return float2(-1.0, 1.0) + float2(2.0, -2.0) * f2UV;
-	}
-
-	void GetRaySphereIntersection(in float3 f3RayOrigin,
-		in float3 f3RayDirection,
-		in float3 f3SphereCenter,
-		in float fSphereRadius,
-		out float2 f2Intersections)
-	{
-		f3RayOrigin -= f3SphereCenter;
-		float A = dot(f3RayDirection, f3RayDirection);
-		float B = 2 * dot(f3RayOrigin, f3RayDirection);
-		float C = dot(f3RayOrigin, f3RayOrigin) - fSphereRadius * fSphereRadius;
-		float D = B * B - 4 * A*C;
-
-		if (D < 0)
-		{
-			f2Intersections = float2(-1, -2);
-		}
-		else
-		{
-			D = sqrt(D);
-			f2Intersections = float2(-B - D, -B + D) / (2 * A);
-		}
-	}
-
-	void DirectionToZenithAzimuthAngleXZY(in float3 f3Direction, out float fZenithAngle, out float fAzimuthAngle)
-	{
-		float fZenithCos = f3Direction.y;
-		fZenithAngle = acos(fZenithCos);
-		//float fZenithSin = sqrt( max(1 - fZenithCos*fZenithCos, 1e-10) );
-		float fAzimuthCos = f3Direction.x;// / fZenithSin;
-		float fAzimuthSin = f3Direction.z;// / fZenithSin;
-		fAzimuthAngle = atan2(fAzimuthSin, fAzimuthCos);
-	}
-	void ComputeLocalFrameAnglesXYZ(in float3 f3LocalX,
-		in float3 f3LocalY,
-		in float3 f3LocalZ,
-		in float3 f3RayDir,
-		out float fLocalZenithAngle,
-		out float fLocalAzimuthAngle)
-	{
-		fLocalZenithAngle = acos(saturate(dot(f3LocalZ, f3RayDir)));
-
-		// Compute azimuth angle in the local frame
-		float fViewDirLocalAzimuthCos = dot(f3RayDir, f3LocalX);
-		float fViewDirLocalAzimuthSin = dot(f3RayDir, f3LocalY);
-		fLocalAzimuthAngle = atan2(fViewDirLocalAzimuthSin, fViewDirLocalAzimuthCos);
-	}
-
-#define SAMPLE_4D_LUT(tex3DLUT, LUT_DIM, f4LUTCoords, fLOD, Result)  \
-{                                                               \
-    float3 f3UVW;                                               \
-    f3UVW.xy = f4LUTCoords.xy;                                  \
-    float fQSlice = f4LUTCoords.w * LUT_DIM.w - 0.5;            \
-    float fQ0Slice = floor(fQSlice);                            \
-    float fQWeight = fQSlice - fQ0Slice;                        \
-                                                                \
-    f3UVW.z = (fQ0Slice + f4LUTCoords.z) / LUT_DIM.w;           \
-                                                                \
-    Result = lerp(                                              \
-        tex3DLUT.SampleLevel(MyLinearRepeatSampler, f3UVW, fLOD),       \
-        /* frac() assures wraparound filtering of w coordinate*/                            \
-        tex3DLUT.SampleLevel(MyLinearRepeatSampler, frac(f3UVW + float3(0,0,1/LUT_DIM.w)), fLOD),   \
-        fQWeight);                                                                          \
-}
-
-	void ConstructLocalFrameXYZ(in float3 f3Up, in float3 f3Inward, out float3 f3X, out float3 f3Y, out float3 f3Z)
-	{
-		//      Z (Up)
-		//      |    Y  (Inward)
-		//      |   /
-		//      |  /
-		//      | /  
-		//      |/
-		//       -----------> X
-		//
-		f3Z = normalize(f3Up);
-		f3X = normalize(cross(f3Inward, f3Z));
-		f3Y = normalize(cross(f3Z, f3X));
-	}
-	void WorldParamsToOpticalDepthLUTCoords(in float3 f3NormalizedStartPos, in float3 f3RayDir, out float4 f4LUTCoords)
-	{
-		DirectionToZenithAzimuthAngleXZY(f3NormalizedStartPos, f4LUTCoords.x, f4LUTCoords.y);
-
-		float3 f3LocalX, f3LocalY, f3LocalZ;
-		// Construct local tangent frame for the start point on the sphere (z up)
-		// For convinience make the Z axis look into the sphere
-		ConstructLocalFrameXYZ(-f3NormalizedStartPos, float3(0, 1, 0), f3LocalX, f3LocalY, f3LocalZ);
-
-		// z coordinate is the angle between the ray direction and the local frame zenith direction
-		// Note that since we are interested in rays going inside the sphere only, the allowable
-		// range is [0, PI/2]
-
-		float fRayDirLocalZenith, fRayDirLocalAzimuth;
-		ComputeLocalFrameAnglesXYZ(f3LocalX, f3LocalY, f3LocalZ, f3RayDir, fRayDirLocalZenith, fRayDirLocalAzimuth);
-		f4LUTCoords.z = fRayDirLocalZenith;
-		f4LUTCoords.w = fRayDirLocalAzimuth;
-
-		f4LUTCoords.xyzw = f4LUTCoords.xyzw / float4(PI, 2 * PI, PI / 2, 2 * PI) + float4(0.0, 0.5, 0, 0.5);
-
-		// Clamp only zenith (yz) coordinate as azimuth is filtered with wraparound mode
-		f4LUTCoords.xz = clamp(f4LUTCoords, 0.5 / OPTICAL_DEPTH_LUT_DIM, 1.0 - 0.5 / OPTICAL_DEPTH_LUT_DIM).xz;
-	}
+	// ---------------------------------------------------------------------------------------------------------------------------------
 
 	float3 GetParticleScales(in float fSize, in float fNumActiveLayers)
 	{
@@ -344,6 +193,130 @@
 
 		fDistanceToEntryPoint = length(f3ViewRayUSSpace / f3Scale) * f2RayIsecs.x;
 		fDistanceToExitPoint = length(f3ViewRayUSSpace / f3Scale) * f2RayIsecs.y;
+	}
+
+	float2 ComputeLiSpTransparency(const in SParticleAttribs ParticleAttrs)
+	{
+		float4 f4ParticleCenterPosPS = mul(float4(ParticleAttrs.f3Pos, 1), g_GlobalCloudAttribs.mParticleTiling);
+		float2 f2ParticleProjSpaceXY = f4ParticleCenterPosPS.xy / f4ParticleCenterPosPS.w;
+		if (any(abs(f2ParticleProjSpaceXY) > 1))
+			return 1;
+
+		float2 f2ParticleUV = saturate(ProjToUV(f2ParticleProjSpaceXY));
+
+		float3 f3RayStart = ParticleAttrs.f3Pos.xyz;
+		float3 f3RayDir = g_LightAttribs.f4DirOnLight.xyz;
+
+		uint2 uiTileXY = floor(f2ParticleUV * g_GlobalCloudAttribs.uiLiSpFirstListIndTexDim);
+		int iCurrKnotInd = g_tex2DFirstKnot.Load(uint3(uiTileXY, 0));
+		float2 f2Transparency = 1;
+
+		[loop]
+		while (iCurrKnotInd >= 0)
+		{
+			SParticleListKnot CurrKnot = g_TiledParticlesList[iCurrKnotInd];
+			SParticleAttribs CurrParticleAttrs = g_Particles[CurrKnot.uiParticleID];
+			SCloudCellAttribs CurrCellAttrs = g_CloudCells[CurrKnot.uiParticleID / g_GlobalCloudAttribs.uiMaxLayers];
+
+			float2 f2RayIsecs;
+			float fDistanceToEntryPoint, fDistanceToExitPoint;
+			float3 f3EntryPointUSSpace, f3ViewRayUSSpace, f3LightDirUSSpace;
+			IntersectRayWithParticle(CurrParticleAttrs, CurrCellAttrs, f3RayStart, f3RayDir,
+				f2RayIsecs, f3EntryPointUSSpace, f3ViewRayUSSpace,
+				f3LightDirUSSpace,
+				fDistanceToEntryPoint, fDistanceToExitPoint);
+
+			float2 f2CurrTransparency = 1.f;
+			if ( //CurrKnot.uiParticleID != uiParticleOrder && 
+				fDistanceToExitPoint > 0
+				/*f2RayIsecs.y > f2RayIsecs.x && */)
+			{
+				//float fDensityScale = 1;
+				//float fDensity = ParticleAttrs.fDensity * fDensityScale;
+				fDistanceToEntryPoint = max(fDistanceToEntryPoint, CurrParticleAttrs.fSize);
+				float fCloudMass = max(fDistanceToExitPoint - fDistanceToEntryPoint, 0);//g_GlobalCloudAttribs.fCloudVolumeDensity * fDensity;
+				fCloudMass *= CurrCellAttrs.fMorphFadeout * ParticleAttrs.fDensity;
+				f2CurrTransparency = exp(-fCloudMass * g_GlobalCloudAttribs.fAttenuationCoeff * float2(0.05, 0.025));
+			}
+
+			f2Transparency *= f2CurrTransparency;
+			if (all(f2Transparency < g_fTransparencyThreshold))
+				break;
+
+			iCurrKnotInd = CurrKnot.iNextKnotInd;
+		}
+
+		//fTransparency = saturate((fTransparency - g_fTransparencyThreshold) / (1-g_fTransparencyThreshold));
+
+		return f2Transparency;
+	}
+
+	void DirectionToZenithAzimuthAngleXZY(in float3 f3Direction, out float fZenithAngle, out float fAzimuthAngle)
+	{
+		float fZenithCos = f3Direction.y;
+		fZenithAngle = acos(fZenithCos);
+		//float fZenithSin = sqrt( max(1 - fZenithCos*fZenithCos, 1e-10) );
+		float fAzimuthCos = f3Direction.x;// / fZenithSin;
+		float fAzimuthSin = f3Direction.z;// / fZenithSin;
+		fAzimuthAngle = atan2(fAzimuthSin, fAzimuthCos);
+	}
+
+	void ComputeLocalFrameAnglesXYZ(in float3 f3LocalX,
+		in float3 f3LocalY,
+		in float3 f3LocalZ,
+		in float3 f3RayDir,
+		out float fLocalZenithAngle,
+		out float fLocalAzimuthAngle)
+	{
+		fLocalZenithAngle = acos(saturate(dot(f3LocalZ, f3RayDir)));
+
+		// Compute azimuth angle in the local frame
+		float fViewDirLocalAzimuthCos = dot(f3RayDir, f3LocalX);
+		float fViewDirLocalAzimuthSin = dot(f3RayDir, f3LocalY);
+		fLocalAzimuthAngle = atan2(fViewDirLocalAzimuthSin, fViewDirLocalAzimuthCos);
+	}
+
+	void ConstructLocalFrameXYZ(in float3 f3Up, in float3 f3Inward, out float3 f3X, out float3 f3Y, out float3 f3Z)
+	{
+		//      Z (Up)
+		//      |    Y  (Inward)
+		//      |   /
+		//      |  /
+		//      | /  
+		//      |/
+		//       -----------> X
+		//
+		f3Z = normalize(f3Up);
+		f3X = normalize(cross(f3Inward, f3Z));
+		f3Y = normalize(cross(f3Z, f3X));
+	}
+	void WorldParamsToOpticalDepthLUTCoords(in float3 f3NormalizedStartPos, in float3 f3RayDir, out float4 f4LUTCoords)
+	{
+		DirectionToZenithAzimuthAngleXZY(f3NormalizedStartPos, f4LUTCoords.x, f4LUTCoords.y);
+
+		float3 f3LocalX, f3LocalY, f3LocalZ;
+		// Construct local tangent frame for the start point on the sphere (z up)
+		// For convinience make the Z axis look into the sphere
+		ConstructLocalFrameXYZ(-f3NormalizedStartPos, float3(0, 1, 0), f3LocalX, f3LocalY, f3LocalZ);
+
+		// z coordinate is the angle between the ray direction and the local frame zenith direction
+		// Note that since we are interested in rays going inside the sphere only, the allowable
+		// range is [0, PI/2]
+
+		float fRayDirLocalZenith, fRayDirLocalAzimuth;
+		ComputeLocalFrameAnglesXYZ(f3LocalX, f3LocalY, f3LocalZ, f3RayDir, fRayDirLocalZenith, fRayDirLocalAzimuth);
+		f4LUTCoords.z = fRayDirLocalZenith;
+		f4LUTCoords.w = fRayDirLocalAzimuth;
+
+		f4LUTCoords.xyzw = f4LUTCoords.xyzw / float4(PI, 2 * PI, PI / 2, 2 * PI) + float4(0.0, 0.5, 0, 0.5);
+
+		// Clamp only zenith (yz) coordinate as azimuth is filtered with wraparound mode
+		f4LUTCoords.xz = clamp(f4LUTCoords, 0.5 / OPTICAL_DEPTH_LUT_DIM, 1.0 - 0.5 / OPTICAL_DEPTH_LUT_DIM).xz;
+	}
+
+	float GetConservativeScreenDepth(in float2 f2UV)
+	{
+		return g_tex2DDepthBuffer.SampleLevel(MyLinearClampSampler, f2UV, 0);
 	}
 
 	void ComputeParticleRenderAttribs(const in SParticleAttribs ParticleAttrs,
@@ -427,16 +400,18 @@
 	sampler2D _CameraDepthTexture;
 	float _InvFade;
 
-	void frag(PS_Input In, out float fTransparency : SV_Target0, out float fDistToCloud : SV_Target1, out float4 f4Color : SV_Target2)
+	void frag(PS_Input In, out float fTransparency : SV_Target0, out float4 f4Color : SV_Target2)
 	{
 		SParticleAttribs ParticleAttrs = g_Particles[In.uiParticleID];
 		SCloudCellAttribs CellAttribs = g_CloudCells[In.uiParticleID / max(g_GlobalCloudAttribs.uiMaxLayers, 1)];
+
+		SCloudParticleLighting ParticleLighting = g_ParticlesLighting[In.uiParticleID];
 
 		float fTime = g_fTimeScale * g_GlobalCloudAttribs.fTime;
 
 		float3 f3CameraPos, f3ViewRay;
 
-		// For directional light source, we should use position on the near clip plane instead of
+		/*// For directional light source, we should use position on the near clip plane instead of
 		// camera location as a ray start point
 		float2 f2PosPS = UVToProj((In.f4Pos.xy / g_GlobalCloudAttribs.f2LiSpCloudDensityDim.xy));
 		float4 f4PosOnNearClipPlaneWS = mul(mul(float4(f2PosPS.xy, 1, 1), unity_CameraInvProjection), UNITY_MATRIX_IT_MV);
@@ -447,6 +422,20 @@
 		float4 f4PosOnFarClipPlaneWS = mul(mul(float4(f2PosPS.xy, 0, 1), unity_CameraInvProjection), UNITY_MATRIX_IT_MV);
 		f4PosOnFarClipPlaneWS.xyz = f4PosOnFarClipPlaneWS.xyz / f4PosOnFarClipPlaneWS.w;
 		f3ViewRay = normalize(f4PosOnFarClipPlaneWS.xyz - f4PosOnNearClipPlaneWS.xyz);
+		*/
+
+		f3CameraPos = _WorldSpaceCameraPos.xyz;
+		//f3ViewRay = normalize(In.f3ViewRay);
+		float2 f2ScreenDim = float2(g_GlobalCloudAttribs.fDownscaledBackBufferWidth, g_GlobalCloudAttribs.fDownscaledBackBufferHeight);
+		float2 f2PosPS = UVToProj(In.f4Pos.xy / f2ScreenDim);
+		float fDepth = GetConservativeScreenDepth(ProjToUV(f2PosPS.xy));
+		float4 f4ReconstructedPosWS = mul(mul(float4(f2PosPS.xy, fDepth, 1.0), unity_CameraInvProjection), UNITY_MATRIX_IT_MV); // mul(float4(f2PosPS.xy, fDepth, 1.0), g_CameraAttribs.mViewProjInv);
+		float3 f3WorldPos = f4ReconstructedPosWS.xyz / f4ReconstructedPosWS.w;
+
+		// Compute view ray
+		f3ViewRay = f3WorldPos - f3CameraPos;
+		float fRayLength = length(f3ViewRay);
+		f3ViewRay /= fRayLength;
 
 		// Intersect view ray with the particle
 		float2 f2RayIsecs;
@@ -476,7 +465,7 @@
 			true
 		);
 
-		fDistToCloud = fTransparency < 0.9 ? fDistanceToEntryPoint : +FLT_MAX;
+		// fDistToCloud = fTransparency < 0.9 ? fDistanceToEntryPoint : +FLT_MAX;
 	}
 
 
