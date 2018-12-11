@@ -121,7 +121,10 @@ namespace MastersOfTempest.Networking
                     objectsFromServer[messageServerObject.instanceID] = tmp;
 
                     // Switch active scene back to the server scene
-                    UnityEngine.SceneManagement.SceneManager.SetActiveScene(GameServer.Instance.gameObject.scene);
+                    if (GameServer.Instance != null)
+                    {
+                        UnityEngine.SceneManagement.SceneManager.SetActiveScene(GameServer.Instance.gameObject.scene);
+                    }
 
                     // Set attributes, also update transform after spawn
                     tmp.onServer = false;
