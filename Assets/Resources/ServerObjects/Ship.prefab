@@ -1850,7 +1850,7 @@ MonoBehaviour:
   serverID: 0
   lastUpdate: 0
   interpolateOnClient: 1
-  removeChildColliders: 1
+  removeChildColliders: 0
   removeChildRigidbodies: 1
 --- !u!114 &114739895200692124
 MonoBehaviour:
