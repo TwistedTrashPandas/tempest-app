@@ -113,8 +113,15 @@ namespace MastersOfTempest.Networking
                 // Make sure that the parent exists already if it has one
                 if (!messageServerObject.hasParent || objectsFromServer.ContainsKey(messageServerObject.parentInstanceID))
                 {
+                    // Switch active scene so that instantiate creates the object as part of the client scene
+                    UnityEngine.SceneManagement.SceneManager.SetActiveScene(gameObject.scene);
+
+                    // Instantiate the object
                     ServerObject tmp = Instantiate(serverObjectPrefabs[messageServerObject.resourceID]).GetComponent<ServerObject>();
                     objectsFromServer[messageServerObject.instanceID] = tmp;
+
+                    // Switch active scene back to the server scene
+                    UnityEngine.SceneManagement.SceneManager.SetActiveScene(GameServer.Instance.gameObject.scene);
 
                     // Set attributes, also update transform after spawn
                     tmp.onServer = false;
