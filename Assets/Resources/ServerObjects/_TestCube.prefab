@@ -24,8 +24,10 @@ GameObject:
   - component: {fileID: 65596641293358568}
   - component: {fileID: 114340251316627260}
   - component: {fileID: 114515986793166176}
+  - component: {fileID: 114074685468992710}
+  - component: {fileID: 114798025031087092}
   m_Layer: 10
-  m_Name: Cube
+  m_Name: _TestCube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -98,6 +100,17 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114074685468992710
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1216853482755444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38ea6535ed642ec43a7a0fee34953e2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114340251316627260
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -130,3 +143,14 @@ MonoBehaviour:
   inputsPerSec: 60
   movementSpeed: 30
   jumpHeight: 7
+--- !u!114 &114798025031087092
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1216853482755444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38ea6535ed642ec43a7a0fee34953e2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

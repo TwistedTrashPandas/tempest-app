@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace MastersOfTempest.Networking
 {
+    [DisallowMultipleComponent]
     public class ServerObject : MonoBehaviour
     {
         [ReadOnly]
@@ -24,6 +25,10 @@ namespace MastersOfTempest.Networking
         private MessageServerObject lastMessage;
         private float timeSinceLastMessage = 0;
         private uint receivedMessageCount = 0;
+
+        // Handles all the incoming network behaviour messages from the network behaviours
+        private Dictionary<int, Action<byte[], ulong>> networkBehaviourEvents = new Dictionary<int, Action<byte[], ulong>>();
+        private Dictionary<int, Action<ulong>> networkBehaviourInitializedEvents = new Dictionary<int, Action<ulong>>();
 
         void Start()
         {
@@ -120,6 +125,28 @@ namespace MastersOfTempest.Networking
                     transform.localScale = messageServerObject.localScale;
                 }
             }
+        }
+
+        public void HandleNetworkBehaviourInitializedMessage (int networkBehaviourTypeId, ulong steamID)
+        {
+            networkBehaviourInitializedEvents[networkBehaviourTypeId].Invoke(steamID);
+        }
+
+        public void HandleNetworkBehaviourMessage(int networkBehaviourTypeId, byte[] data, ulong steamId)
+        {
+            networkBehaviourEvents[networkBehaviourTypeId].Invoke(data, steamId);
+        }
+
+        public void AddNetworkBehaviourEvents(int networkBehaviourTypeId, Action<byte[], ulong> behaviourAction, Action<ulong> initializedAction)
+        {
+            networkBehaviourEvents[networkBehaviourTypeId] = behaviourAction;
+            networkBehaviourInitializedEvents[networkBehaviourTypeId] = initializedAction;
+        }
+
+        public void RemoveNetworkBehaviourEvents(int networkBehaviourTypeId)
+        {
+            networkBehaviourEvents.Remove(networkBehaviourTypeId);
+            networkBehaviourInitializedEvents.Remove(networkBehaviourTypeId);
         }
 
         public void SetLayerOfThisGameObjectAndAllChildren (string layer)

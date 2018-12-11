@@ -1092,6 +1092,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b013c2d11ed6cb4db82b31da068a900, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  networkBehaviourTypeContainer: {fileID: 11400000, guid: b5efdec07be45e54c916b511303c9597,
+    type: 2}
   appId: 480
   debugClientMessages: 0
   debugServerMessages: 0

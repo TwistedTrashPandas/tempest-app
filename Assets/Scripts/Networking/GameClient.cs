@@ -14,10 +14,6 @@ namespace MastersOfTempest.Networking
         // Stores all the server object prefabs based on their resource id
         private Dictionary<int, GameObject> serverObjectPrefabs = new Dictionary<int, GameObject>();
 
-        // Handles all the incoming network behaviour messages from the server network behaviours
-        private Dictionary<int, System.Action<byte[], ulong>> clientNetworkBehaviourEvents = new Dictionary<int, System.Action<byte[], ulong>>();
-        private Dictionary<int, System.Action<ulong>> clientNetworkBehaviourInitializedEvents = new Dictionary<int, System.Action<ulong>>();
-
         // Use the gameobject instance id from the server to keep track of the objects
         private Dictionary<int, ServerObject> objectsFromServer = new Dictionary<int, ServerObject>();
 
@@ -187,28 +183,13 @@ namespace MastersOfTempest.Networking
             byte[] messageData = new byte[message.dataLength];
             System.Array.Copy(message.data, messageData, message.dataLength);
 
-            if (clientNetworkBehaviourEvents.ContainsKey(message.serverID))
-            {
-                clientNetworkBehaviourEvents[message.serverID].Invoke(messageData, steamID);
-            }
+            objectsFromServer[message.serverID].HandleNetworkBehaviourMessage(message.typeID, message.data, steamID);
         }
 
         void OnMessageNetworkBehaviourInitialized(byte[] data, ulong steamID)
         {
-            int serverID = System.BitConverter.ToInt32(data, 0);
-            clientNetworkBehaviourInitializedEvents[serverID].Invoke(steamID);
-        }
-
-        public void AddNetworkBehaviourEvents(int serverID, System.Action<byte[], ulong> behaviourAction, System.Action<ulong> initializedAction)
-        {
-            clientNetworkBehaviourEvents[serverID] = behaviourAction;
-            clientNetworkBehaviourInitializedEvents[serverID] = initializedAction;
-        }
-
-        public void RemoveNetworkBehaviourEvents(int serverID)
-        {
-            clientNetworkBehaviourEvents.Remove(serverID);
-            clientNetworkBehaviourInitializedEvents.Remove(serverID);
+            NetworkBehaviourInitializedMessage message = ByteSerializer.FromBytes<NetworkBehaviourInitializedMessage>(data);
+            objectsFromServer[message.serverID].HandleNetworkBehaviourInitializedMessage(message.typeID, steamID);
         }
 
         /// <summary>

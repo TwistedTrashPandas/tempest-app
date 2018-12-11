@@ -1,11 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MastersOfTempest.Networking;
 
-namespace MastersOfTempest
+namespace MastersOfTempest.Networking.Test
 {
-    public class CubeNetworkBehaviour : NetworkBehaviour
+    public class MoveNetworkBehaviour : NetworkBehaviour
     {
         [SerializeField]
         private float inputsPerSec = 1;
@@ -63,17 +62,20 @@ namespace MastersOfTempest
             GetComponent<Rigidbody>().AddForce(force, ForceMode.VelocityChange);
         }
 
-        protected override void OnServerReceivedMessageRaw(byte[] data, ulong steamID)
+        protected override void OnReceivedMessageRaw(byte[] data, ulong steamID)
         {
-            CubeNetworkMessage cubeNetworkMessage = ByteSerializer.FromBytes<CubeNetworkMessage>(data);
-            horizontalInput = cubeNetworkMessage.horizontalInput;
-            verticalInput = cubeNetworkMessage.verticalInput;
-            jump = cubeNetworkMessage.jump;
-
-            if (jump)
+            if (serverObject.onServer)
             {
-                Vector3 jumpForce = jumpHeight * Vector3.up;
-                GetComponent<Rigidbody>().AddForce(jumpForce, ForceMode.VelocityChange);
+                CubeNetworkMessage cubeNetworkMessage = ByteSerializer.FromBytes<CubeNetworkMessage>(data);
+                horizontalInput = cubeNetworkMessage.horizontalInput;
+                verticalInput = cubeNetworkMessage.verticalInput;
+                jump = cubeNetworkMessage.jump;
+
+                if (jump)
+                {
+                    Vector3 jumpForce = jumpHeight * Vector3.up;
+                    GetComponent<Rigidbody>().AddForce(jumpForce, ForceMode.VelocityChange);
+                }
             }
         }
     }
