@@ -15,34 +15,36 @@ namespace MastersOfTempest.PlayerControls
             if(isActive)
             {
                 var speed = defaultSpeed;
+                Vector3 movement = Vector3.zero;
                 if(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
                 {
                     speed *= 5;
                 }
                 if(Input.GetKey(KeyCode.W))
                 {
-                    transform.Translate(FirstPersonCamera.transform.forward * speed * Time.deltaTime);
+                    movement += FirstPersonCamera.transform.forward * speed * Time.deltaTime;
                 }
                 else if(Input.GetKey(KeyCode.S))
                 {
-                    transform.Translate(-FirstPersonCamera.transform.forward * speed * Time.deltaTime);
+                    movement += -FirstPersonCamera.transform.forward * speed * Time.deltaTime;
                 }
                 if(Input.GetKey(KeyCode.D))
                 {
-                    transform.Translate(FirstPersonCamera.transform.right * speed * Time.deltaTime);
+                    movement += FirstPersonCamera.transform.right * speed * Time.deltaTime;
                 }
                 else if(Input.GetKey(KeyCode.A))
                 {
-                    transform.Translate(-FirstPersonCamera.transform.right * speed * Time.deltaTime);
+                    movement += -FirstPersonCamera.transform.right * speed * Time.deltaTime;
                 }
                 if(Input.GetKey(KeyCode.Space))
                 {
-                    transform.Translate(FirstPersonCamera.transform.up * speed * Time.deltaTime);
+                    movement += FirstPersonCamera.transform.up * speed * Time.deltaTime;
                 }
                 else if(Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
                 {
-                    transform.Translate(-FirstPersonCamera.transform.up * speed * Time.deltaTime);
+                    movement += -FirstPersonCamera.transform.up * speed * Time.deltaTime;
                 }
+                FirstPersonCamera.transform.position += movement;
             }
         }
 
