@@ -11,7 +11,6 @@ namespace MastersOfTempest.PlayerControls
     {
         private QTEDriver QTEDriver;
         private SpellcastingController spellcastingController;
-        private Array keyCodes;
         private KeyCode lastPressed;
         private int counter;
         private const int triggerAmount = 3;
@@ -23,7 +22,6 @@ namespace MastersOfTempest.PlayerControls
         protected override void Awake()
         {
             base.Awake();
-            keyCodes = Enum.GetValues(typeof(KeyCode));
         }
 
         protected void Start()
