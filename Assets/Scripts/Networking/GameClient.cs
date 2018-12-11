@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Facepunch.Steamworks;
+using UnityEngine.SceneManagement;
 
 namespace MastersOfTempest.Networking
 {
@@ -113,8 +113,16 @@ namespace MastersOfTempest.Networking
                 // Make sure that the parent exists already if it has one
                 if (!messageServerObject.hasParent || objectsFromServer.ContainsKey(messageServerObject.parentInstanceID))
                 {
+                    // Switch active scene so that instantiate creates the object as part of the client scene
+                    Scene previouslyActiveScene = SceneManager.GetActiveScene();
+                    SceneManager.SetActiveScene(gameObject.scene);
+
+                    // Instantiate the object
                     ServerObject tmp = Instantiate(serverObjectPrefabs[messageServerObject.resourceID]).GetComponent<ServerObject>();
                     objectsFromServer[messageServerObject.instanceID] = tmp;
+
+                    // Switch back to the previously active scene
+                    SceneManager.SetActiveScene(previouslyActiveScene);
 
                     // Set attributes, also update transform after spawn
                     tmp.onServer = false;
@@ -179,7 +187,7 @@ namespace MastersOfTempest.Networking
 
         void OnMessageNetworkBehaviour(byte[] data, ulong steamID)
         {
-            NetworkBehaviourMessage message = ByteSerializer.FromBytes<NetworkBehaviourMessage>(data);
+            MessageNetworkBehaviour message = ByteSerializer.FromBytes<MessageNetworkBehaviour>(data);
             byte[] messageData = new byte[message.dataLength];
             System.Array.Copy(message.data, messageData, message.dataLength);
 
@@ -188,7 +196,7 @@ namespace MastersOfTempest.Networking
 
         void OnMessageNetworkBehaviourInitialized(byte[] data, ulong steamID)
         {
-            NetworkBehaviourInitializedMessage message = ByteSerializer.FromBytes<NetworkBehaviourInitializedMessage>(data);
+            MessageNetworkBehaviourInitialized message = ByteSerializer.FromBytes<MessageNetworkBehaviourInitialized>(data);
             objectsFromServer[message.serverID].HandleNetworkBehaviourInitializedMessage(message.typeID, steamID);
         }
 

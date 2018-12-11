@@ -17,13 +17,13 @@ namespace MastersOfTempest.Networking.Test
         private float verticalInput = 0;
         private bool jump = false;
 
-        private struct CubeNetworkMessage
+        private struct MessageMove
         {
             public float horizontalInput;
             public float verticalInput;
             public bool jump;
 
-            public CubeNetworkMessage (float horizontalInput, float verticalInput, bool jump)
+            public MessageMove (float horizontalInput, float verticalInput, bool jump)
             {
                 this.horizontalInput = horizontalInput;
                 this.verticalInput = verticalInput;
@@ -40,7 +40,7 @@ namespace MastersOfTempest.Networking.Test
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                CubeNetworkMessage message = new CubeNetworkMessage(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), true);
+                MessageMove message = new MessageMove(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), true);
                 SendToServer(ByteSerializer.GetBytes(message), Facepunch.Steamworks.Networking.SendType.Reliable);
             }
         }
@@ -49,7 +49,7 @@ namespace MastersOfTempest.Networking.Test
         {
             while (true)
             {
-                CubeNetworkMessage message = new CubeNetworkMessage(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), false);
+                MessageMove message = new MessageMove(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), false);
                 SendToServer(ByteSerializer.GetBytes(message), Facepunch.Steamworks.Networking.SendType.Unreliable);
 
                 yield return new WaitForSeconds(1.0f / inputsPerSec);
@@ -66,10 +66,10 @@ namespace MastersOfTempest.Networking.Test
         {
             if (serverObject.onServer)
             {
-                CubeNetworkMessage cubeNetworkMessage = ByteSerializer.FromBytes<CubeNetworkMessage>(data);
-                horizontalInput = cubeNetworkMessage.horizontalInput;
-                verticalInput = cubeNetworkMessage.verticalInput;
-                jump = cubeNetworkMessage.jump;
+                MessageMove message = ByteSerializer.FromBytes<MessageMove>(data);
+                horizontalInput = message.horizontalInput;
+                verticalInput = message.verticalInput;
+                jump = message.jump;
 
                 if (jump)
                 {

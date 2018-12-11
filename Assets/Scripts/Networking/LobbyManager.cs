@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Facepunch.Steamworks;
 
 namespace MastersOfTempest.Networking
@@ -80,12 +81,12 @@ namespace MastersOfTempest.Networking
         private void OnMessageLobbyStartGame(byte[] data, ulong steamID)
         {
             // Load client scene
-            UnityEngine.SceneManagement.SceneManager.LoadScene(clientSceneName);
+            SceneManager.LoadScene(clientSceneName);
 
             // Also load server scene if you are the owner of the lobby
             if (Client.Instance.Lobby.Owner == Client.Instance.SteamId)
             {
-                UnityEngine.SceneManagement.SceneManager.LoadScene(serverSceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive);
+                SceneManager.LoadScene(serverSceneName, LoadSceneMode.Additive);
             }
         }
 
