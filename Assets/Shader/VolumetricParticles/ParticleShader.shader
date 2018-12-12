@@ -211,7 +211,7 @@
 			// for orthogonal matrix:
 			// float3x3 f3x3WorldToObjSpaceRotation = transpose(f3x3ObjToWorldSpaceRotation);
 			
-			float4x4 f3x3WorldToObjSpaceRotation = unity_WorldToObject;
+			float4x4 f3x3WorldToObjSpaceRotation = float4x4(1,0,0,0,	0,1,0,0,	0,0,1,0,	0,0,0,1);// unity_WorldToObject;
 			// Compute camera location and view direction in particle's object space:
 			float4 f4CamPosObjSpace = float4(f3CameraPos - ParticleAttrs.f3Pos,0.0f);
 			f4CamPosObjSpace = mul(f4CamPosObjSpace, f3x3WorldToObjSpaceRotation);
@@ -424,6 +424,7 @@
 			f3Ambient.rgb *= lerp(1, fSubSrfScattering, fAmbientSSSStrength);
 			f4Color.rgb = (f3Ambient.rgb + (fSingleScattering + fMultipleScattering) * ParticleLighting.f4SunLight.rgb) * PI;
 			f4Color.a = fTransparency;
+			f4Color.rbg = fNoise;
 		}
 
 
@@ -446,14 +447,12 @@
 
 		float4 frag(g2f In) : SV_Target
 		{
-			if (In.id > 0)
-				discard;
 			float fTransparency;
 			float4 f4Color;
 			SParticleAttribs ParticleAttrs = g_Particles[In.id];
 			ParticleAttrs.fDensity = 1.0f;
 			ParticleAttrs.f3Pos = float3(0,0,0);
-			ParticleAttrs.fSize = 100.0f;
+			ParticleAttrs.fSize = 1.0f;
 			ParticleAttrs.fRndAzimuthBias = 0.0f;
 
 			SCloudCellAttribs CellAttribs = g_CloudCells[In.id / max(g_GlobalCloudAttribs.uiMaxLayers, 1)];
@@ -494,7 +493,7 @@
 			f3ViewRay /= fRayLength;
 			*/
 
-			f3ViewRay = (WorldSpaceViewDir(In.vertex));
+			f3ViewRay = float3(0, 0, 1);// (WorldSpaceViewDir(In.vertex));
 			float fRayLength = length(f3ViewRay);
 			f3ViewRay /= fRayLength;
 
@@ -505,9 +504,10 @@
 			IntersectRayWithParticle(ParticleAttrs, CellAttribs, f3CameraPos, f3ViewRay,
 									f2RayIsecs, f3EntryPointUSSpace, f3ViewRayUSSpace,f3LightDirUSSpace,fDistanceToEntryPoint, fDistanceToExitPoint);
 
-	if (f2RayIsecs.y < 0 || fRayLength < fDistanceToEntryPoint)
-		discard;
-
+			//if (f2RayIsecs.y < 0 || fRayLength < fDistanceToEntryPoint)
+			//	discard;
+			f2RayIsecs = normalize(f2RayIsecs);
+			return float4(-f2RayIsecs.y, 0,0,1);
 			fDistanceToExitPoint = min(fDistanceToExitPoint, fRayLength);
 
 			float fCloudMass;

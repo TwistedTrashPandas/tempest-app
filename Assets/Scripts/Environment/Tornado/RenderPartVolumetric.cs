@@ -75,7 +75,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             Texture3D t1 = Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/3DNoiseTex.dds", TextureFormat.Alpha8, 1), TextureFormat.Alpha8);
             material.SetTexture("g_tex3DNoise", t1);
 
-            Texture3D t2 = Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/Density_1.dds", TextureFormat.RG16, 2), TextureFormat.RHalf);
+            Texture3D t2 = Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/Density_1.dds", TextureFormat.RG16, 2), TextureFormat.RGHalf);
             material.SetTexture("g_tex3DParticleDensityLUT", t2);
 
             Texture3D t3 = Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/SingleSctr.dds", TextureFormat.RHalf, 2), TextureFormat.RHalf);
