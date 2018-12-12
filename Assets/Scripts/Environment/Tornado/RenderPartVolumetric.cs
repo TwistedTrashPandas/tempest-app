@@ -6,8 +6,62 @@ namespace MastersOfTempest.Environment.VisualEffects
 {
     public class RenderPartVolumetric : MonoBehaviour
     {
+        struct SGlobalCloudAttribs
+        {
+            uint uiInnerRingDim;
+            uint uiRingExtension;
+            uint uiRingDimension;
+            uint uiNumRings;
+
+            uint uiMaxLayers;
+            uint uiNumCells;
+            uint uiMaxParticles;
+            uint uiDownscaleFactor;
+
+            float fCloudDensityThreshold;
+            float fCloudThickness;
+            float fCloudAltitude;
+            float fParticleCutOffDist;
+
+            float fTime;
+            float fCloudVolumeDensity;
+            Vector2 f2LiSpCloudDensityDim;
+
+            uint uiBackBufferWidth;
+            uint uiBackBufferHeight;
+            uint uiDownscaledBackBufferWidth;
+            uint uiDownscaledBackBufferHeight;
+
+            float fBackBufferWidth;
+            float fBackBufferHeight;
+            float fDownscaledBackBufferWidth;
+            float fDownscaledBackBufferHeight;
+
+            float fTileTexWidth;
+            float fTileTexHeight;
+            uint uiLiSpFirstListIndTexDim;
+            uint uiNumCascades;
+            Vector4 f4Parameter;
+
+            float fScatteringCoeff;
+            float fAttenuationCoeff;
+            uint uiNumParticleLayers;
+            uint uiDensityGenerationMethod;
+
+            bool bVolumetricBlending;
+            Vector3 f3Dummy;
+            Vector4 f4TilingFrustumPlanes1;
+            Vector4 f4TilingFrustumPlanes2;
+            Vector4 f4TilingFrustumPlanes3;
+            Vector4 f4TilingFrustumPlanes4;
+            Vector4 f4TilingFrustumPlanes5;
+            Vector4 f4TilingFrustumPlanes6;
+            Matrix4x4 mParticleTiling;
+        }
+
         private Material material;
 
+        private ComputeBuffer particles;
         // Use this for initialization
         void Start()
         {
@@ -29,6 +83,11 @@ namespace MastersOfTempest.Environment.VisualEffects
 
             Texture3D t4 = Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/MultipleSctr.dds", TextureFormat.RHalf, 2), TextureFormat.RHalf);
             material.SetTexture("g_tex3DMultipleScatteringInParticleLUT", t4);
+
+            particles = new ComputeBuffer(10, 12);
+            Vector3[] pos = new Vector3[10];
+            particles.SetData(pos);
+            material.SetBuffer("g_vVertices", particles);            
         }
 
         private Texture3D Tex2DArrtoTex3D(Texture2D[] tex2DArr, TextureFormat tf)

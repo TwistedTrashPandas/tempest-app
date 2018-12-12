@@ -19,7 +19,6 @@ static const float g_fParticleToFlatMorphRatio = 0.2;
 
 static const float g_fTimeScale = 1.f;
 static const float2 g_f2CloudDensitySamplingScale = float2(1.f / 200000.f, 1.f / 20000.f);
-static const float4 OPTICAL_DEPTH_LUT_DIM = float4(64, 32, 64, 32);
 
 Texture2DArray<float>  g_tex2DLightSpaceDepthMap_t0 : register(t0);
 Texture2DArray<float>  g_tex2DLiSpCloudTransparency : register(t0);
