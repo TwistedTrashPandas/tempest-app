@@ -57,7 +57,7 @@ namespace MastersOfTempest.Environment.VisualEffects
                         throw new System.InvalidOperationException("TornadoTex prefab can't be null");
                     GameObject temp = GameObject.Instantiate(tornadoTexPrefab);
                     tornadoTex = temp.GetComponent<SetTornadoTexture>();
-                    if (tornadoPS == null)
+                    if (tornadoTex == null)
                         throw new System.InvalidOperationException("SetTornadoTexture.cs has to be attached to the tornadoTex prefab");
                     tornadoTex.vectorField = vectorField;
                     tornadoTex.camPos = Camera.main.transform;
