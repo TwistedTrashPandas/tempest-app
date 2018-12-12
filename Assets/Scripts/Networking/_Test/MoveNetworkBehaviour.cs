@@ -72,20 +72,17 @@ namespace MastersOfTempest.Networking.Test
             GetComponent<Rigidbody>().AddForce(force, ForceMode.VelocityChange);
         }
 
-        protected override void OnReceivedMessageRaw(byte[] data, ulong steamID)
+        protected override void OnServerReceivedMessageRaw(byte[] data, ulong steamID)
         {
-            if (serverObject.onServer)
-            {
-                MessageMove message = ByteSerializer.FromBytes<MessageMove>(data);
-                horizontalInput = message.horizontalInput;
-                verticalInput = message.verticalInput;
-                jump = message.jump;
+            MessageMove message = ByteSerializer.FromBytes<MessageMove>(data);
+            horizontalInput = message.horizontalInput;
+            verticalInput = message.verticalInput;
+            jump = message.jump;
 
-                if (jump)
-                {
-                    Vector3 jumpForce = jumpHeight * Vector3.up;
-                    GetComponent<Rigidbody>().AddForce(jumpForce, ForceMode.VelocityChange);
-                }
+            if (jump)
+            {
+                Vector3 jumpForce = jumpHeight * Vector3.up;
+                GetComponent<Rigidbody>().AddForce(jumpForce, ForceMode.VelocityChange);
             }
         }
     }

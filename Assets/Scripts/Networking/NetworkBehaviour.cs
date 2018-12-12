@@ -97,23 +97,15 @@ namespace MastersOfTempest.Networking
             }
         }
 
-        /// <summary>
-        /// Can be overridden by the subclass in order to access the bytes directly.
-        /// Make sure to check the serverObject.onServer attribute.
-        /// </summary>
-        /// <param name="data">The received data</param>
-        /// <param name="steamID">The steam id of the user who sent the message</param>
-        protected virtual void OnReceivedMessageRaw(byte[] data, ulong steamID)
+        private void OnReceivedMessageRaw(byte[] data, ulong steamID)
         {
-            string message = System.Text.Encoding.UTF8.GetString(data);
-
             if (serverObject.onServer)
             {
-                OnServerReceivedMessage(message, steamID);
+                OnServerReceivedMessageRaw(data, steamID);
             }
             else
             {
-                OnClientReceivedMessage(message, steamID);
+                OnClientReceivedMessageRaw(data, steamID);
             }
         }
 
@@ -182,6 +174,18 @@ namespace MastersOfTempest.Networking
         protected virtual void UpdateClient()
         {
             // To be overwritten by the subclass
+        }
+
+        protected virtual void OnServerReceivedMessageRaw(byte[] data, ulong steamID)
+        {
+            // Can be overwritten by the subclass
+            OnServerReceivedMessage(System.Text.Encoding.UTF8.GetString(data), steamID);
+        }
+
+        protected virtual void OnClientReceivedMessageRaw(byte[] data, ulong steamID)
+        {
+            // Can be overwritten by the subclass
+            OnClientReceivedMessage(System.Text.Encoding.UTF8.GetString(data), steamID);
         }
 
         protected virtual void OnServerReceivedMessage(string message, ulong steamID)

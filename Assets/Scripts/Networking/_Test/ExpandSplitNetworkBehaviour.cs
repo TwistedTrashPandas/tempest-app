@@ -32,27 +32,24 @@ namespace MastersOfTempest.Networking.Test
             }
         }
 
-        protected override void OnReceivedMessageRaw(byte[] data, ulong steamID)
+        protected override void OnServerReceivedMessageRaw(byte[] data, ulong steamID)
         {
-            if (serverObject.onServer)
+            MessageExpandSplit message = ByteSerializer.FromBytes<MessageExpandSplit>(data);
+
+            if (message.expand)
             {
-                MessageExpandSplit message = ByteSerializer.FromBytes<MessageExpandSplit>(data);
+                transform.localScale += Vector3.one;
+            }
+            else
+            {
+                // Make smaller and duplicate this object
+                transform.localScale *= 0.5f;
 
-                if (message.expand)
-                {
-                    transform.localScale += Vector3.one;
-                }
-                else
-                {
-                    // Make smaller and duplicate this object
-                    transform.localScale *= 0.5f;
-
-                    // Duplicate the object on the server scene
-                    Scene previouslyActiveScene = SceneManager.GetActiveScene();
-                    SceneManager.SetActiveScene(GameServer.Instance.gameObject.scene);
-                    Instantiate(gameObject, transform.parent, true);
-                    SceneManager.SetActiveScene(previouslyActiveScene);
-                }
+                // Duplicate the object on the server scene
+                Scene previouslyActiveScene = SceneManager.GetActiveScene();
+                SceneManager.SetActiveScene(GameServer.Instance.gameObject.scene);
+                Instantiate(gameObject, transform.parent, true);
+                SceneManager.SetActiveScene(previouslyActiveScene);
             }
         }
     }
