@@ -43,6 +43,16 @@ namespace MastersOfTempest.Networking.Test
                 MessageMove message = new MessageMove(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), true);
                 SendToServer(ByteSerializer.GetBytes(message), Facepunch.Steamworks.Networking.SendType.Reliable);
             }
+
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                serverObject.interpolateOnClient = true;
+            }
+
+            if (Input.GetKeyDown(KeyCode.O))
+            {
+                serverObject.interpolateOnClient = false;
+            }
         }
 
         IEnumerator SendInputToServer ()
