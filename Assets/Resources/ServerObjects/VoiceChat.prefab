@@ -148,7 +148,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06fbde0c791bae14691623bc1dc238b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hearYourself: 1
+  recordKey: 9
+  recordIcon: {fileID: 2800000, guid: 6a59f3aab646eb34e9bb46161fe48a09, type: 3}
+  recording: 0
+  mirror: 0
 --- !u!114 &114471020201023198
 MonoBehaviour:
   m_ObjectHideFlags: 1
