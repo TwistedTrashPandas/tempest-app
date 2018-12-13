@@ -48,8 +48,8 @@ Texture3D<float>        g_tex3DMultipleScatteringInParticleLUT : register(t12);
 
 StructuredBuffer<float4> g_SunLightAttenuation : register(t4);
 
-RWStructuredBuffer<SCloudParticleLighting> g_ParticlesLightingRW : register(u0);
-RWStructuredBuffer<float4>                 g_SunLightAttenuationRW : register(u1);
+RWStructuredBuffer<SCloudParticleLighting> g_ParticlesLightingRW : register(u1);
+RWStructuredBuffer<float4>                 g_SunLightAttenuationRW : register(u2);
 
 SamplerState MyLinearClampSampler : register(s0);
 SamplerState MyLinearRepeatSampler : register(s1);
@@ -246,6 +246,7 @@ void SmoothParticlesLightingCS(uint3 Gid  : SV_GroupID,
 	UnPackParticleIJRing(CellAttrs.uiPackedLocation, uiCellX, uiCellY, uiRing, uiLayerUnused);
 	uint uiLayer = uiParticleId % max(g_GlobalCloudAttribs.uiMaxLayers, 1);
 	uint uiDirectID =
+
 		(uiRing * g_GlobalCloudAttribs.uiRingDimension * g_GlobalCloudAttribs.uiRingDimension +
 			uiCellX + uiCellY * g_GlobalCloudAttribs.uiRingDimension) * g_GlobalCloudAttribs.uiMaxLayers +
 		uiLayer;

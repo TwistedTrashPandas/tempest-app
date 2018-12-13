@@ -87,7 +87,18 @@ namespace MastersOfTempest.Environment.VisualEffects
             particles = new ComputeBuffer(10, 12);
             Vector3[] pos = new Vector3[10];
             particles.SetData(pos);
-            material.SetBuffer("g_vVertices", particles);            
+            material.SetBuffer("g_vVertices", particles);
+            Vector3[] v = new Vector3[1];
+            int[] t = new int[3];
+            t[0] = 0;
+            t[1] = 0;
+            t[2] = 0;
+
+            Mesh m = GetComponent<MeshFilter>().mesh;
+            m.triangles = t;
+            m.vertices = v;
+
+            GetComponent<MeshFilter>().mesh = m;
         }
 
         private Texture3D Tex2DArrtoTex3D(Texture2D[] tex2DArr, TextureFormat tf)
@@ -97,13 +108,14 @@ namespace MastersOfTempest.Environment.VisualEffects
             int h = tex2DArr[0].height;
             Texture3D tex = new Texture3D(w, h, d, tf, false);
             Color[] colors = new Color[w * d * h];
-            for (int i = 0; i < h; i++)
+            int idx = 0;
+            for (int k = 0; k < d; k++)
             {
-                for (int j = 0; j < w; j++)
+                for (int i = 0; i < h; i++)
                 {
-                    for (int k = 0; k < d; k++)
+                    for (int j = 0; j < w; j++, idx++)
                     {
-                        colors[j + i * w + k * h * w] = tex2DArr[k].GetPixel(j, i);
+                        colors[idx] = tex2DArr[k].GetPixel(j, i);
                     }
                 }
             }
