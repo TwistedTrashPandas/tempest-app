@@ -162,9 +162,9 @@ namespace MastersOfTempest.Networking
         {
             MessageServerObjectList messageServerObjectList = MessageServerObjectList.FromBytes(data, 0);
 
-            foreach (MessageServerObject m in messageServerObjectList.messages)
+            foreach (byte[] b in messageServerObjectList.messages)
             {
-                UpdateServerObject(m);
+                UpdateServerObject(MessageServerObject.FromBytes(b, 0));
             }
         }
 

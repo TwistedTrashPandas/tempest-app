@@ -8,8 +8,21 @@ namespace MastersOfTempest.Networking
 {
     class MessageServerObjectList
     {
-        // Dynamic size
-        public LinkedList<MessageServerObject> messages = new LinkedList<MessageServerObject>();    // ? bytes
+        // Dynamic size, stores byte representations of server object messages
+        public LinkedList<byte[]> messages = new LinkedList<byte[]>();    // ? bytes
+
+        public int GetLength ()
+        {
+            // Message count
+            int length = 4;
+
+            foreach (byte[] b in messages)
+            {
+                length += 4 + b.Length;
+            }
+
+            return length;
+        }
 
         public byte[] GetBytes()
         {
@@ -18,11 +31,10 @@ namespace MastersOfTempest.Networking
             // Dynamic size
             data.AddRange(BitConverter.GetBytes(messages.Count));
 
-            foreach (MessageServerObject m in messages)
+            foreach (byte[] b in messages)
             {
-                byte[] mData = m.GetBytes();
-                data.AddRange(BitConverter.GetBytes(mData.Length));
-                data.AddRange(mData);
+                data.AddRange(BitConverter.GetBytes(b.Length));
+                data.AddRange(b);
             }
 
             return (byte[])data.ToArray(typeof(byte));
@@ -39,13 +51,14 @@ namespace MastersOfTempest.Networking
             // Read and assign all the dynamically sized server object messages
             for (int i = 0; i < messagesCount; i++)
             {
-                int mLength = BitConverter.ToInt32(data, index);
+                int bLength = BitConverter.ToInt32(data, index);
                 index += 4;
 
-                MessageServerObject m = MessageServerObject.FromBytes(data, index);
-                index += mLength;
+                byte[] b = new byte[bLength];
+                Array.Copy(data, index, b, 0, bLength);
+                index += bLength;
 
-                messageServerObjectList.messages.AddLast(m);
+                messageServerObjectList.messages.AddLast(b);
             }
 
             return messageServerObjectList;

@@ -97,25 +97,38 @@ namespace MastersOfTempest.Networking
                 }
             );
 
+            // Standard is UDP packet size, 1200 bytes
+            int maximumTransmissionLength = 1200;
+
+            if (sendType == Facepunch.Steamworks.Networking.SendType.Reliable)
+            {
+                // TCP packet, up to 1MB
+                maximumTransmissionLength = 1000000;
+            }
+
             // Create and send server object list messages until the pool is empty
             while (serverObjectsToSend.Count > 0)
             {
                 // Make sure that the message is small enough to fit into the UDP packet (1200 bytes)
                 MessageServerObjectList messageServerObjectList = new MessageServerObjectList();
 
-                // TODO: Improve this and handle reliable / unreliable messages with different size
                 while (true)
                 {
                     if (serverObjectsToSend.Count > 0)
                     {
-                        messageServerObjectList.messages.AddLast(new MessageServerObject(serverObjectsToSend[0].Value));
+                        // Add next message
+                        MessageServerObject message = new MessageServerObject(serverObjectsToSend[0].Value);
+                        messageServerObjectList.messages.AddLast(message.GetBytes());
 
-                        if (messageServerObjectList.GetBytes().Length <= 1200)
+                        // Check if length is still small enough
+                        if (messageServerObjectList.GetLength() <= maximumTransmissionLength)
                         {
+                            // Small enough, keep message and remove from objects to send
                             serverObjectsToSend.RemoveAt(0);
                         }
                         else
                         {
+                            // Too big, remove message and create a new list to send the rest
                             messageServerObjectList.messages.RemoveLast();
                             break;
                         }
