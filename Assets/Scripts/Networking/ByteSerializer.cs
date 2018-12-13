@@ -7,7 +7,7 @@ namespace MastersOfTempest.Networking
     {
 
         /// <summary>
-        /// Returns byte array representation of a struct.
+        /// Returns exact byte array representation of a struct without overhead (unlike BinaryFormatter class).
         /// Make sure that strings have a maximal size e.g. [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 100)]
         /// </summary>
         /// <typeparam name="T">The type of the struct</typeparam>
@@ -27,7 +27,7 @@ namespace MastersOfTempest.Networking
         }
 
         /// <summary>
-        /// Returns struct instance representation from a byte array.
+        /// Returns struct instance representation from a previously serialized byte array.
         /// </summary>
         /// <typeparam name="T">The type of the struct</typeparam>
         /// <param name="data">The bytes that represent the struct</param>

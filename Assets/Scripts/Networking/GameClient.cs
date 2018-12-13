@@ -127,9 +127,9 @@ namespace MastersOfTempest.Networking
                     // Set attributes, also update transform after spawn
                     tmp.onServer = false;
                     tmp.serverID = messageServerObject.instanceID;
-                    tmp.transform.localPosition = messageServerObject.localPosition;
-                    tmp.transform.localRotation = messageServerObject.localRotation;
-                    tmp.transform.localScale = messageServerObject.localScale;
+                    tmp.transform.localPosition = messageServerObject.GetLocalPosition();
+                    tmp.transform.localRotation = messageServerObject.GetLocalRotation();
+                    tmp.transform.localScale = messageServerObject.GetLocalScale();
                 }
             }
 
