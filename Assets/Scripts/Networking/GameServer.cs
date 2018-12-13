@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace MastersOfTempest.Networking
 {
@@ -13,13 +14,12 @@ namespace MastersOfTempest.Networking
         [Tooltip("Will not send objects if they didn't change their transform. Enabling can cause teleportation for objects that start moving after being static.")]
         [SerializeField]
         private bool onlySendChanges = true;
+        [Space(10)]
+        public UnityEvent serverInitializedEvent;
 
         private Dictionary<int, ServerObject> serverObjects = new Dictionary<int, ServerObject>();
         private HashSet<ulong> clientsReadyForInitialization = new HashSet<ulong>();
         private bool allClientsInitialized = false;
-
-        // Make it possible to let other scripts subscribe to these events
-        private System.Action serverInitializedEvents;
 
         void Awake()
         {
@@ -198,7 +198,7 @@ namespace MastersOfTempest.Networking
 
                 // Start the server loop and invoke all subscribed actions
                 StartCoroutine(ServerUpdate());
-                serverInitializedEvents?.Invoke();
+                serverInitializedEvent.Invoke();
             }
         }
 
@@ -217,21 +217,6 @@ namespace MastersOfTempest.Networking
         {
             MessageNetworkBehaviourInitialized message = ByteSerializer.FromBytes<MessageNetworkBehaviourInitialized>(data);
             serverObjects[message.serverID].HandleNetworkBehaviourInitializedMessage(message.typeID, steamID);
-        }
-
-        /// <summary>
-        /// Add an action that is called when the server is initialized.
-        /// Make sure that you unsubscribe and that the object with this script is on the server.
-        /// </summary>
-        /// <param name="clientInitializedAction">The action to be called</param>
-        public void SubscribeToServerInitializedAction(System.Action serverInitializedAction)
-        {
-            serverInitializedEvents += serverInitializedAction;
-        }
-
-        public void UnsubscribeFromServerInitializedAction(System.Action serverInitializedAction)
-        {
-            serverInitializedEvents -= serverInitializedAction;
         }
 
         void OnDestroy()
