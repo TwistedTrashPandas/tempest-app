@@ -688,7 +688,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 316f497cf4acb8c419e173eef059255f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hz: 5
+  hz: 16
   onlySendChanges: 1
 --- !u!1001 &1881771540
 Prefab:

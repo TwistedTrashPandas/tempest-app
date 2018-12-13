@@ -48,7 +48,7 @@ namespace MastersOfTempest.Networking
             localScale = serverObject.transform.localScale;
         }
 
-        public byte[] GetBytes ()
+        public byte[] ToBytes ()
         {
             ArrayList data = new ArrayList();
 

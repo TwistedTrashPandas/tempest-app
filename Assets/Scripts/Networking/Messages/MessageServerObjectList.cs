@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Runtime.InteropServices;
 
 namespace MastersOfTempest.Networking
 {
@@ -24,7 +23,7 @@ namespace MastersOfTempest.Networking
             return length;
         }
 
-        public byte[] GetBytes()
+        public byte[] ToBytes()
         {
             ArrayList data = new ArrayList();
 

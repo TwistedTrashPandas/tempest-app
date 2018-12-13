@@ -186,10 +186,7 @@ namespace MastersOfTempest.Networking
 
         void OnMessageNetworkBehaviour(byte[] data, ulong steamID)
         {
-            MessageNetworkBehaviour message = ByteSerializer.FromBytes<MessageNetworkBehaviour>(data);
-            byte[] messageData = new byte[message.dataLength];
-            System.Array.Copy(message.data, messageData, message.dataLength);
-
+            MessageNetworkBehaviour message = MessageNetworkBehaviour.FromBytes(data, 0);
             objectsFromServer[message.serverID].HandleNetworkBehaviourMessage(message.typeID, message.data, steamID);
         }
 

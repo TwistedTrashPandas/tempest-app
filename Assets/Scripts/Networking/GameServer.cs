@@ -118,7 +118,7 @@ namespace MastersOfTempest.Networking
                     {
                         // Add next message
                         MessageServerObject message = new MessageServerObject(serverObjectsToSend[0].Value);
-                        messageServerObjectList.messages.AddLast(message.GetBytes());
+                        messageServerObjectList.messages.AddLast(message.ToBytes());
 
                         // Check if length is still small enough
                         if (messageServerObjectList.GetLength() <= maximumTransmissionLength)
@@ -140,7 +140,7 @@ namespace MastersOfTempest.Networking
                 }
 
                 // Send the message to all clients
-                NetworkManager.Instance.SendToAllClients(messageServerObjectList.GetBytes(), NetworkMessageType.ServerObjectList, sendType);
+                NetworkManager.Instance.SendToAllClients(messageServerObjectList.ToBytes(), NetworkMessageType.ServerObjectList, sendType);
             }
         }
 
@@ -150,7 +150,7 @@ namespace MastersOfTempest.Networking
             {
                 // Make sure that objects are spawned on the server (with UDP it could happen that they don't spawn)
                 MessageServerObject message = new MessageServerObject(serverObject);
-                NetworkManager.Instance.SendToAllClients(message.GetBytes(), NetworkMessageType.ServerObject, Facepunch.Steamworks.Networking.SendType.Reliable);
+                NetworkManager.Instance.SendToAllClients(message.ToBytes(), NetworkMessageType.ServerObject, Facepunch.Steamworks.Networking.SendType.Reliable);
             }
 
             serverObjects.Add(serverObject.serverID, serverObject);
@@ -209,10 +209,7 @@ namespace MastersOfTempest.Networking
 
         void OnMessageNetworkBehaviour(byte[] data, ulong steamID)
         {
-            MessageNetworkBehaviour message = ByteSerializer.FromBytes<MessageNetworkBehaviour>(data);
-            byte[] messageData = new byte[message.dataLength];
-            System.Array.Copy(message.data, messageData, message.dataLength);
-
+            MessageNetworkBehaviour message = MessageNetworkBehaviour.FromBytes(data, 0);
             serverObjects[message.serverID].HandleNetworkBehaviourMessage(message.typeID, message.data, steamID);
         }
 

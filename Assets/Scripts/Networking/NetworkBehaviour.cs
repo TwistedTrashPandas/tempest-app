@@ -112,7 +112,7 @@ namespace MastersOfTempest.Networking
         protected void SendToServer(byte[] data, Facepunch.Steamworks.Networking.SendType sendType)
         {
             MessageNetworkBehaviour message = new MessageNetworkBehaviour(serverObject.serverID, typeId, data);
-            NetworkManager.Instance.SendToServer(ByteSerializer.GetBytes(message), NetworkMessageType.NetworkBehaviour, sendType);
+            NetworkManager.Instance.SendToServer(message.ToBytes(), NetworkMessageType.NetworkBehaviour, sendType);
         }
 
         protected void SendToServer(string message, Facepunch.Steamworks.Networking.SendType sendType = Facepunch.Steamworks.Networking.SendType.Reliable)
@@ -123,7 +123,7 @@ namespace MastersOfTempest.Networking
         protected void SendToClient(ulong steamID, byte[] data, Facepunch.Steamworks.Networking.SendType sendType)
         {
             MessageNetworkBehaviour message = new MessageNetworkBehaviour(serverObject.serverID, typeId, data);
-            NetworkManager.Instance.SendToClient(steamID, ByteSerializer.GetBytes(message), NetworkMessageType.NetworkBehaviour, sendType);
+            NetworkManager.Instance.SendToClient(steamID, message.ToBytes(), NetworkMessageType.NetworkBehaviour, sendType);
         }
 
         protected void SendToClient(ulong steamID, string message, Facepunch.Steamworks.Networking.SendType sendType = Facepunch.Steamworks.Networking.SendType.Reliable)
@@ -134,7 +134,7 @@ namespace MastersOfTempest.Networking
         protected void SendToAllClients(byte[] data, Facepunch.Steamworks.Networking.SendType sendType)
         {
             MessageNetworkBehaviour message = new MessageNetworkBehaviour(serverObject.serverID, typeId, data);
-            NetworkManager.Instance.SendToAllClients(ByteSerializer.GetBytes(message), NetworkMessageType.NetworkBehaviour, sendType);
+            NetworkManager.Instance.SendToAllClients(message.ToBytes(), NetworkMessageType.NetworkBehaviour, sendType);
         }
 
         protected void SendToAllClients(string message, Facepunch.Steamworks.Networking.SendType sendType = Facepunch.Steamworks.Networking.SendType.Reliable)
