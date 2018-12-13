@@ -101,8 +101,7 @@ namespace MastersOfTempest.Networking
 
         void OnMessageServerObject(byte[] data, ulong steamID)
         {
-            MessageServerObject messageServerObject = ByteSerializer.FromBytes<MessageServerObject>(data);
-            UpdateServerObject(messageServerObject);
+            UpdateServerObject(MessageServerObject.FromBytes(data, 0));
         }
 
         void UpdateServerObject(MessageServerObject messageServerObject)
@@ -127,9 +126,9 @@ namespace MastersOfTempest.Networking
                     // Set attributes, also update transform after spawn
                     tmp.onServer = false;
                     tmp.serverID = messageServerObject.instanceID;
-                    tmp.transform.localPosition = messageServerObject.GetLocalPosition();
-                    tmp.transform.localRotation = messageServerObject.GetLocalRotation();
-                    tmp.transform.localScale = messageServerObject.GetLocalScale();
+                    tmp.transform.localPosition = messageServerObject.localPosition;
+                    tmp.transform.localRotation = messageServerObject.localRotation;
+                    tmp.transform.localScale = messageServerObject.localScale;
                 }
             }
 
@@ -161,11 +160,11 @@ namespace MastersOfTempest.Networking
 
         void OnMessageServerObjectList (byte[] data, ulong steamID)
         {
-            MessageServerObjectList messageServerObjectList = ByteSerializer.FromBytes<MessageServerObjectList>(data);
+            MessageServerObjectList messageServerObjectList = MessageServerObjectList.FromBytes(data, 0);
 
-            for (int i = 0; i < messageServerObjectList.count; i++)
+            foreach (MessageServerObject m in messageServerObjectList.messages)
             {
-                UpdateServerObject(messageServerObjectList.messages[i]);
+                UpdateServerObject(m);
             }
         }
 

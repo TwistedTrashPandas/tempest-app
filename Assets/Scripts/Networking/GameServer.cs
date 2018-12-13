@@ -102,16 +102,23 @@ namespace MastersOfTempest.Networking
             {
                 // Make sure that the message is small enough to fit into the UDP packet (1200 bytes)
                 MessageServerObjectList messageServerObjectList = new MessageServerObjectList();
-                messageServerObjectList.messages = new MessageServerObject[14];
-                messageServerObjectList.count = 0;
 
-                for (int i = 0; i < messageServerObjectList.messages.Length; i++)
+                // TODO: Improve this and handle reliable / unreliable messages with different size
+                while (true)
                 {
                     if (serverObjectsToSend.Count > 0)
                     {
-                        messageServerObjectList.messages[i] = new MessageServerObject(serverObjectsToSend[0].Value);
-                        messageServerObjectList.count++;
-                        serverObjectsToSend.RemoveAt(0);
+                        messageServerObjectList.messages.AddLast(new MessageServerObject(serverObjectsToSend[0].Value));
+
+                        if (messageServerObjectList.GetBytes().Length <= 1200)
+                        {
+                            serverObjectsToSend.RemoveAt(0);
+                        }
+                        else
+                        {
+                            messageServerObjectList.messages.RemoveLast();
+                            break;
+                        }
                     }
                     else
                     {
@@ -120,8 +127,7 @@ namespace MastersOfTempest.Networking
                 }
 
                 // Send the message to all clients
-                byte[] data = ByteSerializer.GetBytes(messageServerObjectList);
-                NetworkManager.Instance.SendToAllClients(data, NetworkMessageType.ServerObjectList, sendType);
+                NetworkManager.Instance.SendToAllClients(messageServerObjectList.GetBytes(), NetworkMessageType.ServerObjectList, sendType);
             }
         }
 
@@ -130,8 +136,8 @@ namespace MastersOfTempest.Networking
             if (allClientsInitialized)
             {
                 // Make sure that objects are spawned on the server (with UDP it could happen that they don't spawn)
-                byte[] data = ByteSerializer.GetBytes(new MessageServerObject(serverObject));
-                NetworkManager.Instance.SendToAllClients(data, NetworkMessageType.ServerObject, Facepunch.Steamworks.Networking.SendType.Reliable);
+                MessageServerObject message = new MessageServerObject(serverObject);
+                NetworkManager.Instance.SendToAllClients(message.GetBytes(), NetworkMessageType.ServerObject, Facepunch.Steamworks.Networking.SendType.Reliable);
             }
 
             serverObjects.Add(serverObject.serverID, serverObject);

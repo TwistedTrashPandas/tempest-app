@@ -72,9 +72,9 @@ namespace MastersOfTempest.Networking
                     if (dt > 0)
                     {
                         float interpolationFactor = timeSinceLastMessage / dt;
-                        transform.localPosition = Vector3.Lerp(lastMessage.GetLocalPosition(), currentMessage.GetLocalPosition(), interpolationFactor);
-                        transform.localRotation = Quaternion.Lerp(lastMessage.GetLocalRotation(), currentMessage.GetLocalRotation(), interpolationFactor);
-                        transform.localScale = Vector3.Lerp(lastMessage.GetLocalScale(), currentMessage.GetLocalScale(), interpolationFactor);
+                        transform.localPosition = Vector3.Lerp(lastMessage.localPosition, currentMessage.localPosition, interpolationFactor);
+                        transform.localRotation = Quaternion.Lerp(lastMessage.localRotation, currentMessage.localRotation, interpolationFactor);
+                        transform.localScale = Vector3.Lerp(lastMessage.localScale, currentMessage.localScale, interpolationFactor);
                         timeSinceLastMessage += Time.deltaTime;
                     }
                 }
@@ -119,9 +119,9 @@ namespace MastersOfTempest.Networking
                 else
                 {
                     // Directly update the transform
-                    transform.localPosition = messageServerObject.GetLocalPosition();
-                    transform.localRotation = messageServerObject.GetLocalRotation();
-                    transform.localScale = messageServerObject.GetLocalScale();
+                    transform.localPosition = messageServerObject.localPosition;
+                    transform.localRotation = messageServerObject.localRotation;
+                    transform.localScale = messageServerObject.localScale;
                 }
             }
         }

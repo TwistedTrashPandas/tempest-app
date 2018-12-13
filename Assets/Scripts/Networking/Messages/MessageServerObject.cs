@@ -1,31 +1,29 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Runtime.InteropServices;
 
 namespace MastersOfTempest.Networking
 {
-    // This struct has a fixed size and can therefore be nicely packed into UDP/TCP messages
-    public struct MessageServerObject
+    public class MessageServerObject
     {
+        // Fixed size
         public float time;                                          // 4 bytes
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 24)]
-        public string name;                                         // 24 bytes
+        public bool hasParent;                                      // 1 byte
         public int resourceID;                                      // 4 bytes
-        public bool hasParent;                                      // 4 byte
         public int parentInstanceID;                                // 4 bytes
         public int instanceID;                                      // 4 bytes
-        public float localPositionX;                                // 4 bytes
-        public float localPositionY;                                // 4 bytes
-        public float localPositionZ;                                // 4 bytes
-        public float localRotationX;                                // 4 bytes
-        public float localRotationY;                                // 4 bytes
-        public float localRotationZ;                                // 4 bytes
-        public float localRotationW;                                // 4 bytes
-        public float localScaleX;                                   // 4 bytes
-        public float localScaleY;                                   // 4 bytes
-        public float localScaleZ;                                   // 4 bytes
-                                                                    // 84 bytes
+        public Vector3 localPosition;                               // 12 bytes
+        public Quaternion localRotation;                            // 16 bytes
+        public Vector3 localScale;                                  // 12 bytes
+
+        // Dynamic size
+        public string name;                                         // ? bytes
+
+        public MessageServerObject ()
+        {
+            // Empty constructor
+        }
 
         public MessageServerObject(ServerObject serverObject)
         {
@@ -45,37 +43,66 @@ namespace MastersOfTempest.Networking
             name = serverObject.name;
             resourceID = serverObject.resourceID;
             instanceID = serverObject.transform.GetInstanceID();
-
-            // Position
-            localPositionX = serverObject.transform.localPosition.x;
-            localPositionY = serverObject.transform.localPosition.y;
-            localPositionZ = serverObject.transform.localPosition.z;
-
-            // Rotation
-            localRotationX = serverObject.transform.localRotation.x;
-            localRotationY = serverObject.transform.localRotation.y;
-            localRotationZ = serverObject.transform.localRotation.z;
-            localRotationW = serverObject.transform.localRotation.w;
-
-            // Scale
-            localScaleX = serverObject.transform.localScale.x;
-            localScaleY = serverObject.transform.localScale.y;
-            localScaleZ = serverObject.transform.localScale.z;
+            localPosition = serverObject.transform.localPosition;
+            localRotation = serverObject.transform.localRotation;
+            localScale = serverObject.transform.localScale;
         }
 
-        public Vector3 GetLocalPosition ()
+        public byte[] GetBytes ()
         {
-            return new Vector3(localPositionX, localPositionY, localPositionZ);
+            ArrayList data = new ArrayList();
+
+            // Fixed size
+            data.AddRange(BitConverter.GetBytes(time));
+            data.AddRange(BitConverter.GetBytes(hasParent));
+            data.AddRange(BitConverter.GetBytes(resourceID));
+            data.AddRange(BitConverter.GetBytes(parentInstanceID));
+            data.AddRange(BitConverter.GetBytes(instanceID));
+            data.AddRange(BitConverter.GetBytes(localPosition.x));
+            data.AddRange(BitConverter.GetBytes(localPosition.y));
+            data.AddRange(BitConverter.GetBytes(localPosition.z));
+            data.AddRange(BitConverter.GetBytes(localRotation.x));
+            data.AddRange(BitConverter.GetBytes(localRotation.y));
+            data.AddRange(BitConverter.GetBytes(localRotation.z));
+            data.AddRange(BitConverter.GetBytes(localRotation.w));
+            data.AddRange(BitConverter.GetBytes(localScale.x));
+            data.AddRange(BitConverter.GetBytes(localScale.y));
+            data.AddRange(BitConverter.GetBytes(localScale.z));
+
+            // Dynamic size
+            byte[] nameData = System.Text.Encoding.UTF8.GetBytes(name);
+            data.AddRange(BitConverter.GetBytes(nameData.Length));
+            data.AddRange(nameData);
+
+            return (byte[]) data.ToArray(typeof(byte));
         }
 
-        public Quaternion GetLocalRotation()
+        public static MessageServerObject FromBytes (byte[] data, int startIndex)
         {
-            return new Quaternion(localRotationX, localRotationY, localRotationZ, localRotationW);
-        }
+            MessageServerObject messageServerObject = new MessageServerObject();
 
-        public Vector3 GetLocalScale()
-        {
-            return new Vector3(localScaleX, localScaleY, localScaleZ);
+            // Fixed size
+            messageServerObject.time = BitConverter.ToSingle(data, startIndex);
+            messageServerObject.hasParent = BitConverter.ToBoolean(data, startIndex + 4);
+            messageServerObject.resourceID = BitConverter.ToInt32(data, startIndex + 5);
+            messageServerObject.parentInstanceID = BitConverter.ToInt32(data, startIndex + 9);
+            messageServerObject.instanceID = BitConverter.ToInt32(data, startIndex + 13);
+            messageServerObject.localPosition.x = BitConverter.ToSingle(data, startIndex + 17);
+            messageServerObject.localPosition.y = BitConverter.ToSingle(data, startIndex + 21);
+            messageServerObject.localPosition.z = BitConverter.ToSingle(data, startIndex + 25);
+            messageServerObject.localRotation.x = BitConverter.ToSingle(data, startIndex + 29);
+            messageServerObject.localRotation.y = BitConverter.ToSingle(data, startIndex + 33);
+            messageServerObject.localRotation.z = BitConverter.ToSingle(data, startIndex + 37);
+            messageServerObject.localRotation.w = BitConverter.ToSingle(data, startIndex + 41);
+            messageServerObject.localScale.x = BitConverter.ToSingle(data, startIndex + 45);
+            messageServerObject.localScale.y = BitConverter.ToSingle(data, startIndex + 49);
+            messageServerObject.localScale.z = BitConverter.ToSingle(data, startIndex + 53);
+
+            // Dynamic size
+            int nameDataLength = BitConverter.ToInt32(data, startIndex + 57);
+            messageServerObject.name = System.Text.Encoding.UTF8.GetString(data, startIndex + 61, nameDataLength);
+
+            return messageServerObject;
         }
     }
 }
