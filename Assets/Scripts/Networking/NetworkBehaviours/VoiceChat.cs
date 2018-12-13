@@ -65,11 +65,6 @@ namespace MastersOfTempest.Networking
             }
         }
 
-        protected override void OnServerReceivedMessageRaw(byte[] data, ulong steamID)
-        {
-            SendToAllClients(data, Facepunch.Steamworks.Networking.SendType.Reliable);
-        }
-
         protected override void OnDestroyClient()
         {
             if (Facepunch.Steamworks.Client.Instance != null)
