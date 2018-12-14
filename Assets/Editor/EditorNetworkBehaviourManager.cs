@@ -1,12 +1,11 @@
-﻿using MastersOfTempest.Networking;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
 namespace MastersOfTempest.Networking
 {
-    public class NetworkBehaviourManager
+    public class EditorNetworkBehaviourManager
     {
         [InitializeOnLoadMethod]
         static void CreateNetworkBehaviourTypeIds()

@@ -19,3 +19,4 @@ MonoBehaviour:
   - MastersOfTempest.Player
   - MastersOfTempest.ShipBL.ForceManilpulator
   - MastersOfTempest.ShipBL.Ship
+  - MastersOfTempest.Networking.VoiceChat

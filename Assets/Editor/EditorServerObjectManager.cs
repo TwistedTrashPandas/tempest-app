@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using MastersOfTempest.Networking;
 
 namespace MastersOfTempest.Networking
 {
-    public class ServerObjectManager
+    public class EditorServerObjectManager
     {
         [InitializeOnLoadMethod]
         static void AssignServerObjectResourceIDs()

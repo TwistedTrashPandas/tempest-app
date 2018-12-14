@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace MastersOfTempest.Networking
 {
@@ -13,13 +14,12 @@ namespace MastersOfTempest.Networking
         [Tooltip("Will not send objects if they didn't change their transform. Enabling can cause teleportation for objects that start moving after being static.")]
         [SerializeField]
         private bool onlySendChanges = true;
+        [Space(10)]
+        public UnityEvent serverInitializedEvent;
 
         private Dictionary<int, ServerObject> serverObjects = new Dictionary<int, ServerObject>();
         private HashSet<ulong> clientsReadyForInitialization = new HashSet<ulong>();
         private bool allClientsInitialized = false;
-
-        // Make it possible to let other scripts subscribe to these events
-        private System.Action serverInitializedEvents;
 
         void Awake()
         {
@@ -97,21 +97,41 @@ namespace MastersOfTempest.Networking
                 }
             );
 
+            // Standard is UDP packet size, 1200 bytes
+            int maximumTransmissionLength = 1200;
+
+            if (sendType == Facepunch.Steamworks.Networking.SendType.Reliable)
+            {
+                // TCP packet, up to 1MB
+                maximumTransmissionLength = 1000000;
+            }
+
             // Create and send server object list messages until the pool is empty
             while (serverObjectsToSend.Count > 0)
             {
                 // Make sure that the message is small enough to fit into the UDP packet (1200 bytes)
                 MessageServerObjectList messageServerObjectList = new MessageServerObjectList();
-                messageServerObjectList.messages = new MessageServerObject[14];
-                messageServerObjectList.count = 0;
 
-                for (int i = 0; i < messageServerObjectList.messages.Length; i++)
+                while (true)
                 {
                     if (serverObjectsToSend.Count > 0)
                     {
-                        messageServerObjectList.messages[i] = new MessageServerObject(serverObjectsToSend[0].Value);
-                        messageServerObjectList.count++;
-                        serverObjectsToSend.RemoveAt(0);
+                        // Add next message
+                        MessageServerObject message = new MessageServerObject(serverObjectsToSend[0].Value);
+                        messageServerObjectList.messages.AddLast(message.ToBytes());
+
+                        // Check if length is still small enough
+                        if (messageServerObjectList.GetLength() <= maximumTransmissionLength)
+                        {
+                            // Small enough, keep message and remove from objects to send
+                            serverObjectsToSend.RemoveAt(0);
+                        }
+                        else
+                        {
+                            // Too big, remove message and create a new list to send the rest
+                            messageServerObjectList.messages.RemoveLast();
+                            break;
+                        }
                     }
                     else
                     {
@@ -120,8 +140,7 @@ namespace MastersOfTempest.Networking
                 }
 
                 // Send the message to all clients
-                byte[] data = ByteSerializer.GetBytes(messageServerObjectList);
-                NetworkManager.Instance.SendToAllClients(data, NetworkMessageType.ServerObjectList, sendType);
+                NetworkManager.Instance.SendToAllClients(messageServerObjectList.ToBytes(), NetworkMessageType.ServerObjectList, sendType);
             }
         }
 
@@ -130,8 +149,8 @@ namespace MastersOfTempest.Networking
             if (allClientsInitialized)
             {
                 // Make sure that objects are spawned on the server (with UDP it could happen that they don't spawn)
-                byte[] data = ByteSerializer.GetBytes(new MessageServerObject(serverObject));
-                NetworkManager.Instance.SendToAllClients(data, NetworkMessageType.ServerObject, Facepunch.Steamworks.Networking.SendType.Reliable);
+                MessageServerObject message = new MessageServerObject(serverObject);
+                NetworkManager.Instance.SendToAllClients(message.ToBytes(), NetworkMessageType.ServerObject, Facepunch.Steamworks.Networking.SendType.Reliable);
             }
 
             serverObjects.Add(serverObject.serverID, serverObject);
@@ -179,7 +198,7 @@ namespace MastersOfTempest.Networking
 
                 // Start the server loop and invoke all subscribed actions
                 StartCoroutine(ServerUpdate());
-                serverInitializedEvents?.Invoke();
+                serverInitializedEvent.Invoke();
             }
         }
 
@@ -190,10 +209,7 @@ namespace MastersOfTempest.Networking
 
         void OnMessageNetworkBehaviour(byte[] data, ulong steamID)
         {
-            MessageNetworkBehaviour message = ByteSerializer.FromBytes<MessageNetworkBehaviour>(data);
-            byte[] messageData = new byte[message.dataLength];
-            System.Array.Copy(message.data, messageData, message.dataLength);
-
+            MessageNetworkBehaviour message = MessageNetworkBehaviour.FromBytes(data, 0);
             serverObjects[message.serverID].HandleNetworkBehaviourMessage(message.typeID, message.data, steamID);
         }
 
@@ -201,21 +217,6 @@ namespace MastersOfTempest.Networking
         {
             MessageNetworkBehaviourInitialized message = ByteSerializer.FromBytes<MessageNetworkBehaviourInitialized>(data);
             serverObjects[message.serverID].HandleNetworkBehaviourInitializedMessage(message.typeID, steamID);
-        }
-
-        /// <summary>
-        /// Add an action that is called when the server is initialized.
-        /// Make sure that you unsubscribe and that the object with this script is on the server.
-        /// </summary>
-        /// <param name="clientInitializedAction">The action to be called</param>
-        public void SubscribeToServerInitializedAction(System.Action serverInitializedAction)
-        {
-            serverInitializedEvents += serverInitializedAction;
-        }
-
-        public void UnsubscribeFromServerInitializedAction(System.Action serverInitializedAction)
-        {
-            serverInitializedEvents -= serverInitializedAction;
         }
 
         void OnDestroy()

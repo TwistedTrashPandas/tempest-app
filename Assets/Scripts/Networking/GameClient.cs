@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 namespace MastersOfTempest.Networking
@@ -10,21 +11,19 @@ namespace MastersOfTempest.Networking
         public static GameClient Instance = null;
 
         public float pingsPerSec = 1;
+        [SerializeField]
+        private bool initialized = false;
+        [SerializeField]
+        private float ping = 0;
+        private float lastPingTime = 0;
+        [Space(10)]
+        public UnityEvent clientInitializedEvent;
 
         // Stores all the server object prefabs based on their resource id
         private Dictionary<int, GameObject> serverObjectPrefabs = new Dictionary<int, GameObject>();
 
         // Use the gameobject instance id from the server to keep track of the objects
         private Dictionary<int, ServerObject> objectsFromServer = new Dictionary<int, ServerObject>();
-
-        // Make it possible to let other scripts subscribe to these events
-        private System.Action clientInitializedEvents;
-
-        [SerializeField]
-        private bool initialized = false;
-        [SerializeField]
-        private float ping = 0;
-        private float lastPingTime = 0;
 
         private void Awake()
         {
@@ -94,15 +93,14 @@ namespace MastersOfTempest.Networking
             if (!initialized)
             {
                 initialized = true;
-                clientInitializedEvents?.Invoke();
+                clientInitializedEvent.Invoke();
                 NetworkManager.Instance.clientMessageEvents[NetworkMessageType.Initialization] -= OnMessageInitialization;
             }
         }
 
         void OnMessageServerObject(byte[] data, ulong steamID)
         {
-            MessageServerObject messageServerObject = ByteSerializer.FromBytes<MessageServerObject>(data);
-            UpdateServerObject(messageServerObject);
+            UpdateServerObject(MessageServerObject.FromBytes(data, 0));
         }
 
         void UpdateServerObject(MessageServerObject messageServerObject)
@@ -161,11 +159,11 @@ namespace MastersOfTempest.Networking
 
         void OnMessageServerObjectList (byte[] data, ulong steamID)
         {
-            MessageServerObjectList messageServerObjectList = ByteSerializer.FromBytes<MessageServerObjectList>(data);
+            MessageServerObjectList messageServerObjectList = MessageServerObjectList.FromBytes(data, 0);
 
-            for (int i = 0; i < messageServerObjectList.count; i++)
+            foreach (byte[] b in messageServerObjectList.messages)
             {
-                UpdateServerObject(messageServerObjectList.messages[i]);
+                UpdateServerObject(MessageServerObject.FromBytes(b, 0));
             }
         }
 
@@ -187,10 +185,7 @@ namespace MastersOfTempest.Networking
 
         void OnMessageNetworkBehaviour(byte[] data, ulong steamID)
         {
-            MessageNetworkBehaviour message = ByteSerializer.FromBytes<MessageNetworkBehaviour>(data);
-            byte[] messageData = new byte[message.dataLength];
-            System.Array.Copy(message.data, messageData, message.dataLength);
-
+            MessageNetworkBehaviour message = MessageNetworkBehaviour.FromBytes(data, 0);
             objectsFromServer[message.serverID].HandleNetworkBehaviourMessage(message.typeID, message.data, steamID);
         }
 
@@ -198,21 +193,6 @@ namespace MastersOfTempest.Networking
         {
             MessageNetworkBehaviourInitialized message = ByteSerializer.FromBytes<MessageNetworkBehaviourInitialized>(data);
             objectsFromServer[message.serverID].HandleNetworkBehaviourInitializedMessage(message.typeID, steamID);
-        }
-
-        /// <summary>
-        /// Add an action that is called when the client is initialized.
-        /// Make sure that you unsubscribe and that the object with this script is on the client.
-        /// </summary>
-        /// <param name="clientInitializedAction">The action to be called</param>
-        public void SubscribeToClientInitializedAction(System.Action clientInitializedAction)
-        {
-            clientInitializedEvents += clientInitializedAction;
-        }
-
-        public void UnsubscribeFromClientInitializedAction(System.Action clientInitializedAction)
-        {
-            clientInitializedEvents -= clientInitializedAction;
         }
 
         public bool IsInitialized ()
