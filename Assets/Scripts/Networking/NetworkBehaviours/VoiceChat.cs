@@ -19,10 +19,13 @@ namespace MastersOfTempest.Networking
         private bool toggleRecording = false;
         private float lastTimeKeyDown = -1;
 
+        private ArrayList bufferSamples = new ArrayList();
+        private const int minBufferLength = 6000;
+        private const int sampleRate = 24000;
+
         protected override void StartClient()
         {
             audioSource = GetComponent<AudioSource>();
-
             Facepunch.Steamworks.Client.Instance.Voice.OnCompressedData += OnCompressedData;
         }
 
@@ -48,6 +51,17 @@ namespace MastersOfTempest.Networking
             }
 
             recording = Facepunch.Steamworks.Client.Instance.Voice.IsRecording;
+
+            // Play received voice recording when it is long enough
+            if (bufferSamples.Count > minBufferLength)
+            {
+                // Create a new clip from the buffer and play it
+                AudioClip clip = AudioClip.Create("Voice", bufferSamples.Count, 1, sampleRate, false);
+                clip.SetData((float[])bufferSamples.ToArray(typeof(float)), 0);
+                audioSource.PlayOneShot(clip);
+
+                bufferSamples.Clear();
+            }
         }
 
         private void OnCompressedData(byte[] data, int dataLength)
@@ -71,7 +85,7 @@ namespace MastersOfTempest.Networking
         {
             System.IO.MemoryStream stream = new System.IO.MemoryStream();
 
-            if (Facepunch.Steamworks.Client.Instance.Voice.Decompress(data, stream))
+            if (Facepunch.Steamworks.Client.Instance.Voice.Decompress(data, stream, sampleRate))
             {
                 // 16 bit signed PCM data
                 byte[] uncompressedData = stream.ToArray();
@@ -83,14 +97,8 @@ namespace MastersOfTempest.Networking
                     samples[i / 2] = (BitConverter.ToInt16(uncompressedData, i) / (float)Int16.MaxValue);
                 }
 
-                if (samples.Length > 0)
-                {
-                    // Create a new clip and play it (should be able to play multiple user voices at the same time)
-                    // Maybe this can be improved by also taking into account the time between recordings
-                    AudioClip clip = AudioClip.Create("Voice", samples.Length, 1, (int)Facepunch.Steamworks.Client.Instance.Voice.OptimalSampleRate, false);
-                    clip.SetData(samples, 0);
-                    audioSource.PlayOneShot(clip);
-                }
+                // Add it to the buffer to play later
+                bufferSamples.AddRange(samples);
             }
             else
             {
