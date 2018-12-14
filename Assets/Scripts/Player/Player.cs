@@ -41,7 +41,7 @@ namespace MastersOfTempest
             SendToAllClients(ByteSerializer.GetBytes(message), SendType.Reliable);
         }
 
-        protected override void OnReceivedMessageRaw(byte[] data, ulong steamID)
+        protected override void OnClientReceivedMessageRaw(byte[] data, ulong steamID)
         {
             //Initialize player id
             var message = ByteSerializer.FromBytes<PlayerMessage>(data);
