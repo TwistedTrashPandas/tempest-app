@@ -15,7 +15,7 @@ namespace MastersOfTempest.Networking
         [SerializeField]
         private bool onlySendChanges = true;
         [Space(10)]
-        public UnityEvent serverInitializedEvent;
+        public UnityEvent onServerInitialized;
 
         private Dictionary<int, ServerObject> serverObjects = new Dictionary<int, ServerObject>();
         private HashSet<ulong> clientsReadyForInitialization = new HashSet<ulong>();
@@ -198,7 +198,7 @@ namespace MastersOfTempest.Networking
 
                 // Start the server loop and invoke all subscribed actions
                 StartCoroutine(ServerUpdate());
-                serverInitializedEvent.Invoke();
+                onServerInitialized.Invoke();
             }
         }
 

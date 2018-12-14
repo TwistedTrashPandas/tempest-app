@@ -17,7 +17,7 @@ namespace MastersOfTempest.Networking
         private float ping = 0;
         private float lastPingTime = 0;
         [Space(10)]
-        public UnityEvent clientInitializedEvent;
+        public UnityEvent onClientInitialized;
 
         // Stores all the server object prefabs based on their resource id
         private Dictionary<int, GameObject> serverObjectPrefabs = new Dictionary<int, GameObject>();
@@ -93,7 +93,7 @@ namespace MastersOfTempest.Networking
             if (!initialized)
             {
                 initialized = true;
-                clientInitializedEvent.Invoke();
+                onClientInitialized.Invoke();
                 NetworkManager.Instance.clientMessageEvents[NetworkMessageType.Initialization] -= OnMessageInitialization;
             }
         }
