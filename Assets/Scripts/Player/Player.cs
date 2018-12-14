@@ -3,22 +3,25 @@ using MastersOfTempest.PlayerControls;
 using MastersOfTempest.Networking;
 using MastersOfTempest.PlayerControls.QTE;
 using UnityEngine;
+using static Facepunch.Steamworks.Networking;
 
 namespace MastersOfTempest
 {
     public class Player : NetworkBehaviour
     {
-        /*TODO:
-            Think about avatar objects for players. Most probably we will need to tell server 
-            to spawn an avatar for the other players.
-         */
+        [Serializable]
+        private struct PlayerMessage
+        {
+            public ulong playerId;
+        }
+
+        public ulong PlayerId { get; set; }
         private Gamemaster context;
         private PlayerInputController playerInput;
 
         protected override void Start()
         {
             base.Start();
-
             context = FindObjectOfType<Gamemaster>();
             if (context == null)
             {
@@ -27,13 +30,29 @@ namespace MastersOfTempest
             context.Register(this);
         }
 
-        protected override void StartClient()
+        protected override void StartServer()
         {
-            base.StartClient();
-            //Initialize player controllers based on the active role
-            playerInput = PlayerRoleExtensions.AddActiveRoleInputController(gameObject);
-            playerInput.Bootstrap();
-            playerInput.ActionMade += ExecutePlayerAction;
+            if (PlayerId == default(ulong))
+            {
+                throw new InvalidOperationException($"{nameof(Player)} should have initialized PlayerId value!");
+            }
+
+            var message = new PlayerMessage { playerId = PlayerId };
+            SendToAllClients(ByteSerializer.GetBytes(message), SendType.Reliable);
+        }
+
+        protected override void OnReceivedMessageRaw(byte[] data, ulong steamID)
+        {
+            //Initialize player id
+            var message = ByteSerializer.FromBytes<PlayerMessage>(data);
+            PlayerId = message.playerId;
+            //Set controls if this Player belongs to this client
+            if (Facepunch.Steamworks.Client.Instance.SteamId == PlayerId)
+            {
+                playerInput = PlayerRoleExtensions.AddActiveRoleInputController(gameObject);
+                playerInput.Bootstrap();
+                playerInput.ActionMade += ExecutePlayerAction;
+            }
         }
 
         void ExecutePlayerAction(object sender, EventArgs e)
