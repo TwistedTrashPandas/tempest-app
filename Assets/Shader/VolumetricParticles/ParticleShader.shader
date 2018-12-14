@@ -189,7 +189,7 @@
 						float3 f3Scales = fSize;
 						//if( fNumActiveLayers > 1 )
 						//    f3Scales.y = max(f3Scales.y, g_GlobalCloudAttribs.fCloudThickness/fNumActiveLayers);
-						f3Scales.y = min(f3Scales.y, fCloudThickness / 2.f);
+						//f3Scales.y = min(f3Scales.y, fCloudThickness / 2.f);
 						return f3Scales;
 					}
 
@@ -213,12 +213,12 @@
 						// for orthogonal matrix:
 						// float3x3 f3x3WorldToObjSpaceRotation = transpose(f3x3ObjToWorldSpaceRotation);
 
-						float4x4 f3x3WorldToObjSpaceRotation = float4x4(1,0,0,0,	0,1,0,0,	0,0,1,0,	0,0,0,1);// unity_WorldToObject;
+						float4x4 f3x3WorldToObjSpaceRotation = transpose(unity_ObjectToWorld); // float4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);//;
 						// Compute camera location and view direction in particle's object space:
 						float4 f4CamPosObjSpace = float4(f3CameraPos - ParticleAttrs.f3Pos,0.0f);
 						f4CamPosObjSpace = mul(f4CamPosObjSpace, f3x3WorldToObjSpaceRotation);
 						float4 f3ViewRayObjSpace = mul(float4(f3ViewRay,0.0f), f3x3WorldToObjSpaceRotation);
-						float4 f3LightDirObjSpce = mul(float4(-_WorldSpaceLightPos0.xyz,0.0f), f3x3WorldToObjSpaceRotation);
+						float4 f3LightDirObjSpce = mul(float4(_WorldSpaceLightPos0.xyz,0.0f), f3x3WorldToObjSpaceRotation);
 
 						// Compute scales to transform ellipsoid into the unit sphere:
 						float3 f3Scale = 1.0f / ParticleAttrs.fSize; // 1.f / GetParticleScales(ParticleAttrs.fSize, CellAttrs.uiNumActiveLayers);
@@ -385,16 +385,16 @@
 						//f2NormalizedDensityAndDist.x *= fNoise;
 
 						// TODO change g_GlobalCloudAttribs
-
+						
 						fCloudMass = f2NormalizedDensityAndDist.x * (fDistanceToExitPoint - fDistanceToEntryPoint);
-						float fFadeOutDistance = g_GlobalCloudAttribs.fParticleCutOffDist * g_fParticleToFlatMorphRatio;
-						float fFadeOutFactor = saturate((g_GlobalCloudAttribs.fParticleCutOffDist - fDistanceToEntryPoint) / max(fFadeOutDistance, 100));
-						fCloudMass *= fFadeOutFactor * 1.0f;//CellAttrs.fMorphFadeout;
-						fCloudMass *= ParticleAttrs.fDensity; // * lerp(fNoise, 1, 0.5);
+						float fFadeOutDistance = 1e+5f * g_fParticleToFlatMorphRatio;
+						float fFadeOutFactor = saturate((1e+5f - fDistanceToEntryPoint) / fFadeOutDistance);
+						fCloudMass *= fFadeOutFactor * 1.0f; // *CellAttrs.fMorphFadeout;
+						fCloudMass *= ParticleAttrs.fDensity; // *lerp(fNoise, 1, 0.5);
 
 						//fDistanceToEntryPoint = fDistanceToEntryPoint + (fDistanceToExitPoint - fDistanceToEntryPoint) * f2NormalizedDensityAndDist.y;
 
-						fTransparency = exp(-fCloudMass * g_GlobalCloudAttribs.fAttenuationCoeff);
+						fTransparency =  exp(-fCloudMass * 0.07f); // range 0.01 - 0.1 m^-1
 
 						float fMultipleScatteringDensityScale = fFadeOutFactor * ParticleAttrs.fDensity;
 						float fSingleScatteringDensityScale = fMultipleScatteringDensityScale * f2NormalizedDensityAndDist.x;
@@ -405,7 +405,7 @@
 						SAMPLE_4D_LUT(g_tex3DSingleScatteringInParticleLUT, SRF_SCATTERING_IN_PARTICLE_LUT_DIM, f4SingleScatteringLUTCoords, 0, fSingleScattering);
 						SAMPLE_4D_LUT(g_tex3DMultipleScatteringInParticleLUT, SRF_SCATTERING_IN_PARTICLE_LUT_DIM, f4MultipleScatteringLUTCoords, 0, fMultipleScattering);
 						//float2 f2PrecomputedScattering = g_PrecomputedScatteringInParticle.SampleLevel(samLinearWrap, f3ParticleScatteringLUTCoords, 0);
-
+						
 						//float3 _f3EntryPointUSSpace, _f3ViewRayUSSpace, _f3LightDirUSSpace;
 						//ParticleScatteringLUTToWorldParams(f3ParticleScatteringLUTCoords, _f3EntryPointUSSpace, _f3ViewRayUSSpace, _f3LightDirUSSpace);
 						//float3 _f3ParticleScatteringLUTCoords = WorldParamsToParticleScatteringLUT(_f3EntryPointUSSpace, _f3ViewRayUSSpace, _f3LightDirUSSpace);
@@ -427,7 +427,9 @@
 						float fAmbientSSSStrength = (1 - fNoise)*0.5;//0.3;
 						f3Ambient.rgb *= lerp(1, fSubSrfScattering, fAmbientSSSStrength);
 						f4Color.rgb = (f3Ambient.rgb + (fSingleScattering + fMultipleScattering) * ParticleLighting.f4SunLight.rgb) * PI;
-						f4Color.a = fTransparency; // 1.0f - f4Color.r;
+						f4Color.a = fTransparency; // fTransparency;//  f4Color.g; // 
+						//f4Color.r = fTransparency;
+						//f4Color.gb = 0;
 					}
 
 
@@ -478,7 +480,7 @@
 								float3 f3Size = 1.0f;// GetParticleScales(ParticleAttrs.fSize, CellAttrs.uiNumActiveLayers);
 
 								g2f Outs[8];
-								matrix mViewProj = UNITY_MATRIX_MVP; // g_CameraAttribs.WorldViewProj;
+								matrix mViewProj = UNITY_MATRIX_VP; // g_CameraAttribs.WorldViewProj;
 								// Multiply with camera view-proj matrix
 								matrix ParticleObjToProjSpaceMatr = mViewProj; // mul(ParticleObjToWorldSpaceMatr, );
 
@@ -486,9 +488,9 @@
 								{
 									float4 f4CurrCornerWorldPos;
 									f4CurrCornerWorldPos.xyz = f3Size * float3((iCorner & 0x01) ? +1 : -1, (iCorner & 0x04) ? +1 : -1, (iCorner & 0x02) ? +1 : -1);
-									f4CurrCornerWorldPos.w = 1;
+									f4CurrCornerWorldPos.w = 1.0f;
 
-									float4 f4CurrCornerPosPS = UnityObjectToClipPos(f4CurrCornerWorldPos);// mul(f4CurrCornerWorldPos, ParticleObjToProjSpaceMatr);
+									float4 f4CurrCornerPosPS = UnityObjectToClipPos(f4CurrCornerWorldPos);//mul(f4CurrCornerWorldPos, ParticleObjToProjSpaceMatr); //
 
 									Outs[iCorner].id = uiParticleId;
 									Outs[iCorner].vertex = f4CurrCornerPosPS;
@@ -498,8 +500,9 @@
 
 									Outs[iCorner].texcoord = float2(0, 1);// float2(min(max((v[0].x + startPos.x)*mul_val_x, 0), 1.0f), max(min((v[0].y + startPos.y)*mul_val_y + 0.1f * g_i3Dimensions.y, 1.0), 0.0f));
 									Outs[iCorner].texcoord_2 = float2(1, 0);
-									Outs[iCorner].projPos = ComputeScreenPos(f4CurrCornerWorldPos);
-									Outs[iCorner].projPos.z = -mul(UNITY_MATRIX_MV, f4CurrCornerPosPS).z;
+									Outs[iCorner].projPos = float4(UnityObjectToViewPos(f4CurrCornerWorldPos),1.0f);
+									//Outs[iCorner].projPos.z = -Outs[iCorner].projPos.z;
+									//Outs[iCorner].projPos.z = mul(UNITY_MATRIX_MV, f4CurrCornerPosPS).z;
 								}
 								// Generate bounding box faces
 								{
@@ -528,18 +531,17 @@
 								float fTransparency;
 								float4 f4Color;
 								SParticleAttribs ParticleAttrs = g_Particles[In.id];
-								ParticleAttrs.fDensity = 10.0f;
-								ParticleAttrs.f3Pos = float3(0,0,0);
+								ParticleAttrs.fDensity = 1.f / 100000.f;
+								ParticleAttrs.f3Pos = mul(unity_ObjectToWorld, float4(0, 0, 0, 1)).xyz;
 								ParticleAttrs.fSize = 1.0f;
 								ParticleAttrs.fRndAzimuthBias = 0.0f;
-
 								SCloudCellAttribs CellAttribs = g_CloudCells[In.id / max(g_GlobalCloudAttribs.uiMaxLayers, 1)];
 
 								SCloudParticleLighting ParticleLighting = g_ParticlesLighting[In.id];
 
-								ParticleLighting.f4SunLight = (1.0f,1.0f,1.0f,1.0f);
+								ParticleLighting.f4SunLight = float4(1.0f,1.0f,1.0f,1.0f);
 								ParticleLighting.f4LightAttenuation = float4(1.0f,1.0f,1.0f,1.0f); // .x == single scattering; .y == multiple scattering
-								ParticleLighting.f4AmbientLight = float4(0.1f,0.1f,0.1f,1.0f);
+								ParticleLighting.f4AmbientLight = unity_AmbientSky;
 								float fTime = 1.0f; // g_fTimeScale * g_GlobalCloudAttribs.fTime;
 
 								float3 f3CameraPos, f3ViewRay;
@@ -557,22 +559,16 @@
 								f3ViewRay = normalize(f4PosOnFarClipPlaneWS.xyz - f4PosOnNearClipPlaneWS.xyz);
 								*/
 
-								f3CameraPos = _WorldSpaceCameraPos.xyz;
+								f3CameraPos = float3(0, 0, 0);//_WorldSpaceCameraPos.xyz;
 								//f3ViewRay = normalize(In.f3ViewRay);
 								//(float2 f2PosPS = UVToProj(In.vertex.xy / f2ScreenDim);
 								float fDepth = In.projPos.z;
-								float4 f4ReconstructedPosWS = mul(UNITY_MATRIX_IT_MV, mul(unity_CameraInvProjection, float4(In.projPos.xy, fDepth, 1.0))); // mul(mul(, unity_CameraInvProjection), UNITY_MATRIX_IT_MV); // mul(float4(f2PosPS.xy, fDepth, 1.0), g_CameraAttribs.mViewProjInv);
-								float3 f3WorldPos = f4ReconstructedPosWS.xyz / f4ReconstructedPosWS.w; // TODO eval this here
-
+								float4 f4ReconstructedPosWS =  mul(UNITY_MATRIX_I_V, float4(In.projPos.xy, fDepth, 1.0)); // mul(mul(, unity_CameraInvProjection), UNITY_MATRIX_IT_MV); // mul(float4(f2PosPS.xy, fDepth, 1.0), g_CameraAttribs.mViewProjInv);
+								float3 f3WorldPos = f4ReconstructedPosWS.xyz / f4ReconstructedPosWS.w;
 								// Compute view ray
 								f3ViewRay = f3WorldPos - f3CameraPos;
 								float fRayLength = length(f3ViewRay);
 								f3ViewRay /= fRayLength;
-								
-								/*
-								f3ViewRay = -(WorldSpaceViewDir());
-								float fRayLength = length(f3ViewRay);
-								f3ViewRay /= fRayLength;*/
 
 								// Intersect view ray with the particle
 								float2 f2RayIsecs;
@@ -580,13 +576,17 @@
 								float3 f3EntryPointUSSpace, f3ViewRayUSSpace, f3LightDirUSSpace;
 								IntersectRayWithParticle(ParticleAttrs, CellAttribs, f3CameraPos, f3ViewRay,
 														f2RayIsecs, f3EntryPointUSSpace, f3ViewRayUSSpace,f3LightDirUSSpace,fDistanceToEntryPoint, fDistanceToExitPoint);
+								//return float4(fRayLength/ fDistanceToEntryPoint,0,0,1 );
 
-								if (f2RayIsecs.y < 0 || fRayLength < fDistanceToEntryPoint)
+								return float4(0.0f,0.0f,fDepth, 1.0f);
+								//return float4(f2RayIsecs, 0.0f, 1.0f);
+								//return float4(fDistanceToExitPoint, -fDistanceToExitPoint + fRayLength, 0.0f, 1.0f);
+								if (f2RayIsecs.y < 0)
+									discard;
+								if (fRayLength < fDistanceToEntryPoint)
 									discard; // return float4(1.0f, 1.0f, 1.0f, 1.0f);
-								//return float4(f3ViewRay,1.0f);
-								//f2RayIsecs = normalize(f2RayIsecs);
-								//return float4(f2RayIsecs.y, 0,0,1);
 								fDistanceToExitPoint = min(fDistanceToExitPoint, fRayLength);
+
 
 								float fCloudMass;
 								float fIsecLenUSSpace = f2RayIsecs.y - f2RayIsecs.x;
@@ -608,6 +608,7 @@
 									f4Color
 								);
 								//f4Color.a = fTransparency;
+								//f4Color.rgb *= 1 - fTransparency;
 
 								return f4Color;
 								// fDistToCloud = fTransparency < 0.9 ? fDistanceToEntryPoint : +FLT_MAX;

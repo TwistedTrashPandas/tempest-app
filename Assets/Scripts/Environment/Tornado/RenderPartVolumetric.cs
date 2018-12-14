@@ -94,6 +94,8 @@ namespace MastersOfTempest.Environment.VisualEffects
             t[1] = 0;
             t[2] = 0;
 
+           // Camera.main.cameraToWorldMatrix;
+
             Mesh m = GetComponent<MeshFilter>().mesh;
             m.triangles = t;
             m.vertices = v;
