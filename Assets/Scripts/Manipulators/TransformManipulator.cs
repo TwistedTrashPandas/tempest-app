@@ -6,7 +6,7 @@ using MastersOfTempest.Networking;
 
 namespace MastersOfTempest.PlayerControls
 {
-    public class TranformManipulator : NetworkBehaviour
+    public class TransformManipulator : NetworkBehaviour
     {
         [Serializable]
         private struct TransformMessage
