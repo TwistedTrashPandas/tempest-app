@@ -33,7 +33,7 @@ static SLightAttribs g_LightAttribs;
 
 
 
-#   define OPTICAL_DEPTH_LUT_DIM float4(64,32,64,32)
+#   define OPTICAL_DEPTH_LUT_DIM float4(32,64,32,64) // test: float4(64,32,64,32) //
 #   define VOL_SCATTERING_IN_PARTICLE_LUT_DIM float4(32,64,32,8)
 #   define SRF_SCATTERING_IN_PARTICLE_LUT_DIM float4(32,64,16,8)
 

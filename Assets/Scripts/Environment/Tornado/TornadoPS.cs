@@ -82,9 +82,14 @@ namespace MastersOfTempest.Environment.VisualEffects
             }
             material = GetComponent<MeshRenderer>().material;
             initBuffers();
+            Load3DTextures();
             CreateMesh();
+
             camPos = Camera.main.transform;
-            // GetComponent<Renderer>().material.SetTexture("g_NoiseTex", partTex);
+            // TODO: seperate script
+            Camera.main.cullingMatrix = Matrix4x4.Ortho(-99999, 99999, -99999, 99999, 0.001f, 99999) *
+                                Matrix4x4.Translate(Vector3.forward * -99999 / 2f) *
+                                Camera.main.worldToCameraMatrix;
         }
 
         private void initBuffers()
@@ -186,9 +191,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             particlesCS.SetFloats("g_fRandPos", randPos);
             
             particlesCS.DispatchIndirect(kernelP, argsBuffer1);            
-            // particlesCS.Dispatch(kernelP, Mathf.CeilToInt(numberParticles / 1024f), 1, 1);
-
-            material.SetBuffer("g_vVertices", particlePosCB);
+            // particlesCS.Dispatch(kernelP, Mathf.CeilToInt(numberParticles / 1024f), 1, 1);            
         }
 
         private void SortParticles()
@@ -199,7 +202,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             camPos[2] = Camera.main.transform.position.z;
             sortCS.SetFloats("g_vCameraPos", camPos);
             sortCS.SetInt("g_iNumPart", (int)numberParticles);
-            int groups = (int)((numberParticles / BLOCK_SIZE));
+            //int groups = (int)((numberParticles / BLOCK_SIZE));
 
             // sort rows first
             for (int k = 2; k <= BLOCK_SIZE; k <<= 1)
@@ -252,6 +255,21 @@ namespace MastersOfTempest.Environment.VisualEffects
                 SortParticles();
         }
         
+        private void Load3DTextures()
+        {
+            Texture3D t1 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/3DNoiseTex.dds", TextureFormat.Alpha8, 1), TextureFormat.Alpha8);
+            material.SetTexture("g_tex3DNoise", t1);
+
+            Texture3D t2 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/Density_latest.dds", TextureFormat.RG16, 2), TextureFormat.RGHalf);
+            material.SetTexture("g_tex3DParticleDensityLUT", t2);
+
+            Texture3D t3 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/SingleSctr.dds", TextureFormat.RHalf, 2), TextureFormat.RHalf);
+            material.SetTexture("g_tex3DSingleScatteringInParticleLUT", t3);
+
+            Texture3D t4 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/MultipleSctr.dds", TextureFormat.RHalf, 2), TextureFormat.RHalf);
+            material.SetTexture("g_tex3DMultipleScatteringInParticleLUT", t4);
+        }
+
         private void CreateMesh()
         {
             Vector2[] newUV;
@@ -272,6 +290,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             mesh.SetIndices(particleIdx, MeshTopology.Points, 0);
             mesh.uv = newUV;
             GetComponent<MeshFilter>().mesh = mesh;
+            //GetComponent<MeshFilter>().mesh.bounds = new Bounds(Vector3.zero, Vector3.one * float.MaxValue);
         }
 
         void OnApplicationQuit()
@@ -279,8 +298,14 @@ namespace MastersOfTempest.Environment.VisualEffects
             // releasing compute buffers
             particleVelCB.Release();
             particlePosCB.Release();
+            particleinitialPosCB.Release();
+            indicesRCB.Release();
             indicesCB.Release();
             vectorFieldCBIn.Release();
+            argsBuffer1.Release();
+            argsBuffer2.Release();
+            argsBuffer3.Release();
+            argsBuffer4.Release();
         }
     }
 }

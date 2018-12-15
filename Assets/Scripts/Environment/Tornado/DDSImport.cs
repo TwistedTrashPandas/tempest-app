@@ -50,6 +50,29 @@ namespace MastersOfTempest.Tools
             byte[] data = Tools.FileHandling.ReadFile(path);
             return LoadTextureDXT(data, textureFormat, sizeOfFormat);
         }
+        
+        public static Texture3D Tex2DArrtoTex3D(Texture2D[] tex2DArr, TextureFormat tf)
+        {
+            int d = tex2DArr.Length;
+            int w = tex2DArr[0].width;
+            int h = tex2DArr[0].height;
+            Texture3D tex = new Texture3D(w, h, d, tf, false);
+            Color[] colors = new Color[w * d * h];
+            int idx = 0;
+            for (int k = 0; k < d; k++)
+            {
+                for (int i = 0; i < h; i++)
+                {
+                    for (int j = 0; j < w; j++, idx++)
+                    {
+                        colors[idx] = tex2DArr[k].GetPixel(j, i);
+                    }
+                }
+            }
+            tex.SetPixels(colors);
+            tex.Apply();
+            return tex;
+        }
 
         public static Texture2D[] LoadTextureDXT(byte[] ddsBytes, TextureFormat textureFormat, int sizeOfFormat)
         {
@@ -62,7 +85,6 @@ namespace MastersOfTempest.Tools
             IntPtr handle = Marshal.AllocHGlobal(bufferSize);
             Marshal.Copy(ddsBytes, 4, handle, bufferSize);
             header = Marshal.PtrToStructure<DDS_HEADER>(handle);
-
             int height = (int)header.dwHeight;
             int width = (int)header.dwWidth;
             int depth = (int)header.dwDepth;
