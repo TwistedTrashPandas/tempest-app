@@ -183,13 +183,18 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 276298367}
-  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -30, y: 0, z: -2.55}
+  m_LocalRotation: {x: 0.18779226, y: -0.21990071, z: 0.043182656, w: 0.95630175}
+  m_LocalPosition: {x: -44.53, y: 7.83, z: -15.62}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
+  m_LocalEulerAnglesHint: {x: 22.22, y: -25.9, z: 0}
+--- !u!4 &407167770 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 400026, guid: d83e9ce1fea8d45e3a1ddac050b2bfb4,
+    type: 3}
+  m_PrefabInternal: {fileID: 1268196779}
 --- !u!1001 &1268196779
 Prefab:
   m_ObjectHideFlags: 0
@@ -242,6 +247,7 @@ GameObject:
   - component: {fileID: 1386559632}
   - component: {fileID: 1386559631}
   - component: {fileID: 1386559630}
+  - component: {fileID: 1386559633}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -309,6 +315,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1386559633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1386559629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da49bd6ecf9548d4a9147dd681d881d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1888405830
 GameObject:
   m_ObjectHideFlags: 0
@@ -319,6 +336,7 @@ GameObject:
   - component: {fileID: 1888405834}
   - component: {fileID: 1888405833}
   - component: {fileID: 1888405832}
+  - component: {fileID: 1888405831}
   m_Layer: 0
   m_Name: Hologram
   m_TagString: Untagged
@@ -326,6 +344,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1888405831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1888405830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f272fba85ee68ed4abd68444d1d0b4e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 407167770}
+  hologramCamera: {fileID: 276298369}
+  distance: 20
 --- !u!23 &1888405832
 MeshRenderer:
   m_ObjectHideFlags: 0
