@@ -3,7 +3,8 @@
 	Properties
 	{
 		_MainTex ("Texture", 2D) = "white" {}
-		_DepthScale ("Depth Scale", Range(-10, 0)) = -1
+		_TesselationFactor ("TesselationFactor", Range(1, 64)) = 1
+		_DepthScale ("Depth Scale", Range(-10, 10)) = -1
 		_DiscardAbove ("Discard Above", Range(0, 1)) = 1
 	}
 	SubShader
@@ -14,13 +15,16 @@
 		Pass
 		{
 			CGPROGRAM
+
 			#pragma vertex VS
+			#pragma hull HS
+			#pragma domain DS
 			#pragma geometry GS
 			#pragma fragment FS
 			
 			#include "UnityCG.cginc"
 
-			struct appdata
+			struct vertex
 			{
 				float4 position : POSITION;
 				float2 uv : TEXCOORD0;
@@ -39,6 +43,12 @@
 				float depth : DEPTH;
 			};
 
+			struct TesselationFactors
+			{
+				float edge[3] : SV_TessFactor;
+				float inside : SV_InsideTessFactor;
+			};
+
 			float GetDepthAtUV(sampler2D depthTexture, float2 uv)
 			{
 				return Linear01Depth(UNITY_SAMPLE_DEPTH(tex2Dlod(depthTexture, float4(uv, 0, 0))));
@@ -46,10 +56,11 @@
 
 			sampler2D _MainTex;
 			float4 _MainTex_ST;
+			float _TesselationFactor;
 			float _DepthScale;
 			float _DiscardAbove;
 			
-			v2g VS (appdata v)
+			v2g VS (vertex v)
 			{
 				v2g o;
 				o.position = v.position;
@@ -57,39 +68,58 @@
 				return o;
 			}
 
-			[maxvertexcount(12)]
+			// Pass vertex data to the tesselation stage
+			[UNITY_domain("tri")]
+			[UNITY_outputcontrolpoints(3)]
+			[UNITY_outputtopology("triangle_cw")]
+			[UNITY_partitioning("integer")]
+			[UNITY_patchconstantfunc("PatchConstantFunction")]
+			v2g HS(InputPatch<vertex, 3> patch, uint id : SV_OutputControlPointID)
+			{
+				return patch[id];
+			}
+
+			// Return the tesselation factors for an input patch
+			TesselationFactors PatchConstantFunction(InputPatch<vertex, 3> patch)
+			{
+				TesselationFactors f;
+				f.edge[0] = _TesselationFactor;
+				f.edge[1] = _TesselationFactor;
+				f.edge[2] = _TesselationFactor;
+				f.inside = _TesselationFactor;
+
+				return f;
+			}
+
+			[UNITY_domain("tri")]
+			// Interpolate the values of new vertices by the barycentric coordinates
+			v2g DS(TesselationFactors factors, OutputPatch<vertex, 3> patch, float3 barycentricCoordinates : SV_DomainLocation)
+			{
+				v2g o;
+				o.position = patch[0].position * barycentricCoordinates.x +
+							 patch[1].position * barycentricCoordinates.y +
+							 patch[2].position * barycentricCoordinates.z;
+
+				o.uv = patch[0].uv * barycentricCoordinates.x +
+					   patch[1].uv * barycentricCoordinates.y +
+					   patch[2].uv * barycentricCoordinates.z;
+
+				// Could add a second vertex shader and vertex struct with INTERNALTESSPOS semantic instead of POSITION
+				// Then we could have different behaviour for the vertices that were tesselated and maybe no need for a geometry shader
+				return VS(o);
+			}
+
+			[maxvertexcount(3)]
 			void GS(triangle v2g input[3], inout TriangleStream<g2f> stream)
 			{
-				// Split every triangle up at the center
-				float4 positionCenter = (input[0].position + input[1].position + input[2].position) / 3.0f;
-				float2 uvCenter = (input[0].uv + input[1].uv + input[2].uv) / 3.0f;
-
-				// Center vertex to append to every new triangle
-				g2f center;
-				center.depth = GetDepthAtUV(_MainTex, uvCenter);
-				center.position = UnityObjectToClipPos(positionCenter + float4(0, 0, _DepthScale * center.depth, 0));
-				center.uv = uvCenter;
-
-				g2f o;
-
 				for (int i = 0; i < 3; i++)
 				{
-					// Current
+					// Move vertex based on the depth at the texture
+					g2f o;
 					o.depth = GetDepthAtUV(_MainTex, input[i].uv);
 					o.position = UnityObjectToClipPos(input[i].position + float4(0, 0, _DepthScale * o.depth, 0));
 					o.uv = input[i].uv;
 					stream.Append(o);
-
-					// Center
-					stream.Append(center);
-
-					// Next
-					uint next = (i + 2) % 3;
-					o.depth = GetDepthAtUV(_MainTex, input[next].uv);
-					o.position = UnityObjectToClipPos(input[next].position + float4(0, 0, _DepthScale * o.depth, 0));
-					o.uv = input[next].uv;
-					stream.Append(o);
-					stream.RestartStrip();
 				}
 			}
 			
