@@ -131,7 +131,7 @@ namespace MastersOfTempest.Networking
 
         void OnConnectionFailed(ulong steamID, Facepunch.Steamworks.Networking.SessionError sessionError)
         {
-            Debug.Log("Connection failed with user " + steamID + " " + sessionError);
+            DialogBox.Show("Connection failed with user " + steamID + ", " + sessionError, false, false, null, null);
         }
 
         // This is where all the messages are received and delegated to the respective events
