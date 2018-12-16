@@ -11,8 +11,13 @@ namespace MastersOfTempest.Networking
         public static GameClient Instance = null;
 
         public float pingsPerSec = 1;
+        [ReadOnly]
         [SerializeField]
         private bool initialized = false;
+        [ReadOnly]
+        [SerializeField]
+        private float serverHz = 16;
+        [ReadOnly]
         [SerializeField]
         private float ping = 0;
         private float lastPingTime = 0;
@@ -181,6 +186,7 @@ namespace MastersOfTempest.Networking
         void OnMessagePingPong(byte[] data, ulong steamID)
         {
             ping = Time.time - System.BitConverter.ToSingle(data, 0);
+            serverHz = System.BitConverter.ToSingle(data, 4);
         }
 
         void OnMessageNetworkBehaviour(byte[] data, ulong steamID)
@@ -198,6 +204,11 @@ namespace MastersOfTempest.Networking
         public bool IsInitialized ()
         {
             return initialized;
+        }
+
+        public float GetServerHz ()
+        {
+            return serverHz;
         }
 
         public float GetPing ()

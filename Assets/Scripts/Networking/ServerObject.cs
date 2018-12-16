@@ -20,10 +20,9 @@ namespace MastersOfTempest.Networking
         public bool removeChildRigidbodies = true;
 
         // Interpolation variables
-        private MessageServerObject currentMessage;
-        private MessageServerObject lastMessage;
+        private MessageServerObject currentMessage = null;
+        private MessageServerObject lastMessage = null;
         private float timeSinceLastMessage = 0;
-        private uint receivedMessageCount = 0;
 
         // Handles all the incoming network behaviour messages from the network behaviours
         private Dictionary<int, Action<byte[], ulong>> networkBehaviourEvents = new Dictionary<int, Action<byte[], ulong>>();
@@ -62,12 +61,11 @@ namespace MastersOfTempest.Networking
             if (!onServer && interpolateOnClient)
             {
                 // Make sure that both messages exist
-                if (receivedMessageCount > 1)
+                if (currentMessage != null && lastMessage != null)
                 {
                     // Interpolate between the transform from the last and the current message based on the time that passed since the last message
                     // This introduces a bit of latency but does not require any prediction
-                    // Also make sure that the interpolation does not take too long if the time between the messages is long
-                    float dt = Mathf.Min(currentMessage.time - lastMessage.time, 1);
+                    float dt = currentMessage.time - lastMessage.time;
 
                     if (dt > 0)
                     {
@@ -114,7 +112,13 @@ namespace MastersOfTempest.Networking
                     lastMessage = currentMessage;
                     currentMessage = messageServerObject;
                     timeSinceLastMessage = 0;
-                    receivedMessageCount++;
+
+                    // Correct the time of the last message to the time where it should have arrived based on the server hz
+                    // This improves the interpolation when the actual time between messages is way larger than the server hz
+                    if (lastMessage != null)
+                    {
+                        lastMessage.time = currentMessage.time - (1.0f / GameClient.Instance.GetServerHz());
+                    }
                 }
                 else
                 {
