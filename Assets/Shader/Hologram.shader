@@ -10,8 +10,10 @@
 		_WaveSpeed ("Wave Speed", Range(0, 10)) = 0.5
 		_WaveFrequency ("Wave Frequency", Range(0, 10)) = 8
 		_WaveAmplitude ("Wave Amplitude", Range(0, 1)) = 0.02
-		_RotationSpeed ("Rotation Speed", Range(0, 100)) = 1
+		_RotationSpeed ("Rotation Speed", Range(0, 10)) = 3
 		_ColorShiftSpeed ("Color Shift Speed", Range(0, 2)) = 0.5
+		_MinHue ("MinHue", Range(0, 1)) = 0
+		_MaxHue ("MaxHue", Range(0, 1)) = 1
 	}
 	SubShader
 	{
@@ -70,6 +72,8 @@
 			float _WaveAmplitude;
 			float _RotationSpeed;
 			float _ColorShiftSpeed;
+			float _MinHue;
+			float _MaxHue;
 			
 			// Vertex shader before tesselation
 			v2t VS (appdata v)
@@ -153,7 +157,7 @@
 
 				// Shift colors with hsv representation
 				float3 hsv = RGBtoHSV(colorOutput.rgb);
-				hsv.x = abs(sin(hsv.x + uvRotated.x + uvRotated.y + _ColorShiftSpeed * _Time.y));
+				hsv.x = _MinHue + (_MaxHue - _MinHue) * abs(sin(hsv.x + uvRotated.x + uvRotated.y + _ColorShiftSpeed * _Time.y));
 				colorOutput.rgb = HSVtoRGB(hsv);
 
 				// Wave for more magic appeal
