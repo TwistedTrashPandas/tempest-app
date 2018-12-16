@@ -11,6 +11,7 @@
 		_WaveFrequency ("Wave Frequency", Range(0, 10)) = 8
 		_WaveAmplitude ("Wave Amplitude", Range(0, 1)) = 0.02
 		_RotationSpeed ("Rotation Speed", Range(0, 100)) = 1
+		_ColorShiftSpeed ("Color Shift Speed", Range(0, 2)) = 0.5
 	}
 	SubShader
 	{
@@ -28,6 +29,7 @@
 			#pragma fragment FS
 			
 			#include "UnityCG.cginc"
+			#include "ColorConversion.hlsl"
 
 			struct appdata
 			{
@@ -67,6 +69,7 @@
 			float _WaveFrequency;
 			float _WaveAmplitude;
 			float _RotationSpeed;
+			float _ColorShiftSpeed;
 			
 			// Vertex shader before tesselation
 			v2t VS (appdata v)
@@ -130,19 +133,28 @@
 			
 			float4 FS (t2f i) : SV_Target
 			{
+				float4 colorOutput = float4(0, 0, 0, 0);
+
 				// Rotate the magic ring
-				float2 uvRotated = i.uv;
 				float alpha = _RotationSpeed * _Time.y;
 				float s = sin(alpha);
 				float c = cos(alpha);
 				float2x2 rotationMatrix = float2x2(c, -s, s, c);
 
 				// Move to origin, rotate and move back again
+				float2 uvRotated = i.uv;
 				uvRotated -= float2(0.5f, 0.5f);
 				uvRotated = mul(uvRotated, rotationMatrix);
 				uvRotated += float2(0.5f, 0.5f);
 
-				float4 col = sin(2 * pow(abs(uvRotated.x), 2)) * tex2D(_MainTex, uvRotated);
+				float4 colorMainTex = tex2D(_MainTex, uvRotated);
+				colorOutput += 0.5f * sin(2 * pow(uvRotated.x, 2)) * colorMainTex;
+				colorOutput += 0.5f * abs(sin(_Time.y)) * colorMainTex;
+
+				// Shift colors with hsv representation
+				float3 hsv = RGBtoHSV(colorOutput.rgb);
+				hsv.x = abs(sin(hsv.x + uvRotated.x + uvRotated.y + _ColorShiftSpeed * _Time.y));
+				colorOutput.rgb = HSVtoRGB(hsv);
 
 				// Wave for more magic appeal
 				float2 uv = i.uvColor;
@@ -154,11 +166,11 @@
 				// Check depth and only add color if valid
 				if (depth < _DiscardAbove)
 				{
-					col += tex2D(_ColorTex, uv);
-					col.r += 1.0f / depth;
+					colorOutput += tex2D(_ColorTex, uv);
+					//colorOutput.r += 1.0f / depth;
 				}
 
-				return col;
+				return colorOutput;
 			}
 
 			ENDCG
