@@ -6,7 +6,8 @@
 		g_tex3DMultipleScatteringInParticleLUT("_MultipleScatter", 3D) = ""  {}
 		g_Color("g_Color", Color) = (1,1,1,1)
 		g_SpecColor("g_SpecColor", Color) = (1,1,1,1)
-		g_fSize("g_BillboardSize", Range(0.1,100.0)) = 1.0
+		g_fSize("BillboardSize", Range(0.1,100.0)) = 1.0
+		g_fDensity("Density", Range(0.01,100.0)) = 1
 	}
 		SubShader{
 		Tags { "Queue" = "Transparent" "RenderType" = "Transparent"}
@@ -45,7 +46,6 @@
 
 			//	pass for directional lights
 		Pass {
-				ColorMask RGB
 				Lighting On ZWrite Off Cull Front
 				Blend SrcAlpha OneMinusSrcAlpha
 			//Blend One OneMinusSrcAlpha
@@ -105,6 +105,7 @@
 				SamplerState MyLinearRepeatSampler : register(s1);
 				
 				float g_fSize;
+				float g_fDensity;
 					
 					// ---------------------------------------------------------------------------------------------------------------------------------
 
@@ -127,18 +128,18 @@
 						out float fDistanceToEntryPoint,
 						out float fDistanceToExitPoint)
 					{
-						float4x4 f3x3WorldToObjSpaceRotation = transpose(unity_ObjectToWorld); // float4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);//;
+						float4x4 f3x3WorldToObjSpaceRotation = unity_WorldToObject; // float4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);//;
 						// Compute camera location and view direction in particle's object space:
-						float4 f4CamPosObjSpace = float4(f3CameraPos - ParticleAttrs.f3Pos,0.0f);
-						f4CamPosObjSpace = mul(f4CamPosObjSpace, f3x3WorldToObjSpaceRotation);
-						float4 f3ViewRayObjSpace = mul(float4(f3ViewRay,0.0f), f3x3WorldToObjSpaceRotation);
-						float4 f3LightDirObjSpce = mul(float4(_WorldSpaceLightPos0.xyz,0.0f), f3x3WorldToObjSpaceRotation);
+						float3 f3CamPosObjSpace = f3CameraPos - ParticleAttrs.f3Pos;
+						f3CamPosObjSpace = mul(f3CamPosObjSpace, f3x3WorldToObjSpaceRotation);
+						float3 f3ViewRayObjSpace = mul(f3ViewRay, f3x3WorldToObjSpaceRotation);
+						float3 f3LightDirObjSpce = mul(_WorldSpaceLightPos0.xyz, f3x3WorldToObjSpaceRotation);
 
 						// Compute scales to transform ellipsoid into the unit sphere:
 						float3 f3Scale = 1.0f / g_fSize; // 1.f / GetParticleScales(ParticleAttrs.fSize, CellAttrs.uiNumActiveLayers);
 
 						float3 f3ScaledCamPosObjSpace;
-						f3ScaledCamPosObjSpace = f4CamPosObjSpace.xyz * f3Scale;
+						f3ScaledCamPosObjSpace = f3CamPosObjSpace.xyz * f3Scale;
 						f3ViewRayUSSpace = normalize(f3ViewRayObjSpace.xyz*f3Scale);
 						f3LightDirUSSpace = normalize(f3LightDirObjSpce.xyz*f3Scale);
 						// Scale camera pos and view dir in obj space and compute intersection with the unit sphere:
@@ -178,11 +179,11 @@
 						f4LUTCoords.z = fRayDirLocalZenith;
 						f4LUTCoords.w = fRayDirLocalAzimuth;
 
-						f4LUTCoords.xyzw = f4LUTCoords.xyzw / float4(PI, 2 * PI, PI / 2, 2 * PI) + float4(0.0, 0.5, 0, 0.5);
+						f4LUTCoords.xyzw = f4LUTCoords.xyzw / float4(PI, 2 * PI, PI / 2, 2 * PI) + float4(0.0, 0.5f, 0, 0.5f);
 
 						// Clamp only zenith (yz) coordinate as azimuth is filtered with wraparound mode
-						f4LUTCoords.x = clamp(f4LUTCoords, 0.5 / OPTICAL_DEPTH_LUT_DIM, 1.0 - 0.5 / OPTICAL_DEPTH_LUT_DIM).x;
-						// f4LUTCoords.xyzw = f4LUTCoords.yxwz;
+						f4LUTCoords.xz = clamp(f4LUTCoords, 0.5f / OPTICAL_DEPTH_LUT_DIM, 1.0f - 0.5f / OPTICAL_DEPTH_LUT_DIM).xz;
+						f4LUTCoords.xyzw = f4LUTCoords.xyzw;
 					}
 
 					void ComputeParticleRenderAttribs(const in SParticleAttribs ParticleAttrs,
@@ -212,7 +213,7 @@
 
 						float2 f2NormalizedDensityAndDist;
 						SAMPLE_4D_LUT(g_tex3DParticleDensityLUT, OPTICAL_DEPTH_LUT_DIM, f4LUTCoords, fLOD, f2NormalizedDensityAndDist);
-
+						f2NormalizedDensityAndDist.x += f2NormalizedDensityAndDist.y;
 						float3 f3FirstMatterPointWS = f3CameraPos + (fDistanceToEntryPoint + (fDistanceToExitPoint - fDistanceToEntryPoint) * f2NormalizedDensityAndDist.y) * f3ViewRay;
 						float3 f3FirstMatterPointUSSpace = f3EntryPointUSSpace + (fIsecLenUSSpace * f2NormalizedDensityAndDist.y) * f3ViewRayUSSpace;
 
@@ -256,10 +257,11 @@
 						float fAmbientSSSStrength = (1 - fNoise)*0.5;//0.3;
 						f3Ambient.rgb *= lerp(1, fSubSrfScattering, fAmbientSSSStrength);
 						f4Color.rgb = (f3Ambient.rgb + (fSingleScattering + fMultipleScattering) * ParticleLighting.f4SunLight.rgb) * PI; // max((f2NormalizedDensityAndDist.x), 0); //
-						//f4Color.b = 0;// f4LUTCoords.w;// max((f2NormalizedDensityAndDist.y), 0);// (f3Ambient.rgb + (fSingleScattering + fMultipleScattering) * ParticleLighting.f4SunLight.rgb) * PI;
-						//f4Color.g = 0;// fTransparency;// (f3Ambient.rgb + (fSingleScattering + fMultipleScattering) * ParticleLighting.f4SunLight.rgb) * PI;
-						f4Color.a = fTransparency;//  f4Color.g; // 
-						//f4Color.r = fTransparency;
+						f4Color.b = 0;// f4LUTCoords.w;// max((f2NormalizedDensityAndDist.y), 0);// (f3Ambient.rgb + (fSingleScattering + fMultipleScattering) * ParticleLighting.f4SunLight.rgb) * PI;
+						f4Color.g = 0;// fTransparency;// (f3Ambient.rgb + (fSingleScattering + fMultipleScattering) * ParticleLighting.f4SunLight.rgb) * PI;
+						f4Color.a = 1.0f;// fTransparency;//  f4Color.g; // 
+						f4Color.r = f2NormalizedDensityAndDist.x;
+						//f4Color.rb = f2NormalizedDensityAndDist.xy;
 						//f4Color.gb = 0;
 					}
 
@@ -268,7 +270,7 @@
 							{
 								v2g o;
 								v.id = g_iIndices[v.id];
-								o.vertex = float4(g_vVertices[v.id], 1);
+								o.vertex = float4(g_vVertices[v.id], 1.0f);
 								o.id = v.id;
 								return o;
 							}
@@ -334,7 +336,7 @@
 								float fTransparency;
 								float4 f4Color;
 								SParticleAttribs ParticleAttrs;
-								ParticleAttrs.fDensity = 1.0f;
+								ParticleAttrs.fDensity = g_fDensity;
 								ParticleAttrs.f3Pos = g_vVertices[In.id];
 								ParticleAttrs.fSize = g_fSize;
 								ParticleAttrs.fRndAzimuthBias = 0.0f;
@@ -343,7 +345,7 @@
 
 								ParticleLighting.f4SunLight = _LightColor0;
 								ParticleLighting.f4LightAttenuation = float4(3.0f,3.0f,1.0f,1.0f); // .x == single scattering; .y == multiple scattering
-								ParticleLighting.f4AmbientLight = unity_AmbientSky;
+								ParticleLighting.f4AmbientLight = float4(0.0,0.0,0.0,1.0);
 								float fTime = 1.0f; // g_fTimeScale * g_GlobalCloudAttribs.fTime;
 
 								float3 f3CameraPos, f3ViewRay;
@@ -361,34 +363,28 @@
 								f3ViewRay = normalize(f4PosOnFarClipPlaneWS.xyz - f4PosOnNearClipPlaneWS.xyz);
 								*/
 
-								f3CameraPos = _WorldSpaceCameraPos.xyz; //  float3(0, 0, -2);//
+								f3CameraPos = float3(0, 0, -2);//_WorldSpaceCameraPos.xyz; // 
 								//f3ViewRay = normalize(In.f3ViewRay);
 								//(float2 f2PosPS = UVToProj(In.vertex.xy / f2ScreenDim);
 								float fDepth = In.projPos.z;
-								float4 f4ReconstructedPosWS = mul(UNITY_MATRIX_I_V, float4(In.projPos.xy, fDepth, 1.0f)); // mul(mul(, unity_CameraInvProjection), UNITY_MATRIX_IT_MV); // mul(float4(f2PosPS.xy, fDepth, 1.0), g_CameraAttribs.mViewProjInv);
+								float4 f4ReconstructedPosWS =mul(UNITY_MATRIX_I_V, float4(In.projPos.xy, fDepth, 1.0f)); // mul(mul(, unity_CameraInvProjection), UNITY_MATRIX_IT_MV); // mul(float4(f2PosPS.xy, fDepth, 1.0), g_CameraAttribs.mViewProjInv);
 								float3 f3WorldPos = f4ReconstructedPosWS.xyz / f4ReconstructedPosWS.w;
 								// Compute view ray
 								f3ViewRay = f3WorldPos - f3CameraPos;
 								float fRayLength = length(f3ViewRay);
 								f3ViewRay /= fRayLength;
-								//f3ViewRay = float3(0.0, 0.0, 1.0);
-								// Intersect view ray with the particle
+								
 								float2 f2RayIsecs;
 								float fDistanceToEntryPoint, fDistanceToExitPoint;
 								float3 f3EntryPointUSSpace, f3ViewRayUSSpace, f3LightDirUSSpace;
 								IntersectRayWithParticle(ParticleAttrs,  f3CameraPos, f3ViewRay,
 														f2RayIsecs, f3EntryPointUSSpace, f3ViewRayUSSpace,f3LightDirUSSpace,fDistanceToEntryPoint, fDistanceToExitPoint);
-								//return float4(fRayLength/ fDistanceToEntryPoint,0,0,1 );
 
-								//return float4(0.0f,0.0f,fDepth, 1.0f);
-								//return float4(fDistanceToExitPoint, -fDistanceToExitPoint + fRayLength, 0.0f, 1.0f);
 								if (f2RayIsecs.y < 0)
 									discard;
 								if (fRayLength < fDistanceToEntryPoint)
 									discard; // return float4(1.0f, 1.0f, 1.0f, 1.0f);
 								fDistanceToExitPoint = min(fDistanceToExitPoint, fRayLength);
-
-								//return float4(f3EntryPointUSSpace, 1.0f);
 
 								float fCloudMass;
 								float fIsecLenUSSpace = f2RayIsecs.y - f2RayIsecs.x;

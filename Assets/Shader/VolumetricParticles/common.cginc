@@ -1,5 +1,3 @@
-
-
 Texture2D<float>  g_tex2DDepthBuffer            : register(t0);
 Texture2D<float>  g_tex2DCamSpaceZ              : register(t0);
 Texture2D<float4> g_tex2DSliceEndPoints         : register(t4);

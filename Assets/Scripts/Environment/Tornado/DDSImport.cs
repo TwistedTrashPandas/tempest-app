@@ -90,7 +90,6 @@ namespace MastersOfTempest.Tools
             int depth = (int)header.dwDepth;
             Texture2D[] texs = new Texture2D[depth];
             int texSize = height * width * sizeOfFormat;
-
             for (int i = 0; i < depth; i++)
             {
                 byte[] dxtBytes = new byte[texSize];

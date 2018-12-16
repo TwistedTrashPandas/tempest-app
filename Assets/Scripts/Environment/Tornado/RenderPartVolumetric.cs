@@ -19,16 +19,16 @@ namespace MastersOfTempest.Environment.VisualEffects
         {
             material = GetComponent<Renderer>().material;
 
-            Texture3D t1 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/3DNoiseTex.dds", TextureFormat.Alpha8, 1), TextureFormat.Alpha8);
+            Texture3D t1 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/v3/3DNoiseTex.dds", TextureFormat.Alpha8, 1), TextureFormat.Alpha8);
             material.SetTexture("g_tex3DNoise", t1);
 
-            Texture3D t2 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/Density_1.dds", TextureFormat.RG16, 2), TextureFormat.RGHalf);
+            Texture3D t2 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/v3/Density.dds", TextureFormat.RG16, 2), TextureFormat.RGHalf);
             material.SetTexture("g_tex3DParticleDensityLUT", t2);
 
-            Texture3D t3 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/SingleSctr.dds", TextureFormat.RHalf, 2), TextureFormat.RHalf);
+            Texture3D t3 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/v3/SingleSctr.dds", TextureFormat.RHalf, 2), TextureFormat.RHalf);
             material.SetTexture("g_tex3DSingleScatteringInParticleLUT", t3);
 
-            Texture3D t4 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/MultipleSctr.dds", TextureFormat.RHalf, 2), TextureFormat.RHalf);
+            Texture3D t4 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/v3/MultipleSctr.dds", TextureFormat.RHalf, 2), TextureFormat.RHalf);
             material.SetTexture("g_tex3DMultipleScatteringInParticleLUT", t4);
 
             particles = new ComputeBuffer(10, 12);
@@ -41,7 +41,10 @@ namespace MastersOfTempest.Environment.VisualEffects
             t[1] = 0;
             t[2] = 0;
 
-           // Camera.main.cameraToWorldMatrix;
+            // Camera.main.cameraToWorldMatrix;
+            Camera.main.cullingMatrix = Matrix4x4.Ortho(-99999, 99999, -99999, 99999, 2f, 99999) *
+                                Matrix4x4.Translate(Vector3.forward * -99999 / 2f) *
+                                Camera.main.worldToCameraMatrix;
 
             Mesh m = GetComponent<MeshFilter>().mesh;
             m = new Mesh();
@@ -49,7 +52,6 @@ namespace MastersOfTempest.Environment.VisualEffects
             m.triangles = t;
             Vector3 center = Vector3.zero;
             GetComponent<MeshFilter>().sharedMesh = m;
-            //GetComponent<MeshFilter>().sharedMesh.bounds = new Bounds(center, Vector3.one * float.MaxValue);
             //transform.position = new Vector3();
         }
         
@@ -66,7 +68,7 @@ namespace MastersOfTempest.Environment.VisualEffects
                 {
                     for (int k = 0; k < d; k++)
                     {
-                        colors[j + i * w + k * h * w] = tex2DArr[k].GetPixel(j, i);
+                        colors[j + i * w + k * h * w] = tex2DArr[k].GetPixel(i, j);
                     }
                 }
             }

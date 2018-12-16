@@ -87,7 +87,7 @@ namespace MastersOfTempest.Environment.VisualEffects
 
             camPos = Camera.main.transform;
             // TODO: seperate script
-            Camera.main.cullingMatrix = Matrix4x4.Ortho(-99999, 99999, -99999, 99999, 0.001f, 99999) *
+            Camera.main.cullingMatrix = Matrix4x4.Ortho(-99999, 99999, -99999, 99999, 2f, 99999) *
                                 Matrix4x4.Translate(Vector3.forward * -99999 / 2f) *
                                 Camera.main.worldToCameraMatrix;
         }
@@ -257,16 +257,16 @@ namespace MastersOfTempest.Environment.VisualEffects
         
         private void Load3DTextures()
         {
-            Texture3D t1 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/3DNoiseTex.dds", TextureFormat.Alpha8, 1), TextureFormat.Alpha8);
+            Texture3D t1 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/v3/3DNoiseTex.dds", TextureFormat.Alpha8, 1), TextureFormat.Alpha8);
             material.SetTexture("g_tex3DNoise", t1);
 
-            Texture3D t2 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/Density_latest.dds", TextureFormat.RG16, 2), TextureFormat.RGHalf);
+            Texture3D t2 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/v3/Density.dds", TextureFormat.RG16, 2), TextureFormat.RGHalf);
             material.SetTexture("g_tex3DParticleDensityLUT", t2);
 
-            Texture3D t3 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/SingleSctr.dds", TextureFormat.RHalf, 2), TextureFormat.RHalf);
+            Texture3D t3 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/v3/SingleSctr.dds", TextureFormat.RHalf, 2), TextureFormat.RHalf);
             material.SetTexture("g_tex3DSingleScatteringInParticleLUT", t3);
 
-            Texture3D t4 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/MultipleSctr.dds", TextureFormat.RHalf, 2), TextureFormat.RHalf);
+            Texture3D t4 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/v3/MultipleSctr.dds", TextureFormat.RHalf, 2), TextureFormat.RHalf);
             material.SetTexture("g_tex3DMultipleScatteringInParticleLUT", t4);
         }
 
