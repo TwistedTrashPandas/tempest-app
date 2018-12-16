@@ -3,9 +3,12 @@
 	Properties
 	{
 		_MainTex ("Texture", 2D) = "white" {}
-		_TesselationFactor ("TesselationFactor", Range(1, 64)) = 1
+		_TesselationFactor ("TesselationFactor", Range(1, 64)) = 4
 		_DepthScale ("Depth Scale", Range(-10, 10)) = -1
 		_DiscardAbove ("Discard Above", Range(0, 1)) = 1
+		_WaveSpeed ("Wave Speed", Range(0, 10)) = 0.5
+		_WaveFrequency ("Wave Frequency", Range(0, 10)) = 8
+		_WaveAmplitude ("Wave Amplitude", Range(0, 1)) = 0.02
 	}
 	SubShader
 	{
@@ -58,6 +61,9 @@
 			float _TesselationFactor;
 			float _DepthScale;
 			float _DiscardAbove;
+			float _WaveSpeed;
+			float _WaveFrequency;
+			float _WaveAmplitude;
 			
 			// Vertex shader before tesselation
 			v2t VS (appdata v)
@@ -71,9 +77,13 @@
 			// Vertex shader after tesselation
 			t2f TVS(v2t v)
 			{
+				float4 wave = float4(0, 0, 0, 0);
+				wave.x = _WaveAmplitude * sin(_WaveFrequency * (v.uv.y - _WaveSpeed * _Time.y));
+				wave.y = _WaveAmplitude * sin(_WaveFrequency * (v.uv.x - _WaveSpeed * _Time.y));
+
 				t2f o;
 				o.depth = GetDepthAtUV(_MainTex, v.uv);
-				o.position = UnityObjectToClipPos(v.position + float4(0, 0, _DepthScale * o.depth, 0));
+				o.position = UnityObjectToClipPos(v.position + float4(0, 0, _DepthScale * o.depth, 0) + wave);
 				o.uv = v.uv;
 				return o;
 			}
