@@ -3,16 +3,19 @@
 	Properties
 	{
 		_MainTex ("Texture", 2D) = "white" {}
+		_ColorTex("Color Tex", 2D) = "white" {}
+		_DepthTex("Depth Tecture", 2D) = "white" {}
 		_TesselationFactor ("TesselationFactor", Range(1, 64)) = 4
-		_DepthScale ("Depth Scale", Range(-10, 10)) = -1
 		_DiscardAbove ("Discard Above", Range(0, 1)) = 1
 		_WaveSpeed ("Wave Speed", Range(0, 10)) = 0.5
 		_WaveFrequency ("Wave Frequency", Range(0, 10)) = 8
 		_WaveAmplitude ("Wave Amplitude", Range(0, 1)) = 0.02
+		_RotationSpeed ("Rotation Speed", Range(0, 100)) = 1
 	}
 	SubShader
 	{
-		Tags { "RenderType"="Opaque" }
+		Tags { "RenderType"="Transparent" "Queue"="Transparent"}
+		Blend SrcAlpha OneMinusSrcAlpha
 		LOD 100
 
 		Pass
@@ -41,8 +44,9 @@
 			struct t2f
 			{
 				float4 position : SV_POSITION;
+				float2 uvColor : TEXCOORD2;
+				float2 uvDepth : TEXCOORD1;
 				float2 uv : TEXCOORD0;
-				float depth : DEPTH;
 			};
 
 			struct TesselationFactors
@@ -51,19 +55,18 @@
 				float inside : SV_InsideTessFactor;
 			};
 
-			float GetDepthAtUV(sampler2D depthTexture, float2 uv)
-			{
-				return Linear01Depth(UNITY_SAMPLE_DEPTH(tex2Dlod(depthTexture, float4(uv, 0, 0))));
-			}
-
 			sampler2D _MainTex;
 			float4 _MainTex_ST;
+			sampler2D _ColorTex;
+			float4 _ColorTex_ST;
+			sampler2D _DepthTex;
+			float4 _DepthTex_ST;
 			float _TesselationFactor;
-			float _DepthScale;
 			float _DiscardAbove;
 			float _WaveSpeed;
 			float _WaveFrequency;
 			float _WaveAmplitude;
+			float _RotationSpeed;
 			
 			// Vertex shader before tesselation
 			v2t VS (appdata v)
@@ -77,14 +80,11 @@
 			// Vertex shader after tesselation
 			t2f TVS(v2t v)
 			{
-				float4 wave = float4(0, 0, 0, 0);
-				wave.x = _WaveAmplitude * sin(_WaveFrequency * (v.uv.y - _WaveSpeed * _Time.y));
-				wave.y = _WaveAmplitude * sin(_WaveFrequency * (v.uv.x - _WaveSpeed * _Time.y));
-
 				t2f o;
-				o.depth = GetDepthAtUV(_MainTex, v.uv);
-				o.position = UnityObjectToClipPos(v.position + float4(0, 0, _DepthScale * o.depth, 0) + wave);
-				o.uv = v.uv;
+				o.position = UnityObjectToClipPos(v.position);
+				o.uvColor = TRANSFORM_TEX(v.uv, _ColorTex);
+				o.uvDepth = TRANSFORM_TEX(v.uv, _DepthTex);
+				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 				return o;
 			}
 
@@ -130,12 +130,35 @@
 			
 			float4 FS (t2f i) : SV_Target
 			{
-				if (i.depth > _DiscardAbove)
+				// Rotate the magic ring
+				float2 uvRotated = i.uv;
+				float alpha = _RotationSpeed * _Time.y;
+				float s = sin(alpha);
+				float c = cos(alpha);
+				float2x2 rotationMatrix = float2x2(c, -s, s, c);
+
+				// Move to origin, rotate and move back again
+				uvRotated -= float2(0.5f, 0.5f);
+				uvRotated = mul(uvRotated, rotationMatrix);
+				uvRotated += float2(0.5f, 0.5f);
+
+				float4 col = sin(2 * pow(abs(uvRotated.x), 2)) * tex2D(_MainTex, uvRotated);
+
+				// Wave for more magic appeal
+				float2 uv = i.uvColor;
+				uv.x += _WaveAmplitude * sin(_WaveFrequency * (i.uvColor.y - _WaveSpeed * _Time.y));
+				uv.y += _WaveAmplitude * sin(_WaveFrequency * (i.uvColor.x - _WaveSpeed * _Time.y));
+
+				float depth = Linear01Depth(UNITY_SAMPLE_DEPTH(tex2D(_DepthTex, uv)));
+
+				// Check depth and only add color if valid
+				if (depth < _DiscardAbove)
 				{
-					discard;
+					col += tex2D(_ColorTex, uv);
+					col.r += 1.0f / depth;
 				}
 
-				return float4(i.depth, i.depth, i.depth, 1);
+				return col;
 			}
 
 			ENDCG

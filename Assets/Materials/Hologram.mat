@@ -22,6 +22,14 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _ColorTex:
+        m_Texture: {fileID: 8400000, guid: 69bcd91d8997532489fc0f3a818b3504, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DepthTex:
+        m_Texture: {fileID: 8400000, guid: 87e37eb5aa7c18a4cb2a730dc6d19456, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -39,9 +47,9 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 8400000, guid: 87e37eb5aa7c18a4cb2a730dc6d19456, type: 2}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+        m_Texture: {fileID: 2800000, guid: 99e6e8b5b8dc29645a52ef75ab0e7794, type: 3}
+        m_Scale: {x: 0.8, y: 0.8}
+        m_Offset: {x: 0.1, y: 0.1}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -57,9 +65,9 @@ Material:
     m_Floats:
     - _BumpScale: 1
     - _Cutoff: 0.5
-    - _DepthScale: -1
+    - _DepthScale: 0
     - _DetailNormalMapScale: 1
-    - _DiscardAbove: 1
+    - _DiscardAbove: 0.995
     - _DstBlend: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
@@ -68,10 +76,11 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _RotationSpeed: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _TesselationFactor: 4
+    - _TesselationFactor: 1
     - _UVSec: 0
     - _WaveAmplitude: 0.02
     - _WaveFrequency: 8
