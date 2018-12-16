@@ -19,24 +19,23 @@
 			#pragma vertex VS
 			#pragma hull HS
 			#pragma domain DS
-			#pragma geometry GS
 			#pragma fragment FS
 			
 			#include "UnityCG.cginc"
 
-			struct vertex
+			struct appdata
 			{
 				float4 position : POSITION;
 				float2 uv : TEXCOORD0;
 			};
 
-			struct v2g
+			struct v2t
 			{
-				float4 position : POSITION;
+				float4 position : INTERNALTESSPOS;
 				float2 uv : TEXCOORD0;
 			};
 
-			struct g2f
+			struct t2f
 			{
 				float4 position : SV_POSITION;
 				float2 uv : TEXCOORD0;
@@ -60,10 +59,21 @@
 			float _DepthScale;
 			float _DiscardAbove;
 			
-			v2g VS (vertex v)
+			// Vertex shader before tesselation
+			v2t VS (appdata v)
 			{
-				v2g o;
+				v2t o;
 				o.position = v.position;
+				o.uv = v.uv;
+				return o;
+			}
+
+			// Vertex shader after tesselation
+			t2f TVS(v2t v)
+			{
+				t2f o;
+				o.depth = GetDepthAtUV(_MainTex, v.uv);
+				o.position = UnityObjectToClipPos(v.position + float4(0, 0, _DepthScale * o.depth, 0));
 				o.uv = v.uv;
 				return o;
 			}
@@ -74,13 +84,13 @@
 			[UNITY_outputtopology("triangle_cw")]
 			[UNITY_partitioning("integer")]
 			[UNITY_patchconstantfunc("PatchConstantFunction")]
-			v2g HS(InputPatch<vertex, 3> patch, uint id : SV_OutputControlPointID)
+			v2t HS(InputPatch<v2t, 3> patch, uint id : SV_OutputControlPointID)
 			{
 				return patch[id];
 			}
 
 			// Return the tesselation factors for an input patch
-			TesselationFactors PatchConstantFunction(InputPatch<vertex, 3> patch)
+			TesselationFactors PatchConstantFunction(InputPatch<v2t, 3> patch)
 			{
 				TesselationFactors f;
 				f.edge[0] = _TesselationFactor;
@@ -93,9 +103,9 @@
 
 			[UNITY_domain("tri")]
 			// Interpolate the values of new vertices by the barycentric coordinates
-			v2g DS(TesselationFactors factors, OutputPatch<vertex, 3> patch, float3 barycentricCoordinates : SV_DomainLocation)
+			t2f DS(TesselationFactors factors, OutputPatch<v2t, 3> patch, float3 barycentricCoordinates : SV_DomainLocation)
 			{
-				v2g o;
+				v2t o;
 				o.position = patch[0].position * barycentricCoordinates.x +
 							 patch[1].position * barycentricCoordinates.y +
 							 patch[2].position * barycentricCoordinates.z;
@@ -104,26 +114,11 @@
 					   patch[1].uv * barycentricCoordinates.y +
 					   patch[2].uv * barycentricCoordinates.z;
 
-				// Could add a second vertex shader and vertex struct with INTERNALTESSPOS semantic instead of POSITION
-				// Then we could have different behaviour for the vertices that were tesselated and maybe no need for a geometry shader
-				return VS(o);
-			}
-
-			[maxvertexcount(3)]
-			void GS(triangle v2g input[3], inout TriangleStream<g2f> stream)
-			{
-				for (int i = 0; i < 3; i++)
-				{
-					// Move vertex based on the depth at the texture
-					g2f o;
-					o.depth = GetDepthAtUV(_MainTex, input[i].uv);
-					o.position = UnityObjectToClipPos(input[i].position + float4(0, 0, _DepthScale * o.depth, 0));
-					o.uv = input[i].uv;
-					stream.Append(o);
-				}
+				// Run different vertex shader after tesselation
+				return TVS(o);
 			}
 			
-			float4 FS (g2f i) : SV_Target
+			float4 FS (t2f i) : SV_Target
 			{
 				if (i.depth > _DiscardAbove)
 				{
@@ -132,6 +127,7 @@
 
 				return float4(i.depth, i.depth, i.depth, 1);
 			}
+
 			ENDCG
 		}
 	}
