@@ -10,9 +10,16 @@ namespace MastersOfTempest.Networking
     {
         [ReadOnly]
         public int resourceID = -1;
+        [ReadOnly]
         public bool onServer = true;
         public int serverID = 0;
         public float lastUpdate = 0;
+
+        // Used when the server object is a child in a server object resource (resourceID < 0)
+        [SerializeField, HideInInspector]
+        public ServerObject root = null;
+        [SerializeField, HideInInspector]
+        public ServerObject[] children = null;
 
         [Header("Client Parameters")]
         public bool interpolateOnClient = true;
@@ -33,9 +40,9 @@ namespace MastersOfTempest.Networking
             if (onServer)
             {
                 // Check if the resource id is valid
-                if (resourceID < 0)
+                if (resourceID == 0)
                 {
-                    Debug.LogError("Resource id " + resourceID + " is not valid for ServerObject " + gameObject.name);
+                    Debug.LogError("Resource id is not valid for ServerObject " + gameObject.name);
                 }
 
                 // Set server ID

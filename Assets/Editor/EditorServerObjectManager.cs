@@ -17,7 +17,8 @@ namespace MastersOfTempest.Networking
 
             foreach (ServerObject s in serverObjectResources)
             {
-                if (s.resourceID >= 0 && !alreadyAssignedResourceIDs.ContainsKey(s.resourceID))
+                // Assign resource id
+                if (s.resourceID > 0 && !alreadyAssignedResourceIDs.ContainsKey(s.resourceID))
                 {
                     // Valid id, add it to the set
                     alreadyAssignedResourceIDs[s.resourceID] = s;
@@ -25,11 +26,27 @@ namespace MastersOfTempest.Networking
                 else
                 {
                     // Duplicated id or no id set
-                    s.resourceID = -1;
+                    s.resourceID = 0;
                 }
+
+                // Assign children and resource id as -(1 + childId)
+                List<ServerObject> children = new List<ServerObject>();
+                s.GetComponentsInChildren(true, children);
+                children.Remove(s);
+
+                s.children = children.ToArray();
+
+                for (int i = 0; i < s.children.Length; i++)
+                {
+                    s.children[i].resourceID = -(1 + i);
+                    s.children[i].root = s;
+                }
+
+                // Assign root to itself
+                s.root = s;
             }
 
-            int nextIdToAssign = 0;
+            int nextIdToAssign = 1;
 
             foreach (ServerObject s in serverObjectResources)
             {
@@ -38,13 +55,15 @@ namespace MastersOfTempest.Networking
                     nextIdToAssign++;
                 }
 
-                if (s.resourceID == -1)
+                if (s.resourceID == 0)
                 {
-                    // Assign the id and make sure that changes to this prefab are saved
+                    // Assign id
                     s.resourceID = nextIdToAssign;
-                    EditorUtility.SetDirty(s);
                     nextIdToAssign++;
                 }
+
+                // Make sure that changes to this prefab are saved
+                EditorUtility.SetDirty(s);
             }
         }
     }
