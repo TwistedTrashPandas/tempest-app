@@ -11,8 +11,9 @@ namespace MastersOfTempest.Networking
         public float time;                                          // 4 bytes
         public bool hasParent;                                      // 1 byte
         public int resourceID;                                      // 4 bytes
-        public int parentInstanceID;                                // 4 bytes
         public int instanceID;                                      // 4 bytes
+        public int rootInstanceID;                                  // 4 bytes
+        public int parentInstanceID;                                // 4 bytes
         public Vector3 localPosition;                               // 12 bytes
         public Quaternion localRotation;                            // 16 bytes
         public Vector3 localScale;                                  // 12 bytes
@@ -43,6 +44,7 @@ namespace MastersOfTempest.Networking
             name = serverObject.name;
             resourceID = serverObject.resourceID;
             instanceID = serverObject.transform.GetInstanceID();
+            rootInstanceID = serverObject.root.transform.GetInstanceID();
             localPosition = serverObject.transform.localPosition;
             localRotation = serverObject.transform.localRotation;
             localScale = serverObject.transform.localScale;
@@ -56,8 +58,9 @@ namespace MastersOfTempest.Networking
             data.AddRange(BitConverter.GetBytes(time));
             data.AddRange(BitConverter.GetBytes(hasParent));
             data.AddRange(BitConverter.GetBytes(resourceID));
-            data.AddRange(BitConverter.GetBytes(parentInstanceID));
             data.AddRange(BitConverter.GetBytes(instanceID));
+            data.AddRange(BitConverter.GetBytes(rootInstanceID));
+            data.AddRange(BitConverter.GetBytes(parentInstanceID));
             data.AddRange(BitConverter.GetBytes(localPosition.x));
             data.AddRange(BitConverter.GetBytes(localPosition.y));
             data.AddRange(BitConverter.GetBytes(localPosition.z));
@@ -85,22 +88,23 @@ namespace MastersOfTempest.Networking
             messageServerObject.time = BitConverter.ToSingle(data, startIndex);
             messageServerObject.hasParent = BitConverter.ToBoolean(data, startIndex + 4);
             messageServerObject.resourceID = BitConverter.ToInt32(data, startIndex + 5);
-            messageServerObject.parentInstanceID = BitConverter.ToInt32(data, startIndex + 9);
-            messageServerObject.instanceID = BitConverter.ToInt32(data, startIndex + 13);
-            messageServerObject.localPosition.x = BitConverter.ToSingle(data, startIndex + 17);
-            messageServerObject.localPosition.y = BitConverter.ToSingle(data, startIndex + 21);
-            messageServerObject.localPosition.z = BitConverter.ToSingle(data, startIndex + 25);
-            messageServerObject.localRotation.x = BitConverter.ToSingle(data, startIndex + 29);
-            messageServerObject.localRotation.y = BitConverter.ToSingle(data, startIndex + 33);
-            messageServerObject.localRotation.z = BitConverter.ToSingle(data, startIndex + 37);
-            messageServerObject.localRotation.w = BitConverter.ToSingle(data, startIndex + 41);
-            messageServerObject.localScale.x = BitConverter.ToSingle(data, startIndex + 45);
-            messageServerObject.localScale.y = BitConverter.ToSingle(data, startIndex + 49);
-            messageServerObject.localScale.z = BitConverter.ToSingle(data, startIndex + 53);
+            messageServerObject.instanceID = BitConverter.ToInt32(data, startIndex + 9);
+            messageServerObject.rootInstanceID = BitConverter.ToInt32(data, startIndex + 13);
+            messageServerObject.parentInstanceID = BitConverter.ToInt32(data, startIndex + 17);
+            messageServerObject.localPosition.x = BitConverter.ToSingle(data, startIndex + 21);
+            messageServerObject.localPosition.y = BitConverter.ToSingle(data, startIndex + 25);
+            messageServerObject.localPosition.z = BitConverter.ToSingle(data, startIndex + 29);
+            messageServerObject.localRotation.x = BitConverter.ToSingle(data, startIndex + 33);
+            messageServerObject.localRotation.y = BitConverter.ToSingle(data, startIndex + 37);
+            messageServerObject.localRotation.z = BitConverter.ToSingle(data, startIndex + 41);
+            messageServerObject.localRotation.w = BitConverter.ToSingle(data, startIndex + 45);
+            messageServerObject.localScale.x = BitConverter.ToSingle(data, startIndex + 49);
+            messageServerObject.localScale.y = BitConverter.ToSingle(data, startIndex + 53);
+            messageServerObject.localScale.z = BitConverter.ToSingle(data, startIndex + 57);
 
             // Dynamic size
-            int nameDataLength = BitConverter.ToInt32(data, startIndex + 57);
-            messageServerObject.name = System.Text.Encoding.UTF8.GetString(data, startIndex + 61, nameDataLength);
+            int nameDataLength = BitConverter.ToInt32(data, startIndex + 61);
+            messageServerObject.name = System.Text.Encoding.UTF8.GetString(data, startIndex + 65, nameDataLength);
 
             return messageServerObject;
         }

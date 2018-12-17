@@ -204,7 +204,10 @@ namespace MastersOfTempest.Networking
 
         void OnMessagePingPong(byte[] data, ulong steamID)
         {
-            NetworkManager.Instance.SendToClient(steamID, data, NetworkMessageType.PingPong, Facepunch.Steamworks.Networking.SendType.Unreliable);
+            // Send the time back but also append the current server hz
+            ArrayList tmp = new ArrayList(data);
+            tmp.AddRange(System.BitConverter.GetBytes(hz));
+            NetworkManager.Instance.SendToClient(steamID, (byte[])tmp.ToArray(typeof(byte)), NetworkMessageType.PingPong, Facepunch.Steamworks.Networking.SendType.Unreliable);
         }
 
         void OnMessageNetworkBehaviour(byte[] data, ulong steamID)

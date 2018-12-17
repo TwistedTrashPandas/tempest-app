@@ -18,7 +18,7 @@ namespace MastersOfTempest.Networking
         {
             initialized = false;
             serverObject = GetComponent<ServerObject>();
-            typeId = NetworkManager.Instance.networkBehaviourTypeContainer.GetTypeIdOfNetworkBehaviour(GetType());
+            typeId = NetworkManager.Instance.GetTypeIdOfNetworkBehaviour(GetType());
 
             // NetworkBehaviour messages are managed by the GameClient, GameServer and their ServerObjects
             serverObject.AddNetworkBehaviourEvents(typeId, OnReceivedMessageRaw, OnNetworkBehaviourInitialized);
