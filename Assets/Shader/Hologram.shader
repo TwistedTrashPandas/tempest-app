@@ -10,6 +10,7 @@
 		_WaveSpeed ("Wave Speed", Range(0, 10)) = 0.5
 		_WaveFrequency ("Wave Frequency", Range(0, 10)) = 8
 		_WaveAmplitude ("Wave Amplitude", Range(0, 1)) = 0.02
+		[Toggle] _Ring ("Ring", Float) = 0
 		_RotationSpeed ("Rotation Speed", Range(0, 10)) = 3
 		_ColorShiftSpeed ("Color Shift Speed", Range(0, 2)) = 0.5
 		_MinHue ("MinHue", Range(0, 1)) = 0
@@ -70,6 +71,7 @@
 			float _WaveSpeed;
 			float _WaveFrequency;
 			float _WaveAmplitude;
+			bool _Ring;
 			float _RotationSpeed;
 			float _ColorShiftSpeed;
 			float _MinHue;
@@ -139,26 +141,29 @@
 			{
 				float4 colorOutput = float4(0, 0, 0, 0);
 
-				// Rotate the magic ring
-				float alpha = _RotationSpeed * _Time.y;
-				float s = sin(alpha);
-				float c = cos(alpha);
-				float2x2 rotationMatrix = float2x2(c, -s, s, c);
+				if (_Ring)
+				{
+					// Rotate the magic ring
+					float alpha = _RotationSpeed * _Time.y;
+					float s = sin(alpha);
+					float c = cos(alpha);
+					float2x2 rotationMatrix = float2x2(c, -s, s, c);
 
-				// Move to origin, rotate and move back again
-				float2 uvRotated = i.uv;
-				uvRotated -= float2(0.5f, 0.5f);
-				uvRotated = mul(uvRotated, rotationMatrix);
-				uvRotated += float2(0.5f, 0.5f);
+					// Move to origin, rotate and move back again
+					float2 uvRotated = i.uv;
+					uvRotated -= float2(0.5f, 0.5f);
+					uvRotated = mul(uvRotated, rotationMatrix);
+					uvRotated += float2(0.5f, 0.5f);
 
-				float4 colorMainTex = tex2D(_MainTex, uvRotated);
-				colorOutput += 0.5f * sin(2 * pow(uvRotated.x, 2)) * colorMainTex;
-				colorOutput += 0.5f * abs(sin(_Time.y)) * colorMainTex;
+					float4 colorMainTex = tex2D(_MainTex, uvRotated);
+					colorOutput += 0.5f * sin(2 * pow(uvRotated.x, 2)) * colorMainTex;
+					colorOutput += 0.5f * abs(sin(_Time.y)) * colorMainTex;
 
-				// Shift colors with hsv representation
-				float3 hsv = RGBtoHSV(colorOutput.rgb);
-				hsv.x = _MinHue + (_MaxHue - _MinHue) * abs(sin(hsv.x + uvRotated.x + uvRotated.y + _ColorShiftSpeed * _Time.y));
-				colorOutput.rgb = HSVtoRGB(hsv);
+					// Shift colors with hsv representation
+					float3 hsv = RGBtoHSV(colorOutput.rgb);
+					hsv.x = _MinHue + (_MaxHue - _MinHue) * abs(sin(hsv.x + uvRotated.x + uvRotated.y + _ColorShiftSpeed * _Time.y));
+					colorOutput.rgb = HSVtoRGB(hsv);
+				}
 
 				// Wave for more magic appeal
 				float2 uv = i.uvColor;
