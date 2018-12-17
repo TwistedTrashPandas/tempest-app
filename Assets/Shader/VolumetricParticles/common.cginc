@@ -65,6 +65,15 @@ void ComputeLocalFrameAnglesXYZ(in float3 f3LocalX,
 	float fViewDirLocalAzimuthSin = dot(f3RayDir, f3LocalY);
 	fLocalAzimuthAngle = atan2(fViewDirLocalAzimuthSin, fViewDirLocalAzimuthCos);
 }
+void DirectionToZenithAzimuthAngleXZY(in float3 f3Direction, out float fZenithAngle, out float fAzimuthAngle)
+{
+	float fZenithCos = f3Direction.y;
+	fZenithAngle = acos(fZenithCos);
+	//float fZenithSin = sqrt( max(1 - fZenithCos*fZenithCos, 1e-10) );
+	float fAzimuthCos = f3Direction.x;// / fZenithSin;
+	float fAzimuthSin = f3Direction.z;// / fZenithSin;
+	fAzimuthAngle = atan2(fAzimuthSin, fAzimuthCos);
+}
 
 void ConstructLocalFrameXYZ(in float3 f3Up, in float3 f3Inward, out float3 f3X, out float3 f3Y, out float3 f3Z)
 {
@@ -134,6 +143,30 @@ float2 UVToProj(in float2 f2UV)
 float2 ProjToUV(in float2 f2ProjSpaceXY)
 {
 	return float2(0.5, 0.5) + float2(0.5, -0.5) * f2ProjSpaceXY;
+}
+
+void WorldParamsToOpticalDepthLUTCoords(in float3 f3NormalizedStartPos, in float3 f3RayDir, out float4 f4LUTCoords)
+{
+	DirectionToZenithAzimuthAngleXZY(f3NormalizedStartPos, f4LUTCoords.x, f4LUTCoords.y);
+
+	float3 f3LocalX, f3LocalY, f3LocalZ;
+	// Construct local tangent frame for the start point on the sphere (z up)
+	// For convinience make the Z axis look into the sphere
+	ConstructLocalFrameXYZ(-f3NormalizedStartPos, float3(0, 1, 0), f3LocalX, f3LocalY, f3LocalZ);
+
+	// z coordinate is the angle between the ray direction and the local frame zenith direction
+	// Note that since we are interested in rays going inside the sphere only, the allowable
+	// range is [0, PI/2]
+
+	float fRayDirLocalZenith, fRayDirLocalAzimuth;
+	ComputeLocalFrameAnglesXYZ(f3LocalX, f3LocalY, f3LocalZ, f3RayDir, fRayDirLocalZenith, fRayDirLocalAzimuth);
+	f4LUTCoords.z = fRayDirLocalZenith;
+	f4LUTCoords.w = fRayDirLocalAzimuth;
+
+	f4LUTCoords.xyzw = f4LUTCoords.xyzw / float4(PI, 2 * PI, PI / 2, 2 * PI) + float4(0.0, 0.5, 0, 0.5);
+
+	// Clamp only zenith (yz) coordinate as azimuth is filtered with wraparound mode
+	f4LUTCoords.xz = clamp(f4LUTCoords, 0.5 / OPTICAL_DEPTH_LUT_DIM, 1.0 - 0.5 / OPTICAL_DEPTH_LUT_DIM).xz;
 }
 
 void GetRaySphereIntersection(in float3 f3RayOrigin,

@@ -90,7 +90,7 @@ Shader "Custom/HeightFieldRender" {
 			half4x4 modelMatrixInverse = unity_WorldToObject;
 			half3 pos = mul(modelMatrix, half4(centerPos, 1.0f)).xyz;
 
-			half3 normalDirection = normalize(mul(half4(normal, 1.0f), modelMatrixInverse).xyz);
+			half3 normalDirection = normalize(mul(modelMatrixInverse, half4(normal, 1.0f)).xyz);
 			half3 viewDirection = normalize(_WorldSpaceCameraPos - pos);
 			half3 lightDirection;
 			half attenuation = g_Attenuation;

@@ -22,7 +22,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             Texture3D t1 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/v3/3DNoiseTex.dds", TextureFormat.Alpha8, 1), TextureFormat.Alpha8);
             material.SetTexture("g_tex3DNoise", t1);
 
-            Texture3D t2 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/v3/Density.dds", TextureFormat.RG16, 2), TextureFormat.RGHalf);
+            Texture3D t2 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/v2/Density.dds", TextureFormat.RG16, 2), TextureFormat.RGFloat);
             material.SetTexture("g_tex3DParticleDensityLUT", t2);
 
             Texture3D t3 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/v3/SingleSctr.dds", TextureFormat.RHalf, 2), TextureFormat.RHalf);
@@ -54,7 +54,12 @@ namespace MastersOfTempest.Environment.VisualEffects
             GetComponent<MeshFilter>().sharedMesh = m;
             //transform.position = new Vector3();
         }
-        
+
+        private void Update()
+        {
+            //this.transform.LookAt(Camera.main.transform);
+        }
+
         private Texture2D Tex2DArrtoTex2D(Texture2D[] tex2DArr, TextureFormat tf)
         {
             int d = tex2DArr.Length;
@@ -68,7 +73,7 @@ namespace MastersOfTempest.Environment.VisualEffects
                 {
                     for (int k = 0; k < d; k++)
                     {
-                        colors[j + i * w + k * h * w] = tex2DArr[k].GetPixel(i, j);
+                        colors[j + i * w + k * h * w] = tex2DArr[k].GetPixel(j, i);
                     }
                 }
             }
