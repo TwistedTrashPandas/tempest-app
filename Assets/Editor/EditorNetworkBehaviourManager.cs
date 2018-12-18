@@ -8,41 +8,28 @@ namespace MastersOfTempest.Networking
     public class EditorNetworkBehaviourManager
     {
         [InitializeOnLoadMethod]
-        static void CreateNetworkBehaviourTypeIds()
+        static void SetNetworkBehaviourIndices()
         {
-            NetworkBehaviourTypeContainer asset = AssetDatabase.LoadAssetAtPath<NetworkBehaviourTypeContainer>("Assets/Resources/NetworkBehaviourTypeContainer.asset");
-            asset.networkBehaviourTypeFullNames = null;
-
             ServerObject[] serverObjects = Resources.LoadAll<ServerObject>("ServerObjects/");
-
-            HashSet<string> setOfTypeFullNames = new HashSet<string>();
 
             foreach (ServerObject s in serverObjects)
             {
-                NetworkBehaviour[] networkBehaviours = s.GetComponents<NetworkBehaviour>();
+                ServerObject[] children = s.GetComponentsInChildren<ServerObject>();
 
-                foreach (NetworkBehaviour n in networkBehaviours)
+                foreach (ServerObject c in children)
                 {
-                    string typeName = n.GetType().FullName;
+                    NetworkBehaviour[] networkBehaviours = c.GetComponents<NetworkBehaviour>();
 
-                    if (!setOfTypeFullNames.Contains(typeName))
+                    for (int i = 0; i < networkBehaviours.Length; i++)
                     {
-                        setOfTypeFullNames.Add(typeName);
+                        if (networkBehaviours[i].index != i)
+                        {
+                            networkBehaviours[i].index = i;
+                            EditorUtility.SetDirty(s);
+                        }
                     }
                 }
             }
-
-            int idToAssign = 0;
-            asset.networkBehaviourTypeFullNames = new string[setOfTypeFullNames.Count];
-
-            foreach (string typeFullName in setOfTypeFullNames)
-            {
-                asset.networkBehaviourTypeFullNames[idToAssign] = typeFullName;
-                idToAssign++;
-            }
-
-            // Make sure that changes to this asset are saved
-            EditorUtility.SetDirty(asset);
         }
     }
 }

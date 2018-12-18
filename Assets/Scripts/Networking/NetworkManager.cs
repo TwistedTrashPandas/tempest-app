@@ -23,10 +23,6 @@ namespace MastersOfTempest.Networking
         public Dictionary<NetworkMessageType, System.Action<byte[], ulong>> clientMessageEvents;
         public Dictionary<NetworkMessageType, System.Action<byte[], ulong>> serverMessageEvents;
 
-        // Let other classes acces the data from the type container through this script
-        [SerializeField]
-        private NetworkBehaviourTypeContainer networkBehaviourTypeContainer;
-
         private Client client;
         private int serverMessagesOffset = 0;
 
@@ -194,11 +190,6 @@ namespace MastersOfTempest.Networking
             // Messages for the server are sent on a different channel than messages for a client
             // This way the client knows if the incoming message is for him as a client or him as a server
             SendToClient(client.Lobby.Owner, data, serverMessagesOffset + (int)networkMessageType, sendType);
-        }
-
-        public int GetTypeIdOfNetworkBehaviour(System.Type networkBehaviourType)
-        {
-            return networkBehaviourTypeContainer.GetTypeIdOfNetworkBehaviour(networkBehaviourType);
         }
 
         public ulong[] GetLobbyMemberIDs()

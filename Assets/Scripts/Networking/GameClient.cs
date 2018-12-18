@@ -210,7 +210,7 @@ namespace MastersOfTempest.Networking
         void OnMessageNetworkBehaviour(byte[] data, ulong steamID)
         {
             MessageNetworkBehaviour message = MessageNetworkBehaviour.FromBytes(data, 0);
-            objectsFromServer[message.serverID].HandleNetworkBehaviourMessage(message.typeID, message.data, steamID);
+            objectsFromServer[message.serverID].HandleNetworkBehaviourMessage(message.index, message.data, steamID);
         }
 
         void OnMessageNetworkBehaviourInitialized(byte[] data, ulong steamID)
