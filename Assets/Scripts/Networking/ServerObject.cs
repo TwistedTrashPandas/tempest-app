@@ -15,7 +15,7 @@ namespace MastersOfTempest.Networking
         public int serverID = 0;
         public float lastUpdate = 0;
 
-        // Used when the server object is a child in a server object resource (resourceID < 0)
+        // Used when the server object is a child in a server object resource (resourceID < 0), set by editor script
         [SerializeField, HideInInspector]
         public ServerObject root = null;
         [SerializeField, HideInInspector]
@@ -137,26 +137,26 @@ namespace MastersOfTempest.Networking
             }
         }
 
-        public void HandleNetworkBehaviourInitializedMessage (int networkBehaviourTypeId, ulong steamID)
+        public void HandleNetworkBehaviourInitializedMessage (int index, ulong steamID)
         {
-            networkBehaviourInitializedEvents[networkBehaviourTypeId].Invoke(steamID);
+            networkBehaviourInitializedEvents[index].Invoke(steamID);
         }
 
-        public void HandleNetworkBehaviourMessage(int networkBehaviourTypeId, byte[] data, ulong steamId)
+        public void HandleNetworkBehaviourMessage(int index, byte[] data, ulong steamId)
         {
-            networkBehaviourEvents[networkBehaviourTypeId].Invoke(data, steamId);
+            networkBehaviourEvents[index].Invoke(data, steamId);
         }
 
-        public void AddNetworkBehaviourEvents(int networkBehaviourTypeId, Action<byte[], ulong> behaviourAction, Action<ulong> initializedAction)
+        public void AddNetworkBehaviourEvents(int index, Action<byte[], ulong> behaviourAction, Action<ulong> initializedAction)
         {
-            networkBehaviourEvents[networkBehaviourTypeId] = behaviourAction;
-            networkBehaviourInitializedEvents[networkBehaviourTypeId] = initializedAction;
+            networkBehaviourEvents[index] = behaviourAction;
+            networkBehaviourInitializedEvents[index] = initializedAction;
         }
 
-        public void RemoveNetworkBehaviourEvents(int networkBehaviourTypeId)
+        public void RemoveNetworkBehaviourEvents(int index)
         {
-            networkBehaviourEvents.Remove(networkBehaviourTypeId);
-            networkBehaviourInitializedEvents.Remove(networkBehaviourTypeId);
+            networkBehaviourEvents.Remove(index);
+            networkBehaviourInitializedEvents.Remove(index);
         }
 
         public void SetLayerOfThisGameObjectAndAllChildren (string layer)
