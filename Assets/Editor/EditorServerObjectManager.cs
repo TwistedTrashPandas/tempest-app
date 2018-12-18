@@ -38,12 +38,24 @@ namespace MastersOfTempest.Networking
 
                 for (int i = 0; i < s.children.Length; i++)
                 {
-                    s.children[i].resourceID = -(1 + i);
-                    s.children[i].root = s;
+                    ServerObject child = s.children[i];
+                    int resourceIdAsChildId = -(1 + i);
+
+                    if (child.resourceID != resourceIdAsChildId || child.root != s)
+                    {
+                        // Assign resource id / root and save changes
+                        s.children[i].resourceID = resourceIdAsChildId;
+                        s.children[i].root = s;
+                        EditorUtility.SetDirty(s);
+                    }
                 }
 
-                // Assign root to itself
-                s.root = s;
+                if (s.root != s)
+                {
+                    // Assign root to itself and save changes
+                    s.root = s;
+                    EditorUtility.SetDirty(s);
+                }
             }
 
             int nextIdToAssign = 1;
@@ -57,13 +69,11 @@ namespace MastersOfTempest.Networking
 
                 if (s.resourceID == 0)
                 {
-                    // Assign id
+                    // Assign id and make sure that changes to this prefab are saved
                     s.resourceID = nextIdToAssign;
+                    EditorUtility.SetDirty(s);
                     nextIdToAssign++;
                 }
-
-                // Make sure that changes to this prefab are saved
-                EditorUtility.SetDirty(s);
             }
         }
     }
