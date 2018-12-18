@@ -1,4 +1,6 @@
-﻿Shader "Custom/CloudPart" {
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "Custom/CloudPart" {
 	Properties{
 		g_tex3DNoise("_NoiseTex", 3D) = ""  {}
 		g_tex3DParticleDensityLUT("_ParticleDensity", 3D) = ""  {}
@@ -46,7 +48,7 @@
 
 			//	pass for directional lights
 		Pass {
-				Lighting On ZWrite On Cull Off
+				Lighting On ZWrite On Cull Front
 				Blend SrcAlpha OneMinusSrcAlpha
 			//Blend One OneMinusSrcAlpha
 
@@ -85,7 +87,8 @@
 				{
 					float4 vertex : SV_POSITION;
 					uint id : VertexID;
-					float4 projPos: TEXCOORD0;
+					float4 projPos: TEXCOORD1;
+					float4 uv: TEXCOORD0;
 				};
 
 
@@ -97,8 +100,6 @@
 				StructuredBuffer<float3>	g_vVertices : register(t3);
 				StructuredBuffer<int>		g_iIndices : register(t5);
 
-				SamplerState MyLinearClampSampler : register(s0);
-				SamplerState MyLinearRepeatSampler : register(s1);
 
 				sampler2D _CameraDepthTexture;
 
@@ -126,12 +127,36 @@
 					out float fDistanceToEntryPoint,
 					out float fDistanceToExitPoint)
 				{
-					float4x4 f3x3WorldToObjSpaceRotation = float4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);//;
+					/*
+					float3 f3Forward = normalize(ParticleAttrs.f3Pos - _WorldSpaceCameraPos).xyz;
+					float cosAng = dot(float3(0, 0, 1), f3Forward);
+					float3 f3RotAxis = -normalize(cross(float3(0, 0, 1), f3Forward));
+					if (cosAng < -1) {
+						cosAng = 1.0f - cosAng;
+						f3RotAxis = -f3RotAxis;
+					}
+					float sinAng = sin(acos(cosAng));
+					float minCos = 1.0f - cosAng;
+					float uxy = minCos * f3RotAxis.x * f3RotAxis.y;
+					float uxz = minCos * f3RotAxis.x * f3RotAxis.z;
+					float uyz = minCos * f3RotAxis.z * f3RotAxis.y;
+					float xSin = sinAng * f3RotAxis.x;
+					float ySin = sinAng * f3RotAxis.y;
+					float zSin = sinAng * f3RotAxis.z;
+
+					matrix mRotCamDirMatrix = matrix(
+						cosAng + f3RotAxis.x*f3RotAxis.x*minCos, uxy - zSin, uxz + ySin, 0,
+						uxy + zSin, cosAng + f3RotAxis.y*f3RotAxis.y*minCos, uyz - xSin, 0,
+						uxz - ySin, uyz + xSin, cosAng + f3RotAxis.z*f3RotAxis.z*minCos, 0,
+						0, 0, 0, 1
+						);
+					*/
+					matrix f3x3WorldToObjSpaceRotation = (unity_WorldToObject);// mRotCamDirMatrix;//  float4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);//;
 					// Compute camera location and view direction in particle's object space:
 					float3 f3CamPosObjSpace = f3CameraPos - ParticleAttrs.f3Pos;
-					f3CamPosObjSpace = mul(f3x3WorldToObjSpaceRotation, f3CamPosObjSpace);
+					f3CamPosObjSpace = mul(f3x3WorldToObjSpaceRotation, float4(f3CamPosObjSpace,1.0f));
 					float3 f3ViewRayObjSpace = mul(f3x3WorldToObjSpaceRotation, f3ViewRay);
-					float3 f3LightDirObjSpce = mul(f3x3WorldToObjSpaceRotation, _WorldSpaceLightPos0.xyz);
+					float3 f3LightDirObjSpce = mul(f3x3WorldToObjSpaceRotation, -_WorldSpaceLightPos0.xyz) ;
 
 					// Compute scales to transform ellipsoid into the unit sphere:
 					float3 f3Scale = 1.0f / g_fSize; // 1.f / GetParticleScales(ParticleAttrs.fSize, CellAttrs.uiNumActiveLayers);
@@ -173,10 +198,12 @@
 					WorldParamsToOpticalDepthLUTCoords(f3EntryPointUSSpace, f3ViewRayUSSpace, f4LUTCoords);
 					// Randomly rotate the sphere
 					//f4LUTCoords = f4LUTCoords.xyzw;
-					f4LUTCoords.y += ParticleAttrs.fRndAzimuthBias;
+					//f4LUTCoords.x += 0.5f;
+					//f4LUTCoords.y += ParticleAttrs.fRndAzimuthBias;
 
 					float2 f2NormalizedDensityAndDist;
-					SAMPLE_4D_LUT(g_tex3DParticleDensityLUT, OPTICAL_DEPTH_LUT_DIM, f4LUTCoords, 0, f2NormalizedDensityAndDist);
+					SAMPLE_4D_LUT_FLT2(g_tex3DParticleDensityLUT, OPTICAL_DEPTH_LUT_DIM, f4LUTCoords, 0, f2NormalizedDensityAndDist);
+					//f2NormalizedDensityAndDist = g_tex3DParticleDensityLUT.SampleLevel(MyLinearRepeatSampler, f4LUTCoords.xyz + , 0);
 					//f2NormalizedDensityAndDist.x += f2NormalizedDensityAndDist.y;
 					float3 f3FirstMatterPointWS = f3CameraPos + (fDistanceToEntryPoint + (fDistanceToExitPoint - fDistanceToEntryPoint) * f2NormalizedDensityAndDist.y) * f3ViewRay;
 					float3 f3FirstMatterPointUSSpace = f3EntryPointUSSpace + (fIsecLenUSSpace * f2NormalizedDensityAndDist.y) * f3ViewRayUSSpace;
@@ -202,8 +229,8 @@
 					float4 f4SingleScatteringLUTCoords = WorldParamsToParticleScatteringLUT(f3EntryPointUSSpace, f3ViewRayUSSpace, f3LightDirUSSpace, true, fSingleScatteringDensityScale);
 					float4 f4MultipleScatteringLUTCoords = WorldParamsToParticleScatteringLUT(f3EntryPointUSSpace, f3ViewRayUSSpace, f3LightDirUSSpace, true, fMultipleScatteringDensityScale);
 					float fSingleScattering = 0, fMultipleScattering = 0;
-					SAMPLE_4D_LUT(g_tex3DSingleScatteringInParticleLUT, SRF_SCATTERING_IN_PARTICLE_LUT_DIM, f4SingleScatteringLUTCoords, 0, fSingleScattering);
-					SAMPLE_4D_LUT(g_tex3DMultipleScatteringInParticleLUT, SRF_SCATTERING_IN_PARTICLE_LUT_DIM, f4MultipleScatteringLUTCoords, 0, fMultipleScattering);
+					SAMPLE_4D_LUT_FLT(g_tex3DSingleScatteringInParticleLUT, SRF_SCATTERING_IN_PARTICLE_LUT_DIM, f4SingleScatteringLUTCoords, 0, fSingleScattering);
+					SAMPLE_4D_LUT_FLT(g_tex3DMultipleScatteringInParticleLUT, SRF_SCATTERING_IN_PARTICLE_LUT_DIM, f4MultipleScatteringLUTCoords, 0, fMultipleScattering);
 					float fCosTheta = dot(-f3ViewRayUSSpace, f3LightDirUSSpace);
 					float PhaseFunc = HGPhaseFunc(fCosTheta);
 
@@ -225,9 +252,12 @@
 					// max((f2NormalizedDensityAndDist.x), 0); //
 					//f4Color.b = 0;// f4LUTCoords.w;// max((f2NormalizedDensityAndDist.y), 0);// (f3Ambient.rgb + (fSingleScattering + fMultipleScattering) * ParticleLighting.f4SunLight.rgb) * PI;
 					//f4Color.g = 0;// fTransparency;// (f3Ambient.rgb + (fSingleScattering + fMultipleScattering) * ParticleLighting.f4SunLight.rgb) * PI;
-					f4Color.a = 1.0f;// fTransparency;//  f4Color.g; // 
-					f4Color.r = f2NormalizedDensityAndDist.x;
-					f4Color.gb = 0;
+					//f4Color.a = 1.0f;// fTransparency;//  f4Color.g; // 
+					//f4Color.r = f2NormalizedDensityAndDist.x;
+					//f4Color.gb = 0;
+					//if (f4LUTCoords.y < 1.0-sqrt(0.5))
+					//	f4Color.a = 0.0f;
+					//f4Color.b = f4LUTCoords.w;
 				}
 
 
@@ -256,19 +286,59 @@
 							g2f Outs[8];
 							// matrix mViewProj = ; // g_CameraAttribs.WorldViewProj;
 							// Multiply with camera view-proj matrix
-							matrix ParticleObjToProjSpaceMatr = UNITY_MATRIX_MVP; // mul(ParticleObjToWorldSpaceMatr, );
+							matrix g_CameraRotation;
+							g_CameraRotation = matrix(1 ,0 ,0, 0,
+								0, 1, 0, 0,
+								0, 0, 1, 0,
+								0, 0, 0, 1
+							);/*
+							float3 forward = normalize(UNITY_MATRIX_IT_MV[2].xyz);
+							float3 right = cross(up, forward);*/
+							float3 f3Forward = normalize(p[0].vertex - _WorldSpaceCameraPos).xyz;
+							float cosAng = dot(float3(0, 0, 1), f3Forward);
+							float3 f3RotAxis = normalize(cross(float3(0, 0, 1), f3Forward));
+							if (cosAng < -1) {
+								cosAng = 1.0f - cosAng;
+								f3RotAxis = -f3RotAxis;
+							}
+							float sinAng = sin(acos(cosAng));
+							float minCos = 1.0f - cosAng;
+							float uxy = minCos * f3RotAxis.x * f3RotAxis.y;
+							float uxz = minCos * f3RotAxis.x * f3RotAxis.z;
+							float uyz = minCos * f3RotAxis.z * f3RotAxis.y;
+							float xSin = sinAng * f3RotAxis.x;
+							float ySin = sinAng * f3RotAxis.y;
+							float zSin = sinAng * f3RotAxis.z;
+
+							matrix mRotCamDirMatrix = matrix(
+								cosAng + f3RotAxis.x*f3RotAxis.x*minCos,	uxy - zSin,									uxz + ySin,									0,
+								uxy + zSin,									cosAng + f3RotAxis.y*f3RotAxis.y*minCos,	uyz-xSin,									0,
+								uxz - ySin,									uyz + xSin,									cosAng + f3RotAxis.z*f3RotAxis.z*minCos,	0,
+								0,0,0,1
+								);
+
+							matrix ParticleObjToProjSpaceMatr = (UNITY_MATRIX_MVP); // mul(UNITY_MATRIX_VP, mRotCamDirMatrix); // mul(ParticleObjToWorldSpaceMatr, );
+							/*matrix ParticleObjToWorldSpaceMatr;
+							ParticleObjToWorldSpaceMatr[0].xyzw = float4(1, 0, 0, 0);
+							ParticleObjToWorldSpaceMatr[1].xyzw = float4(0, 1, 0, 0);// f3Normal.xyz;
+							ParticleObjToWorldSpaceMatr[2].xyzw = float4(0, 0, 1, 0);//f3Bitangent.xyz;
+							// Add translation to particle world position
+							ParticleObjToWorldSpaceMatr[3].xyzw = p[0].vertex;
+							ParticleObjToWorldSpaceMatr = mul(UNITY_MATRIX_VP, transpose(ParticleObjToWorldSpaceMatr));*/
 
 							for (int iCorner = 0; iCorner < 8; ++iCorner)
 							{
-								float4 f4CurrCornerWorldPos;
+								float4 f4CurrCornerWorldPos; 
 								f4CurrCornerWorldPos.xyz = p[0].vertex + f3Size * float3((iCorner & 0x01) ? +1 : -1, (iCorner & 0x04) ? +1 : -1, (iCorner & 0x02) ? +1 : -1);
+								//f4CurrCornerWorldPos.xyz = p[0].vertex + f3Size *((iCorner & 0x01) ? +right : -right) + ((iCorner & 0x04) ? +up : -up) + ((iCorner & 0x02) ? +forward : -forward);
 								f4CurrCornerWorldPos.w = 1.0f;
 
-								float4 f4CurrCornerPosPS = mul(ParticleObjToProjSpaceMatr, f4CurrCornerWorldPos); //UnityObjectToClipPos(f4CurrCornerWorldPos);//
+								float4 f4CurrCornerPosPS = UnityObjectToClipPos(f4CurrCornerWorldPos); //UnityObjectToClipPos(f4CurrCornerWorldPos);//
 
 								Outs[iCorner].id = uiParticleId;
 								Outs[iCorner].vertex = f4CurrCornerPosPS;
-								Outs[iCorner].projPos = ComputeScreenPos(Outs[iCorner].vertex);
+								Outs[iCorner].projPos = mul(UNITY_MATRIX_MV, f4CurrCornerWorldPos);
+								Outs[iCorner].uv = ComputeScreenPos(Outs[iCorner].vertex);
 							}
 							// Generate bounding box faces
 							{
@@ -323,13 +393,20 @@
 							f4PosOnFarClipPlaneWS.xyz = f4PosOnFarClipPlaneWS.xyz / f4PosOnFarClipPlaneWS.w;
 							f3ViewRay = normalize(f4PosOnFarClipPlaneWS.xyz - f4PosOnNearClipPlaneWS.xyz);
 							*/
+							/*
+							i.ray = i.ray * (_ProjectionParams.z / i.ray.z);
+							float2 uv = i.uv.xy / i.uv.w;
 
-							f3CameraPos = _WorldSpaceCameraPos.xyz; // float3(0, 0, -2);//
-							float2 uv = In.projPos.xy / In.projPos.w;
-							float fDepth = tex2D(_CameraDepthTexture, uv);
-							float2 f2PosPS = UVToProj(uv);
-							float4 f4ReconstructedPosWS = mul(UNITY_MATRIX_I_V ,mul(unity_CameraInvProjection, float4(f2PosPS, Linear01Depth(fDepth) , 1.0)));
-							float3 f3WorldPos = f4ReconstructedPosWS.xyz / f4ReconstructedPosWS.w;
+							float depth = UNITY_SAMPLE_DEPTH(tex2D(_CameraDepthTexture, uv));
+							depth = Linear01Depth(depth);
+							float4 vpos = float4(i.ray * depth, 1);
+							float3 wpos = mul(_CameraToWorld, vpos).xyz;
+							*/
+							f3CameraPos = _WorldSpaceCameraPos.xyz; // float3(0, 2, 0);//
+							float2 uv = In.uv.xy / In.uv.w;
+							float fDepth = Linear01Depth(tex2D(_CameraDepthTexture, uv));
+							float4 f4ReconstructedPosWS = mul(UNITY_MATRIX_I_V,float4(In.projPos.xyz * fDepth, 1.0));
+							float3 f3WorldPos = f4ReconstructedPosWS.xyz;// f4ReconstructedPosWS.w;
 							/*
 							float2 f2PosPS = UVToProj(In.vertex.xy / f2ScreenDim);
 
@@ -344,23 +421,25 @@
 							float4 f4ReconstructedPosWS = mul(UNITY_MATRIX_I_V, float4(In.projPos.xy, fDepth, 1.0f)); // mul(mul(, unity_CameraInvProjection), UNITY_MATRIX_IT_MV); // mul(float4(f2PosPS.xy, fDepth, 1.0), g_CameraAttribs.mViewProjInv);
 							float3 f3WorldPos = f4ReconstructedPosWS.xyz / f4ReconstructedPosWS.w;*/
 							// Compute view ray
+							//f3WorldPos.y = f3CameraPos.y;
 							f3ViewRay = f3WorldPos - f3CameraPos;
 							float fRayLength = length(f3ViewRay);
 							f3ViewRay /= fRayLength;
-
 							float2 f2RayIsecs;
 							float fDistanceToEntryPoint, fDistanceToExitPoint;
 							float3 f3EntryPointUSSpace, f3ViewRayUSSpace, f3LightDirUSSpace;
 							IntersectRayWithParticle(ParticleAttrs,  f3CameraPos, f3ViewRay,
 													f2RayIsecs, f3EntryPointUSSpace, f3ViewRayUSSpace,f3LightDirUSSpace,fDistanceToEntryPoint, fDistanceToExitPoint);
-
+							
 							if (f2RayIsecs.y < 0)
 								discard;
 							if (fRayLength < fDistanceToEntryPoint)
 								discard; // return float4(1.0f, 1.0f, 1.0f, 1.0f);
-							
+							//return float4((f3ViewRay), 1.0f);
+							//return float4(normalize(f3ViewRay * 0.5f + 0.5f), 1.0f);
 							fDistanceToExitPoint = min(fDistanceToExitPoint, fRayLength);
 
+							//return float4(normalize(f3ViewRay), 1.0f);
 							float fCloudMass;
 							float fIsecLenUSSpace = f2RayIsecs.y - f2RayIsecs.x;
 							// Compute particle rendering attributes

@@ -51,9 +51,6 @@ StructuredBuffer<float4> g_SunLightAttenuation : register(t4);
 RWStructuredBuffer<SCloudParticleLighting> g_ParticlesLightingRW : register(u1);
 RWStructuredBuffer<float4>                 g_SunLightAttenuationRW : register(u2);
 
-SamplerState MyLinearClampSampler : register(s0);
-SamplerState MyLinearRepeatSampler : register(s1);
-
 static SGlobalCloudAttribs g_GlobalCloudAttribs;
 
 float3 GetParticleScales(in float fSize, in float fNumActiveLayers)

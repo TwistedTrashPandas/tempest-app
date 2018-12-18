@@ -26,6 +26,10 @@ Texture2DArray<float> g_tex2DLiSpaceCloudTransparency : register(t14);
 Texture2D<float> g_tex2DLiSpCldDensityEpipolarScan  : register(t15);
 Texture2D<float> g_tex2DEpipolarCloudTransparency : register(t16);
 
+SamplerState My_Linear_ClampU_RepeatV_RepeatW_Sampler : register(s0);
+SamplerState MyLinearRepeatSampler : register(s1);
+SamplerState MyLinearClampSampler : register(s2);
+
 static SAirScatteringAttribs g_MediaParams;
 static SLightAttribs g_LightAttribs;
 
@@ -35,22 +39,39 @@ static SLightAttribs g_LightAttribs;
 #   define VOL_SCATTERING_IN_PARTICLE_LUT_DIM float4(32,64,32,8)
 #   define SRF_SCATTERING_IN_PARTICLE_LUT_DIM float4(32,64,16,8)
 
-#define SAMPLE_4D_LUT(tex3DLUT, LUT_DIM, f4LUTCoords, fLOD, Result)  \
-{                                                               \
-    float3 f3UVW;                                               \
-    f3UVW.xy = f4LUTCoords.xy;                                  \
-    float fQSlice = f4LUTCoords.w * LUT_DIM.w - 0.5;            \
-    float fQ0Slice = floor(fQSlice);                            \
-    float fQWeight = fQSlice - fQ0Slice;                        \
-                                                                \
-    f3UVW.z = (fQ0Slice + f4LUTCoords.z) / LUT_DIM.w;           \
-                                                                \
-    Result = lerp(                                              \
-        tex3DLUT.SampleLevel(MyLinearRepeatSampler, f3UVW, fLOD),       \
-        /* frac() assures wraparound filtering of w coordinate*/                            \
-        tex3DLUT.SampleLevel(MyLinearRepeatSampler, frac(f3UVW + float3(0,0,1/LUT_DIM.w)), fLOD),   \
-        fQWeight);                                                                          \
+void SAMPLE_4D_LUT_FLT2(Texture3D<float2> tex3DLUT, float4 LUT_DIM, float4 f4LUTCoords, int fLOD, out float2 Result)  \
+{                                                               
+float3 f3UVW;                                               
+f3UVW.xy = f4LUTCoords.xy;                                  
+float fQSlice = f4LUTCoords.w *  float(LUT_DIM.w) - 0.5f;
+float fQ0Slice = floor(fQSlice);                            
+float fQWeight = fQSlice - fQ0Slice;                        
+
+f3UVW.z = (fQ0Slice + f4LUTCoords.z) / float(LUT_DIM.w);           
+
+Result = lerp(
+	tex3DLUT.SampleLevel(MyLinearRepeatSampler, f3UVW, fLOD), 
+	/* frac() assures wraparound filtering of w coordinate*/                            
+	tex3DLUT.SampleLevel(MyLinearRepeatSampler, frac(f3UVW + float3(0.0f, 0.0f, 1.0f / LUT_DIM.w)), fLOD),
+	fQWeight);                                                                          
 }
+
+void SAMPLE_4D_LUT_FLT(Texture3D<float> tex3DLUT, float4 LUT_DIM, float4 f4LUTCoords, int fLOD, out float Result)  \
+{                                                               
+float3 f3UVW;                                               
+f3UVW.xy = f4LUTCoords.xy;                                  
+float fQSlice = f4LUTCoords.w *  (LUT_DIM.w) - 0.5f;
+float fQ0Slice = floor(fQSlice);                           
+float fQWeight = fQSlice - fQ0Slice;                        
+
+f3UVW.z = (fQ0Slice + f4LUTCoords.z) / (LUT_DIM.w);          
+
+Result = lerp(tex3DLUT.Sample(MyLinearRepeatSampler, f3UVW), 
+	/* frac() assures wraparound filtering of w coordinate*/                            
+	tex3DLUT.Sample(MyLinearRepeatSampler, frac(f3UVW + float3(0.0f, 0.0f, 1.0f / LUT_DIM.w))), 
+	fQWeight);                                                                          
+}
+
 void ComputeLocalFrameAnglesXYZ(in float3 f3LocalX,
 	in float3 f3LocalY,
 	in float3 f3LocalZ,
@@ -137,7 +158,7 @@ float HGPhaseFunc(float fCosTheta, const float g = 0.9)
 
 float2 UVToProj(in float2 f2UV)
 {
-	return float2(-1.0, 1.0) + float2(2.0, -2.0) * f2UV;
+	return float2(-1.0, -1.0) + float2(2.0, 2.0) * f2UV;
 }
 
 float2 ProjToUV(in float2 f2ProjSpaceXY)
@@ -163,10 +184,19 @@ void WorldParamsToOpticalDepthLUTCoords(in float3 f3NormalizedStartPos, in float
 	f4LUTCoords.z = fRayDirLocalZenith;
 	f4LUTCoords.w = fRayDirLocalAzimuth;
 
-	f4LUTCoords.xyzw = f4LUTCoords.xyzw / float4(PI, 2 * PI, PI / 2, 2 * PI) + float4(0.0, 0.5, 0, 0.5);
-
+	f4LUTCoords.xyzw = f4LUTCoords.xyzw / float4(PI, 2 * PI, PI / 2, 2 * PI) + float4(0.0f, 0.5, 0, 0.5);
+	float offset = 0.0f/2.9f;
 	// Clamp only zenith (yz) coordinate as azimuth is filtered with wraparound mode
-	f4LUTCoords.xz = clamp(f4LUTCoords, 0.5 / OPTICAL_DEPTH_LUT_DIM, 1.0 - 0.5 / OPTICAL_DEPTH_LUT_DIM).xz;
+	f4LUTCoords.z = clamp(f4LUTCoords, 0.5 / OPTICAL_DEPTH_LUT_DIM, 1.0 - 0.5 / OPTICAL_DEPTH_LUT_DIM).z;
+
+	if (f4LUTCoords.x < offset)
+		f4LUTCoords.x += (1.0f - offset);
+	else
+		f4LUTCoords.x = f4LUTCoords.x - offset;
+	f4LUTCoords.x = clamp(f4LUTCoords, 0.5 / OPTICAL_DEPTH_LUT_DIM, 1.0 - 0.5 / OPTICAL_DEPTH_LUT_DIM).x;
+
+	// f4LUTCoords.x = clamp(f4LUTCoords, 0.5 / OPTICAL_DEPTH_LUT_DIM + 1.0f / 3.0f, 1.0 - 0.5 / OPTICAL_DEPTH_LUT_DIM - 1.0f / 3.0f).x;
+	// f4LUTCoords.x = 1.0f - f4LUTCoords.x;
 }
 
 void GetRaySphereIntersection(in float3 f3RayOrigin,

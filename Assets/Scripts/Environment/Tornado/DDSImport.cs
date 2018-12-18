@@ -51,7 +51,7 @@ namespace MastersOfTempest.Tools
             return LoadTextureDXT(data, textureFormat, sizeOfFormat);
         }
         
-        public static Texture3D Tex2DArrtoTex3D(Texture2D[] tex2DArr, TextureFormat tf)
+        public static Texture3D Tex2DArrtoTex3D(Texture2D[] tex2DArr, TextureFormat tf, bool transpose = false)
         {
             int d = tex2DArr.Length;
             int w = tex2DArr[0].width;
@@ -65,7 +65,14 @@ namespace MastersOfTempest.Tools
                 {
                     for (int j = 0; j < w; j++, idx++)
                     {
-                        colors[idx] = tex2DArr[k].GetPixel(j, i);
+                        int idxTranspose = k;
+                        if (transpose)
+                        {
+
+                          /*int row = Mathf.FloorToInt(k / 32f);
+                            idxTranspose = row + (k % 32) * 64;*/
+                        }
+                        colors[idx] = tex2DArr[idxTranspose%d].GetPixel(j%w, i%h);
                     }
                 }
             }
