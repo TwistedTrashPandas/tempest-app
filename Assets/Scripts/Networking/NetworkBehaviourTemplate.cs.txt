@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using MastersOfTempest.Networking;
 
-namespace MasterOfTempest
+namespace MastersOfTempest
 {
     // Use this class for custom networking messages between the client and the server
     // Requires a ServerObject to be attached to this gameObject
@@ -11,10 +11,11 @@ namespace MasterOfTempest
 
     // NOTES:
     // - Rename this class and the message struct
-    // - Make sure that the public member networkMessageType is set to the type of your message (e.g. the name of this class)
     // - Only use SendToServer(...) as a client and let the server answer with SendToClient(...) or SendToAllClients(...)
+    // - You can override the OnClientMessageReceivedRaw(...) and OnServerMessageReceivedRaw(...) functions in combination with the ByteSerializer for less message overhead
     // - If you have to use the MonoBehaviour Start(), Update() and OnDestroy() methods you have to call base.Start() / base.Update() / base.OnDestroy() inside
     // - If you want to synchronize a lot of objects it is more performant to only have one NetworkBehaviour that handles e.g. a list of objects that you want to synchronize
+    [DisallowMultipleComponent]
     public class NetworkBehaviourTemplate : NetworkBehaviour
     {
         // Example: synchronize this variable which is randomly set by the server

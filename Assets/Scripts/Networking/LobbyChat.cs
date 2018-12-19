@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Facepunch.Steamworks;
-using System;
 
 namespace MastersOfTempest.Networking
 {
@@ -13,29 +12,36 @@ namespace MastersOfTempest.Networking
 
         void Start()
         {
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.LobbyChat] += OnMessageLobbyChat;
+            Client.Instance.Lobby.OnChatMessageRecieved += OnChatMessageReceived;
         }
 
-        void OnMessageLobbyChat(byte[] data, ulong steamID)
+        private void OnChatMessageReceived(ulong steamID, byte[] data, int dataLength)
         {
-            string message = System.Text.Encoding.UTF8.GetString(data);
+            byte[] messageData = new byte[dataLength];
+            System.Array.Copy(data, messageData, dataLength);
+            string message = System.Text.Encoding.UTF8.GetString(messageData);
             textChat.text += "<color=grey>[" + Client.Instance.Friends.Get(steamID).Name + "]: </color>" + message + "\n";
         }
 
         public void SendChatMessage()
         {
-            byte[] data = System.Text.Encoding.UTF8.GetBytes(inputFieldChat.text);
-            ClientManager.Instance.SendToAllClients(data, NetworkMessageType.LobbyChat, Facepunch.Steamworks.Networking.SendType.Reliable);
+            if (Client.Instance != null)
+            {
+                Client.Instance.Lobby.SendChatMessage(inputFieldChat.text);
 
-            inputFieldChat.text = "";
-            inputFieldChat.ActivateInputField();
-            inputFieldChat.Select();
-            inputFieldChat.placeholder.gameObject.SetActive(false);
+                inputFieldChat.text = "";
+                inputFieldChat.ActivateInputField();
+                inputFieldChat.Select();
+                inputFieldChat.placeholder.gameObject.SetActive(false);
+            }
         }
 
         void OnDestroy()
         {
-            ClientManager.Instance.clientMessageEvents[NetworkMessageType.LobbyChat] -= OnMessageLobbyChat;
+            if (Client.Instance != null)
+            {
+                Client.Instance.Lobby.OnChatMessageRecieved -= OnChatMessageReceived;
+            }
         }
     }
 }

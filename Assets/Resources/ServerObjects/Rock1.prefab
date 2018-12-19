@@ -262,10 +262,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceName: Rock1
+  resourceID: 9
   onServer: 1
   serverID: 0
   lastUpdate: 0
+  root: {fileID: 114334480994139150}
+  children: []
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1

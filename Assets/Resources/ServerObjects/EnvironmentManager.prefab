@@ -55,6 +55,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bba05efee5f39146b4d782416baadee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  index: 0
   vectorField: {fileID: 114404567317752372}
   visualSpawner: {fileID: 114371213497830530}
 --- !u!114 &114371213497830530
@@ -140,10 +141,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceName: EnvironmentManager
+  resourceID: 4
   onServer: 1
   serverID: 0
   lastUpdate: 0
+  root: {fileID: 114801461701559052}
+  children: []
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1

@@ -82,11 +82,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   instanceID: 0
-  prefabNum: 0
   relativeTargetPos: {x: 0, y: 0, z: 0}
   type: 1
   speed: 0
   closestDistance: 0
+  moveType: 0
 --- !u!114 &114946308849238226
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -98,8 +98,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceName: DangerZone
+  resourceID: 1
   onServer: 1
   serverID: 0
   lastUpdate: 0
+  root: {fileID: 114946308849238226}
+  children: []
   interpolateOnClient: 1
+  removeChildColliders: 1
+  removeChildRigidbodies: 1

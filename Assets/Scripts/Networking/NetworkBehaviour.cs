@@ -1,16 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace MastersOfTempest.Networking
 {
-    [DisallowMultipleComponent]
     [RequireComponent(typeof(ServerObject))]
-    public class NetworkBehaviour : MonoBehaviour
+    public abstract class NetworkBehaviour : MonoBehaviour
     {
         protected bool initialized = false;
         protected ServerObject serverObject;
 
+        // The index of this NetworkBehaviour component attached to the server object, set by editor script
+        [SerializeField, HideInInspector]
+        public int index = -1;
         private HashSet<ulong> clientsReadyForInitialization = new HashSet<ulong>();
 
         protected virtual void Start()
@@ -18,20 +21,18 @@ namespace MastersOfTempest.Networking
             initialized = false;
             serverObject = GetComponent<ServerObject>();
 
-            if (serverObject.onServer)
+            if (index < 0)
             {
-                // NetworkBehaviour messages are managed by the GameClient and GameServer, add the handlers for the mesaages
-                // The serverID is the same as the instance ID of the transform but might not have been set on the server object yet
-                GameServer.Instance.AddNetworkBehaviourEvents(transform.GetInstanceID(), OnServerReceivedMessageRaw, OnServerNetworkBehaviourInitialized);
+                Debug.LogError("Index of a NetworkBehaviour attached to\"" + gameObject.name + "\" is not valid!");
             }
-            else
-            {
-                GameClient.Instance.AddNetworkBehaviourEvents(serverObject.serverID, OnClientReceivedMessageRaw, OnClientNetworkBehaviourInitialized);
 
+            // NetworkBehaviour messages are managed by the GameClient, GameServer and their ServerObjects
+            serverObject.AddNetworkBehaviourEvents(index, OnReceivedMessageRaw, OnNetworkBehaviourInitialized);
+
+            if (!serverObject.onServer)
+            {
                 // Begin the initialization, tell the server that this object is ready
-                // This is important because the NetworkBehaviour on the server has to be sure that this object spawned and listens to messages from the server
-                byte[] data = System.BitConverter.GetBytes(serverObject.serverID);
-                ClientManager.Instance.SendToServer(data, NetworkMessageType.NetworkBehaviourInitialized, Facepunch.Steamworks.Networking.SendType.Reliable);
+                StartCoroutine(SendNetworkBehaviourInitializedMessage());
             }
         }
 
@@ -50,63 +51,74 @@ namespace MastersOfTempest.Networking
             }
         }
 
-        private void OnServerNetworkBehaviourInitialized(ulong steamID)
+        IEnumerator SendNetworkBehaviourInitializedMessage()
+        {
+            while (!GameClient.Instance.IsInitialized())
+            {
+                // Wait until all objects from the server spawned before sending the initialized message
+                // The NetworkBehaviour could otherwise try to access objects that did not spawn yet
+                yield return new WaitForEndOfFrame();
+            }
+
+            // The NetworkBehaviour on the server has to be sure that this object spawned and listens to messages from the server
+            MessageNetworkBehaviourInitialized message = new MessageNetworkBehaviourInitialized(serverObject.serverID, index);
+            NetworkManager.Instance.SendToServer(ByteSerializer.GetBytes(message), NetworkMessageType.NetworkBehaviourInitialized, Facepunch.Steamworks.Networking.SendType.Reliable);
+        }
+
+        private void OnNetworkBehaviourInitialized(ulong steamID)
         {
             if (!initialized)
             {
-                // Only initialize if all clients are ready
-                bool allClientsReady = true;
-                clientsReadyForInitialization.Add(steamID);
-
-                ulong[] lobbyMemberIDs = ClientManager.Instance.GetLobbyMemberIDs();
-
-                foreach (ulong id in lobbyMemberIDs)
+                if (serverObject.onServer)
                 {
-                    if (!clientsReadyForInitialization.Contains(id))
+                    // Only initialize if all clients are ready
+                    bool allClientsReady = true;
+                    clientsReadyForInitialization.Add(steamID);
+
+                    ulong[] lobbyMemberIDs = NetworkManager.Instance.GetLobbyMemberIDs();
+
+                    foreach (ulong id in lobbyMemberIDs)
                     {
-                        allClientsReady = false;
-                        break;
+                        if (!clientsReadyForInitialization.Contains(id))
+                        {
+                            allClientsReady = false;
+                            break;
+                        }
+                    }
+
+                    if (allClientsReady)
+                    {
+                        // All clients are ready to be initialized, send a message to initialize all of them at the same time
+                        initialized = true;
+                        MessageNetworkBehaviourInitialized message = new MessageNetworkBehaviourInitialized(serverObject.serverID, index);
+                        NetworkManager.Instance.SendToAllClients(ByteSerializer.GetBytes(message), NetworkMessageType.NetworkBehaviourInitialized, Facepunch.Steamworks.Networking.SendType.Reliable);
+                        StartServer();
                     }
                 }
-
-                if (allClientsReady)
+                else
                 {
-                    // All clients are ready to be initialized, send a message to initialize all of them at the same time
                     initialized = true;
-                    byte[] data = System.BitConverter.GetBytes(serverObject.serverID);
-                    ClientManager.Instance.SendToAllClients(data, NetworkMessageType.NetworkBehaviourInitialized, Facepunch.Steamworks.Networking.SendType.Reliable);
-                    StartServer();
+                    StartClient();
                 }
             }
         }
 
-        private void OnClientNetworkBehaviourInitialized(ulong steamID)
+        private void OnReceivedMessageRaw(byte[] data, ulong steamID)
         {
-            if (!initialized)
+            if (serverObject.onServer)
             {
-                initialized = true;
-                StartClient();
+                OnServerReceivedMessageRaw(data, steamID);
             }
-        }
-
-        // Can be overridden by the subclass in order to access the bytes directly
-        protected virtual void OnServerReceivedMessageRaw(byte[] data, ulong steamID)
-        {
-            string message = System.Text.Encoding.UTF8.GetString(data);
-            OnServerReceivedMessage(message, steamID);
-        }
-
-        // Can be overridden by the subclass in order to access the bytes directly
-        protected virtual void OnClientReceivedMessageRaw(byte[] data, ulong steamID)
-        {
-            string message = System.Text.Encoding.UTF8.GetString(data);
-            OnClientReceivedMessage(message, steamID);
+            else
+            {
+                OnClientReceivedMessageRaw(data, steamID);
+            }
         }
 
         protected void SendToServer(byte[] data, Facepunch.Steamworks.Networking.SendType sendType)
         {
-            NetworkBehaviourMessage networkBehaviourMessage = new NetworkBehaviourMessage(serverObject.serverID, data);
-            ClientManager.Instance.SendToServer(ByteSerializer.GetBytes(networkBehaviourMessage), NetworkMessageType.NetworkBehaviour, sendType);
+            MessageNetworkBehaviour message = new MessageNetworkBehaviour(serverObject.serverID, index, data);
+            NetworkManager.Instance.SendToServer(message.ToBytes(), NetworkMessageType.NetworkBehaviour, sendType);
         }
 
         protected void SendToServer(string message, Facepunch.Steamworks.Networking.SendType sendType = Facepunch.Steamworks.Networking.SendType.Reliable)
@@ -116,8 +128,8 @@ namespace MastersOfTempest.Networking
 
         protected void SendToClient(ulong steamID, byte[] data, Facepunch.Steamworks.Networking.SendType sendType)
         {
-            NetworkBehaviourMessage networkBehaviourMessage = new NetworkBehaviourMessage(serverObject.serverID, data);
-            ClientManager.Instance.SendToClient(steamID, ByteSerializer.GetBytes(networkBehaviourMessage), NetworkMessageType.NetworkBehaviour, sendType);
+            MessageNetworkBehaviour message = new MessageNetworkBehaviour(serverObject.serverID, index, data);
+            NetworkManager.Instance.SendToClient(steamID, message.ToBytes(), NetworkMessageType.NetworkBehaviour, sendType);
         }
 
         protected void SendToClient(ulong steamID, string message, Facepunch.Steamworks.Networking.SendType sendType = Facepunch.Steamworks.Networking.SendType.Reliable)
@@ -127,8 +139,8 @@ namespace MastersOfTempest.Networking
 
         protected void SendToAllClients(byte[] data, Facepunch.Steamworks.Networking.SendType sendType)
         {
-            NetworkBehaviourMessage networkBehaviourMessage = new NetworkBehaviourMessage(serverObject.serverID, data);
-            ClientManager.Instance.SendToAllClients(ByteSerializer.GetBytes(networkBehaviourMessage), NetworkMessageType.NetworkBehaviour, sendType);
+            MessageNetworkBehaviour message = new MessageNetworkBehaviour(serverObject.serverID, index, data);
+            NetworkManager.Instance.SendToAllClients(message.ToBytes(), NetworkMessageType.NetworkBehaviour, sendType);
         }
 
         protected void SendToAllClients(string message, Facepunch.Steamworks.Networking.SendType sendType = Facepunch.Steamworks.Networking.SendType.Reliable)
@@ -138,14 +150,14 @@ namespace MastersOfTempest.Networking
 
         protected void OnDestroy()
         {
+            serverObject.RemoveNetworkBehaviourEvents(index);
+
             if (serverObject.onServer)
             {
-                GameServer.Instance.RemoveNetworkBehaviourEvents(serverObject.serverID);
                 OnDestroyServer();
             }
             else
             {
-                GameClient.Instance.RemoveNetworkBehaviourEvents(serverObject.serverID);
                 OnDestroyClient();
             }
         }
@@ -170,6 +182,18 @@ namespace MastersOfTempest.Networking
             // To be overwritten by the subclass
         }
 
+        protected virtual void OnServerReceivedMessageRaw(byte[] data, ulong steamID)
+        {
+            // Can be overwritten by the subclass
+            OnServerReceivedMessage(System.Text.Encoding.UTF8.GetString(data), steamID);
+        }
+
+        protected virtual void OnClientReceivedMessageRaw(byte[] data, ulong steamID)
+        {
+            // Can be overwritten by the subclass
+            OnClientReceivedMessage(System.Text.Encoding.UTF8.GetString(data), steamID);
+        }
+
         protected virtual void OnServerReceivedMessage(string message, ulong steamID)
         {
             // To be overwritten by the subclass
@@ -190,23 +214,4 @@ namespace MastersOfTempest.Networking
             // To be overwritten by the subclass
         }
     }
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct NetworkBehaviourMessage
-    {
-        public int serverID;                                        // 4 bytes
-        public int dataLength;                                      // 4 bytes
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 1192)]
-        public byte[] data;                                         // 1192 bytes
-                                                                    // 1200 bytes
-
-        public NetworkBehaviourMessage(int serverID, byte[] data)
-        {
-            this.serverID = serverID;
-
-            this.data = new byte[1192];
-            System.Array.Copy(data, this.data, data.Length);
-            this.dataLength = data.Length;
-        }
-    };
 }

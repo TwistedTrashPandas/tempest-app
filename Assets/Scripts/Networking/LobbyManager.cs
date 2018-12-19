@@ -1,13 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Facepunch.Steamworks;
 
 namespace MastersOfTempest.Networking
 {
     public class LobbyManager : MonoBehaviour
     {
-        public GameObject friendPrefab;
+        public GameObject friendAvatarPrefab;
+        public GameObject lobbyAvatarPrefab;
 
         public Transform layoutLobby;
         public Transform layoutFriends;
@@ -16,76 +18,164 @@ namespace MastersOfTempest.Networking
         public UnityEngine.UI.Text textFriends;
         public UnityEngine.UI.Button readyButton;
 
+        // Make these buttons non interactable if there already is a wizard/apprentice
+        public UnityEngine.UI.Button selectWizardButton;
+        public UnityEngine.UI.Button selectApprenticeButton;
+
         [Header("Change this to your development scene(s)")]
         public string serverSceneName = "Server";
         public string clientSceneName = "Client";
 
+        private Dictionary<ulong, LobbyAvatar> lobbyAvatars = new Dictionary<ulong, LobbyAvatar>();
+
         private ulong lobbyIDToJoin;
+        private bool gameStarted = false;
         private bool ready = false;
 
         void Start()
         {
             if (Client.Instance != null)
             {
-                Client.Instance.Lobby.OnLobbyCreated += OnLobbyCreated;
-                Client.Instance.Lobby.OnLobbyJoined += OnLobbyJoined;
+                Client.Instance.Lobby.OnLobbyCreated += OnLobbyCreatedOrJoined;
+                Client.Instance.Lobby.OnLobbyJoined += OnLobbyCreatedOrJoined;
                 Client.Instance.Lobby.OnUserInvitedToLobby += OnUserInvitedToLobby;
+                Client.Instance.Lobby.OnLobbyStateChanged += OnLobbyStateChanged;
+                Client.Instance.Lobby.OnLobbyMemberDataUpdated += OnLobbyMemberDataUpdated;
 
-                ClientManager.Instance.clientMessageEvents[NetworkMessageType.LobbyStartGame] += OnMessageLobbyStartGame;
+                NetworkManager.Instance.clientMessageEvents[NetworkMessageType.StartGame] += OnMessageLobbyStartGame;
 
                 // Create a lobby that the player is in when the game starts
                 CreateDefaultLobby();
-
-                StartCoroutine(RefreshLobby());
+                StartCoroutine(RefreshFriendAvatars());
             }
             else
             {
                 Debug.LogError("Client instance is null!");
             }
-
-            Client.Instance.Lobby.SetMemberData("Ready", ready.ToString());
-            StartCoroutine(CheckForEveryoneReady());
         }
 
-        IEnumerator CheckForEveryoneReady()
+        // Called when someone joins/leaves the lobby
+        private void OnLobbyStateChanged (Lobby.MemberStateChange stateChange, ulong steamID, ulong affectedSteamID)
+        {
+            if (stateChange == Lobby.MemberStateChange.Entered)
+            {
+                // Create avatar for this user
+                lobbyAvatars[steamID] = InstantiateLobbyAvatar(Client.Instance.Friends.Get(steamID));
+            }
+            else
+            {
+                // Destroy the avatar of this user
+                Destroy(lobbyAvatars[steamID].gameObject);
+                lobbyAvatars.Remove(steamID);
+            }
+        }
+
+        // Called when the data of a member in the lobby is updated
+        private void OnLobbyMemberDataUpdated (ulong steamID)
+        {
+            lobbyAvatars[steamID].Refresh();
+            DisableTakenRoleButtons();
+            CheckForEveryoneReady();
+        }
+
+        private void OnMessageLobbyStartGame(byte[] data, ulong steamID)
+        {
+            // Load client scene
+            SceneManager.LoadScene(clientSceneName);
+
+            // Also load server scene if you are the owner of the lobby
+            if (Client.Instance.Lobby.Owner == Client.Instance.SteamId)
+            {
+                SceneManager.LoadScene(serverSceneName, LoadSceneMode.Additive);
+            }
+        }
+
+        private void OnLobbyCreatedOrJoined(bool success)
+        {
+            if (success && Client.Instance.Lobby.IsValid)
+            {
+                Debug.Log("Created/joined lobby \"" + Client.Instance.Lobby.Name + "\"");
+                InitializeLobby();
+            }
+            else
+            {
+                Debug.LogError("Failed to create/join lobby. Trying to recreate the default lobby...");
+                CreateDefaultLobby();
+            }
+        }
+
+        private void OnUserInvitedToLobby(ulong lobbyID, ulong otherUserID)
+        {
+            Debug.Log("Got invitation to the lobby " + lobbyID + " from user " + otherUserID);
+            lobbyIDToJoin = lobbyID;
+            string message = "Player " + Client.Instance.Friends.Get(otherUserID).Name + " invited you to a lobby.\nDo you want to join?";
+            DialogBox.Show(message, true, true, AcceptLobbyInvitation, null);
+        }
+
+        private void CreateDefaultLobby()
+        {
+            Client.Instance.Lobby.Create(Lobby.Type.FriendsOnly, 4);
+            Client.Instance.Lobby.Name = Client.Instance.Username + "'s Lobby";
+        }
+
+        private void AcceptLobbyInvitation()
+        {
+            Client.Instance.Lobby.Leave();
+            Client.Instance.Lobby.Join(lobbyIDToJoin);
+        }
+
+        private void InitializeLobby()
+        {
+            // Destroy the old lobby
+            foreach (LobbyAvatar lobbyAvatar in lobbyAvatars.Values)
+            {
+                Destroy(lobbyAvatar.gameObject);
+            }
+
+            lobbyAvatars.Clear();
+
+            ulong[] lobbyMemberIDs = Client.Instance.Lobby.GetMemberIDs();
+
+            // Spawn all members of the new lobby
+            foreach (ulong steamID in lobbyMemberIDs)
+            {
+                lobbyAvatars[steamID] = InstantiateLobbyAvatar(Client.Instance.Friends.Get(steamID));
+                lobbyAvatars[steamID].Refresh();
+            }
+
+            textLobby.text = Client.Instance.Lobby.Name;
+            Client.Instance.Lobby.SetMemberData("Ready", ready.ToString());
+            Client.Instance.Lobby.SetMemberData("Role", "" + (int)PlayerControls.PlayerRole.Spectator);
+            PlayerControls.PlayerRoleExtensions.SetPlayerRoleAsActive(PlayerControls.PlayerRole.Spectator);
+        }
+
+        private void CheckForEveryoneReady()
         {
             // Only the lobby owner checks if everyone is ready and then sends a message to everyone to start the game
-            bool gameStarted = false;
-
-            while (!gameStarted)
+            if (!gameStarted && Client.Instance.Lobby.NumMembers > 0)
             {
                 // Always check this because the lobby owner could have changed
                 if (Client.Instance.SteamId == Client.Instance.Lobby.Owner)
                 {
-                    ulong[] memberSteamIDs = Client.Instance.Lobby.GetMemberIDs();
+                    bool everyoneReady = true;
 
-                    if (memberSteamIDs.Length > 0)
+                    foreach (LobbyAvatar lobbyAvatar in lobbyAvatars.Values)
                     {
-                        bool everyoneReady = true;
-
-                        foreach (ulong steamID in memberSteamIDs)
+                        if (!lobbyAvatar.ready)
                         {
-                            bool memberReady = false;
-                            bool.TryParse(Client.Instance.Lobby.GetMemberData(steamID, "Ready"), out memberReady);
-
-                            if (!memberReady)
-                            {
-                                everyoneReady = false;
-                                break;
-                            }
-                        }
-
-                        if (everyoneReady)
-                        {
-                            // Send the game start message only once
-                            byte[] data = System.Text.Encoding.UTF8.GetBytes("LobbyStartGame");
-                            ClientManager.Instance.SendToAllClients(data, NetworkMessageType.LobbyStartGame, Facepunch.Steamworks.Networking.SendType.Reliable);
-                            gameStarted = true;
+                            everyoneReady = false;
+                            break;
                         }
                     }
-                }
 
-                yield return new WaitForSeconds(0.5f);
+                    if (everyoneReady)
+                    {
+                        // Send the game start message only once
+                        byte[] data = System.Text.Encoding.UTF8.GetBytes("LobbyStartGame");
+                        NetworkManager.Instance.SendToAllClients(data, NetworkMessageType.StartGame, Facepunch.Steamworks.Networking.SendType.Reliable);
+                        gameStarted = true;
+                    }
+                }
             }
         }
 
@@ -97,178 +187,97 @@ namespace MastersOfTempest.Networking
             readyButton.GetComponentInChildren<UnityEngine.UI.Text>().text = ready ? "Ready" : "Not Ready";
         }
 
-        void CreateDefaultLobby()
+        private IEnumerator RefreshFriendAvatars()
         {
-            Client.Instance.Lobby.Create(Lobby.Type.FriendsOnly, 4);
-            Client.Instance.Lobby.Name = Client.Instance.Username + "'s Lobby";
-        }
-
-        void OnMessageLobbyStartGame(byte[] data, ulong steamID)
-        {
-            // Load client scene
-            UnityEngine.SceneManagement.SceneManager.LoadScene(clientSceneName);
-
-            // Also load server scene if you are the owner of the lobby
-            if (Client.Instance.Lobby.Owner == Client.Instance.SteamId)
-            {
-                UnityEngine.SceneManagement.SceneManager.LoadScene(serverSceneName, UnityEngine.SceneManagement.LoadSceneMode.Additive);
-            }
-        }
-
-        void OnLobbyCreated(bool success)
-        {
-            if (success && Client.Instance.Lobby.IsValid)
-            {
-                Debug.Log("Created lobby \"" + Client.Instance.Lobby.Name + "\"");
-            }
-            else
-            {
-                Debug.LogError("Failed to create lobby. Trying to recreate the default lobby...");
-                CreateDefaultLobby();
-            }
-        }
-
-        void OnLobbyJoined(bool success)
-        {
-            if (success && Client.Instance.Lobby.IsValid)
-            {
-                Debug.Log("Joined lobby \"" + Client.Instance.Lobby.Name + "\"");
-            }
-            else
-            {
-                Debug.LogError("Failed to join lobby. Recreating default lobby...");
-                CreateDefaultLobby();
-            }
-        }
-
-        void OnUserInvitedToLobby(ulong lobbyID, ulong otherUserID)
-        {
-            Debug.Log("Got invitation to the lobby " + lobbyID + " from user " + otherUserID);
-            lobbyIDToJoin = lobbyID;
-            string message = "Player " + Client.Instance.Friends.Get(otherUserID).Name + " invited you to a lobby.\nDo you want to join?";
-            DialogBox.Show(message, true, true, AcceptLobbyInvitation, null);
-        }
-
-        void AcceptLobbyInvitation()
-        {
-            Client.Instance.Lobby.Leave();
-            Client.Instance.Lobby.Join(lobbyIDToJoin);
-        }
-
-        IEnumerator RefreshLobby()
-        {
-            yield return new WaitForSeconds(0.25f);
-
             while (true)
             {
-                RefreshFriendAvatars();
-                RefreshLobbyAvatars();
+                yield return new WaitForSecondsRealtime(0.25f);
 
-                yield return new WaitForSeconds(0.5f);
-            }
-        }
+                FriendAvatar[] friendAvatars = layoutFriends.GetComponentsInChildren<FriendAvatar>();
 
-        void RefreshFriendAvatars()
-        {
-            FriendAvatar[] friendAvatars = layoutFriends.GetComponentsInChildren<FriendAvatar>();
+                Dictionary<ulong, bool> friendsToStay = new Dictionary<ulong, bool>();
 
-            Dictionary<ulong, bool> friendsToStay = new Dictionary<ulong, bool>();
-
-            // Mark all the friends for removal later
-            foreach (FriendAvatar f in friendAvatars)
-            {
-                friendsToStay[f.steamID] = false;
-            }
-
-            // Refresh all friends of this user
-            Client.Instance.Friends.Refresh();
-            IEnumerable<SteamFriend> friends = Client.Instance.Friends.All;
-
-            foreach (SteamFriend friend in friends)
-            {
-                if (friend.IsOnline)
+                // Mark all the friends for removal later
+                foreach (FriendAvatar f in friendAvatars)
                 {
-                    if (!friendsToStay.ContainsKey(friend.Id))
+                    friendsToStay[f.steamID] = false;
+                }
+
+                // Refresh all friends of this user
+                Client.Instance.Friends.Refresh();
+                IEnumerable<SteamFriend> friends = Client.Instance.Friends.All;
+
+                foreach (SteamFriend friend in friends)
+                {
+                    if (friend.IsOnline)
                     {
-                        // A new friend is now online
-                        InstantiateFriendAvatar(friend, layoutFriends, true);
+                        if (!friendsToStay.ContainsKey(friend.Id))
+                        {
+                            // A new friend is now online
+                            InstantiateFriendAvatar(friend);
+                        }
+
+                        // This friend should not be removed later
+                        friendsToStay[friend.Id] = true;
                     }
-
-                    // This friend should not be removed later
-                    friendsToStay[friend.Id] = true;
                 }
-            }
 
-            // Remove all friends that are no longer online
-            foreach (FriendAvatar f in friendAvatars)
-            {
-                if (!friendsToStay[f.steamID])
+                // Remove all friends that are no longer online
+                foreach (FriendAvatar f in friendAvatars)
                 {
-                    Destroy(f.gameObject);
+                    if (!friendsToStay[f.steamID])
+                    {
+                        Destroy(f.gameObject);
+                    }
                 }
             }
         }
 
-        void RefreshLobbyAvatars()
+        private FriendAvatar InstantiateFriendAvatar(SteamFriend friend)
         {
-            FriendAvatar[] lobbyAvatars = layoutLobby.GetComponentsInChildren<FriendAvatar>();
-
-            Dictionary<ulong, bool> lobbyMembersToStay = new Dictionary<ulong, bool>();
-
-            // Mark all the friends for removal later
-            foreach (FriendAvatar f in lobbyAvatars)
-            {
-                lobbyMembersToStay[f.steamID] = false;
-            }
-
-            // Display current users that are in this lobby
-            textLobby.text = Client.Instance.Lobby.Name;
-            ulong[] memberSteamIDs = Client.Instance.Lobby.GetMemberIDs();
-
-            foreach (ulong steamID in memberSteamIDs)
-            {
-                if (!lobbyMembersToStay.ContainsKey(steamID))
-                {
-                    // A new lobby member joined, activate ready outline
-                    SteamFriend friend = Client.Instance.Friends.Get(steamID);
-                    InstantiateFriendAvatar(friend, layoutLobby, false).imageReadyOutline.gameObject.SetActive(true);
-                }
-
-                // This lobby member should not be removed later
-                lobbyMembersToStay[steamID] = true;
-            }
-
-            // Remove all lobby members that are no longer in the lobby
-            foreach (FriendAvatar f in lobbyAvatars)
-            {
-                if (!lobbyMembersToStay[f.steamID])
-                {
-                    Destroy(f.gameObject);
-                }
-            }
-        }
-
-        FriendAvatar InstantiateFriendAvatar(SteamFriend friend, Transform parent, bool inviteable)
-        {
-            FriendAvatar tmp = Instantiate(friendPrefab, parent, false).GetComponent<FriendAvatar>();
+            FriendAvatar tmp = Instantiate(friendAvatarPrefab, layoutFriends, false).GetComponent<FriendAvatar>();
             tmp.gameObject.name = friend.Name;
             tmp.steamID = friend.Id;
-            tmp.buttonInvite.gameObject.SetActive(inviteable);
-
-            Client.Instance.Friends.GetAvatar(Friends.AvatarSize.Large, friend.Id, tmp.OnImage);
-
             return tmp;
         }
 
-        void OnDestroy()
+        private LobbyAvatar InstantiateLobbyAvatar(SteamFriend friend)
+        {
+            LobbyAvatar tmp = Instantiate(lobbyAvatarPrefab, layoutLobby, false).GetComponent<LobbyAvatar>();
+            tmp.gameObject.name = friend.Name;
+            tmp.steamID = friend.Id;
+            return tmp;
+        }
+
+        private void DisableTakenRoleButtons ()
+        {
+            selectWizardButton.interactable = true;
+            selectApprenticeButton.interactable = true;
+
+            foreach (LobbyAvatar lobbyAvatar in lobbyAvatars.Values)
+            {
+                if (lobbyAvatar.role == PlayerControls.PlayerRole.Wizard)
+                {
+                    selectWizardButton.interactable = false;
+                }
+                else if (lobbyAvatar.role == PlayerControls.PlayerRole.Apprentice)
+                {
+                    selectApprenticeButton.interactable = false;
+                }
+            }
+        }
+
+        private void OnDestroy()
         {
             if (Client.Instance != null)
             {
-                Client.Instance.Lobby.OnLobbyCreated -= OnLobbyCreated;
-                Client.Instance.Lobby.OnLobbyJoined -= OnLobbyJoined;
+                Client.Instance.Lobby.OnLobbyCreated -= OnLobbyCreatedOrJoined;
+                Client.Instance.Lobby.OnLobbyJoined -= OnLobbyCreatedOrJoined;
                 Client.Instance.Lobby.OnUserInvitedToLobby -= OnUserInvitedToLobby;
+                Client.Instance.Lobby.OnLobbyMemberDataUpdated -= OnLobbyMemberDataUpdated;
+                Client.Instance.Lobby.OnLobbyStateChanged -= OnLobbyStateChanged;
 
-                ClientManager.Instance.clientMessageEvents[NetworkMessageType.LobbyStartGame] -= OnMessageLobbyStartGame;
+                NetworkManager.Instance.clientMessageEvents[NetworkMessageType.StartGame] -= OnMessageLobbyStartGame;
             }
         }
     }

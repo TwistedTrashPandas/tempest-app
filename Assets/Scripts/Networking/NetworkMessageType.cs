@@ -3,13 +3,12 @@
     public enum NetworkMessageType
     {
         PingPong,
-        LobbyChat,
-        LobbyStartGame,
+        StartGame,
+        Initialization,
         ServerObject,
         ServerObjectList,
         DestroyServerObject,
         NetworkBehaviour,
-        NetworkBehaviourInitialized,
-        ReadyForInitialization
+        NetworkBehaviourInitialized
     };
 }

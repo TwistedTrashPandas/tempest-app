@@ -18,22 +18,13 @@ namespace MastersOfTempest
 
         public static void Show(string text, bool showYesButton, bool showNoButton, OnButtonClick onYes, OnButtonClick onNo)
         {
-            Canvas canvas = FindObjectOfType<Canvas>();
-
-            if (canvas != null)
-            {
-                GameObject dialogBoxPrefab = Resources.Load<GameObject>("Dialog Box");
-                DialogBox dialogBox = Instantiate(dialogBoxPrefab, canvas.transform).GetComponent<DialogBox>();
-                dialogBox.text.text = text;
-                dialogBox.buttonYes.gameObject.SetActive(showYesButton);
-                dialogBox.buttonNo.gameObject.SetActive(showNoButton);
-                dialogBox.onYes = onYes;
-                dialogBox.onNo = onNo;
-            }
-            else
-            {
-                Debug.LogError("There is no canvas in the scene that the dialog box can be attached to!");
-            }
+            GameObject dialogBoxPrefab = Resources.Load<GameObject>("Dialog Box");
+            DialogBox dialogBox = Instantiate(dialogBoxPrefab).GetComponent<DialogBox>();
+            dialogBox.text.text = text;
+            dialogBox.buttonYes.gameObject.SetActive(showYesButton);
+            dialogBox.buttonNo.gameObject.SetActive(showNoButton);
+            dialogBox.onYes = onYes;
+            dialogBox.onNo = onNo;
         }
 
         public void Yes()

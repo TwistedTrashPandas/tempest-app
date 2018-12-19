@@ -1,11 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MastersOfTempest.Networking;
 
-namespace MasterOfTempest
+namespace MastersOfTempest.Networking.Test
 {
-    public class CubeNetworkBehaviour : NetworkBehaviour
+    public class MoveNetworkBehaviour : NetworkBehaviour
     {
         [SerializeField]
         private float inputsPerSec = 1;
@@ -18,13 +17,13 @@ namespace MasterOfTempest
         private float verticalInput = 0;
         private bool jump = false;
 
-        private struct CubeNetworkMessage
+        private struct MessageMove
         {
             public float horizontalInput;
             public float verticalInput;
             public bool jump;
 
-            public CubeNetworkMessage (float horizontalInput, float verticalInput, bool jump)
+            public MessageMove (float horizontalInput, float verticalInput, bool jump)
             {
                 this.horizontalInput = horizontalInput;
                 this.verticalInput = verticalInput;
@@ -41,8 +40,18 @@ namespace MasterOfTempest
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                CubeNetworkMessage message = new CubeNetworkMessage(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), true);
+                MessageMove message = new MessageMove(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), true);
                 SendToServer(ByteSerializer.GetBytes(message), Facepunch.Steamworks.Networking.SendType.Reliable);
+            }
+
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                serverObject.interpolateOnClient = true;
+            }
+
+            if (Input.GetKeyDown(KeyCode.O))
+            {
+                serverObject.interpolateOnClient = false;
             }
         }
 
@@ -50,7 +59,7 @@ namespace MasterOfTempest
         {
             while (true)
             {
-                CubeNetworkMessage message = new CubeNetworkMessage(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), false);
+                MessageMove message = new MessageMove(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), false);
                 SendToServer(ByteSerializer.GetBytes(message), Facepunch.Steamworks.Networking.SendType.Unreliable);
 
                 yield return new WaitForSeconds(1.0f / inputsPerSec);
@@ -65,10 +74,10 @@ namespace MasterOfTempest
 
         protected override void OnServerReceivedMessageRaw(byte[] data, ulong steamID)
         {
-            CubeNetworkMessage cubeNetworkMessage = ByteSerializer.FromBytes<CubeNetworkMessage>(data);
-            horizontalInput = cubeNetworkMessage.horizontalInput;
-            verticalInput = cubeNetworkMessage.verticalInput;
-            jump = cubeNetworkMessage.jump;
+            MessageMove message = ByteSerializer.FromBytes<MessageMove>(data);
+            horizontalInput = message.horizontalInput;
+            verticalInput = message.verticalInput;
+            jump = message.jump;
 
             if (jump)
             {

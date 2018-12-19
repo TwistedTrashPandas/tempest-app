@@ -6,12 +6,15 @@ namespace MastersOfTempest.PlayerControls
     public abstract class PlayerInputController : MonoBehaviour
     {
         protected CameraDirectionController CameraDirectionController;
+        protected MovementController MovementController;
 
         public event EventHandler ActionMade;
 
         protected virtual void Awake() 
         {
             CameraDirectionController = gameObject.AddComponent<CameraDirectionController>();
+            MovementController = gameObject.AddComponent<MovementController>();
+            MovementController.DirectionCamera = CameraDirectionController.FirstPersonCamera;
         }
 
         public abstract void Interrupt();

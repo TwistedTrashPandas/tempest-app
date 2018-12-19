@@ -6,31 +6,18 @@ using UnityEngine.EventSystems;
 
 namespace MastersOfTempest.Networking
 {
-    public class FriendAvatar : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    public class Avatar : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         public ulong steamID;
 
         public Image avatar;
         public Image imageNameBackground;
-        public Image imageReadyOutline;
-        public Button buttonInvite;
         public Text textName;
 
         void Start()
         {
-            textName.text = gameObject.name;
-        }
-
-        void Update()
-        {
-            bool ready = false;
-            bool.TryParse(Facepunch.Steamworks.Client.Instance.Lobby.GetMemberData(steamID, "Ready"), out ready);
-            imageReadyOutline.color = ready ? Color.green : Color.red;
-        }
-
-        public void Invite()
-        {
-            Facepunch.Steamworks.Client.Instance.Lobby.InviteUserToLobby(steamID);
+            textName.text = Facepunch.Steamworks.Client.Instance.Friends.Get(steamID).Name;
+            Facepunch.Steamworks.Client.Instance.Friends.GetAvatar(Facepunch.Steamworks.Friends.AvatarSize.Large, steamID, OnImage);
         }
 
         public void OnImage(Facepunch.Steamworks.Image image)
