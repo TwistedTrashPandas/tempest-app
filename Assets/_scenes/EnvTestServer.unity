@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0.4511454, g: 0.49975932, b: 0.56766605, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -176,7 +176,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4997648306434654, guid: 927214b2ba2f8534ca0188075beb6a6c, type: 2}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: 0.976296
       objectReference: {fileID: 0}
     - target: {fileID: 4997648306434654, guid: 927214b2ba2f8534ca0188075beb6a6c, type: 2}
       propertyPath: m_LocalRotation.y
@@ -188,11 +188,19 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4997648306434654, guid: 927214b2ba2f8534ca0188075beb6a6c, type: 2}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.2164397
       objectReference: {fileID: 0}
     - target: {fileID: 4997648306434654, guid: 927214b2ba2f8534ca0188075beb6a6c, type: 2}
       propertyPath: m_RootOrder
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4997648306434654, guid: 927214b2ba2f8534ca0188075beb6a6c, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4997648306434654, guid: 927214b2ba2f8534ca0188075beb6a6c, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 155
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 927214b2ba2f8534ca0188075beb6a6c, type: 2}
@@ -295,7 +303,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4516789872046452, guid: b1a1c1a46495e48d4990bf09f3b4339a, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -308
+      value: -90.9
       objectReference: {fileID: 0}
     - target: {fileID: 4516789872046452, guid: b1a1c1a46495e48d4990bf09f3b4339a, type: 2}
       propertyPath: m_LocalPosition.y
@@ -373,14 +381,14 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 10000
   field of view: 60
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1335
+    m_Bits: 1319
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 1

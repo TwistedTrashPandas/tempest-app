@@ -12,7 +12,7 @@ namespace MastersOfTempest.Environment.Interacting
 
         private void Start()
         {
-            if (forceDir != null)
+            if (forceDir != Vector3.zero)
                 forceDir = Vector3.Normalize(forceDir);
             else
                 forceDir = new Vector3(1, 0, 1);

@@ -104,13 +104,6 @@ MonoBehaviour:
   sortEach: 20
   particelNumExp: 16
   dampVel: 0.999
-  g_fTimeDiff: 0
-  g_fTimeStepTex: 0.1
-  densityTexPrefix: diffuse_
-  normalTexPrefix: normal_
-  startIdx: 0
-  endIdx: 10
-  skipIdx: 1
   maxVel:
   - 30
   - 30

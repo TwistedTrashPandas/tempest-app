@@ -37,7 +37,7 @@ namespace MastersOfTempest.Environment
 
         void Awake()
         {
-            if (v3_dimensions == null)
+            if (v3_dimensions == Vector3.zero)
                 throw new System.InvalidOperationException("Dimensions of grid not set in prefab!");
             v3s_vectors = new Vector3[v3_dimensions[0], v3_dimensions[1], v3_dimensions[2]];
             if (loadFromFile)
