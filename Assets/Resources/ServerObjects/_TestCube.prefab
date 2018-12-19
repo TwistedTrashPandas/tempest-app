@@ -110,6 +110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38ea6535ed642ec43a7a0fee34953e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  index: 1
 --- !u!114 &114340251316627260
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -121,10 +122,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: 0
+  resourceID: 16
   onServer: 1
   serverID: 0
   lastUpdate: 0
+  root: {fileID: 114340251316627260}
+  children: []
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -139,6 +142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 370baa69c70f4d841b423d5e7e5abfd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  index: 0
   inputsPerSec: 10
   movementSpeed: 30
   jumpHeight: 8

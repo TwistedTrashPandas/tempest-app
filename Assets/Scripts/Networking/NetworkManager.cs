@@ -14,9 +14,6 @@ namespace MastersOfTempest.Networking
     {
         public static NetworkManager Instance = null;
 
-        // Let other classes acces the data from the type container through this script
-        public NetworkBehaviourTypeContainer networkBehaviourTypeContainer;
-
         // The app id should be 480 for testing purposes
         public uint appId = 480;
         public bool debugClientMessages = false;
@@ -131,7 +128,7 @@ namespace MastersOfTempest.Networking
 
         void OnConnectionFailed(ulong steamID, Facepunch.Steamworks.Networking.SessionError sessionError)
         {
-            Debug.Log("Connection failed with user " + steamID + " " + sessionError);
+            DialogBox.Show("Connection failed with user " + steamID + ", " + sessionError, false, false, null, null);
         }
 
         // This is where all the messages are received and delegated to the respective events

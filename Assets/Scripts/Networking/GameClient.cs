@@ -11,8 +11,13 @@ namespace MastersOfTempest.Networking
         public static GameClient Instance = null;
 
         public float pingsPerSec = 1;
+        [ReadOnly]
         [SerializeField]
         private bool initialized = false;
+        [ReadOnly]
+        [SerializeField]
+        private float serverHz = 16;
+        [ReadOnly]
         [SerializeField]
         private float ping = 0;
         private float lastPingTime = 0;
@@ -42,7 +47,7 @@ namespace MastersOfTempest.Networking
 
             foreach (ServerObject s in serverObjectResources)
             {
-                if (s.resourceID >= 0 && !serverObjectPrefabs.ContainsKey(s.resourceID))
+                if (s.resourceID > 0 && !serverObjectPrefabs.ContainsKey(s.resourceID))
                 {
                     serverObjectPrefabs[s.resourceID] = s.gameObject;
                 }
@@ -111,23 +116,41 @@ namespace MastersOfTempest.Networking
                 // Make sure that the parent exists already if it has one
                 if (!messageServerObject.hasParent || objectsFromServer.ContainsKey(messageServerObject.parentInstanceID))
                 {
-                    // Switch active scene so that instantiate creates the object as part of the client scene
-                    Scene previouslyActiveScene = SceneManager.GetActiveScene();
-                    SceneManager.SetActiveScene(gameObject.scene);
+                    // Check if the object is a prefab or a child of a prefab (resourceID < 0)
+                    if (messageServerObject.resourceID > 0)
+                    {
+                        // Switch active scene so that instantiate creates the object as part of the client scene
+                        Scene previouslyActiveScene = SceneManager.GetActiveScene();
+                        SceneManager.SetActiveScene(gameObject.scene);
 
-                    // Instantiate the object
-                    ServerObject tmp = Instantiate(serverObjectPrefabs[messageServerObject.resourceID]).GetComponent<ServerObject>();
-                    objectsFromServer[messageServerObject.instanceID] = tmp;
+                        // Instantiate the object
+                        ServerObject tmp = Instantiate(serverObjectPrefabs[messageServerObject.resourceID]).GetComponent<ServerObject>();
+                        objectsFromServer[messageServerObject.instanceID] = tmp;
 
-                    // Switch back to the previously active scene
-                    SceneManager.SetActiveScene(previouslyActiveScene);
+                        // Switch back to the previously active scene
+                        SceneManager.SetActiveScene(previouslyActiveScene);
 
-                    // Set attributes, also update transform after spawn
-                    tmp.onServer = false;
-                    tmp.serverID = messageServerObject.instanceID;
-                    tmp.transform.localPosition = messageServerObject.localPosition;
-                    tmp.transform.localRotation = messageServerObject.localRotation;
-                    tmp.transform.localScale = messageServerObject.localScale;
+                        // Set attributes, also update transform after spawn
+                        tmp.onServer = false;
+                        tmp.serverID = messageServerObject.instanceID;
+                        tmp.transform.localPosition = messageServerObject.localPosition;
+                        tmp.transform.localRotation = messageServerObject.localRotation;
+                        tmp.transform.localScale = messageServerObject.localScale;
+                    }
+                    else if (messageServerObject.resourceID < 0)
+                    {
+                        // Then only the transform should be synchronized and no objects should be spawned
+                        // The root resource has an array of all children where the index is the childId
+                        // Client children find themselves with root.children[-resourceID - 1]
+                        // Find root, then child and assign to objectsFromServer
+                        ServerObject root = objectsFromServer[messageServerObject.rootInstanceID];
+                        ServerObject child = root.children[-messageServerObject.resourceID - 1];
+                        child.serverID = messageServerObject.instanceID;
+                        child.onServer = false;
+
+                        // Add to the dictionairy to make sure that this object is updated with messages
+                        objectsFromServer.Add(child.serverID, child);
+                    }
                 }
             }
 
@@ -181,12 +204,13 @@ namespace MastersOfTempest.Networking
         void OnMessagePingPong(byte[] data, ulong steamID)
         {
             ping = Time.time - System.BitConverter.ToSingle(data, 0);
+            serverHz = System.BitConverter.ToSingle(data, 4);
         }
 
         void OnMessageNetworkBehaviour(byte[] data, ulong steamID)
         {
             MessageNetworkBehaviour message = MessageNetworkBehaviour.FromBytes(data, 0);
-            objectsFromServer[message.serverID].HandleNetworkBehaviourMessage(message.typeID, message.data, steamID);
+            objectsFromServer[message.serverID].HandleNetworkBehaviourMessage(message.index, message.data, steamID);
         }
 
         void OnMessageNetworkBehaviourInitialized(byte[] data, ulong steamID)
@@ -198,6 +222,11 @@ namespace MastersOfTempest.Networking
         public bool IsInitialized ()
         {
             return initialized;
+        }
+
+        public float GetServerHz ()
+        {
+            return serverHz;
         }
 
         public float GetPing ()

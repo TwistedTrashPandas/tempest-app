@@ -55,6 +55,8 @@ MonoBehaviour:
   onServer: 1
   serverID: 0
   lastUpdate: 0
+  root: {fileID: 114769764667969792}
+  children: []
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1

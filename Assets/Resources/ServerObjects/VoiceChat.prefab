@@ -50,9 +50,10 @@ AudioSource:
   m_GameObject: {fileID: 1182796548636702}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 243310982345334608, guid: b9971ab818e01194593dd346eecc440c,
+    type: 2}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -148,6 +149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06fbde0c791bae14691623bc1dc238b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  index: 0
   recordKey: 9
   recordIcon: {fileID: 2800000, guid: 6a59f3aab646eb34e9bb46161fe48a09, type: 3}
   recording: 0
@@ -167,6 +169,8 @@ MonoBehaviour:
   onServer: 1
   serverID: 0
   lastUpdate: 0
+  root: {fileID: 114471020201023198}
+  children: []
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1

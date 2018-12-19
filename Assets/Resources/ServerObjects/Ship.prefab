@@ -1823,6 +1823,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06e31ad85a1214a6ebc9e7d5980a6cc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  index: 1
 --- !u!114 &114157638872992546
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1849,6 +1850,8 @@ MonoBehaviour:
   onServer: 1
   serverID: 0
   lastUpdate: 0
+  root: {fileID: 114449933113175548}
+  children: []
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
@@ -1863,6 +1866,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c6fbf6ed4a5348f6bdf98199eb8825b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  index: 0
 --- !u!136 &136682792734011132
 CapsuleCollider:
   m_ObjectHideFlags: 1
