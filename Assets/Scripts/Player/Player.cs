@@ -18,6 +18,16 @@ namespace MastersOfTempest
         public ulong PlayerId { get; set; }
         private Gamemaster context;
         private PlayerInputController playerInput;
+        public TransformManipulator TransformManipulator { get; private set; }
+
+        private void Awake()
+        {
+            TransformManipulator = GetComponent<TransformManipulator>();
+            if (TransformManipulator == null)
+            {
+                throw new InvalidOperationException($"{nameof(TransformManipulator)} is not specified!");
+            }
+        }
 
         protected override void Start()
         {
@@ -55,7 +65,7 @@ namespace MastersOfTempest
             }
         }
 
-        void ExecutePlayerAction(object sender, EventArgs e)
+        private void ExecutePlayerAction(object sender, EventArgs e)
         {
             ((ActionMadeEventArgs)e).Action.Execute(context);
         }

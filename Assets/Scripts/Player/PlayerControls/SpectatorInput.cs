@@ -55,6 +55,8 @@ namespace MastersOfTempest.PlayerControls
             {
                 throw new InvalidOperationException($"{nameof(FirstPersonCamera)} is not specified!");
             }
+            //We have custom WASD movement on the spectator
+            MovementController.Active = false;
         }
 
         public override void Interrupt()
