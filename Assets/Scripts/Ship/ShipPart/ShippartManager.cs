@@ -2,46 +2,49 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShippartManager : MonoBehaviour
+namespace MastersOfTempest.ShipBL
 {
-    private Shippart[] shipparts;
-    private List<int>[] interactionAreas;
-    void Start()
+    public class ShipPartManager : MonoBehaviour
     {
-        interactionAreas = new List<int>[5];
-        for (int i = 0; i < interactionAreas.Length; i++)
+        private ShipPart[] shipparts;
+        private List<int>[] interactionAreas;
+        void Start()
         {
-            interactionAreas[i] = new List<int>();
-        }
-        shipparts = GetComponentsInChildren<Shippart>();
-        if (shipparts == null)
-            throw new System.InvalidOperationException("Ship has to have at least one shippart attached");
-        else
-        {
-            for (int i = 0; i < shipparts.Length; i++)
+            interactionAreas = new List<int>[5];
+            for (int i = 0; i < interactionAreas.Length; i++)
             {
-                interactionAreas[shipparts[i].interactionArea].Insert(0, i);// Add(i);
+                interactionAreas[i] = new List<int>();
+            }
+            shipparts = GetComponentsInChildren<ShipPart>();
+            if (shipparts == null)
+                throw new System.InvalidOperationException("Ship has to have at least one shippart attached");
+            else
+            {
+                for (int i = 0; i < shipparts.Length; i++)
+                {
+                    interactionAreas[shipparts[i].interactionArea].Insert(0, i);// Add(i);
+                }
             }
         }
-    }
 
-    private void FixedUpdate()
-    {
-        CheckDestruction();
-    }
-
-    void CheckDestruction()
-    {
-        Debug.Log(CalculateOverallDestruction());
-    }
-
-    public float CalculateOverallDestruction()
-    {
-        float result = 0.0f;
-        for (int i = 0; i < shipparts.Length; i++)
+        private void FixedUpdate()
         {
-            result += shipparts[i].GetDestruction();
+            CheckDestruction();
         }
-        return result / shipparts.Length;
+
+        void CheckDestruction()
+        {
+            Debug.Log(CalculateOverallDestruction());
+        }
+
+        public float CalculateOverallDestruction()
+        {
+            float result = 0.0f;
+            for (int i = 0; i < shipparts.Length; i++)
+            {
+                result += shipparts[i].GetDestruction();
+            }
+            return result / shipparts.Length;
+        }
     }
 }

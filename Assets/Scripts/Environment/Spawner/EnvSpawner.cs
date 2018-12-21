@@ -179,10 +179,11 @@ namespace MastersOfTempest.Environment.Interacting
                 switch (type)
                 {
                     case EnvObjectType.Damaging:
-                        float randomSize = Random.Range(0.5f, 2.0f);
+                        float randomSize = Random.Range(0.25f, 4.0f);
                         localScale = new Vector3(randomSize, randomSize, randomSize);
                         prefabNum = Mathf.FloorToInt(Random.Range(0f, damagingPrefabs.Length - Mathf.Epsilon));
                         envObjects.Add(GameObject.Instantiate(damagingPrefabs[prefabNum], position, orientation).GetComponent<EnvObject>());
+                        // hard coded so far larger rocks are slower but deal more damage
                         envObjects[envObjects.Count - 1].GetComponent<Damaging>().damage = 0.25f * randomSize;
                         envObjects[envObjects.Count - 1].speed *= 1f / randomSize;
                         break;

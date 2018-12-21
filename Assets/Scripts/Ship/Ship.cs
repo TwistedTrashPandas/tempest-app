@@ -10,7 +10,7 @@ namespace MastersOfTempest.ShipBL
     {
         private Gamemaster context;
         private ForceManilpulator forceManipulator;
-        private ShippartManager shippartManager;
+        private ShipPartManager shipPartManager;
 
         private ShipStatus currentStatus;
 
@@ -21,10 +21,10 @@ namespace MastersOfTempest.ShipBL
             {
                 throw new InvalidOperationException($"{nameof(ForceManilpulator)} is not specified!");
             }
-            shippartManager = GetComponent<ShippartManager>();
-            if (shippartManager == null)
+            shipPartManager = GetComponent<ShipPartManager>();
+            if (shipPartManager == null)
             {
-                throw new InvalidOperationException($"{nameof(ShippartManager)} is not specified!");
+                throw new InvalidOperationException($"{nameof(ShipPartManager)} is not specified!");
             }
         }
 
