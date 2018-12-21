@@ -46,7 +46,7 @@ Shader "Custom/CloudPart" {
 		#define FLT_MAX 3.402823466e+38f
 		ENDCG
 
-			//	pass for directional lights
+		//	pass for directional lights
 		Pass {
 				Lighting On ZWrite On Cull Front
 				Blend SrcAlpha OneMinusSrcAlpha

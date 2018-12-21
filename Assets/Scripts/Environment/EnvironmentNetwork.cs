@@ -95,7 +95,6 @@ namespace MastersOfTempest
             {
                 base.OnClientReceivedMessage(message, steamID);
                 MessageAllEnvObjects tmp = JsonUtility.FromJson<MessageAllEnvObjects>(message);
-                envManager.envSpawner.UpdateEnvObjects(tmp.envObjects, tmp.lastUpdate);
             }
         }
     }

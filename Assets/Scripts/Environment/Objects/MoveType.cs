@@ -5,6 +5,7 @@
         Force,
         Velocity,
         Direct,
-        ForceDirect
+        ForceDirect,
+        Static
     };
 }

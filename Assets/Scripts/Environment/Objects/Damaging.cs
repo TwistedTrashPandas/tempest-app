@@ -12,16 +12,23 @@ namespace MastersOfTempest.Environment.Interacting
         protected override void OnCollisionEnter(Collision collision)
         {
             if (collision.gameObject.tag == "Ship")
-            {
-                Ship ship = collision.gameObject.GetComponent<Ship>();
-                ship.GetShipForceManipulator().AddForceAtPosition(collision.impulse, collision.contacts[0].point);
+            {/*
+                Ship ship = collision.gameObject.GetComponentInParent<Ship>();
+                ship.GetShipForceManipulator().AddForceAtPosition(collision.impulse, collision.contacts[0].point);*/
+                collision.collider.gameObject.GetComponent<Shippart>().ResolveCollision(damage, collision.contacts, collision.impulse);
+                Explode(false);
             }
         }
 
-        // TODO: event for envspawner -> remove from list
-        public void Explode()
+        // TODO: spawn new rocks?, explosion animation
+        public void Explode(bool split)
         {
-            
+            if (!split)
+                Destroy(this.gameObject);
+            else
+            {
+
+            }
         }
     }
 }
