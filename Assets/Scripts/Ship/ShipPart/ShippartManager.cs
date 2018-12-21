@@ -22,7 +22,7 @@ namespace MastersOfTempest.ShipBL
             {
                 for (int i = 0; i < shipparts.Length; i++)
                 {
-                    interactionAreas[shipparts[i].interactionArea].Insert(0, i);// Add(i);
+                    interactionAreas[shipparts[i].interactionArea].Insert(0, i); // Add(i);
                 }
             }
         }

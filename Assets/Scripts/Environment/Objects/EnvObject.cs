@@ -40,6 +40,8 @@ namespace MastersOfTempest.Environment.Interacting
                     MoveDirectly(targetPos);
                     AddForce(vectorVal, new Vector3());
                     break;
+                case MoveType.Static:
+                    break;
                 default:
                     throw new System.InvalidOperationException("MoveType of Environment Spawner has to be set");
             }

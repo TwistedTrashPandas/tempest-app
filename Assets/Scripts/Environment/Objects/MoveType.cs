@@ -4,8 +4,8 @@
     {
         Force,
         Velocity,
-        Direct,
         ForceDirect,
+        Direct,
         Static
     };
 }

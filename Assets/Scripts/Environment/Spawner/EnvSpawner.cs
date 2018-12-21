@@ -99,7 +99,7 @@ namespace MastersOfTempest.Environment.Interacting
 
         private Vector3 GetRandomPointOnSphere(float minRadius, float maxRadius)
         {
-            float alpha = Random.Range(0, 2 * Mathf.PI);
+            float alpha = Random.Range(0f, 2f * Mathf.PI);
             float beta = Mathf.Acos(Random.Range(-1f, 1f));
             float sinBeta = Mathf.Sin(beta);
             float radius = Random.Range(minRadius, maxRadius);
@@ -179,28 +179,30 @@ namespace MastersOfTempest.Environment.Interacting
                 switch (type)
                 {
                     case EnvObjectType.Damaging:
-                        float randomSize = Random.Range(0.25f, 4.0f);
+                        float randomSize = Random.Range(0.25f, 2.0f);
                         localScale = new Vector3(randomSize, randomSize, randomSize);
                         prefabNum = Mathf.FloorToInt(Random.Range(0f, damagingPrefabs.Length - Mathf.Epsilon));
                         envObjects.Add(GameObject.Instantiate(damagingPrefabs[prefabNum], position, orientation).GetComponent<EnvObject>());
                         // hard coded so far larger rocks are slower but deal more damage
                         envObjects[envObjects.Count - 1].GetComponent<Damaging>().damage = 0.25f * randomSize;
                         envObjects[envObjects.Count - 1].speed *= 1f / randomSize;
+                        envObjects[envObjects.Count - 1].moveType = (MoveType) Random.Range(0,3);
                         break;
                     case EnvObjectType.DangerZone:
                         prefabNum = Mathf.FloorToInt(Random.Range(0f, dangerzonesPrefabs.Length - Mathf.Epsilon));
                         envObjects.Add(GameObject.Instantiate(dangerzonesPrefabs[prefabNum], position, orientation).GetComponent<EnvObject>());
+                        envObjects[envObjects.Count - 1].moveType = MoveType.Static;
                         break;
                     case EnvObjectType.Supporting:
                         prefabNum = Mathf.FloorToInt(Random.Range(0f, supportingPrefabs.Length - Mathf.Epsilon));
                         envObjects.Add(GameObject.Instantiate(supportingPrefabs[prefabNum], position, orientation).GetComponent<EnvObject>());
+                        envObjects[envObjects.Count - 1].moveType = moveType;
                         break;
                 }
                 envObjects[envObjects.Count - 1].transform.parent = objectContainer.transform;
                 envObjects[envObjects.Count - 1].transform.localScale = localScale;
                 envObjects[envObjects.Count - 1].relativeTargetPos = GetRandomPointOnSphere(minRadiusT, maxRadiusT);
                 // prefabnumber only important for client to choose correct prefab for initialization
-                envObjects[envObjects.Count - 1].moveType = moveType;
             }
         }
     }
