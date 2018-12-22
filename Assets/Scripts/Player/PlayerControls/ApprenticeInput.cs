@@ -50,11 +50,11 @@ namespace MastersOfTempest.PlayerControls
                         {
                             currentlyLookedAt = hit.transform;
                             currentInteractable = currentlyLookedAt.GetComponent<InteractablePart>();
-                            interactionMessage.text = $"Press {interactionKey} to {currentInteractable.GetResultDescription()}";
+                            // interactionMessage.text = $"Press {interactionKey} to {currentInteractable.GetResultDescription()}";
                         }
                         if (Input.GetKeyDown(interactionKey))
                         {
-                            currentAction = currentInteractable.GetApprenticeAction();
+                            // currentAction = currentInteractable.GetApprenticeAction();
                             //Start QTE; supress this.
                             StartQTE();
                         }
