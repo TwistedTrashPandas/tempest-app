@@ -35,6 +35,7 @@ namespace MastersOfTempest.ShipBL
             return destruction;
         }
 
+        // updates mesh depending on collision (usually called from damaging objects such as rocks)
         public void ResolveCollision(float destruc, ContactPoint[] contactPoints, Vector3 impulse)
         {
             UpdateMesh(contactPoints, impulse);
@@ -100,6 +101,7 @@ namespace MastersOfTempest.ShipBL
                 InterpolateCurrentMesh();
         }
 
+        // interpolate between damaged mesh and initial mesh
         private void InterpolateCurrentMesh()
         {
             Mesh currM = GetComponent<MeshFilter>().mesh;

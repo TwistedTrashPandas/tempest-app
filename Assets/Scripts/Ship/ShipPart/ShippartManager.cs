@@ -10,6 +10,7 @@ namespace MastersOfTempest.ShipBL
         private List<int>[] interactionAreas;
         void Start()
         {
+            // create 5 different interaction areas, shipparts still have to be added accordingly
             interactionAreas = new List<int>[5];
             for (int i = 0; i < interactionAreas.Length; i++)
             {
@@ -27,6 +28,7 @@ namespace MastersOfTempest.ShipBL
             }
         }
 
+        // test output
         private void FixedUpdate()
         {
             CheckDestruction();
@@ -37,6 +39,7 @@ namespace MastersOfTempest.ShipBL
             Debug.Log(CalculateOverallDestruction());
         }
 
+        // calculates average of the destruction of the ship (health = 1 - destruction)
         public float CalculateOverallDestruction()
         {
             float result = 0.0f;
