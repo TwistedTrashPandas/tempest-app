@@ -8,14 +8,6 @@ namespace MastersOfTempest.Environment.Interacting
 {
     public class EnvSpawner : MonoBehaviour
     {
-        public enum EnvObjectType
-        {
-            Damaging,
-            DangerZone,
-            Supporting,
-            Null
-        };
-
         // spawn parameters 
         public float spawnRate;
         [Range(0f, 2f)]

@@ -11,7 +11,7 @@ namespace MastersOfTempest.Environment.Interacting
 
         protected override void OnCollisionEnter(Collision collision)
         {
-            if (collision.gameObject.tag == "Ship")
+            if (collision.gameObject.tag == "Ship" && collision.gameObject.GetComponent<Ship>().GetCurrenStatus().Condition != ShipCondition.Shielded)
             {/*
                 Ship ship = collision.gameObject.GetComponentInParent<Ship>();
                 ship.GetShipForceManipulator().AddForceAtPosition(collision.impulse, collision.contacts[0].point);*/

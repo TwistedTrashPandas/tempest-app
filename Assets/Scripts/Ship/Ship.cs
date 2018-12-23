@@ -38,6 +38,8 @@ namespace MastersOfTempest.ShipBL
                 throw new InvalidOperationException($"{nameof(Ship)} cannot operate without Gamemaster in the same scene!");
             }
             context.Register(this);
+            currentStatus = new ShipStatus();
+            currentStatus.Condition = ShipCondition.None;
         }
 
         public ForceManilpulator GetShipForceManipulator()

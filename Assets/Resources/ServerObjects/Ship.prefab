@@ -260,8 +260,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 0
   interactionArea: 0
-  cutOffDist: 10
-  impulseScaling: 0.1
+  cutOffDist: 20
+  impulseScaling: 0.5
 --- !u!114 &6601214670790932213
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -391,8 +391,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 0
   interactionArea: 0
-  cutOffDist: 10
-  impulseScaling: 0.1
+  cutOffDist: 20
+  impulseScaling: 0.5
 --- !u!114 &585679151958835429
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -522,8 +522,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 0
   interactionArea: 0
-  cutOffDist: 10
-  impulseScaling: 0.1
+  cutOffDist: 20
+  impulseScaling: 0.5
 --- !u!114 &8608198865908682474
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -653,8 +653,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 0
   interactionArea: 0
-  cutOffDist: 10
-  impulseScaling: 0.1
+  cutOffDist: 20
+  impulseScaling: 0.5
 --- !u!114 &9114801120283185396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -784,8 +784,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 0
   interactionArea: 0
-  cutOffDist: 10
-  impulseScaling: 0.1
+  cutOffDist: 20
+  impulseScaling: 0.5
 --- !u!114 &5822187060620456629
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -915,8 +915,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 0
   interactionArea: 0
-  cutOffDist: 10
-  impulseScaling: 0.1
+  cutOffDist: 20
+  impulseScaling: 0.5
 --- !u!114 &3347176048815335791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1046,8 +1046,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 0
   interactionArea: 0
-  cutOffDist: 10
-  impulseScaling: 0.1
+  cutOffDist: 20
+  impulseScaling: 0.5
 --- !u!114 &7358270631994353295
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1177,8 +1177,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 0
   interactionArea: 0
-  cutOffDist: 10
-  impulseScaling: 0.1
+  cutOffDist: 20
+  impulseScaling: 0.5
 --- !u!114 &4530545545067205748
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1308,8 +1308,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 0
   interactionArea: 0
-  cutOffDist: 10
-  impulseScaling: 0.1
+  cutOffDist: 20
+  impulseScaling: 0.5
 --- !u!114 &6466462158037402152
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1439,8 +1439,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 0
   interactionArea: 0
-  cutOffDist: 10
-  impulseScaling: 0.1
+  cutOffDist: 20
+  impulseScaling: 0.5
 --- !u!114 &6224294018138584115
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1570,8 +1570,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 0
   interactionArea: 0
-  cutOffDist: 10
-  impulseScaling: 0.1
+  cutOffDist: 20
+  impulseScaling: 0.5
 --- !u!114 &2011461763848825328
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1701,8 +1701,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 0
   interactionArea: 0
-  cutOffDist: 10
-  impulseScaling: 0.1
+  cutOffDist: 20
+  impulseScaling: 0.5
 --- !u!114 &6386460403178880925
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1832,8 +1832,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 0
   interactionArea: 0
-  cutOffDist: 10
-  impulseScaling: 0.1
+  cutOffDist: 20
+  impulseScaling: 0.5
 --- !u!114 &8189468577008703028
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1963,8 +1963,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 0
   interactionArea: 0
-  cutOffDist: 10
-  impulseScaling: 0.1
+  cutOffDist: 20
+  impulseScaling: 0.5
 --- !u!114 &5006203667671073587
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2094,8 +2094,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 0
   interactionArea: 0
-  cutOffDist: 10
-  impulseScaling: 0.1
+  cutOffDist: 20
+  impulseScaling: 0.5
 --- !u!114 &4182620586480021372
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2225,8 +2225,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 0
   interactionArea: 0
-  cutOffDist: 10
-  impulseScaling: 0.1
+  cutOffDist: 20
+  impulseScaling: 0.5
 --- !u!114 &4125159645631098298
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2356,8 +2356,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 0
   interactionArea: 0
-  cutOffDist: 10
-  impulseScaling: 0.1
+  cutOffDist: 20
+  impulseScaling: 0.5
 --- !u!114 &8336278724331981350
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2487,8 +2487,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 0
   interactionArea: 0
-  cutOffDist: 10
-  impulseScaling: 0.1
+  cutOffDist: 20
+  impulseScaling: 0.5
 --- !u!114 &2320329984642778635
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2618,8 +2618,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 0
   interactionArea: 0
-  cutOffDist: 10
-  impulseScaling: 0.1
+  cutOffDist: 20
+  impulseScaling: 0.5
 --- !u!114 &1614176392171741727
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2749,8 +2749,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 0
   interactionArea: 0
-  cutOffDist: 10
-  impulseScaling: 0.1
+  cutOffDist: 20
+  impulseScaling: 0.5
 --- !u!114 &1174743153005048890
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2880,8 +2880,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 0
   interactionArea: 0
-  cutOffDist: 10
-  impulseScaling: 0.1
+  cutOffDist: 20
+  impulseScaling: 0.5
 --- !u!114 &3117100161430455081
 MonoBehaviour:
   m_ObjectHideFlags: 0
