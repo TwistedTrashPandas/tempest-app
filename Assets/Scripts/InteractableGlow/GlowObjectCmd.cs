@@ -25,6 +25,7 @@ namespace MastersOfTempest.Glow
         void Start()
         {
             Renderers = GetComponentsInChildren<Renderer>();
+            GlowController.RegisterObject(this);
             enabled = false;
         }
 
@@ -33,10 +34,10 @@ namespace MastersOfTempest.Glow
             _targetColor = GlowColor;
             if (enabled == false)
             {
-                if (ColorsEqual(_currentColor, Color.black))
-                {
-                    GlowController.RegisterObject(this);
-                }
+                // if (ColorsEqual(_currentColor, Color.black))
+                // {
+                //     GlowController.RegisterObject(this);
+                // }
                 GlowController.RegisterColorChange(this);
             }
             enabled = true;
@@ -65,10 +66,10 @@ namespace MastersOfTempest.Glow
                 //Remove the object from active color change list
                 GlowController.DeregisterColorChange(this);
                 //Remove this object from consideration if it is not supposed to be glowing at all
-                if (ColorsEqual(_currentColor, Color.black))
-                {
-                    GlowController.DeregisterObject(this);
-                }
+                // if (ColorsEqual(_currentColor, Color.black))
+                // {
+                //     GlowController.DeregisterObject(this);
+                // }
             }
         }
 
