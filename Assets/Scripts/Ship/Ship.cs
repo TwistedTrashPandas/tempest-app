@@ -10,6 +10,7 @@ namespace MastersOfTempest.ShipBL
     {
         private Gamemaster context;
         private ForceManilpulator forceManipulator;
+        private ShipPartManager shipPartManager;
 
         private ShipStatus currentStatus;
 
@@ -19,6 +20,11 @@ namespace MastersOfTempest.ShipBL
             if (forceManipulator == null)
             {
                 throw new InvalidOperationException($"{nameof(ForceManilpulator)} is not specified!");
+            }
+            shipPartManager = GetComponent<ShipPartManager>();
+            if (shipPartManager == null)
+            {
+                throw new InvalidOperationException($"{nameof(ShipPartManager)} is not specified!");
             }
         }
 
@@ -32,6 +38,8 @@ namespace MastersOfTempest.ShipBL
                 throw new InvalidOperationException($"{nameof(Ship)} cannot operate without Gamemaster in the same scene!");
             }
             context.Register(this);
+            currentStatus = new ShipStatus();
+            currentStatus.Condition = ShipCondition.None;
         }
 
         public ForceManilpulator GetShipForceManipulator()

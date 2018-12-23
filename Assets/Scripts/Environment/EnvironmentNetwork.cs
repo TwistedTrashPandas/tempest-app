@@ -44,9 +44,9 @@ namespace MastersOfTempest
             public Vector3 position;
             public Vector3 localScale;
             public Quaternion orientation;
-            public EnvSpawner.EnvObjectType type;
+            public EnvObjectType type;
 
-            public MessageEnvObject(Transform transform, EnvSpawner.EnvObjectType t, int pNum)
+            public MessageEnvObject(Transform transform, EnvObjectType t, int pNum)
             {
                 position = transform.position;
                 localScale = transform.localScale;
@@ -95,7 +95,6 @@ namespace MastersOfTempest
             {
                 base.OnClientReceivedMessage(message, steamID);
                 MessageAllEnvObjects tmp = JsonUtility.FromJson<MessageAllEnvObjects>(message);
-                envManager.envSpawner.UpdateEnvObjects(tmp.envObjects, tmp.lastUpdate);
             }
         }
     }

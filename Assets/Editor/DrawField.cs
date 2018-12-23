@@ -9,7 +9,7 @@ public class DrawField : Editor
 {
     // draw vector field in scene view
     private void OnSceneGUI()
-    {
+    {/*
         if (Application.isPlaying)
         {
             VectorField grid = target as VectorField;
@@ -29,6 +29,6 @@ public class DrawField : Editor
                     }
                 }
             }
-        }
+        }*/
     }
 }

@@ -8,14 +8,6 @@ namespace MastersOfTempest.Environment.Interacting
 {
     public class EnvSpawner : MonoBehaviour
     {
-        public enum EnvObjectType
-        {
-            Damaging,
-            DangerZone,
-            Supporting,
-            Null
-        };
-
         // spawn parameters 
         public float spawnRate;
         [Range(0f, 2f)]
@@ -51,13 +43,8 @@ namespace MastersOfTempest.Environment.Interacting
         // TODO use currServerTime for synchronization 
 
         private float spawnProbSum;
-        private float currServerTime;
-        private float currFixedTime;
-        private float hz;
         private bool onServer;
         private Gamemaster gamemaster;
-        // last obj positions (extrapolate or interpolate ?)
-        private List<Transform> envObjTransforms;
         private GameObject objectContainer;
 
         public void Initialize(Gamemaster gm, VectorField vf, bool server)
@@ -69,13 +56,7 @@ namespace MastersOfTempest.Environment.Interacting
             {
                 vectorField = vf;
                 objectContainer = GameObject.Instantiate(objectContainerPrefab);
-                hz = 1.0f / GameServer.Instance.hz;
                 StartSpawning();
-            }
-            else
-            {
-                envObjTransforms = new List<Transform>();
-                hz = 1f / 64f;
             }
             gamemaster = gm;
             spawnProbSum = spawnProbD + spawnProbS + spawnProbZ;
@@ -106,23 +87,11 @@ namespace MastersOfTempest.Environment.Interacting
                     }
                 }
             }
-            /*else
-            {
-                // "interpolate" objects on client
-                currFixedTime += Time.fixedDeltaTime;
-                if (currFixedTime >= hz)
-                    currFixedTime -= hz;
-                for (int i = 0; i < envObjects.Count; i++)
-                {
-                    envObjects[i].MoveRigidbodyTo(Vector3.Lerp(envObjects[i].gameObject.transform.position, envObjTransforms[i].position, currFixedTime));
-                    envObjects[i].RotateRigidbodyTo(Quaternion.Lerp(envObjects[i].gameObject.transform.rotation, envObjTransforms[i].rotation, currFixedTime));
-                }
-            }*/
         }
 
         private Vector3 GetRandomPointOnSphere(float minRadius, float maxRadius)
         {
-            float alpha = Random.Range(0, 2 * Mathf.PI);
+            float alpha = Random.Range(0f, 2f * Mathf.PI);
             float beta = Mathf.Acos(Random.Range(-1f, 1f));
             float sinBeta = Mathf.Sin(beta);
             float radius = Random.Range(minRadius, maxRadius);
@@ -156,7 +125,7 @@ namespace MastersOfTempest.Environment.Interacting
                     type = EnvObjectType.DangerZone;
             }
 
-            InstantiateNewObject(true, centerPos, Vector3.one, Quaternion.identity, type, 0);
+            InstantiateNewObject(true, centerPos, Quaternion.identity, type, 0);
             StartCoroutine(SpawnObject());
         }
 
@@ -192,72 +161,40 @@ namespace MastersOfTempest.Environment.Interacting
         }
 
         // main functions for initializing an envobject of given type 
-        private void InstantiateNewObject(bool onServer, Vector3 position, Vector3 localScale, Quaternion orientation, EnvObjectType type = EnvObjectType.Damaging, int ID = 0)
+        private void InstantiateNewObject(bool onServer, Vector3 position, Quaternion orientation, EnvObjectType type = EnvObjectType.Damaging, int ID = 0)
         {
             Vector3 randOffset = GetRandomPointOnSphere(minRadiusS, maxRadiusS);
+            Vector3 localScale = Vector3.one;
             position += randOffset;
             {
                 int prefabNum = 0;
                 switch (type)
                 {
                     case EnvObjectType.Damaging:
+                        float randomSize = Random.Range(0.25f, 2.0f);
+                        localScale = new Vector3(randomSize, randomSize, randomSize);
                         prefabNum = Mathf.FloorToInt(Random.Range(0f, damagingPrefabs.Length - Mathf.Epsilon));
                         envObjects.Add(GameObject.Instantiate(damagingPrefabs[prefabNum], position, orientation).GetComponent<EnvObject>());
+                        // hard coded so far larger rocks are slower but deal more damage
+                        envObjects[envObjects.Count - 1].GetComponent<Damaging>().damage = 0.25f * randomSize;
+                        envObjects[envObjects.Count - 1].speed *= 1f / randomSize;
+                        envObjects[envObjects.Count - 1].moveType = (MoveType) Random.Range(0,3);
                         break;
                     case EnvObjectType.DangerZone:
                         prefabNum = Mathf.FloorToInt(Random.Range(0f, dangerzonesPrefabs.Length - Mathf.Epsilon));
                         envObjects.Add(GameObject.Instantiate(dangerzonesPrefabs[prefabNum], position, orientation).GetComponent<EnvObject>());
+                        envObjects[envObjects.Count - 1].moveType = MoveType.Static;
                         break;
                     case EnvObjectType.Supporting:
                         prefabNum = Mathf.FloorToInt(Random.Range(0f, supportingPrefabs.Length - Mathf.Epsilon));
                         envObjects.Add(GameObject.Instantiate(supportingPrefabs[prefabNum], position, orientation).GetComponent<EnvObject>());
+                        envObjects[envObjects.Count - 1].moveType = moveType;
                         break;
                 }
                 envObjects[envObjects.Count - 1].transform.parent = objectContainer.transform;
+                envObjects[envObjects.Count - 1].transform.localScale = localScale;
                 envObjects[envObjects.Count - 1].relativeTargetPos = GetRandomPointOnSphere(minRadiusT, maxRadiusT);
                 // prefabnumber only important for client to choose correct prefab for initialization
-                envObjects[envObjects.Count - 1].moveType = moveType;
-            }
-        }
-
-        private void UpdateTransform(MessageEnvObject obj, int idx)
-        {
-            /*envObjects[idx].transform.position = obj.position;
-            envObjects[idx].transform.localScale = obj.localScale;
-            envObjects[idx].transform.rotation = obj.orientation;*/
-            envObjTransforms[idx].position = obj.position;
-            envObjTransforms[idx].rotation = obj.orientation;
-        }
-
-        public void UpdateEnvObjects(List<MessageEnvObject> objects, float serverTime)
-        {
-            currServerTime = serverTime;
-            for (int i = 0; i < objects.Count; i++)
-            {
-                //  less objects on client than on server currently -> create new object
-                if (envObjects.Count <= i)
-                {
-                    InstantiateNewObject(false, objects[i].position, objects[i].localScale, objects[i].orientation, objects[i].type, objects[i].instanceID);
-                }
-                else
-                {
-                    // object already present -> update transform
-                    if (envObjects[i].instanceID == objects[i].instanceID)
-                    {
-                        // TODO: interpolate for positions (smoother)
-                        UpdateTransform(objects[i], i);
-                    }
-                    // object got destroyed on server -> destroy on all clients
-                    else
-                    {
-                        GameObject toDestroy = envObjects[i].gameObject;
-                        envObjTransforms.RemoveAt(i);
-                        envObjects.RemoveAt(i);
-                        print("removed on client");
-                        Destroy(toDestroy);
-                        i--;
-                    }
-                }
             }
         }
     }

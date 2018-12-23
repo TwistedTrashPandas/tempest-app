@@ -8,7 +8,7 @@ namespace MastersOfTempest.Environment.Interacting
     {
         public int instanceID;
         public Vector3 relativeTargetPos;
-        public EnvSpawner.EnvObjectType type;
+        public EnvObjectType type;
         public float speed;
         public float closestDistance; // distance until which the objects will pursue the target position
         public MoveType moveType;
@@ -39,6 +39,8 @@ namespace MastersOfTempest.Environment.Interacting
                 case MoveType.ForceDirect:
                     MoveDirectly(targetPos);
                     AddForce(vectorVal, new Vector3());
+                    break;
+                case MoveType.Static:
                     break;
                 default:
                     throw new System.InvalidOperationException("MoveType of Environment Spawner has to be set");

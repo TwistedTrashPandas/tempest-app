@@ -1,0 +1,210 @@
+fileFormatVersion: 2
+guid: 72bc3f1acc739bb4b81ef5ba30af15b8
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: Balloon
+    100002: Crownest1
+    100004: Crownest2
+    100006: Galion
+    100008: Mast1
+    100010: Mast2
+    100012: Plane
+    100014: SailBack
+    100016: SailFront
+    100018: //RootNode
+    100020: SideSailLeftBig
+    100022: SideSailLeftSmall1
+    100024: SideSailLeftSmall2
+    100026: SideSailRightBig
+    100028: SideSailRightSmall1
+    100030: SideSailRightSmall2
+    100032: Tornado
+    100034: Underdeck
+    100036: Upperdeck
+    100038: UpperDeckBack
+    100040: UpperDeckFront
+    400000: Balloon
+    400002: Crownest1
+    400004: Crownest2
+    400006: Galion
+    400008: Mast1
+    400010: Mast2
+    400012: Plane
+    400014: SailBack
+    400016: SailFront
+    400018: //RootNode
+    400020: SideSailLeftBig
+    400022: SideSailLeftSmall1
+    400024: SideSailLeftSmall2
+    400026: SideSailRightBig
+    400028: SideSailRightSmall1
+    400030: SideSailRightSmall2
+    400032: Tornado
+    400034: Underdeck
+    400036: Upperdeck
+    400038: UpperDeckBack
+    400040: UpperDeckFront
+    2100000: ShipBody
+    2100002: LoweDeck
+    2100004: UpperdeckBack
+    2100006: SideSail Right Big
+    2100008: Deck
+    2100010: UpperDeckFront
+    2100012: Balloonn
+    2100014: SteeringPlank
+    2100016: Mast
+    2100018: Sail
+    2100020: Crowsnest
+    2100022: Tornado
+    2100024: Gallion
+    2300000: Balloon
+    2300002: Crownest1
+    2300004: Crownest2
+    2300006: Galion
+    2300008: Mast1
+    2300010: Mast2
+    2300012: Plane
+    2300014: SailBack
+    2300016: SailFront
+    2300018: //RootNode
+    2300020: SideSailLeftBig
+    2300022: SideSailLeftSmall1
+    2300024: SideSailLeftSmall2
+    2300026: SideSailRightBig
+    2300028: SideSailRightSmall1
+    2300030: SideSailRightSmall2
+    2300032: Tornado
+    2300034: Underdeck
+    2300036: Upperdeck
+    2300038: UpperDeckBack
+    2300040: UpperDeckFront
+    3300000: Balloon
+    3300002: Crownest1
+    3300004: Crownest2
+    3300006: Galion
+    3300008: Mast1
+    3300010: Mast2
+    3300012: Plane
+    3300014: SailBack
+    3300016: SailFront
+    3300018: //RootNode
+    3300020: SideSailLeftBig
+    3300022: SideSailLeftSmall1
+    3300024: SideSailLeftSmall2
+    3300026: SideSailRightBig
+    3300028: SideSailRightSmall1
+    3300030: SideSailRightSmall2
+    3300032: Tornado
+    3300034: Underdeck
+    3300036: Upperdeck
+    3300038: UpperDeckBack
+    3300040: UpperDeckFront
+    4300000: Ship
+    4300002: Underdeck
+    4300004: UpperDeckBack
+    4300006: SideSailRightBig
+    4300008: SideSailRightSmall2
+    4300010: SideSailRightSmall1
+    4300012: SideSailLeftBig
+    4300014: SideSailLeftSmall2
+    4300016: SideSailLeftSmall1
+    4300018: Upperdeck
+    4300020: UpperDeckFront
+    4300022: Balloon
+    4300024: Plane
+    4300026: Mast1
+    4300028: SailBack
+    4300030: Crownest1
+    4300032: Tornado
+    4300034: Galion
+    4300036: Mast2
+    4300038: SailFront
+    4300040: Crownest2
+    2186277476908879412: ImportLogs
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
