@@ -14,6 +14,7 @@ namespace MastersOfTempest.Glow
         private CommandBuffer _commandBuffer;
 
         private List<GlowObjectCmd> _glowableObjects = new List<GlowObjectCmd>();
+        private List<GlowObjectCmd> _currentlyChangingColor = new List<GlowObjectCmd>();
         private Material _glowMat;
         private Material _blurMaterial;
         private Vector2 _blurTexelSize;
@@ -45,15 +46,28 @@ namespace MastersOfTempest.Glow
             GetComponent<Camera>().AddCommandBuffer(CameraEvent.BeforeImageEffects, _commandBuffer);
         }
 
-        /// <summary>
-        /// TODO: Add a degister method.
-        /// </summary>
         public static void RegisterObject(GlowObjectCmd glowObj)
         {
-            if (_instance != null)
+            _instance?._glowableObjects.Add(glowObj);
+        }
+
+        public static void DeregisterObject(GlowObjectCmd glowObj)
+        {
+            _instance?._glowableObjects.Remove(glowObj);
+        }
+
+        public static void RegisterColorChange(GlowObjectCmd glowObj)
+        {
+            _instance?._currentlyChangingColor.Add(glowObj);
+            if(_instance?._currentlyChangingColor.Count == 1)
             {
-                _instance._glowableObjects.Add(glowObj);
+                _instance.enabled = true;
             }
+        }
+
+        public static void DeregisterColorChange(GlowObjectCmd glowObj)
+        {
+            _instance?._currentlyChangingColor.Remove(glowObj);
         }
 
         /// <summary>
@@ -68,14 +82,12 @@ namespace MastersOfTempest.Glow
             _commandBuffer.SetRenderTarget(_prePassRenderTexID);
             _commandBuffer.ClearRenderTarget(true, true, Color.clear);
 
-            print(string.Format("glowable obj count: {0}", _glowableObjects.Count));
             for (int i = 0; i < _glowableObjects.Count; i++)
             {
                 _commandBuffer.SetGlobalColor(_glowColorID, _glowableObjects[i].CurrentColor);
 
                 for (int j = 0; j < _glowableObjects[i].Renderers.Length; j++)
                 {
-                    print(string.Format("{0} length: {1}", _glowableObjects[i].name, _glowableObjects[i].Renderers.Length));
                     _commandBuffer.DrawRenderer(_glowableObjects[i].Renderers[j], _glowMat);
                 }
             }
@@ -103,7 +115,14 @@ namespace MastersOfTempest.Glow
         /// </summary>
         private void Update()
         {
-            RebuildCommandBuffer();
+            if (_currentlyChangingColor.Count > 0)
+            {
+                RebuildCommandBuffer();
+            }
+            else 
+            {
+                enabled = false;
+            }
         }
     }
 }

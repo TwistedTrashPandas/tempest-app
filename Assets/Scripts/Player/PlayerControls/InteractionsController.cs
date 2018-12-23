@@ -57,7 +57,7 @@ namespace MastersOfTempest.PlayerControls
             {
                 RaycastHit hit;
                 var ray = FirstPersonCamera.ViewportPointToRay(new Vector3(.5f, .5f, 0f));
-                if (Physics.Raycast(ray, out hit, MaxInteractionDistance))
+                if (Physics.Raycast(ray, out hit, MaxInteractionDistance, FirstPersonCamera.cullingMask))
                 {
                     if (hit.transform.CompareTag(InteractableTagName))
                     {

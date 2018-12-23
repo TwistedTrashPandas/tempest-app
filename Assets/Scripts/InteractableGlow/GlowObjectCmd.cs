@@ -19,25 +19,37 @@ namespace MastersOfTempest.Glow
             get { return _currentColor; }
         }
 
-        private Color _currentColor;
+        private Color _currentColor = Color.black;
         private Color _targetColor;
 
         void Start()
         {
             Renderers = GetComponentsInChildren<Renderer>();
-            GlowController.RegisterObject(this);
+            enabled = false;
         }
 
-        private void OnMouseEnter()
+        public void TurnTheGlowOn()
         {
             _targetColor = GlowColor;
+            if (enabled == false)
+            {
+                if (ColorsEqual(_currentColor, Color.black))
+                {
+                    GlowController.RegisterObject(this);
+                }
+                GlowController.RegisterColorChange(this);
+            }
             enabled = true;
         }
 
-        private void OnMouseExit()
+        public void TurnTheGlowOff()
         {
             _targetColor = Color.black;
-            enabled = true;
+            if (enabled == false && !ColorsEqual(_currentColor, Color.black))
+            {
+                GlowController.RegisterColorChange(this);
+                enabled = true;
+            }
         }
 
         /// <summary>
@@ -47,10 +59,22 @@ namespace MastersOfTempest.Glow
         {
             _currentColor = Color.Lerp(_currentColor, _targetColor, Time.deltaTime * LerpFactor);
 
-            if (_currentColor.Equals(_targetColor))
+            if (ColorsEqual(_currentColor, _targetColor))
             {
                 enabled = false;
+                //Remove the object from active color change list
+                GlowController.DeregisterColorChange(this);
+                //Remove this object from consideration if it is not supposed to be glowing at all
+                if (ColorsEqual(_currentColor, Color.black))
+                {
+                    GlowController.DeregisterObject(this);
+                }
             }
+        }
+
+        private bool ColorsEqual(Color a, Color b)
+        {
+            return Mathf.Approximately(a.r, b.r) && Mathf.Approximately(a.g, b.g) && Mathf.Approximately(a.b, b.b) && Mathf.Approximately(a.a, b.a);
         }
     }
 }

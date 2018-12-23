@@ -19,6 +19,8 @@ namespace MastersOfTempest.PlayerControls
         private CoroutineCancellationToken currentCancellationToken;
         private bool isActive = true;
 
+        private InteractionsController interactionsController;
+
         protected override void Awake()
         {
             base.Awake();
@@ -99,6 +101,11 @@ namespace MastersOfTempest.PlayerControls
             qteRenderer.Driver = QTEDriver;
             spellcastingController = gameObject.AddComponent<SpellcastingController>();
             gameObject.AddComponent<SpellReferenceInfo>();
+
+            interactionsController = gameObject.AddComponent<InteractionsController>();
+            interactionsController.Setup(CameraDirectionController.FirstPersonCamera, float.MaxValue, () => Input.GetKeyDown(KeyCode.F));
+            var highlighter = gameObject.AddComponent<InteractionsHighlighter>();
+            highlighter.InteractionsController = interactionsController;
         }
 
         private void OnSpellCasted(object sender, EventArgs args)
