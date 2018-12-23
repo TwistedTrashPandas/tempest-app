@@ -85,7 +85,7 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
                     case Rune.Fire: image.sprite = FireSprite; break;
                     case Rune.Water: image.sprite = WaterSprite; break;
                     case Rune.Wind: image.sprite = AirSprite; break;
-                    case Rune.Ice: image.sprite = IceSprite; break;
+                    case Rune.Earth: image.sprite = IceSprite; break;
                     default: throw new InvalidOperationException($"Unexpected {nameof(Rune)} value of {currentRune}");
                 }
             }

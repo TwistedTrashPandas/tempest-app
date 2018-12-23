@@ -20,6 +20,8 @@ namespace MastersOfTempest
         private PlayerInputController playerInput;
         public TransformManipulator TransformManipulator { get; private set; }
 
+        public PlayerRole Role;
+
         private void Awake()
         {
             TransformManipulator = GetComponent<TransformManipulator>();
@@ -62,6 +64,7 @@ namespace MastersOfTempest
                 playerInput = PlayerRoleExtensions.AddActiveRoleInputController(gameObject);
                 playerInput.Bootstrap();
                 playerInput.ActionMade += ExecutePlayerAction;
+                context.SetCurrentPlayer(this);
             }
         }
 

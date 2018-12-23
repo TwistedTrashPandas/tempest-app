@@ -3,17 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using MastersOfTempest.PlayerControls.QTE;
 using MastersOfTempest.PlayerControls.Spellcasting;
+using MastersOfTempest.ShipBL;
 using UnityEngine;
 
 namespace MastersOfTempest.PlayerControls
 {
     public class WizardInput : PlayerInputController
     {
-        private QTEDriver QTEDriver;
-        private SpellcastingController spellcastingController;
-        private KeyCode lastPressed;
-        private int counter;
-        private const int triggerAmount = 3;
+        public event EventHandler StartedCharging;
+        public event EventHandler ChargingCancelled;
+        public event EventHandler ChargingCompleted;
+        public event EventHandler DischargeHit;
+        public event EventHandler DischargeMiss;
 
         private PlayerAction currentAction;
         private CoroutineCancellationToken currentCancellationToken;
@@ -21,17 +22,122 @@ namespace MastersOfTempest.PlayerControls
 
         private InteractionsController interactionsController;
 
-        protected override void Awake()
+        private enum WizardState
         {
-            base.Awake();
+            Idle = 0,
+            Charging = 1,
+            Charged = 2
+        }
+        private WizardState currentState;
+        private Rune currentChargeType;
+
+        private const int MouseToCharge = 0;
+        private const float DischargeDistance = float.MaxValue;
+        private float chargingTime;
+        private float timeToCharge = 2f;
+        /*
+            Wizard input.
+            1. Wizard input is controlled by actions and interactions controller
+            2. We have states: 
+                i. Idle
+                ii. Drawing energy
+                iii. Energy drawn
+
+            When player is idle, we do nothing. When we receive a command to start drawing energy, this component sends an event and starts timer. If we at this state receive "object lost sight" or player stopped pressing the button, we interrupt the energy drawing, send interrupt event and go to idle
+
+            When player completed the energy drawing, we go to state (iii). Here on mouse release we will try to send the energy to the object we're looking at, sending corresponding event on hit and miss.
+
+            Also we need a spells controller that will check the player's input and send commands to the ship
+         */
+
+        public void StartCharging(Rune chargeType, float time)
+        {
+            if (Mathf.Approximately(time, 0f))
+            {
+                currentState = WizardState.Charged;
+                currentChargeType = chargeType;
+                ChargingCompleted?.Invoke(this, new ChargingEventArgs(currentChargeType));
+            }
+            else
+            {
+                currentState = WizardState.Charging;
+                currentChargeType = chargeType;
+                chargingTime = 0f;
+                timeToCharge = time;
+                StartedCharging?.Invoke(this, new ChargingEventArgs(currentChargeType));
+            }
         }
 
-        protected void Start()
+        private void Discharge()
         {
-            SanityCheck();
-            QTEDriver.Success += OnSuccess;
-            QTEDriver.Fail += OnFail;
-            spellcastingController.SpellCasted += OnSpellCasted;
+            RaycastHit hit;
+            var ray = interactionsController.FirstPersonCamera.ViewportPointToRay(new Vector3(.5f, .5f, 0f));
+            if (Physics.Raycast(ray, out hit, DischargeDistance, interactionsController.FirstPersonCamera.cullingMask))
+            {
+                var recepticle = hit.transform.GetComponent<PowerRecepticle>();
+                if (recepticle != null)
+                {
+                    recepticle.Charge(currentChargeType);
+                    currentState = WizardState.Idle;
+                    DischargeHit?.Invoke(this, new ChargingEventArgs(currentChargeType));
+                }
+                else
+                {
+                    currentState = WizardState.Idle;
+                    DischargeMiss?.Invoke(this, new ChargingEventArgs(currentChargeType));
+                }
+            }
+            else
+            {
+                currentState = WizardState.Idle;
+                DischargeMiss?.Invoke(this, new ChargingEventArgs(currentChargeType));
+            }
+        }
+
+        private void Update()
+        {
+            switch (currentState)
+            {
+                case WizardState.Idle: break;
+                case WizardState.Charging: ChargingUpdate(); break;
+                case WizardState.Charged: ChargedUpdate(); break;
+                default: throw new InvalidOperationException($"Unexpected {nameof(WizardState)} value of {currentState}");
+            }
+        }
+
+        private void ChargingUpdate()
+        {
+            if (Input.GetMouseButton(MouseToCharge))
+            {
+                chargingTime += Time.deltaTime;
+                if (chargingTime > timeToCharge)
+                {
+                    currentState = WizardState.Charged;
+                    ChargingCompleted?.Invoke(this, new ChargingEventArgs(currentChargeType));
+                }
+            }
+            else
+            {
+                currentState = WizardState.Idle;
+                ChargingCancelled?.Invoke(this, new ChargingEventArgs(currentChargeType));
+            }
+        }
+
+        private void ChargedUpdate()
+        {
+            if (Input.GetMouseButtonUp(MouseToCharge))
+            {
+                Discharge();
+            }
+        }
+
+        private void OnUserLostSight(object sender, EventArgs args)
+        {
+            if(currentState == WizardState.Charging)
+            {
+                currentState = WizardState.Idle;
+                ChargingCancelled?.Invoke(this, new ChargingEventArgs(currentChargeType));                
+            }
         }
 
         public override void Interrupt()
@@ -49,75 +155,28 @@ namespace MastersOfTempest.PlayerControls
             isActive = false;
         }
 
-        private void Update()
-        {
-            if (isActive)
-            {
-                if(Input.GetKeyDown(KeyCode.F))
-                {
-                    spellcastingController.Active = !spellcastingController.Active;
-                    CameraDirectionController.Active = !CameraDirectionController.Active;
-                }
-            }
-        }
-
-
-        private void StartQTE(PlayerAction action)
-        {
-            this.Suppress();
-            currentAction = action;
-            currentCancellationToken = new CoroutineCancellationToken();
-            QTEDriver.StartQuickTimeEvent(currentCancellationToken);
-        }
-
-        private void OnSuccess(object sender, EventArgs e)
-        {
-            TriggerActionEvent(new ActionMadeEventArgs(currentAction));
-        }
-
-        void OnFail(object sender, EventArgs e)
-        {
-            currentCancellationToken.CancellationRequested = true;
-            currentCancellationToken = null;
-            this.Resume();
-        }
-
-        private void SanityCheck()
-        {
-            if (QTEDriver == null)
-            {
-                throw new InvalidOperationException($"{nameof(QTEDriver)} is not specified!");
-            }
-            if (spellcastingController == null)
-            {
-                throw new InvalidOperationException($"{nameof(spellcastingController)} is not specified!");
-            }
-        }
-
         public override void Bootstrap()
         {
-            QTEDriver = gameObject.AddComponent<QTEDriver>();
-            var qteRenderer = gameObject.AddComponent<QTESimpleUIRenderer>();
-            qteRenderer.Driver = QTEDriver;
-            spellcastingController = gameObject.AddComponent<SpellcastingController>();
-            gameObject.AddComponent<SpellReferenceInfo>();
-
             interactionsController = gameObject.AddComponent<InteractionsController>();
-            interactionsController.Setup(CameraDirectionController.FirstPersonCamera, float.MaxValue, () => Input.GetKeyDown(KeyCode.F));
+            interactionsController.Setup(CameraDirectionController.FirstPersonCamera, float.MaxValue, UserInteracts);
+            interactionsController.PlayerInteracted += OnUserInteraction;
+            interactionsController.LostSight += OnUserLostSight;
+
             var highlighter = gameObject.AddComponent<InteractionsHighlighter>();
             highlighter.InteractionsController = interactionsController;
+
+            var animations = gameObject.AddComponent<WizardInputAnimations>();
+            animations.WizardInput = this;
         }
 
-        private void OnSpellCasted(object sender, EventArgs args)
+        private bool UserInteracts()
         {
-            var spellArgs = (SpellCastedEventArgs) args;
-            Debug.Log($"Spell {spellArgs.Spell.Name} casted!");
-          
-            spellcastingController.Active = false;
-            CameraDirectionController.Active = true;
-            var spellAction = spellArgs.Spell.GetPlayerAction();
-            TriggerActionEvent(new ActionMadeEventArgs(spellAction));
-            StartQTE(spellAction);
+            return Input.GetMouseButtonDown(MouseToCharge);
+        }
+
+        private void OnUserInteraction(object sender, EventArgs args)
+        {
+            TriggerActionEvent(new ActionMadeEventArgs(((InteractionEventArgs) args).InteractableObject.GetAction()));
         }
     }
 }

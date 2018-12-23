@@ -11,7 +11,7 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
         {
             get
             {
-                return new Rune[] {Rune.Fire, Rune.Fire, Rune.Ice, Rune.Water};
+                return new Rune[] {Rune.Fire, Rune.Fire, Rune.Earth, Rune.Water};
             }
         }
 

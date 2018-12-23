@@ -10,7 +10,7 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
         Wind,
         Fire,
         Water,
-        Ice
+        Earth
     }
 
     public static class RuneExtensions
@@ -22,7 +22,7 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
                 case Rune.Wind: return "Air";
                 case Rune.Fire: return "Fire";
                 case Rune.Water: return "Water";
-                case Rune.Ice: return "Ice";
+                case Rune.Earth: return "Earth";
                 default: throw new InvalidOperationException($"Unexpected {nameof(Rune)} value of {rune}");
             }
         }
