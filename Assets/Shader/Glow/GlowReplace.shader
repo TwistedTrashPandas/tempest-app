@@ -1,9 +1,14 @@
-﻿Shader "Hidden/GlowCmdShader"
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "Hidden/GlowReplace"
 {
 	SubShader
 	{
-		Tags { "RenderType"="Opaque" }
-		LOD 100
+		Tags
+		{
+		"RenderType"="Opaque"
+		"Glowable" = "True"
+		}
 
 		Pass
 		{
@@ -22,7 +27,7 @@
 			{
 				float4 vertex : SV_POSITION;
 			};
-
+			
 			v2f vert (appdata v)
 			{
 				v2f o;

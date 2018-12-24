@@ -23,14 +23,14 @@ namespace MastersOfTempest.PlayerControls
 
         public void OnNewObjectInSight(object sender, EventArgs args)
         {
-            var glowable = ((InteractionEventArgs)args).InteractableObject.GetComponent<GlowObjectCmd>();
-            glowable?.TurnTheGlowOn();
+            var glowable = ((InteractionEventArgs)args).InteractableObject.GetComponent<GlowObject>();
+            glowable?.TurnGlowOn();
         }
 
         public void OnObjectLostSight(object sender, EventArgs args)
         {
-            var glowable = ((InteractionEventArgs)args).InteractableObject.GetComponent<GlowObjectCmd>();
-            glowable?.TurnTheGlowOff();
+            var glowable = ((InteractionEventArgs)args).InteractableObject.GetComponent<GlowObject>();
+            glowable?.TurnGlowOff();
         }
     }
 }

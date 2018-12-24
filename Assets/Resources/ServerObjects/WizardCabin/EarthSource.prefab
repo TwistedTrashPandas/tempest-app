@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 1881414127269652006}
   - component: {fileID: 1881414127269652009}
   - component: {fileID: 1881414127269652008}
-  - component: {fileID: 1881414127269652011}
   - component: {fileID: 1881414127269652010}
   - component: {fileID: 1881414127269652004}
-  m_Layer: 0
+  - component: {fileID: 3252261906152974288}
+  m_Layer: 10
   m_Name: EarthSource
   m_TagString: Interactable
   m_Icon: {fileID: 0}
@@ -94,20 +94,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1881414127269652011
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1881414127269652013}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6ae7428ea0e149efafc7dee31a54022, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlowColor: {r: 0.3019608, g: 0.21960786, b: 0.10196079, a: 1}
-  LerpFactor: 10
 --- !u!114 &1881414127269652010
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -143,3 +129,17 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
+--- !u!114 &3252261906152974288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1881414127269652013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ae0ce9bb9a7f48aabfbd558e1751e57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlowColor: {r: 0.15638803, g: 0.38679248, b: 0.129539, a: 1}
+  LerpFactor: 10

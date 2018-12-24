@@ -81,6 +81,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6ae7428ea0e149efafc7dee31a54022, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  index: 0
   GlowColor: {r: 0.043523308, g: 0.035733357, b: 0.6886792, a: 1}
   LerpFactor: 10
 --- !u!114 &6765416785379756543

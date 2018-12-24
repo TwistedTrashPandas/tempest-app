@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 2644476669256853396}
   - component: {fileID: 2644476669256853419}
   - component: {fileID: 2644476669256853418}
-  - component: {fileID: 2644476669256853417}
   - component: {fileID: 2644476669256853416}
-  m_Layer: 0
+  - component: {fileID: 4573221473133370110}
+  m_Layer: 10
   m_Name: Recepticle_4
   m_TagString: Interactable
   m_Icon: {fileID: 0}
@@ -93,20 +93,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2644476669256853417
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2644476669256853422}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6ae7428ea0e149efafc7dee31a54022, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlowColor: {r: 0.37940046, g: 0.7169812, b: 0.32128873, a: 1}
-  LerpFactor: 10
 --- !u!114 &2644476669256853416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,6 +105,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a3c0196afb7c4fea8c99915ae6ccc1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4573221473133370110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2644476669256853422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ae0ce9bb9a7f48aabfbd558e1751e57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlowColor: {r: 1, g: 1, b: 1, a: 1}
+  LerpFactor: 10
 --- !u!1 &2644476669704739102
 GameObject:
   m_ObjectHideFlags: 0
@@ -132,7 +132,8 @@ GameObject:
   - component: {fileID: 2644476669704739098}
   - component: {fileID: 2644476669704739097}
   - component: {fileID: 2644476669704739096}
-  m_Layer: 0
+  - component: {fileID: 1127036270}
+  m_Layer: 10
   m_Name: PowerRecepticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -182,7 +183,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 124018664b00b466590393aea6ddb1b0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -236,6 +237,20 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
+--- !u!114 &1127036270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2644476669704739102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ae0ce9bb9a7f48aabfbd558e1751e57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlowColor: {r: 0, g: 0, b: 0, a: 1}
+  LerpFactor: 10
 --- !u!1 &2644476670521095985
 GameObject:
   m_ObjectHideFlags: 0
@@ -248,9 +263,9 @@ GameObject:
   - component: {fileID: 2644476670521095999}
   - component: {fileID: 2644476670521095998}
   - component: {fileID: 2644476670521095997}
-  - component: {fileID: 2644476670521095996}
   - component: {fileID: 2644476670521095987}
-  m_Layer: 0
+  - component: {fileID: 8032122758651579976}
+  m_Layer: 10
   m_Name: Recepticle_1
   m_TagString: Interactable
   m_Icon: {fileID: 0}
@@ -329,20 +344,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2644476670521095996
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2644476670521095985}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6ae7428ea0e149efafc7dee31a54022, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlowColor: {r: 0.37940046, g: 0.7169812, b: 0.32128873, a: 1}
-  LerpFactor: 10
 --- !u!114 &2644476670521095987
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -355,6 +356,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a3c0196afb7c4fea8c99915ae6ccc1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8032122758651579976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2644476670521095985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ae0ce9bb9a7f48aabfbd558e1751e57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlowColor: {r: 1, g: 1, b: 1, a: 1}
+  LerpFactor: 10
 --- !u!1 &2644476670595675802
 GameObject:
   m_ObjectHideFlags: 0
@@ -367,9 +382,9 @@ GameObject:
   - component: {fileID: 2644476670595675776}
   - component: {fileID: 2644476670595675783}
   - component: {fileID: 2644476670595675782}
-  - component: {fileID: 2644476670595675781}
   - component: {fileID: 2644476670595675780}
-  m_Layer: 0
+  - component: {fileID: 5939135048367337367}
+  m_Layer: 10
   m_Name: Recepticle_3
   m_TagString: Interactable
   m_Icon: {fileID: 0}
@@ -448,20 +463,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2644476670595675781
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2644476670595675802}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6ae7428ea0e149efafc7dee31a54022, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlowColor: {r: 0.37940046, g: 0.7169812, b: 0.32128873, a: 1}
-  LerpFactor: 10
 --- !u!114 &2644476670595675780
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -474,6 +475,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a3c0196afb7c4fea8c99915ae6ccc1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5939135048367337367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2644476670595675802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ae0ce9bb9a7f48aabfbd558e1751e57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlowColor: {r: 1, g: 1, b: 1, a: 1}
+  LerpFactor: 10
 --- !u!1 &2644476670860945104
 GameObject:
   m_ObjectHideFlags: 0
@@ -486,9 +501,9 @@ GameObject:
   - component: {fileID: 2644476670860945118}
   - component: {fileID: 2644476670860945117}
   - component: {fileID: 2644476670860945116}
-  - component: {fileID: 2644476670860945107}
   - component: {fileID: 2644476670860945106}
-  m_Layer: 0
+  - component: {fileID: 3333737622909659610}
+  m_Layer: 10
   m_Name: Recepticle_2
   m_TagString: Interactable
   m_Icon: {fileID: 0}
@@ -567,20 +582,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2644476670860945107
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2644476670860945104}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6ae7428ea0e149efafc7dee31a54022, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlowColor: {r: 0.37940046, g: 0.7169812, b: 0.32128873, a: 1}
-  LerpFactor: 10
 --- !u!114 &2644476670860945106
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -593,3 +594,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a3c0196afb7c4fea8c99915ae6ccc1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3333737622909659610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2644476670860945104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ae0ce9bb9a7f48aabfbd558e1751e57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlowColor: {r: 1, g: 1, b: 1, a: 1}
+  LerpFactor: 10
