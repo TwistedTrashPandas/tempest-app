@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using MastersOfTempest.Networking;
 using MastersOfTempest.ShipBL;
 using MastersOfTempest.Environment;
+using UnityEngine;
 
 namespace MastersOfTempest
 {
@@ -41,11 +42,16 @@ namespace MastersOfTempest
 
         public void Register(EnvironmentManager envMng)
         {
-            if (envManager!=null)
+            if (envManager != null)
             {
                 throw new InvalidOperationException("Game master already has an EnvironmentManager object registered!");
             }
             envManager = envMng;
+            if (serverObject.onServer)
+            {
+                WinCondition tmp = gameObject.AddComponent<WinCondition>();
+                tmp.Initialize(envManager.vectorField);
+            }
         }
 
         public Ship GetShip()

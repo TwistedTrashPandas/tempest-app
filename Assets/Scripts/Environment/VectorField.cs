@@ -186,7 +186,7 @@ namespace MastersOfTempest.Environment
             return v3_dimensions[0] * v3_dimensions[1] * v3_dimensions[2];
         }
 
-        public Vector3 GetCenter()
+        public Vector3 GetCenterWS()
         {
             return new Vector3(v3_dimensions[0] * f_cellSize / 2f - 0.5f, v3_dimensions[0] * f_cellSize / 2f - 0.5f, v3_dimensions[0] * f_cellSize / 2f - 0.5f);
         }

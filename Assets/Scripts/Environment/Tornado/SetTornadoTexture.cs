@@ -36,7 +36,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             //material.EnableKeyword("Albedo");
             //material.EnableKeyword("_NORMALMAP");
             //material.SetFloat("g_fTimeStepTex", g_fTimeStepTex);
-            transform.position = vectorField.GetCenter();
+            transform.position = vectorField.GetCenterWS();
             Vector3 dims = vectorField.GetDimensions();
             transform.localScale = new Vector3(dims.x, dims.z, dims.y) * vectorField.GetCellSize() / 10f;
             StartCoroutine(UpdateTextures());
@@ -75,7 +75,7 @@ namespace MastersOfTempest.Environment.VisualEffects
         {
             while (true)
             {
-                Vector3 look = -camPos.position + vectorField.GetCenter();
+                Vector3 look = -camPos.position + vectorField.GetCenterWS();
                 look.y = 0;
                 look = Vector3.Normalize(look);
                 float angle = Mathf.Rad2Deg * (Mathf.Atan2(look.x, look.z) - Mathf.Atan2(0f, 1f));

@@ -1,8 +1,8 @@
 ﻿#pragma kernel BitonicSort
 #pragma kernel Transpose
 
-#define BLOCK_SIZE 1024
-#define TRANSPOSE_BLOCK_SIZE 32
+#define BLOCK_SIZE 256
+#define TRANSPOSE_BLOCK_SIZE 16
 
 RWStructuredBuffer<int> indicesRW : register(u0);
 StructuredBuffer<int> indices : register(t1);

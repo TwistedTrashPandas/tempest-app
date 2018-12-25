@@ -108,8 +108,13 @@ namespace MastersOfTempest.Environment.Interacting
         {
             yield return new WaitForSeconds(spawnRate);
             if (envObjects.Count > maxNumObjects)
+            {
+                GameObject toDestroy;
+                toDestroy = envObjects[0].gameObject;
                 envObjects.RemoveAt(0);
-            Vector3 centerPos = vectorField.GetCenter();
+                Destroy(toDestroy);
+            }
+            Vector3 centerPos = vectorField.GetCenterWS();
             centerPos.y = 0f;
             EnvObjectType type;
             float randomType = Random.Range(0f, spawnProbSum);

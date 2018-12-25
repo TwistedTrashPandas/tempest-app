@@ -72,7 +72,7 @@ Shader "Custom/HeightFieldRender" {
 		{
 			v2g o;
 			float3 pos = v.vertex.xyz;
-			uint idnx = round(pos.x / g_fQuadSize) * g_iDepth + round(pos.z / g_fQuadSize);
+			uint idnx = v.id;// round(pos.x / g_fQuadSize) * g_iDepth + round(pos.z / g_fQuadSize);
 			pos = verticesPosition[idnx];
 			o.normal = v.normal; //  verticesNormal[idnx]; // 
 			o.worldPos = float4(pos, 1.0f);

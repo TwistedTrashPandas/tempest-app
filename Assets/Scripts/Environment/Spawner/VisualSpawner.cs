@@ -36,7 +36,7 @@ namespace MastersOfTempest.Environment.VisualEffects
                     // heightField.vectorField = vectorField;
                     //heightField.gameObject.layer = 9;
                     heightField.mainCam = Camera.main;
-                    heightField.Initialize(vectorField.GetCenter());
+                    heightField.Initialize(vectorField.GetCenterWS());
                 }
 
                 if (tornPS)

@@ -12,8 +12,9 @@ namespace MastersOfTempest.Environment.VisualEffects
         /// Compute Shader for particle updates
         public ComputeShader particlesCS;
         public ComputeShader sortCS;
+        public ComputeShader winAnimation;
         public Shader renderParticlesS;
-        
+
         /// Vector field for tornado
         public VectorField vectorField;
         public Transform camPos;
@@ -37,9 +38,9 @@ namespace MastersOfTempest.Environment.VisualEffects
         private ComputeBuffer vectorFieldCBIn;
 
         private ComputeBuffer argsBuffer1;
-        private ComputeBuffer argsBuffer2;        
-        private ComputeBuffer argsBuffer3;        
-        private ComputeBuffer argsBuffer4;        
+        private ComputeBuffer argsBuffer2;
+        private ComputeBuffer argsBuffer3;
+        private ComputeBuffer argsBuffer4;
 
         /// kernel for computeshader
         private int kernelP;
@@ -59,9 +60,9 @@ namespace MastersOfTempest.Environment.VisualEffects
         // counter for sorting particles
         private int counter;
 
-        const uint BLOCK_SIZE = 1024;
-        const uint TRANSPOSE_BLOCK_SIZE = 32;
-        
+        const uint BLOCK_SIZE = 256;
+        const uint TRANSPOSE_BLOCK_SIZE = 16;
+
         void Start()
         {
             if (maxVel == null || maxVel.Length != 3)
@@ -76,7 +77,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             {
                 float x = Random.Range(0f, vectorField.GetDimensions()[0] * vectorField.GetCellSize());
                 float z = Random.Range(0f, vectorField.GetDimensions()[2] * vectorField.GetCellSize());
-                float y =Random.Range(-vectorField.GetDimensions()[1] * vectorField.GetCellSize() * 0.2f, vectorField.GetDimensions()[1] * vectorField.GetCellSize());
+                float y = Random.Range(-vectorField.GetDimensions()[1] * vectorField.GetCellSize() * 0.2f, vectorField.GetDimensions()[1] * vectorField.GetCellSize());
                 particlePos[i] = new Vector3(x, y, z);
                 particleIdx[i] = i;
             }
@@ -107,7 +108,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             argsBuffer4 = new ComputeBuffer(3, 4, ComputeBufferType.IndirectArguments);
 
             int[] args1 = new int[3];
-            args1[0] = Mathf.CeilToInt(numberParticles / 1024f);
+            args1[0] = Mathf.CeilToInt(numberParticles / 256f);
             args1[1] = 1;
             args1[2] = 1;
             argsBuffer1.SetData(args1);
@@ -140,7 +141,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             dims[1] = temp.y;
             dims[2] = temp.z;
             dims[3] = Mathf.RoundToInt(vectorField.GetCellSize());
-            maxDist = temp.x * vectorField.GetCellSize() * 3f;
+            maxDist = temp.x * vectorField.GetCellSize() * 3.5f;
             float[] center = new float[3];
             center[0] = (temp.x - 1) * 0.5f * dims[3];
             center[1] = (temp.y - 1) * 0.5f * dims[3];
@@ -189,8 +190,8 @@ namespace MastersOfTempest.Environment.VisualEffects
             randPos[1] = Random.Range(-1f, 1f);
             randPos[2] = Random.Range(-1f, 1f);//(rnd.Next(0, 2) * 2 - 1f) * (0.25f + (float)rnd.NextDouble() * 0.5f);
             particlesCS.SetFloats("g_fRandPos", randPos);
-            
-            particlesCS.DispatchIndirect(kernelP, argsBuffer1);            
+
+            particlesCS.DispatchIndirect(kernelP, argsBuffer1);
             // particlesCS.Dispatch(kernelP, Mathf.CeilToInt(numberParticles / 1024f), 1, 1);            
         }
 
@@ -214,7 +215,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             }
             uint width = BLOCK_SIZE;
             uint height = (numberParticles / BLOCK_SIZE);
-            
+
             // transpose data and sort transposed columns then rows again
             for (uint k = (BLOCK_SIZE << 1); k <= numberParticles; k <<= 1)
             {
@@ -226,11 +227,11 @@ namespace MastersOfTempest.Environment.VisualEffects
                 sortCS.SetBuffer(kernelT, "indices", indicesCB);
                 sortCS.DispatchIndirect(kernelT, argsBuffer3);
                 //sortCS.Dispatch(kernelT, (int)(width / TRANSPOSE_BLOCK_SIZE), (int)(height / TRANSPOSE_BLOCK_SIZE), 1);
-                
+
                 sortCS.SetBuffer(kernelS, "indicesRW", indicesRCB);
                 sortCS.DispatchIndirect(kernelS, argsBuffer2);
                 //sortCS.Dispatch(kernelS, groups, 1, 1);
-                
+
                 sortCS.SetInt("k", (int)BLOCK_SIZE);
                 sortCS.SetInt("g_iStage_2", (int)k);
                 sortCS.SetInt("g_iWidth", (int)height);
@@ -239,10 +240,10 @@ namespace MastersOfTempest.Environment.VisualEffects
                 sortCS.SetBuffer(kernelT, "indices", indicesRCB);
                 sortCS.DispatchIndirect(kernelT, argsBuffer4);
                 //sortCS.Dispatch(kernelT, (int)(height / TRANSPOSE_BLOCK_SIZE), (int)(width / TRANSPOSE_BLOCK_SIZE), 1);
-                
+
                 sortCS.SetBuffer(kernelS, "indicesRW", indicesCB);
                 sortCS.DispatchIndirect(kernelS, argsBuffer2);
-               // sortCS.Dispatch(kernelS, groups, 1, 1);
+                // sortCS.Dispatch(kernelS, groups, 1, 1);
             }
         }
 
@@ -254,7 +255,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             if (counter == 0)
                 SortParticles();
         }
-        
+
         private void Load3DTextures()
         {
             Texture3D t1 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/v3/3DNoiseTex.dds", TextureFormat.Alpha8, 1), TextureFormat.Alpha8);
@@ -293,6 +294,39 @@ namespace MastersOfTempest.Environment.VisualEffects
             //GetComponent<MeshFilter>().mesh.bounds = new Bounds(Vector3.zero, Vector3.one * float.MaxValue);
         }
 
+        private void OnEnable()
+        {
+            WinCondition.OnWin += UpdateVectorFieldPS;
+        }
+
+        private void OnDisable()
+        {
+            WinCondition.OnWin -= UpdateVectorFieldPS;
+        }
+
+        private void UpdateVectorFieldPS(GameObject ship)
+        {
+            int kernelWA = winAnimation.FindKernel("UpdateVectorField");
+            Vector3Int temp = vectorField.GetDimensions();
+            float[] pos = new float[3];
+            pos[0] = ship.transform.position.x;
+            pos[1] = ship.transform.position.y;
+            pos[2] = ship.transform.position.z;
+            pos[0] = vectorField.GetCenterWS().x;
+            pos[1] = vectorField.GetCenterWS().y;
+            pos[2] = vectorField.GetCenterWS().z;
+            float[] dims = new float[4];
+            dims[0] = temp.x;
+            dims[1] = temp.y;
+            dims[2] = temp.z;
+            dims[3] = Mathf.RoundToInt(vectorField.GetCellSize());
+            winAnimation.SetFloats("g_f3ShipPosition", pos);
+            winAnimation.SetFloat("g_fVelocityScale", 1.0f);
+            winAnimation.SetVector("g_i3Dimensions", new Vector4(dims[0], dims[1], dims[2], dims[3]));
+            winAnimation.SetBuffer(kernelWA, "vectorField", vectorFieldCBIn);
+            winAnimation.Dispatch(kernelWA, Mathf.CeilToInt(dims[0] / 8f), Mathf.CeilToInt(dims[1] / 8f), Mathf.CeilToInt(dims[2] / 8f));
+
+        }
         void OnApplicationQuit()
         {
             // releasing compute buffers

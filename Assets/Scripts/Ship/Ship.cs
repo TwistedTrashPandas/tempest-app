@@ -11,7 +11,7 @@ namespace MastersOfTempest.ShipBL
         private Gamemaster context;
         private ForceManilpulator forceManipulator;
         private ShipPartManager shipPartManager;
-
+        private ShipTornadoInteraction shipTornInteraction;
         private ShipStatus currentStatus;
 
         private void Awake()

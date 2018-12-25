@@ -10,6 +10,7 @@ float g_fSpeed;			//	speed of the waves
 float g_fDamping;
 float g_fMaxVelocity;
 float g_fDeltaTime;		//	timeStep
+float g_fTotalTime;
 float g_fMaxHeight;
 float g_fGridSpacing;
 float g_fQuadSize;		//	size of the quads of the mesh
@@ -24,6 +25,17 @@ float g_fDy;
 RWStructuredBuffer<HeightField> heightFieldOut : register(u0);
 StructuredBuffer<HeightField> heightFieldIn : register(t0);
 StructuredBuffer<uint> reflectWaves : register(t1);
+
+static const float SGNLUT[] =
+{
+	-1, -1, 1, 1, 1, -1, -1,
+	-1, 1, -1, -1, -1, 1, -1,
+	1, -1, 1, 1, 1, -1, 1,
+	1, -1, 1, 0, 1, -1, 1,
+	1, -1, 1, 1, 1, -1, 1,
+	-1, 1, -1, -1, -1, 1, -1,
+	-1, -1, 1, 1, 1, -1, -1
+};
 
 [numthreads(16, 16, 1)]
 void updateHeightfield(uint3 id : SV_DispatchThreadID)
@@ -97,14 +109,35 @@ void updateHeightfield(uint3 id : SV_DispatchThreadID)
 		//	max and min used for clamping the boundary and reflecting the waves
 		//	v[i, j]_(t+1) = v_t + dt * c * c * ((h[i - 1, j] + h[i + 1, j] + h[i, j + 1] + h[i, j - 1])- 4 * h[i, j]_t)	/ (g_fGridSpacing * g_fGridSpacing)
 		heightFieldOut[i * g_iDepth + j].velocity = heightFieldIn[i * g_iDepth + j].velocity * g_fDamping + g_fDeltaTime * g_fSpeed * g_fSpeed *
-			(totalHeight - 4 * (heightFieldIn[i * g_iDepth + j].height) + (totalHeightDiag - 4 * (heightFieldIn[i * g_iDepth + j].height)) / 1.0f) / (g_fGridSpacing * g_fGridSpacing);
+			(totalHeight - 4 * (heightFieldIn[i * g_iDepth + j].height)) / (g_fGridSpacing * g_fGridSpacing); // + (totalHeightDiag - 4 * (heightFieldIn[i * g_iDepth + j].height)) / 1.0f
+
+		int center_x = (int)g_iDepth / 2;
+		int center_y = (int)g_iWidth / 2;
+		int l_border = center_x;
+		int r_border = center_x;
+		r_border += 2;
+		l_border -= 2;
+		int u_border = center_y;
+		int d_border = center_y;
+		u_border += 2;
+		d_border -= 2;
 
 		//	clamping and damping of velocity
 		heightFieldOut[i * g_iDepth + j].velocity = clamp(heightFieldOut[i * g_iDepth + j].velocity, -g_fMaxVelocity, g_fMaxVelocity);
 
+
 		//	integrate height at timestep t+1:  h[i,j]_t+1 = h[i,j]_t + v[i,j]_t * dt 
 		heightFieldOut[i * g_iDepth + j].height = heightFieldIn[i*g_iDepth + j].height + heightFieldOut[i * g_iDepth + j].velocity * g_fDeltaTime;
 
+		//if (i <= r_border && i >= l_border && j >= d_border && j <= u_border) {
+			float2 pos = float2(i - center_x, j - center_y);
+			float2 cos_sin = float2(cos(g_fTotalTime), sin(g_fTotalTime));
+			float dist = distance(pos, cos_sin) + 1.0f;
+			if (dist < 5.0f) {
+				//heightFieldOut[i * g_iDepth + j].velocity += heightFieldOut[i * g_iDepth + j].velocity * 0.01f * SGNLUT[sgn_x + sgn_y * 7] * distance;
+				heightFieldOut[i * g_iDepth + j].height = 64.0f / (dist * dist);
+			}
+		//}
 		//	keep average Height of all points at ca. 0
 		// heightFieldOut[i * g_iDepth + j].height -= g_fAvgHeight;
 
@@ -128,7 +161,7 @@ void interpolateVertices(uint3 id : SV_DispatchThreadID) {
 
 	k = round(pos.x / g_fQuadSize);
 	m = round(pos.z / g_fQuadSize);
-	
+
 	// get surrounding vertices to approximate normal by taking the gradient
 	int idx1 = k * g_iDepth + m;
 	int idx3 = k * g_iDepth + min(m + 1, g_iDepth - 1);

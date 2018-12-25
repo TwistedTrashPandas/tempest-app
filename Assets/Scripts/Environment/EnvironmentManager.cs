@@ -16,24 +16,25 @@ namespace MastersOfTempest.Environment
 
         protected override void StartServer()
         {
-            Initialize();
+            base.StartServer();
+            Initialize(true);
         }
 
         protected override void StartClient()
         {
-            Initialize();
+            Initialize(false);
         }
 
-        private void Initialize()
+        private void Initialize(bool onServer)
         {
             // initalize important scripts for environment + register for gamemaster
             vectorField = GetComponent<VectorField>();
             if (vectorField == null)
                 throw new System.InvalidOperationException("VectorField is not specified");
             
-            if (serverObject.onServer)
+            if (onServer)
             {
-                gamemaster = FindObjectOfType<Gamemaster>();
+                gamemaster = GameObject.Find("Gamemaster").GetComponent<Gamemaster>();// FindObjectOfType<Gamemaster>();
                 if (gamemaster == null)
                 {
                     throw new System.InvalidOperationException("EnvironmentManager cannot operate without Gamemaster in the same scene!");

@@ -11,7 +11,7 @@ namespace MastersOfTempest.ShipBL
     {
         public ShipPartArea interactionArea;
         public float cutOffDist = 20f;
-        public float impulseScaling = 0.5f;
+        public float impulseScaling = 0.25f;
 
         /// <summary>
         /// destruction == 0:   ship part fully repaired

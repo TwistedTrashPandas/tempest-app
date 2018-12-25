@@ -13,7 +13,7 @@ float g_fTimestep;
 float g_fDampVel;
 float g_fMaxDist;
 
-[numthreads(1024, 1, 1)]
+[numthreads(256, 1, 1)]
 void UpdateParticles(uint3 id : SV_DispatchThreadID)
 {
 	// get idx of grid for every particle
@@ -56,8 +56,8 @@ void UpdateParticles(uint3 id : SV_DispatchThreadID)
 	//particleVelRW[id.x].xz = normalize(particleVelRW[id.x].xz) * min(g_fMaxVel.x, vel_magn);
 
 	if (distance(particlePosRW[id.x].xz, g_vCenter.xz) > g_fMaxDist || particlePosRW[id.x].y > g_i3Dimensions[1] * g_i3Dimensions.w) {
-		particlePosRW[id.x].xz = g_fRandPos.xz * particlePosRW[id.x].xz / 5.0f + g_vCenter.xz;
+		particlePosRW[id.x].xz = (particlePosRW[id.x].xz - g_vCenter.xz) * ((id.x + 1) % 2) / 1.5f + g_vCenter.xz;
 		particlePosRW[id.x].y = 0.0f;
-		particleVelRW[id.x] = float3(0.0f, 0.0f, 0.0f);
+		particleVelRW[id.x] *= g_fRandPos;// float3(0.0f, 0.0f, 0.0f);
 	}
 }

@@ -13,7 +13,8 @@ GameObject:
   - component: {fileID: 114739895200692124}
   - component: {fileID: 114095990914788750}
   - component: {fileID: 54704845781409872}
-  - component: {fileID: 8938770833842819595}
+  - component: {fileID: 8073123671162140756}
+  - component: {fileID: 9154757578818545668}
   m_Layer: 10
   m_Name: Ship
   m_TagString: Ship
@@ -134,13 +135,28 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 50
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0.2
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!114 &8938770833842819595
+  m_CollisionDetection: 1
+--- !u!114 &8073123671162140756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1377128144254112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2c3a733c5cfaa548b7411b6c2ab025c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  angularMomentumFactor: 1
+  velocityDamp: 0.999
+  pullStrength: 0.5
+--- !u!114 &9154757578818545668
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -168,7 +184,7 @@ GameObject:
   - component: {fileID: 6601214670790932213}
   m_Layer: 0
   m_Name: Galion
-  m_TagString: Untagged
+  m_TagString: Ship
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -180,9 +196,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3673295131740601120}
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 0, y: 0.5212059, z: -6.91423}
-  m_LocalScale: {x: 93.13873, y: 99.99997, z: 30.925602}
+  m_LocalRotation: {x: -0, y: 0.7071067, z: 0.7071068, w: 0}
+  m_LocalPosition: {x: -24.270662, y: -14.984617, z: 1.0777302}
+  m_LocalScale: {x: 93.13873, y: 99.99991, z: 30.925587}
   m_Children: []
   m_Father: {fileID: 4516789872046452}
   m_RootOrder: 9
@@ -299,7 +315,7 @@ GameObject:
   - component: {fileID: 585679151958835429}
   m_Layer: 0
   m_Name: Crownest2
-  m_TagString: Untagged
+  m_TagString: Ship
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -311,9 +327,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3673295131740601122}
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0.001088798, y: 6.2464447, z: -5.1673207}
-  m_LocalScale: {x: 100, y: 99.99995, z: 99.99992}
+  m_LocalRotation: {x: -0, y: 0.7071067, z: 0.7071068, w: 0}
+  m_LocalPosition: {x: -24.269573, y: -9.259378, z: -0.66917896}
+  m_LocalScale: {x: 100, y: 99.999886, z: 99.99986}
   m_Children: []
   m_Father: {fileID: 4516789872046452}
   m_RootOrder: 2
@@ -430,7 +446,7 @@ GameObject:
   - component: {fileID: 8608198865908682474}
   m_Layer: 0
   m_Name: Crownest1
-  m_TagString: Untagged
+  m_TagString: Ship
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -442,9 +458,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3673295131740601124}
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0.001088798, y: 6.5836067, z: 3.6957965}
-  m_LocalScale: {x: 100, y: 99.99995, z: 99.99992}
+  m_LocalRotation: {x: -0, y: 0.7071067, z: 0.7071068, w: 0}
+  m_LocalPosition: {x: -24.269573, y: -8.922216, z: -9.532296}
+  m_LocalScale: {x: 100, y: 99.999886, z: 99.99986}
   m_Children: []
   m_Father: {fileID: 4516789872046452}
   m_RootOrder: 0
@@ -561,7 +577,7 @@ GameObject:
   - component: {fileID: 9114801120283185396}
   m_Layer: 0
   m_Name: Balloon
-  m_TagString: Untagged
+  m_TagString: Ship
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -573,9 +589,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3673295131740601126}
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0.03370115, y: 0.37585258, z: -2.811536}
-  m_LocalScale: {x: 139.75983, y: 214.75194, z: 125.681656}
+  m_LocalRotation: {x: -0, y: 0.7071067, z: 0.7071068, w: 0}
+  m_LocalPosition: {x: -24.236961, y: -15.129971, z: -3.0249636}
+  m_LocalScale: {x: 139.75983, y: 214.75182, z: 125.681595}
   m_Children: []
   m_Father: {fileID: 4516789872046452}
   m_RootOrder: 8
@@ -692,7 +708,7 @@ GameObject:
   - component: {fileID: 5822187060620456629}
   m_Layer: 0
   m_Name: SailBack
-  m_TagString: Untagged
+  m_TagString: Ship
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -704,8 +720,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3673295131740601128}
-  m_LocalRotation: {x: 0.00000071525574, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 4.007736, z: 3.6472905}
+  m_LocalRotation: {x: -0, y: 1, z: -0.00000071525574, w: 0}
+  m_LocalPosition: {x: -24.270662, y: -11.498087, z: -9.48379}
   m_LocalScale: {x: 193.24004, y: 193.23993, z: 193.23997}
   m_Children: []
   m_Father: {fileID: 4516789872046452}
@@ -823,7 +839,7 @@ GameObject:
   - component: {fileID: 3347176048815335791}
   m_Layer: 0
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: Ship
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -835,8 +851,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3673295131740601130}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 6.258861}
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalPosition: {x: -24.270662, y: -15.505823, z: -12.095361}
   m_LocalScale: {x: 2.872157, y: 99.999985, z: 99.999985}
   m_Children: []
   m_Father: {fileID: 4516789872046452}
@@ -954,7 +970,7 @@ GameObject:
   - component: {fileID: 7358270631994353295}
   m_Layer: 0
   m_Name: Mast2
-  m_TagString: Untagged
+  m_TagString: Ship
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -966,9 +982,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3673295131740601132}
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0.0021995418, y: 3.8637524, z: -5.165373}
-  m_LocalScale: {x: 3.7910779, y: 3.791077, z: 290.85538}
+  m_LocalRotation: {x: -0, y: 0.7071067, z: 0.7071068, w: 0}
+  m_LocalPosition: {x: -24.268463, y: -11.642071, z: -0.67112684}
+  m_LocalScale: {x: 3.7910779, y: 3.791075, z: 290.85513}
   m_Children: []
   m_Father: {fileID: 4516789872046452}
   m_RootOrder: 11
@@ -1085,7 +1101,7 @@ GameObject:
   - component: {fileID: 4530545545067205748}
   m_Layer: 0
   m_Name: Mast1
-  m_TagString: Untagged
+  m_TagString: Ship
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1097,9 +1113,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3673295131740601134}
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0.0021995418, y: 4.446574, z: 3.705236}
-  m_LocalScale: {x: 3.7910779, y: 3.791077, z: 290.85538}
+  m_LocalRotation: {x: -0, y: 0.7071067, z: 0.7071068, w: 0}
+  m_LocalPosition: {x: -24.268463, y: -11.059249, z: -9.541736}
+  m_LocalScale: {x: 3.7910779, y: 3.791075, z: 290.85513}
   m_Children: []
   m_Father: {fileID: 4516789872046452}
   m_RootOrder: 10
@@ -1216,7 +1232,7 @@ GameObject:
   - component: {fileID: 6466462158037402152}
   m_Layer: 0
   m_Name: SideSailLeftSmall1
-  m_TagString: Untagged
+  m_TagString: Ship
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1228,9 +1244,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3673295131740601136}
-  m_LocalRotation: {x: -0.5504805, y: -0.48021618, z: 0.47993606, w: 0.4858242}
-  m_LocalPosition: {x: 2.4478302, y: -2.399242, z: 1.2669013}
-  m_LocalScale: {x: 100.000015, y: 100, z: 100.00004}
+  m_LocalRotation: {x: 0.47993606, y: 0.4858242, z: 0.5504805, w: 0.48021618}
+  m_LocalPosition: {x: -26.718493, y: -17.905066, z: -7.103401}
+  m_LocalScale: {x: 100.00012, y: 100.00005, z: 100.00014}
   m_Children: []
   m_Father: {fileID: 4516789872046452}
   m_RootOrder: 4
@@ -1347,7 +1363,7 @@ GameObject:
   - component: {fileID: 6224294018138584115}
   m_Layer: 0
   m_Name: SideSailLeftBig
-  m_TagString: Untagged
+  m_TagString: Ship
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1359,9 +1375,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3673295131740601138}
-  m_LocalRotation: {x: -0.4888729, y: -0.4184099, z: 0.5425593, w: 0.5399684}
-  m_LocalPosition: {x: 3.839444, y: -2.0757475, z: -0.35978985}
-  m_LocalScale: {x: 141.18901, y: 141.18898, z: 141.18903}
+  m_LocalRotation: {x: 0.5425593, y: 0.5399684, z: 0.4888729, w: 0.4184099}
+  m_LocalPosition: {x: -28.110106, y: -17.58157, z: -5.47671}
+  m_LocalScale: {x: 141.18901, y: 141.18892, z: 141.18903}
   m_Children: []
   m_Father: {fileID: 4516789872046452}
   m_RootOrder: 13
@@ -1478,7 +1494,7 @@ GameObject:
   - component: {fileID: 2011461763848825328}
   m_Layer: 0
   m_Name: ship3_uv_materials
-  m_TagString: Untagged
+  m_TagString: Ship
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1490,9 +1506,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3673295131740601140}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 100, y: 100, z: 100}
+  m_LocalRotation: {x: -0, y: 0.7071067, z: 0.7071068, w: 0}
+  m_LocalPosition: {x: -24.270662, y: -15.505823, z: -5.8364997}
+  m_LocalScale: {x: 100, y: 99.99994, z: 99.99994}
   m_Children: []
   m_Father: {fileID: 4516789872046452}
   m_RootOrder: 20
@@ -1609,7 +1625,7 @@ GameObject:
   - component: {fileID: 6386460403178880925}
   m_Layer: 0
   m_Name: SailFront
-  m_TagString: Untagged
+  m_TagString: Ship
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1621,8 +1637,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3673295131740601142}
-  m_LocalRotation: {x: 0.00000071525574, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.4386187, z: -5.2332926}
+  m_LocalRotation: {x: -0, y: 1, z: -0.00000071525574, w: 0}
+  m_LocalPosition: {x: -24.270662, y: -12.067204, z: -0.6032071}
   m_LocalScale: {x: 193.24004, y: 193.23993, z: 193.23997}
   m_Children: []
   m_Father: {fileID: 4516789872046452}
@@ -1740,7 +1756,7 @@ GameObject:
   - component: {fileID: 8189468577008703028}
   m_Layer: 0
   m_Name: SideSailRightSmall2
-  m_TagString: Untagged
+  m_TagString: Ship
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1752,9 +1768,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3673295131740601144}
-  m_LocalRotation: {x: -0.71776545, y: 0.06215144, z: -0.03686087, w: 0.69252527}
-  m_LocalPosition: {x: -2.5294526, y: -2.3992362, z: 2.6421535}
-  m_LocalScale: {x: 100.00003, y: 100, z: 100.00002}
+  m_LocalRotation: {x: -0.03686087, y: 0.69252527, z: 0.71776545, w: -0.06215144}
+  m_LocalPosition: {x: -21.741209, y: -17.90506, z: -8.478653}
+  m_LocalScale: {x: 100.00005, y: 100, z: 100.00002}
   m_Children: []
   m_Father: {fileID: 4516789872046452}
   m_RootOrder: 7
@@ -1871,7 +1887,7 @@ GameObject:
   - component: {fileID: 5006203667671073587}
   m_Layer: 0
   m_Name: SideSailRightSmall1
-  m_TagString: Untagged
+  m_TagString: Ship
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1883,9 +1899,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3673295131740601146}
-  m_LocalRotation: {x: -0.71776545, y: 0.06215144, z: -0.03686087, w: 0.69252527}
-  m_LocalPosition: {x: -2.5294564, y: -2.399239, z: 1.2212524}
-  m_LocalScale: {x: 100.00002, y: 100, z: 100.00002}
+  m_LocalRotation: {x: -0.03686087, y: 0.69252527, z: 0.71776545, w: -0.06215144}
+  m_LocalPosition: {x: -21.741205, y: -17.905062, z: -7.057752}
+  m_LocalScale: {x: 100.000046, y: 100, z: 100.00002}
   m_Children: []
   m_Father: {fileID: 4516789872046452}
   m_RootOrder: 6
@@ -2002,7 +2018,7 @@ GameObject:
   - component: {fileID: 4182620586480021372}
   m_Layer: 0
   m_Name: SideSailRightBig
-  m_TagString: Untagged
+  m_TagString: Ship
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2014,9 +2030,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3673295131740601148}
-  m_LocalRotation: {x: -0.4790044, y: 0.5395678, z: 0.5163025, w: -0.46136004}
-  m_LocalPosition: {x: -3.9093192, y: -2.0757475, z: -0.35978985}
-  m_LocalScale: {x: -141.18903, y: -141.18898, z: -141.18901}
+  m_LocalRotation: {x: 0.5163025, y: -0.46136004, z: 0.4790044, w: -0.5395678}
+  m_LocalPosition: {x: -20.361343, y: -17.58157, z: -5.47671}
+  m_LocalScale: {x: -141.18904, y: -141.18898, z: -141.18907}
   m_Children: []
   m_Father: {fileID: 4516789872046452}
   m_RootOrder: 14
@@ -2133,7 +2149,7 @@ GameObject:
   - component: {fileID: 4125159645631098298}
   m_Layer: 0
   m_Name: SideSailLeftSmall2
-  m_TagString: Untagged
+  m_TagString: Ship
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2145,9 +2161,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3673295131740601150}
-  m_LocalRotation: {x: -0.5504805, y: -0.48021618, z: 0.47993606, w: 0.4858242}
-  m_LocalPosition: {x: 2.4478302, y: -2.3992414, z: 2.7863302}
-  m_LocalScale: {x: 100.000015, y: 100, z: 100.00004}
+  m_LocalRotation: {x: 0.47993606, y: 0.4858242, z: 0.5504805, w: 0.48021618}
+  m_LocalPosition: {x: -26.718493, y: -17.905064, z: -8.622829}
+  m_LocalScale: {x: 100.00012, y: 100.00005, z: 100.00014}
   m_Children: []
   m_Father: {fileID: 4516789872046452}
   m_RootOrder: 5
@@ -2264,7 +2280,7 @@ GameObject:
   - component: {fileID: 8336278724331981350}
   m_Layer: 0
   m_Name: UpperDeckBack
-  m_TagString: Untagged
+  m_TagString: Ship
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2276,9 +2292,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3673295131740601152}
-  m_LocalRotation: {x: -0.00000003090862, y: 0.7071068, z: 0.7071067, w: 0.000000030908616}
-  m_LocalPosition: {x: -0.024937332, y: 1.0866003, z: 3.0330887}
-  m_LocalScale: {x: -100, y: -99.99997, z: -1.1916301}
+  m_LocalRotation: {x: 0.7071067, y: 0.000000030908616, z: 0.00000003090862, w: -0.7071068}
+  m_LocalPosition: {x: -24.245726, y: -14.419223, z: -8.869589}
+  m_LocalScale: {x: -100, y: -99.99991, z: -1.1916292}
   m_Children: []
   m_Father: {fileID: 4516789872046452}
   m_RootOrder: 18
@@ -2395,7 +2411,7 @@ GameObject:
   - component: {fileID: 2320329984642778635}
   m_Layer: 0
   m_Name: Upperdeck
-  m_TagString: Untagged
+  m_TagString: Ship
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2407,9 +2423,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3673295131740601154}
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0.0011278987, y: -0.0902977, z: -2.3085241}
-  m_LocalScale: {x: 100, y: 99.99997, z: 0.7645274}
+  m_LocalRotation: {x: -0, y: 0.7071067, z: 0.7071068, w: 0}
+  m_LocalPosition: {x: -24.269535, y: -15.596121, z: -3.5279756}
+  m_LocalScale: {x: 100, y: 99.99991, z: 0.7645269}
   m_Children: []
   m_Father: {fileID: 4516789872046452}
   m_RootOrder: 17
@@ -2526,7 +2542,7 @@ GameObject:
   - component: {fileID: 1614176392171741727}
   m_Layer: 0
   m_Name: Underdeck
-  m_TagString: Untagged
+  m_TagString: Ship
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2538,9 +2554,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3673295131740601156}
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 0.004426479, y: -1.7240906, z: -0.8021797}
-  m_LocalScale: {x: 100, y: 487.1909, z: 0.7043896}
+  m_LocalRotation: {x: -0, y: 0.7071067, z: 0.7071068, w: 0}
+  m_LocalPosition: {x: -24.27509, y: -17.229914, z: -5.03432}
+  m_LocalScale: {x: 100, y: 487.19064, z: 0.7043891}
   m_Children: []
   m_Father: {fileID: 4516789872046452}
   m_RootOrder: 16
@@ -2657,7 +2673,7 @@ GameObject:
   - component: {fileID: 1174743153005048890}
   m_Layer: 0
   m_Name: Tornado
-  m_TagString: Untagged
+  m_TagString: Ship
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2669,9 +2685,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3673295131740601158}
-  m_LocalRotation: {x: -0.39611802, y: -5.994229e-17, z: 6.286971e-17, w: 0.91819966}
-  m_LocalPosition: {x: 0.0016031712, y: -1.7093601, z: -6.8018684}
-  m_LocalScale: {x: 89.31439, y: 105.30548, z: 107.67529}
+  m_LocalRotation: {x: 6.286971e-17, y: 0.91819966, z: 0.39611802, w: 5.994229e-17}
+  m_LocalPosition: {x: -24.272266, y: -17.215183, z: 0.96536875}
+  m_LocalScale: {x: 89.31446, y: 105.30554, z: 107.67538}
   m_Children: []
   m_Father: {fileID: 4516789872046452}
   m_RootOrder: 15
@@ -2788,7 +2804,7 @@ GameObject:
   - component: {fileID: 3117100161430455081}
   m_Layer: 0
   m_Name: UpperDeckFront
-  m_TagString: Untagged
+  m_TagString: Ship
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2800,9 +2816,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3673295131740601166}
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0.016919523, y: 0.4885502, z: -5.006402}
-  m_LocalScale: {x: 187.29025, y: 187.29019, z: 187.29019}
+  m_LocalRotation: {x: -0, y: 0.7071067, z: 0.7071068, w: 0}
+  m_LocalPosition: {x: -24.253742, y: -15.017273, z: -0.8300977}
+  m_LocalScale: {x: 187.29025, y: 187.29007, z: 187.29007}
   m_Children: []
   m_Father: {fileID: 4516789872046452}
   m_RootOrder: 19
