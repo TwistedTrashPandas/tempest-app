@@ -155,7 +155,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   angularMomentumFactor: 1
   velocityDamp: 0.999
-  pullStrength: 0.5
+  pullStrength: 0.075
 --- !u!114 &9154757578818545668
 MonoBehaviour:
   m_ObjectHideFlags: 0

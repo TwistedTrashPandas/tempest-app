@@ -59,6 +59,8 @@ namespace MastersOfTempest.Environment.VisualEffects
 
         // counter for sorting particles
         private int counter;
+        private bool targetShip;
+        private GameObject ship;
 
         const uint BLOCK_SIZE = 256;
         const uint TRANSPOSE_BLOCK_SIZE = 16;
@@ -69,6 +71,7 @@ namespace MastersOfTempest.Environment.VisualEffects
                 throw new System.InvalidOperationException("initialize max Vel with 3 elements!");
 
             numberParticles = (uint)Mathf.Pow(2, particelNumExp);
+            targetShip = false;
             counter = 0;
             particlePos = new Vector3[numberParticles];
             particleVel = new Vector3[numberParticles];
@@ -254,6 +257,8 @@ namespace MastersOfTempest.Environment.VisualEffects
             counter = (counter + 1) % sortEach;
             if (counter == 0)
                 SortParticles();
+            if (targetShip)
+                UpdateVectorFieldPS();
         }
 
         private void Load3DTextures()
@@ -296,15 +301,21 @@ namespace MastersOfTempest.Environment.VisualEffects
 
         private void OnEnable()
         {
-            WinCondition.OnWin += UpdateVectorFieldPS;
+            WinCondition.OnWin += ToggleTargetShip;
         }
 
         private void OnDisable()
         {
-            WinCondition.OnWin -= UpdateVectorFieldPS;
+            WinCondition.OnWin -= ToggleTargetShip;
         }
 
-        private void UpdateVectorFieldPS(GameObject ship)
+        private void ToggleTargetShip(GameObject ship)
+        {
+            this.ship = ship;
+            targetShip = true;
+        }
+
+        private void UpdateVectorFieldPS()
         {
             int kernelWA = winAnimation.FindKernel("UpdateVectorField");
             Vector3Int temp = vectorField.GetDimensions();
@@ -312,16 +323,16 @@ namespace MastersOfTempest.Environment.VisualEffects
             pos[0] = ship.transform.position.x;
             pos[1] = ship.transform.position.y;
             pos[2] = ship.transform.position.z;
-            pos[0] = vectorField.GetCenterWS().x;
-            pos[1] = vectorField.GetCenterWS().y;
-            pos[2] = vectorField.GetCenterWS().z;
+            //pos[0] = vectorField.GetCenterWS().x;
+            //pos[1] = vectorField.GetCenterWS().y;
+            //pos[2] = vectorField.GetCenterWS().z;
             float[] dims = new float[4];
             dims[0] = temp.x;
             dims[1] = temp.y;
             dims[2] = temp.z;
             dims[3] = Mathf.RoundToInt(vectorField.GetCellSize());
             winAnimation.SetFloats("g_f3ShipPosition", pos);
-            winAnimation.SetFloat("g_fVelocityScale", 1.0f);
+            winAnimation.SetFloat("g_fVelocityScale", 30.0f);
             winAnimation.SetVector("g_i3Dimensions", new Vector4(dims[0], dims[1], dims[2], dims[3]));
             winAnimation.SetBuffer(kernelWA, "vectorField", vectorFieldCBIn);
             winAnimation.Dispatch(kernelWA, Mathf.CeilToInt(dims[0] / 8f), Mathf.CeilToInt(dims[1] / 8f), Mathf.CeilToInt(dims[2] / 8f));
