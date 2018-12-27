@@ -109,6 +109,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             argsBuffer2 = new ComputeBuffer(3, 4, ComputeBufferType.IndirectArguments);
             argsBuffer3 = new ComputeBuffer(3, 4, ComputeBufferType.IndirectArguments);
             argsBuffer4 = new ComputeBuffer(3, 4, ComputeBufferType.IndirectArguments);
+            ComputeBuffer rndAzimuthCB = new ComputeBuffer((int)numberParticles, 4);
 
             int[] args1 = new int[3];
             args1[0] = Mathf.CeilToInt(numberParticles / 256f);
@@ -153,6 +154,10 @@ namespace MastersOfTempest.Environment.VisualEffects
             for (int i = 0; i < numberParticles; i++)
                 idcs[i] = i;
 
+            float[] rndAzimuthBias = new float[numberParticles];
+            for (int i = 0; i < rndAzimuthBias.Length; i++)
+                rndAzimuthBias[i] = Random.Range(0, Mathf.PI * 2);
+
             particlesCS.SetFloats("g_i3Dimensions", dims);
             particlesCS.SetFloats("g_vCenter", center);
             particlesCS.SetFloat("g_fDampVel", dampVel);
@@ -172,7 +177,9 @@ namespace MastersOfTempest.Environment.VisualEffects
             particleVelCB.SetData(particleVel);
             indicesCB.SetData(idcs);
             indicesRCB.SetData(idcs);
-            //  assume static vector field
+            rndAzimuthCB.SetData(rndAzimuthBias);
+
+            //  assume static vector field (apart from win animation)
             particlesCS.SetBuffer(kernelP, "vectorFieldIn", vectorFieldCBIn);
             particlesCS.SetBuffer(kernelP, "particlePosRW", particlePosCB);
             particlesCS.SetBuffer(kernelP, "particleVelRW", particleVelCB);
@@ -182,6 +189,9 @@ namespace MastersOfTempest.Environment.VisualEffects
             material.SetBuffer("g_vVertices", particlePosCB);
             material.SetBuffer("g_vInitialWorldPos", particleinitialPosCB);
             material.SetBuffer("g_iIndices", indicesCB);
+            material.SetBuffer("g_vRndAzimuth", rndAzimuthCB);
+
+            rndAzimuthCB.Release();
         }
 
         private void UpdateParticles()

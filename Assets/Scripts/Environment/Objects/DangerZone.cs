@@ -7,13 +7,23 @@ namespace MastersOfTempest.Environment.Interacting
 {
     public class DangerZone : EnvObject
     {
-        protected override void OnCollisionStay(Collision collision)
+        protected override void OnTriggerStay(Collider other)
         {
-            if (collision.gameObject.tag == "Ship")
+            if (other.gameObject.tag == "Ship")
             {
                 // handle interaction (e.g., set status of ship to freezing)
-                Ship ship = collision.gameObject.GetComponent<Ship>();
+                Ship ship = other.transform.parent.gameObject.GetComponent<Ship>();
                 ship.GetCurrenStatus().Condition = ShipCondition.Freezing;
+            }
+        }
+
+        protected override void OnTriggerExit(Collider other)
+        {
+            if (other.gameObject.tag == "Ship")
+            {
+                // handle interaction (e.g., set status of ship to freezing)
+                Ship ship = other.transform.parent.gameObject.GetComponent<Ship>();
+                ship.GetCurrenStatus().Condition = ShipCondition.None;
             }
         }
     }

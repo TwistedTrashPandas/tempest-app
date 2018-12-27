@@ -48,7 +48,7 @@ Shader "Custom/CloudPart" {
 
 		//	pass for directional lights
 		Pass {
-				Lighting On ZWrite On Cull Front
+				Lighting On ZWrite Off Cull Front
 				Blend SrcAlpha OneMinusSrcAlpha
 			//Blend One OneMinusSrcAlpha
 
@@ -98,6 +98,7 @@ Shader "Custom/CloudPart" {
 				Texture2D<float3>			g_tex2DAmbientSkylight               : register(t4);
 				Texture3D<float>			g_tex3DNoise                 : register(t6);
 				StructuredBuffer<float3>	g_vVertices : register(t3);
+				StructuredBuffer<float>		g_vRndAzimuth : register(t7);
 				StructuredBuffer<int>		g_iIndices : register(t5);
 
 
@@ -199,7 +200,7 @@ Shader "Custom/CloudPart" {
 					// Randomly rotate the sphere
 					//f4LUTCoords = f4LUTCoords.xyzw;
 					//f4LUTCoords.x += 0.5f;
-					//f4LUTCoords.y += ParticleAttrs.fRndAzimuthBias;
+					f4LUTCoords.y += ParticleAttrs.fRndAzimuthBias;
 
 					float2 f2NormalizedDensityAndDist;
 					SAMPLE_4D_LUT_FLT2(g_tex3DParticleDensityLUT, OPTICAL_DEPTH_LUT_DIM, f4LUTCoords, 0, f2NormalizedDensityAndDist);
@@ -370,7 +371,7 @@ Shader "Custom/CloudPart" {
 							ParticleAttrs.fDensity = g_fDensity;
 							ParticleAttrs.f3Pos = g_vVertices[In.id];
 							ParticleAttrs.fSize = g_fSize;
-							ParticleAttrs.fRndAzimuthBias = 0.0f;
+							ParticleAttrs.fRndAzimuthBias = g_vRndAzimuth[In.id];
 
 							SCloudParticleLighting ParticleLighting;
 
@@ -380,7 +381,6 @@ Shader "Custom/CloudPart" {
 							float fTime = 1.0f; // g_fTimeScale * g_GlobalCloudAttribs.fTime;
 
 							float3 f3CameraPos, f3ViewRay;
-
 							/*// For directional light source, we should use position on the near clip plane instead of
 							// camera location as a ray start point
 							float2 f2PosPS = UVToProj((In.f4Pos.xy / g_GlobalCloudAttribs.f2LiSpCloudDensityDim.xy));

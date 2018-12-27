@@ -186,6 +186,8 @@ namespace MastersOfTempest.Environment.Interacting
                         envObjects[envObjects.Count - 1].moveType = (MoveType) Random.Range(0,3);
                         break;
                     case EnvObjectType.DangerZone:
+                        Vector3 dims = vectorField.GetDimensions();
+                        Vector3 initialPos = new Vector3(Random.Range(0, dims.x), Random.Range(0, dims.y), Random.Range(0, dims.z)) + new Vector3(0.5f,0.5f,0.5f);
                         prefabNum = Mathf.FloorToInt(Random.Range(0f, dangerzonesPrefabs.Length - Mathf.Epsilon));
                         envObjects.Add(GameObject.Instantiate(dangerzonesPrefabs[prefabNum], position, orientation).GetComponent<EnvObject>());
                         envObjects[envObjects.Count - 1].moveType = MoveType.Static;

@@ -66,9 +66,9 @@ MonoBehaviour:
   dampingFactorVel: 0.99
   dampingFactorForce: 0
   maximumObjVelocity: 50
-  spawnProbD: 0.8
-  spawnProbS: 0.1
-  spawnProbZ: 0.1
+  spawnProbD: 0.85
+  spawnProbS: 0
+  spawnProbZ: 0.15
   minRadiusT: 10
   maxRadiusT: 20
   minRadiusS: 20
@@ -79,8 +79,7 @@ MonoBehaviour:
   - {fileID: 1476894203371464, guid: e8c9d0a525a3e1b4fba9d4d419b35e72, type: 3}
   - {fileID: 1473021519196324, guid: d2ea04b96bcf76a4abf3fcf4663245d4, type: 3}
   - {fileID: 1451282214639288, guid: 45662c2cd8889d74f825b663d26232c5, type: 3}
-  supportingPrefabs:
-  - {fileID: 1787456376747014, guid: abeac99c68381474e8f440ab8a83ddd3, type: 3}
+  supportingPrefabs: []
   dangerzonesPrefabs:
   - {fileID: 1202199791458096, guid: 961a3386c9e651c4b86b0edd6a7b053a, type: 3}
   moveType: 2
@@ -140,7 +139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c00f619167f3b444e86ec3225496e04e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  f_cellSize: 2
+  f_cellSize: 4
   v3_dimensions: {x: 152, y: 312, z: 152}
   loadFromFile: 1
   vectorFieldFileNum: 999

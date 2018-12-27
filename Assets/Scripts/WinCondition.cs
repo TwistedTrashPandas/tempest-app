@@ -20,8 +20,9 @@ namespace MastersOfTempest
             winCondition.direction = 1;
             winCondition.isTrigger = true;
             winCondition.radius = 10f;
-            StartCoroutine(WinAfter10secs());
+            // StartCoroutine(WinAfter10secs());
         }
+
         private IEnumerator WinAfter10secs()
         {
             yield return new WaitForSeconds(10f);

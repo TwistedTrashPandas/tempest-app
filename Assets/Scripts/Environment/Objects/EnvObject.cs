@@ -114,5 +114,19 @@ namespace MastersOfTempest.Environment.Interacting
         {
 
         }
+
+        protected virtual void OnTriggerEnter(Collider other)
+        {
+
+        }
+        protected virtual void OnTriggerStay(Collider other)
+        {
+
+        }
+
+        protected virtual void OnTriggerExit(Collider other)
+        {
+
+        }
     }
 }
