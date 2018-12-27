@@ -9,10 +9,10 @@ namespace MastersOfTempest.PlayerControls
 {
     public class DrawEnergyAction : WizardAction
     {
-        private Rune chargeType;
+        private Charge chargeType;
         private float chargeDuration;
 
-        public DrawEnergyAction(Rune chargeType, float chargeDuration)
+        public DrawEnergyAction(Charge chargeType, float chargeDuration)
         {
             this.chargeType = chargeType;
             this.chargeDuration = chargeDuration;

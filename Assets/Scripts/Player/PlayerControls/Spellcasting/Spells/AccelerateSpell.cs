@@ -7,17 +7,17 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
 {
     public class AccelerateSpell : Spell
     {
-        public override Rune[] SpellSequence
+        public override Charge[] SpellSequence
         {
             get
             {
-                return new Rune[] {Rune.Fire, Rune.Earth, Rune.Water, Rune.Water};
+                return new Charge[] {Charge.Fire, Charge.Fire, Charge.Fire, Charge.Fire};
             }
         }
 
         public override String Name
         {
-            get 
+            get
             {
                 return "Tailwind";
             }

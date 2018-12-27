@@ -106,8 +106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca5146586cf5947cb90bc23aab13a009, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Rune: 2
-  ChargeTime: 2
+  Charge: 3
 --- !u!114 &7035890943158109384
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -17,7 +17,6 @@ namespace MastersOfTempest.PlayerControls
         public event EventHandler DischargeMiss;
 
         private PlayerAction currentAction;
-        private CoroutineCancellationToken currentCancellationToken;
         private bool isActive = true;
 
         private InteractionsController interactionsController;
@@ -29,7 +28,7 @@ namespace MastersOfTempest.PlayerControls
             Charged = 2
         }
         private WizardState currentState;
-        private Rune currentChargeType;
+        private Charge currentChargeType;
 
         private const int MouseToCharge = 0;
         private const float DischargeDistance = float.MaxValue;
@@ -38,7 +37,7 @@ namespace MastersOfTempest.PlayerControls
         /*
             Wizard input.
             1. Wizard input is controlled by actions and interactions controller
-            2. We have states: 
+            2. We have states:
                 i. Idle
                 ii. Drawing energy
                 iii. Energy drawn
@@ -50,7 +49,7 @@ namespace MastersOfTempest.PlayerControls
             Also we need a spells controller that will check the player's input and send commands to the ship
          */
 
-        public void StartCharging(Rune chargeType, float time)
+        public void StartCharging(Charge chargeType, float time)
         {
             if (Mathf.Approximately(time, 0f))
             {
@@ -77,7 +76,7 @@ namespace MastersOfTempest.PlayerControls
                 var recepticle = hit.transform.GetComponent<PowerRecepticle>();
                 if (recepticle != null)
                 {
-                    recepticle.Charge(currentChargeType);
+                    recepticle.RequestCharge(currentChargeType);
                     currentState = WizardState.Idle;
                     DischargeHit?.Invoke(this, new ChargingEventArgs(currentChargeType));
                 }
@@ -136,7 +135,7 @@ namespace MastersOfTempest.PlayerControls
             if(currentState == WizardState.Charging)
             {
                 currentState = WizardState.Idle;
-                ChargingCancelled?.Invoke(this, new ChargingEventArgs(currentChargeType));                
+                ChargingCancelled?.Invoke(this, new ChargingEventArgs(currentChargeType));
             }
         }
 

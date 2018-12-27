@@ -9,8 +9,8 @@ namespace MastersOfTempest.ShipBL
 {
     public class PowerSource : InteractablePart
     {
-        public Rune Rune;
-        public float ChargeTime = 2f;
+        public Charge Charge;
+        private const float ChargeTime = 1f;
 
         public override Access GetAccess()
         {
@@ -19,7 +19,7 @@ namespace MastersOfTempest.ShipBL
 
         public override PlayerAction GetAction()
         {
-            return new DrawEnergyAction(Rune, ChargeTime);
+            return new DrawEnergyAction(Charge, ChargeTime);
         }
 
         public override float GetDistance()

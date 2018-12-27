@@ -7,17 +7,17 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
 {
     public class SteerLeftSpell : Spell
     {
-        public override Rune[] SpellSequence
+        public override Charge[] SpellSequence
         {
             get
             {
-                return new Rune[] {Rune.Earth, Rune.Fire, Rune.Water, Rune.Wind};
+                return new Charge[] {Charge.Earth, Charge.Fire, Charge.Water, Charge.Wind};
             }
         }
 
         public override String Name
         {
-            get 
+            get
             {
                 return "Right halfwind";
             }

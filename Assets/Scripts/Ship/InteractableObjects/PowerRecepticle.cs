@@ -7,28 +7,48 @@ using UnityEngine;
 
 namespace MastersOfTempest.ShipBL
 {
+    [RequireComponent(typeof(PowerRecepticleController))]
     public class PowerRecepticle : InteractablePart
     {
-        private Rune CurrentCharge;
+        //TODO: when charge changed we need to stop the energy drawing of a wizard if any
+        public Charge CurrentCharge { get; private set; }
+        private PowerRecepticleController controller;
 
-        private bool IsCharged;
+        private void Awake()
+        {
+            controller = GetComponent<PowerRecepticleController>();
+            if (controller == null)
+            {
+                throw new InvalidOperationException($"{nameof(controller)} is not specified!");
+            }
+        }
 
         public override Access GetAccess()
         {
             return Access.Wizard;
         }
 
+        /*
+            Problem:
+            PowerRecepticle should execute all BL on the server. InteractablePart works only on the ClientSide.
+            We need another component that will be NetworkBehaviour and manage the charge state, etc.
+            ClientSide part should know that it exists and tell it to charge/discharge
+
+
+         */
+
         public override PlayerAction GetAction()
         {
-            if(IsCharged)
-            {
-                //TODO: animations for charge cancellations
-                IsCharged = false;
-                return new DrawEnergyAction(CurrentCharge, 0f);
-            }
-            else 
+            if (CurrentCharge == MastersOfTempest.PlayerControls.Spellcasting.Charge.None)
             {
                 return PlayerAction.Empty;
+            }
+            else
+            {
+                //TODO: animations for charge cancellations
+
+                controller.SetCharge(MastersOfTempest.PlayerControls.Spellcasting.Charge.None);
+                return new DrawEnergyAction(CurrentCharge, 0f);
             }
         }
 
@@ -38,11 +58,33 @@ namespace MastersOfTempest.ShipBL
             return float.MaxValue;
         }
 
-        public void Charge(Rune chargeType)
+        /// <summary>
+        /// Set the charge of this recepticle. Should be used only
+        /// by the PowerRecepticleController.
+        /// </summary>
+        /// <param name="chargeType">Desured charge type</param>
+        [Obsolete("This method should be called by " + nameof(PowerRecepticleController) + " only")]
+        public void Charge(Charge chargeType)
         {
             //TODO: animation for being charged/not charged
             CurrentCharge = chargeType;
-            IsCharged = true;
+            Debug.Log($"Received charge {CurrentCharge}");
+        }
+
+        /// <summary>
+        /// Request controller to set the charge
+        /// </summary>
+        /// <param name="chargeType">Desired charge type</param>
+        public void RequestCharge(Charge chargeType)
+        {
+            Debug.Log($"Requested charge {chargeType}");
+            controller.SetCharge(chargeType);
+        }
+
+        public void Destabilise()
+        {
+            //TODO: play animation for the stabilisation
+            Debug.Log($"Destabilising from {CurrentCharge}!!!");
         }
     }
 }

@@ -8,10 +8,10 @@ namespace MastersOfTempest.PlayerControls
 {
     public class ChargingEventArgs : EventArgs
     {
-        public Rune Rune { get; private set; }
-        public ChargingEventArgs(Rune rune) 
+        public Charge Charge { get; private set; }
+        public ChargingEventArgs(Charge rune)
         {
-            Rune = rune;
+            Charge = rune;
         }
     }
 }
