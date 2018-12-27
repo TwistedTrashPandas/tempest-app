@@ -5,7 +5,8 @@ Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: Tornado
   m_Shader: {fileID: 4800000, guid: f33ffe59326727548a24da678a30c703, type: 3}
   m_ShaderKeywords: _ALPHAPREMULTIPLY_ON
@@ -139,6 +140,8 @@ Material:
     - g_Reflection: 1
     - g_Shininess: 20
     - g_fBillboardSize: 2.6
+    - g_fDensity: 1
+    - g_fSize: 2
     - g_fTimeDiff: 0.01
     - g_fTimeStepTex: 0.2
     m_Colors:

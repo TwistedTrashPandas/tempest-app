@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 114095990914788750}
   - component: {fileID: 54704845781409872}
   - component: {fileID: 8073123671162140756}
-  - component: {fileID: 9154757578818545668}
+  - component: {fileID: 3798610760229167962}
   m_Layer: 10
   m_Name: Ship
   m_TagString: Ship
@@ -156,7 +156,7 @@ MonoBehaviour:
   angularMomentumFactor: 1
   velocityDamp: 0.995
   pullStrength: 0.075
---- !u!114 &9154757578818545668
+--- !u!114 &3798610760229167962
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
