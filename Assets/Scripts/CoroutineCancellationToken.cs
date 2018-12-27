@@ -5,6 +5,8 @@
     /// </summary>
     public class CoroutineCancellationToken
     {
+        public static CoroutineCancellationToken Empty { get; } = new CoroutineCancellationToken();
+
         public bool CancellationRequested { get; set; } = false;
     }
 }
