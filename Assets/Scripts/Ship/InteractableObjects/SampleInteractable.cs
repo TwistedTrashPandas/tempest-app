@@ -4,14 +4,19 @@ namespace MastersOfTempest.ShipBL
 {
     public class SampleInteractable : InteractablePart
     {
-        public override PlayerAction GetApprenticeAction()
+        public override Access GetAccess()
+        {
+            return Access.Players;
+        }
+
+        public override PlayerAction GetAction()
         {
             return new MessageAction($"Sample interactable {transform.name} was interacted with!");
         }
 
-        public override string GetResultDescription()
+        public override float GetDistance()
         {
-            return "pay respect";
+            return float.MaxValue;
         }
     }
 }

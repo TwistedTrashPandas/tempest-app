@@ -7,5 +7,7 @@
     {
         //todo: perhaps return result, or accept callback as a parameter
         public abstract void Execute(Gamemaster context);
+
+        public static PlayerAction Empty { get; } = new EmptyAction();
     }
 }
