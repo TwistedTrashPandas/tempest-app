@@ -7,17 +7,17 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
 {
     public class SuperVisionSpell : Spell
     {
-        public override Rune[] SpellSequence
+        public override Charge[] SpellSequence
         {
             get
             {
-                return new Rune[] { Rune.Wind, Rune.Ice, Rune.Wind, Rune.Wind };
+                return new Charge[] { Charge.Wind, Charge.Earth, Charge.Wind, Charge.Wind };
             }
         }
 
         public override String Name
         {
-            get 
+            get
             {
                 return "Arcane insight";
             }

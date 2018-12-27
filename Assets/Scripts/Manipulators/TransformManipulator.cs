@@ -15,6 +15,7 @@ namespace MastersOfTempest.PlayerControls
             public float x, y, z;
             public bool changeRotation;
             public float rx, ry, rz;
+            public uint messageNumber;
 
             public Vector3 Position
             {
@@ -31,6 +32,7 @@ namespace MastersOfTempest.PlayerControls
                 }
             }
         }
+        private uint lastMessage = 0;
 
         public void ChangeTransform(Vector3 position, Vector3 rotation)
         {
@@ -50,7 +52,8 @@ namespace MastersOfTempest.PlayerControls
                     changeRotation = true,
                     rx = rotation.x,
                     ry = rotation.y,
-                    rz = rotation.z
+                    rz = rotation.z,
+                    messageNumber = ++lastMessage
                 };
                 SendToServer(ByteSerializer.GetBytes(message), Facepunch.Steamworks.Networking.SendType.Unreliable);
             }
@@ -70,7 +73,8 @@ namespace MastersOfTempest.PlayerControls
                     x = position.x,
                     y = position.y,
                     z = position.z,
-                    changeRotation = false
+                    changeRotation = false,
+                    messageNumber = ++lastMessage
                 };
                 SendToServer(ByteSerializer.GetBytes(message), Facepunch.Steamworks.Networking.SendType.Unreliable);
             }
@@ -90,7 +94,8 @@ namespace MastersOfTempest.PlayerControls
                     changeRotation = true,
                     rx = rotation.x,
                     ry = rotation.y,
-                    rz = rotation.z
+                    rz = rotation.z,
+                    messageNumber = ++lastMessage
                 };
                 SendToServer(ByteSerializer.GetBytes(message), Facepunch.Steamworks.Networking.SendType.Unreliable);
             }
@@ -99,19 +104,22 @@ namespace MastersOfTempest.PlayerControls
         protected override void OnServerReceivedMessageRaw(byte[] data, ulong steamID)
         {
             var message = ByteSerializer.FromBytes<TransformMessage>(data);
-            if (message.changePosition && message.changeRotation)
+            if (message.messageNumber > lastMessage)
             {
-                ChangeTransform(message.Position, message.Rotation);
-            }
-            else if(message.changePosition)
-            {
-                ChangePosition(message.Position);
-            }
-            else 
-            {
-                ChangeRotation(message.Rotation);
+                lastMessage = message.messageNumber;
+                if (message.changePosition && message.changeRotation)
+                {
+                    ChangeTransform(message.Position, message.Rotation);
+                }
+                else if (message.changePosition)
+                {
+                    ChangePosition(message.Position);
+                }
+                else
+                {
+                    ChangeRotation(message.Rotation);
+                }
             }
         }
-
     }
 }

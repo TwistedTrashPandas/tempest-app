@@ -15,6 +15,9 @@ namespace MastersOfTempest.PlayerControls
         private float yaw = 0.0f;
         private float pitch = 0.0f;
 
+        private const float PitchMax = 70f;
+        private const float PitchMin = -60f;
+
         private bool isActive = true;
         public bool Active
         {
@@ -56,7 +59,7 @@ namespace MastersOfTempest.PlayerControls
             {
                 yaw += speedH * Input.GetAxis("Mouse X");
                 pitch -= speedV * Input.GetAxis("Mouse Y");
-
+                pitch = Mathf.Clamp(pitch, PitchMin, PitchMax);
                 FirstPersonCamera.transform.localEulerAngles = new Vector3(pitch, yaw, 0.0f);
             }
         }

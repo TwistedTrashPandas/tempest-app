@@ -7,17 +7,17 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
 {
     public class ShieldSpell : Spell
     {
-        public override Rune[] SpellSequence
+        public override Charge[] SpellSequence
         {
             get
             {
-                return new Rune[] { Rune.Fire, Rune.Water, Rune.Fire, Rune.Water };
+                return new Charge[] { Charge.Fire, Charge.Water, Charge.Fire, Charge.Water };
             }
         }
 
         public override String Name
         {
-            get 
+            get
             {
                 return "Shield";
             }

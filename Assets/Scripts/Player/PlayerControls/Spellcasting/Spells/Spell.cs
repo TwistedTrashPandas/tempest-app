@@ -7,7 +7,7 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
     public abstract class Spell
     {
         public abstract PlayerAction GetPlayerAction();
-        public abstract Rune[] SpellSequence { get; }
+        public abstract Charge[] SpellSequence { get; }
         public abstract string Name { get; }
     }
 }

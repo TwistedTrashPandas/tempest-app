@@ -15,6 +15,7 @@ namespace MastersOfTempest
     {
         private Ship ship;
         private List<Player> players;
+        private Player currentPlayer;
         private EnvironmentManager envManager;
 
         private void Awake()
@@ -38,6 +39,16 @@ namespace MastersOfTempest
                 throw new InvalidOperationException($"Player object {nameof(player)} has already been registered!");
             }
             players.Add(player);
+        }
+
+        public Player GetCurrentPlayer()
+        {
+            return currentPlayer;
+        }
+
+        public void SetCurrentPlayer(Player player)
+        {
+            currentPlayer = player;
         }
 
         public void Register(EnvironmentManager envMng)
