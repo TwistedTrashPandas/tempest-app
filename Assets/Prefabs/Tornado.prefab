@@ -54,11 +54,11 @@ MonoBehaviour:
   camPos: {fileID: 0}
   sortEach: 20
   particelNumExp: 16
-  dampVel: 0.999
+  dampVel: 0.998
   maxVel:
-  - 30
-  - 30
-  - 100
+  - 50
+  - 50
+  - 120
 --- !u!33 &33802898687387734
 MeshFilter:
   m_ObjectHideFlags: 0

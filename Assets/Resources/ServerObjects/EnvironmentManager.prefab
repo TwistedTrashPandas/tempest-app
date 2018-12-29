@@ -143,5 +143,5 @@ MonoBehaviour:
   v3_dimensions: {x: 152, y: 312, z: 152}
   loadFromFile: 1
   vectorFieldFileNum: 999
-  velScale: 30
+  velScale: 50
   yVelScale: 0.75

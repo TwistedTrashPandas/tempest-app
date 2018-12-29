@@ -1,0 +1,65 @@
+﻿// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel UpdateParticles
+
+RWStructuredBuffer<float3> particlePosRW: register(u0);
+RWStructuredBuffer<float3> particleVelRW: register(u1);
+StructuredBuffer<float3> vectorFieldIn: register(t0);
+
+float4 g_i3Dimensions;
+float3 g_vCenter;
+float3 g_fMaxVel;
+float3 g_fRandPos;
+float g_fTimestep;
+float g_fDampVel;
+float g_fMaxDist;
+
+[numthreads(256, 1, 1)]
+void UpdateParticles(uint3 id : SV_DispatchThreadID)
+{
+	// get idx of grid for every particle
+	int3 idx = (int3)(particlePosRW[id.x] / ((float)g_i3Dimensions.w));
+	idx.y = min(g_i3Dimensions.y - 1, max(idx.y, 0));
+	float x_proj = particlePosRW[id.x].x - g_vCenter.x;
+	float z_proj = particlePosRW[id.x].z - g_vCenter.z;
+	if ((idx.x < 0 || idx.x >= g_i3Dimensions.x) || (idx.z < 0 || idx.z >= g_i3Dimensions.z))
+	{
+		if (abs(x_proj) > abs(z_proj))
+		{
+			z_proj /= x_proj;
+			x_proj = sign(x_proj);
+			z_proj *= x_proj;
+		}
+		else
+		{
+			x_proj /= z_proj;
+			z_proj = sign(z_proj);
+			x_proj *= z_proj;
+		}
+		idx.x = (int)((x_proj * 0.5f + 0.5f) * (g_i3Dimensions.x - 1));
+		idx.z = (int)((z_proj * 0.5f + 0.5f) * (g_i3Dimensions.z - 1));
+	}
+	// update velocity and positions accordingly
+	float dims = g_i3Dimensions[1] * g_i3Dimensions[2];
+	particleVelRW[id.x] *= g_fDampVel;
+	particleVelRW[id.x] += vectorFieldIn[min(idx.x * dims + idx.y * g_i3Dimensions[2] + idx.z, dims*g_i3Dimensions[0])] * g_fTimestep;
+	particleVelRW[id.x].y = max(-g_fMaxVel.y, min(g_fMaxVel.y, particleVelRW[id.x].y));
+	
+	float2 tempVel = float2(particleVelRW[id.x].x, particleVelRW[id.x].z);
+	if (length(tempVel) > g_fMaxVel.x) {
+		tempVel = normalize(tempVel) * g_fMaxVel.x;
+	}
+	particleVelRW[id.x].x = tempVel.x;
+	particleVelRW[id.x].z = tempVel.y;
+
+	particlePosRW[id.x] += particleVelRW[id.x] * g_fTimestep;
+	//float vel_magn = length(particleVelRW[id.x].xz);
+	//particleVelRW[id.x].xz = normalize(particleVelRW[id.x].xz) * min(g_fMaxVel.x, vel_magn);
+
+	if (distance(particlePosRW[id.x].xz, g_vCenter.xz) > g_fMaxDist || particlePosRW[id.x].y > g_i3Dimensions[1] * g_i3Dimensions.w) {
+		//particlePosRW[id.x].xz = (particlePosRW[id.x].xz - g_vCenter.xz) * ((id.x + 1) % 2) / 1.5f + g_vCenter.xz;
+		float2 dir = particlePosRW[id.x].xz - g_vCenter.xz;
+		particlePosRW[id.x].xz = (dir) * min((id.x) % 2, 1) / 1.5f + (dir) * min((id.x) % 3, 1) / 1.5f + g_vCenter.xz;
+		particlePosRW[id.x].y -= g_vCenter.y * 2;
+		particleVelRW[id.x] *= g_fRandPos;// float3(0.0f, 0.0f, 0.0f);
+	}
+}

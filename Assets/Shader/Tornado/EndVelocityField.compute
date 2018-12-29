@@ -1,0 +1,15 @@
+﻿// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel UpdateVectorField
+
+RWStructuredBuffer<float3> vectorField: register(u0);
+
+float3 g_f3ShipPosition;
+float g_fVelocityScale;
+float4 g_i3Dimensions;
+
+[numthreads(8, 8, 8)]
+void UpdateVectorField(uint3 id : SV_DispatchThreadID)
+{
+	float3 worldPos = (((float3)id) + float3(0.5f,0.5f,0.5f))* g_i3Dimensions.w;
+	vectorField[id.x * g_i3Dimensions.y * g_i3Dimensions.z + id.y * g_i3Dimensions.z + id.z] = normalize(g_f3ShipPosition - worldPos) * g_fVelocityScale;
+}

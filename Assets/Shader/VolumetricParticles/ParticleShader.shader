@@ -6,8 +6,9 @@ Shader "Custom/CloudPart" {
 		g_tex3DParticleDensityLUT("_ParticleDensity", 3D) = ""  {}
 		g_tex3DSingleScatteringInParticleLUT("_SingleScatter", 3D) = ""  {}
 		g_tex3DMultipleScatteringInParticleLUT("_MultipleScatter", 3D) = ""  {}
-		g_fSize("BillboardSize", Range(0.1,100.0)) = 1.0
+		g_fSize("Size", Range(0.1,100.0)) = 1.0
 		g_fDensity("Density", Range(0.01,100.0)) = 1
+		g_bSize("FlexibleSize", Range(0.0,1.0)) = 0.0
 	}
 		SubShader{
 
@@ -99,7 +100,9 @@ Shader "Custom/CloudPart" {
 				sampler2D _CameraDepthTexture;
 
 				float g_fSize;
+				float g_bSize;
 				float g_fDensity;
+				float4 g_f4ShipPosition;
 
 				// ---------------------------------------------------------------------------------------------------------------------------------
 
@@ -154,8 +157,14 @@ Shader "Custom/CloudPart" {
 					float3 f3LightDirObjSpce = mul(f3x3WorldToObjSpaceRotation, -_WorldSpaceLightPos0.xyz) ;
 
 					// Compute scales to transform ellipsoid into the unit sphere:
-					float3 f3Scale = 1.0f / g_fSize; // 1.f / GetParticleScales(ParticleAttrs.fSize, CellAttrs.uiNumActiveLayers);
+					float3 f3Scale; // 1.f / GetParticleScales(ParticleAttrs.fSize, CellAttrs.uiNumActiveLayers);
 
+					if (g_bSize < 0.5f)
+						f3Scale = 1.0f / g_fSize;
+					else {
+						float dist = distance(ParticleAttrs.f3Pos, g_f4ShipPosition.xyz) / 312.0f;
+						f3Scale = 1.0f / (g_fSize * max(min(1.0f, dist), 0.15f));
+					}
 					float3 f3ScaledCamPosObjSpace;
 					f3ScaledCamPosObjSpace = f3CamPosObjSpace.xyz * f3Scale;
 					f3ViewRayUSSpace = normalize(f3ViewRayObjSpace.xyz*f3Scale);
@@ -276,8 +285,6 @@ Shader "Custom/CloudPart" {
 				//if( !bIsValid )
 				//    return;
 
-				float3 f3Size = g_fSize;
-
 				g2f Outs[8];
 				// matrix mViewProj = ; // g_CameraAttribs.WorldViewProj;
 				// Multiply with camera view-proj matrix
@@ -321,6 +328,13 @@ Shader "Custom/CloudPart" {
 				ParticleObjToWorldSpaceMatr[3].xyzw = p[0].vertex;
 				ParticleObjToWorldSpaceMatr = mul(UNITY_MATRIX_VP, transpose(ParticleObjToWorldSpaceMatr));*/
 
+				float3 f3Size;
+				if (g_bSize < 0.5f)
+					f3Size = g_fSize;
+				else {
+					float dist = distance(g_vVertices[p[0].id].xyz, g_f4ShipPosition.xyz) / 312.0f;
+					f3Size = g_fSize * max(min(1.0f, dist), 0.15f);
+				}
 				for (int iCorner = 0; iCorner < 8; ++iCorner)
 				{
 					float4 f4CurrCornerWorldPos; 
@@ -364,14 +378,13 @@ Shader "Custom/CloudPart" {
 				SParticleAttribs ParticleAttrs;
 				ParticleAttrs.fDensity = g_fDensity;
 				ParticleAttrs.f3Pos = g_vVertices[In.id];
-				ParticleAttrs.fSize = g_fSize;
 				ParticleAttrs.fRndAzimuthBias = g_vRndAzimuth[In.id];
 
 				SCloudParticleLighting ParticleLighting;
 
 				ParticleLighting.f4SunLight = _LightColor0;
 				ParticleLighting.f4LightAttenuation = float4(3.0f,3.0f,1.0f,1.0f); // .x == single scattering; .y == multiple scattering
-				ParticleLighting.f4AmbientLight = float4(0.1,0.1,0.1,1.0);
+				ParticleLighting.f4AmbientLight = float4(0.15,0.15,0.15,1.0);
 				float fTime = 1.0f; // g_fTimeScale * g_GlobalCloudAttribs.fTime;
 
 				float3 f3CameraPos, f3ViewRay;
@@ -430,7 +443,7 @@ Shader "Custom/CloudPart" {
 					discard;
 				if (fRayLength < fDistanceToEntryPoint)
 					discard; // return float4(1.0f, 1.0f, 1.0f, 1.0f);
-				return float4(f3WorldPos, 1.0f);
+				//return float4(f3WorldPos, 1.0f);
 				//return float4(normalize(f3ViewRay * 0.5f + 0.5f), 1.0f);
 				fDistanceToExitPoint = min(fDistanceToExitPoint, fRayLength);
 
