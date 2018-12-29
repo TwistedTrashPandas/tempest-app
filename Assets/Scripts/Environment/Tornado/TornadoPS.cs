@@ -345,12 +345,12 @@ namespace MastersOfTempest.Environment.VisualEffects
             dims[2] = temp.z;
             dims[3] = Mathf.RoundToInt(vectorField.GetCellSize());
             winAnimation.SetFloats("g_f3ShipPosition", pos);
-            winAnimation.SetFloat("g_fVelocityScale", 10000.0f);
+            winAnimation.SetFloat("g_fVelocityScale", 10.0f);
             winAnimation.SetVector("g_i3Dimensions", new Vector4(dims[0], dims[1], dims[2], dims[3]));
             winAnimation.SetBuffer(kernelWA, "vectorField", vectorFieldCBIn);
             winAnimation.Dispatch(kernelWA, Mathf.CeilToInt(dims[0] / 8f), Mathf.CeilToInt(dims[1] / 8f), Mathf.CeilToInt(dims[2] / 8f));
             particlesCS.SetFloats("g_fMaxVel", maxVel);
-            particlesCS.SetFloat("g_fDampVel", 0f);
+            particlesCS.SetFloat("g_fDampVel", 0.999f);
             material.SetFloatArray("g_f3ShipPosition", pos);
             material.SetVector("g_f4ShipPosition", new Vector4(pos[0], pos[1], pos[2]));
             material.SetFloat("g_bSize", 1.0f);

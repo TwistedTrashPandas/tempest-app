@@ -319,7 +319,7 @@ Shader "Custom/CloudPart" {
 					0,0,0,1
 					);
 
-				matrix ParticleObjToProjSpaceMatr = (UNITY_MATRIX_MVP); // mul(UNITY_MATRIX_VP, mRotCamDirMatrix); // mul(ParticleObjToWorldSpaceMatr, );
+				//matrix ParticleObjToProjSpaceMatr = (UNITY_MATRIX_MVP); // mul(UNITY_MATRIX_VP, mRotCamDirMatrix); // mul(ParticleObjToWorldSpaceMatr, );
 				/*matrix ParticleObjToWorldSpaceMatr;
 				ParticleObjToWorldSpaceMatr[0].xyzw = float4(1, 0, 0, 0);
 				ParticleObjToWorldSpaceMatr[1].xyzw = float4(0, 1, 0, 0);// f3Normal.xyz;
@@ -346,7 +346,8 @@ Shader "Custom/CloudPart" {
 
 					Outs[iCorner].id = uiParticleId;
 					Outs[iCorner].vertex = f4CurrCornerPosPS;
-					Outs[iCorner].projPos = mul(UNITY_MATRIX_MV, f4CurrCornerWorldPos);
+					Outs[iCorner].projPos.xyz = UnityObjectToViewPos(f4CurrCornerWorldPos);
+					Outs[iCorner].projPos.w = 1.0f;
 					Outs[iCorner].uv = ComputeScreenPos(Outs[iCorner].vertex);
 				}
 				// Generate bounding box faces
