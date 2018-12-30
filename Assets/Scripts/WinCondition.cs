@@ -42,8 +42,11 @@ namespace MastersOfTempest
         private IEnumerator WinAfter10secs()
         {
             yield return new WaitForSeconds(10f);
-            if(serverObject.onServer)
+            if (serverObject.onServer)
+            {
+                OnWinServer();
                 OnWin(gameObject.GetComponent<Gamemaster>().GetShip().gameObject);
+            }
         }
 
         private void OnTriggerEnter(Collider other)
