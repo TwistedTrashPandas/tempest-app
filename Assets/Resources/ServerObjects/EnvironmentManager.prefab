@@ -73,7 +73,7 @@ MonoBehaviour:
   maxRadiusT: 20
   minRadiusS: 20
   maxRadiusS: 30
-  maxNumObjects: 50
+  maxNumObjects: 150
   vectorField: {fileID: 114404567317752372}
   damagingPrefabs:
   - {fileID: 1476894203371464, guid: e8c9d0a525a3e1b4fba9d4d419b35e72, type: 3}

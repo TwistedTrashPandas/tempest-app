@@ -1,10 +1,11 @@
 ﻿using MastersOfTempest.Environment;
+using MastersOfTempest.Networking;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 namespace MastersOfTempest
 {
-    public class WinCondition : MonoBehaviour
+    public class WinCondition : NetworkBehaviour
     {
         public delegate void WinAnimation(GameObject ship);
         public static event WinAnimation OnWin;
@@ -20,13 +21,29 @@ namespace MastersOfTempest
             winCondition.direction = 1;
             winCondition.isTrigger = true;
             winCondition.radius = 10f;
-            StartCoroutine(WinAfter10secs());
+            if (serverObject.onServer)
+                StartCoroutine(WinAfter10secs());
+        }
+
+        public void OnWinServer()
+        {
+            byte[] buffer = new byte[1];
+            buffer[0] = 1;
+            SendToAllClients(buffer, Facepunch.Steamworks.Networking.SendType.Reliable);
+        }
+
+        protected override void OnClientReceivedMessageRaw(byte[] data, ulong steamID)
+        {
+            base.OnClientReceivedMessageRaw(data, steamID);
+            if (data[0] > 0)
+                OnWin(gameObject.GetComponent<Gamemaster>().GetShip().gameObject);
         }
 
         private IEnumerator WinAfter10secs()
         {
             yield return new WaitForSeconds(10f);
-            OnWin(gameObject.GetComponent<Gamemaster>().GetShip().gameObject);
+            if(serverObject.onServer)
+                OnWin(gameObject.GetComponent<Gamemaster>().GetShip().gameObject);
         }
 
         private void OnTriggerEnter(Collider other)
@@ -34,7 +51,8 @@ namespace MastersOfTempest
             // WIN EVENT
             if(other.tag == "Ship")
             {
-                OnWin(other.transform.parent.gameObject);
+                if (serverObject.onServer)
+                    OnWin(other.transform.parent.gameObject);
                 Debug.Log("Victory!");
             }
         }
