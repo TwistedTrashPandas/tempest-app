@@ -9,22 +9,16 @@ namespace MastersOfTempest
     {
         public delegate void WinAnimation(GameObject ship);
         public static event WinAnimation OnWin;
-
+        
         public float radiusCollider = 10f;
         private CapsuleCollider winCondition;
 
-        public void Initialize(VectorField vectorField)
+        protected override void StartServer()
         {
-            winCondition = gameObject.AddComponent<CapsuleCollider>();
-            winCondition.center = vectorField.GetCenterWS();
-            winCondition.height = vectorField.GetCellSize() * vectorField.GetDimensions().y * 1.5f;
-            winCondition.direction = 1;
-            winCondition.isTrigger = true;
-            winCondition.radius = 10f;
-            if (serverObject.onServer)
-                StartCoroutine(WinAfter10secs());
+            base.StartServer();
+            StartCoroutine(WinAfter10secs());
         }
-
+        
         public void OnWinServer()
         {
             byte[] buffer = new byte[1];
@@ -42,10 +36,16 @@ namespace MastersOfTempest
         private IEnumerator WinAfter10secs()
         {
             yield return new WaitForSeconds(10f);
+            VectorField vectorField = GetComponent<Gamemaster>().GetEnvironmentManager().vectorField;
+            winCondition = gameObject.AddComponent<CapsuleCollider>();
+            winCondition.center = vectorField.GetCenterWS();
+            winCondition.height = vectorField.GetCellSize() * vectorField.GetDimensions().y * 1.5f;
+            winCondition.direction = 1;
+            winCondition.isTrigger = true;
+            winCondition.radius = 10f;
             if (serverObject.onServer)
             {
                 OnWinServer();
-                OnWin(gameObject.GetComponent<Gamemaster>().GetShip().gameObject);
             }
         }
 

@@ -58,16 +58,16 @@ namespace MastersOfTempest
                 throw new InvalidOperationException("Game master already has an EnvironmentManager object registered!");
             }
             envManager = envMng;
-            if (serverObject.onServer)
-            {
-                WinCondition tmp = gameObject.AddComponent<WinCondition>();
-                tmp.Initialize(envManager.vectorField);
-            }
         }
 
         public Ship GetShip()
         {
             return ship;
+        }
+
+        public EnvironmentManager GetEnvironmentManager()
+        {
+            return envManager;
         }
     }
 }
