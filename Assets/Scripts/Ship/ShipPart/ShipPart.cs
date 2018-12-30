@@ -11,13 +11,13 @@ namespace MastersOfTempest.ShipBL
     {
         public ShipPartArea interactionArea;
         public float cutOffDist = 20f;
-        public float impulseScaling = 0.25f;
+        public float impulseScaling = 0.15f;
 
         /// <summary>
         /// destruction == 0:   ship part fully repaired
         ///             == 1:   ship part fully destroyed
         /// </summary>
-        private float destruction;
+        public float destruction;
         private Vector3[] initialMesh;
         private Vector3[] targetMesh;
 
@@ -61,8 +61,8 @@ namespace MastersOfTempest.ShipBL
                         Vector3 dir = (worldPos - currContact).normalized;
                         if (Vector3.Dot(dir, impulse.normalized) > 0)
                             dir *= impulse.magnitude;
-                        else
-                            dir = impulse;
+                        /*else
+                            dir = impulse;*/
                         distSquared *= distSquared;
                         worldPos += dir / (distSquared + 1f) / contactPoints.Length * impulseScaling;
                     }
@@ -109,6 +109,17 @@ namespace MastersOfTempest.ShipBL
             for (int i = 0; i < vert.Length; i++)
                 vert[i] = Vector3.Lerp(initialMesh[i], targetMesh[i], destruction);
             GetComponent<MeshFilter>().mesh.vertices = vert;
+
+            byte[] buffer = new byte[vert.Length * 12];
+            for (int j = 0; j < vert.Length; j++)
+            {
+                Buffer.BlockCopy(BitConverter.GetBytes(vert[j].x), 0, buffer, j * 12, 4);
+                Buffer.BlockCopy(BitConverter.GetBytes(vert[j].y), 0, buffer, 4 + j * 12, 4);
+                Buffer.BlockCopy(BitConverter.GetBytes(vert[j].z), 0, buffer, 8 + j * 12, 4);
+            }
+            GetComponent<MeshFilter>().mesh.vertices = vert;
+            targetMesh = vert;
+            SendToAllClients(buffer, Facepunch.Steamworks.Networking.SendType.Reliable);
         }
     }
 }
