@@ -60,6 +60,8 @@ namespace MastersOfTempest.PlayerControls
             interactionsController.PlayerInteracted += OnPlayerInteracted;
             interactionsController.LostSight += OnLostSight;
 
+            // TDOD: For repairing: Call AddDestruction with negative value on all parts in the ShipPartManager interaction area
+
             var highlighter = gameObject.AddComponent<InteractionsHighlighter>();
             highlighter.InteractionsController = interactionsController;
         }
