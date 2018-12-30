@@ -14,7 +14,6 @@ namespace MastersOfTempest.PlayerControls
     public class ApprenticeInput : PlayerInputController
     {
         private const string InteractionMessagePrefabName = "UIPrefabs/Apprentice/InteractionMessage";
-        private QTEDriver QTEDriver;
 
         private KeyCode interactionKey = KeyCode.F;
 
@@ -26,29 +25,6 @@ namespace MastersOfTempest.PlayerControls
 
         protected void Start()
         {
-            SanityCheck();
-
-            QTEDriver.Success += OnQTESuccess;
-            QTEDriver.Fail += OnQTEFail;
-        }
-
-
-        private void StartQTE()
-        {
-            Suppress();
-            currentCancellationToken = new CoroutineCancellationToken();
-            QTEDriver.StartQuickTimeEvent(currentCancellationToken);
-        }
-
-        private void OnQTESuccess(object sender, EventArgs args)
-        {
-            TriggerActionEvent(new ActionMadeEventArgs(currentAction));
-        }
-
-        private void OnQTEFail(object sender, EventArgs args)
-        {
-            Interrupt();
-            Resume();
         }
 
         public override void Interrupt()
@@ -72,28 +48,35 @@ namespace MastersOfTempest.PlayerControls
             isActive = false;
         }
 
-        private void SanityCheck()
-        {
-            if (QTEDriver == null)
-            {
-                throw new InvalidOperationException($"{nameof(QTEDriver)} is not specified!");
-            }
-        }
-
         public override void Bootstrap()
         {
-            //Setup the QTE driver
-            QTEDriver = gameObject.AddComponent<QTEDriver>();
-            //Add renderer for the QTE events
-            var qteRenderer = gameObject.AddComponent<QTESimpleUIRenderer>();
-            qteRenderer.Driver = QTEDriver;
             //Set up camera that is used to determine interactable objects
             firstPersonCamera = CameraDirectionController.FirstPersonCamera;
+
             //Create a message UI element to show hints to player
             interactionsController = gameObject.AddComponent<InteractionsController>();
             interactionsController.Setup(CameraDirectionController.FirstPersonCamera, float.MaxValue, () => Input.GetKeyDown(interactionKey));
+            interactionsController.NewInteractable += OnNewInteractable;
+            interactionsController.PlayerInteracted += OnPlayerInteracted;
+            interactionsController.LostSight += OnLostSight;
+
             var highlighter = gameObject.AddComponent<InteractionsHighlighter>();
             highlighter.InteractionsController = interactionsController;
+        }
+
+        private void OnNewInteractable(object sender, EventArgs e)
+        {
+            Debug.Log(nameof(OnNewInteractable));
+        }
+
+        private void OnPlayerInteracted(object sender, EventArgs e)
+        {
+            Debug.Log(nameof(OnPlayerInteracted));
+        }
+
+        private void OnLostSight(object sender, EventArgs e)
+        {
+            Debug.Log(nameof(OnLostSight));
         }
     }
 }
