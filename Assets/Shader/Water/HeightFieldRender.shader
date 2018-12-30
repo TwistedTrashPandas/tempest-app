@@ -15,9 +15,12 @@ Shader "Custom/HeightFieldRender" {
 		g_Attenuation("Attenuation", Range(0.0, 1.0)) = 1.0
 		g_Reflection("Reflection", Range(0.0,1.0)) = 1.0
 		g_Shininess("Shininess", Range(0.0, 2000.0)) = 20.0
+		g_lerpNormal("Lerp Normals", Range(0.0,1.0)) = 0.9
+		g_Repeat("Tiling", Range(1, 4096)) = 16
 		g_DepthVisible("maximum Depth", Range(1.0, 1000.0)) = 1000.0
 		g_FoamDepth("maximum Foam-Depth", Range(0.0, 1.0)) = 0.1
 		g_DistortionFactor("Distortion", Range(0.0, 500.0)) = 50.0
+		g_NormalMap("Normal Map", 2D) = "bump" {}
 		[HideInInspector] _ReflectionTex("Internal Reflection", 2D) = "" {}
 	}
 		SubShader{
@@ -36,6 +39,8 @@ Shader "Custom/HeightFieldRender" {
 		float g_DepthVisible;
 		float g_FoamDepth;
 		float g_DistortionFactor;
+		float g_lerpNormal;
+		float g_Repeat;
 		fixed4 g_Color;
 		fixed4 g_SpecColor;
 		fixed4 g_DepthColor;
@@ -46,6 +51,7 @@ Shader "Custom/HeightFieldRender" {
 
 		uniform sampler2D _CameraDepthTexture;
 		sampler2D _ReflectionTex;
+		sampler2D g_NormalMap;
 
 		StructuredBuffer<float3> verticesPosition : register(t1);
 		StructuredBuffer<float3> verticesNormal : register(t2);
@@ -65,6 +71,7 @@ Shader "Custom/HeightFieldRender" {
 			float4 projPos : TEXCOORD0;
 			float4 refl : TEXCOORD1;
 			float4 worldPos : TEXCOORD2;
+			float2 uv : TEXCOORD3;
 			SHADOW_COORDS(3)
 		};
 
@@ -72,8 +79,8 @@ Shader "Custom/HeightFieldRender" {
 		{
 			v2g o;
 			float3 pos = v.vertex.xyz;
-			uint idnx = v.id;// round(pos.x / g_fQuadSize) * g_iDepth + round(pos.z / g_fQuadSize);
-			pos = verticesPosition[idnx];
+			//uint idnx = ;// round(pos.x / g_fQuadSize) * g_iDepth + round(pos.z / g_fQuadSize);
+			pos = verticesPosition[v.id];
 			o.normal = v.normal; //  verticesNormal[idnx]; // 
 			o.worldPos = float4(pos, 1.0f);
 			o.vertex = UnityObjectToClipPos(o.worldPos);
@@ -81,6 +88,11 @@ Shader "Custom/HeightFieldRender" {
 			o.projPos = ComputeScreenPos(UnityObjectToClipPos(pos));
 			o.projPos.z = -UnityObjectToViewPos(pos).z;
 			o.refl = ComputeNonStereoScreenPos(o.vertex);
+
+			float maxWidth = g_fQuadSize / g_Repeat;
+			float maxDepth = g_iDepth * maxWidth;
+			maxWidth *= g_iWidth;
+			o.uv = float2(pos.x / (maxWidth), pos.z / (maxDepth));
 			TRANSFER_SHADOW(o);
 			return o;
 		}
@@ -139,6 +151,7 @@ Shader "Custom/HeightFieldRender" {
 
 		fixed4 frag(v2g i) : SV_Target
 		{
+			i.normal = normalize(lerp(UnpackNormal(tex2D(g_NormalMap, i.uv)), i.normal, g_lerpNormal)); // i.normal +
 			//float3 pos = mul(UNITY_MATRIX_IT_MV, mul(unity_CameraInvProjection, i.vertex));
 			i.lightingColor = lighting(i.worldPos, i.normal);
 			//fixed shadow = SHADOW_ATTENUATION(i);
@@ -211,20 +224,27 @@ Shader "Custom/HeightFieldRender" {
 				v2g o1 = p[1];
 				v2g o2 = p[2];
 				
-				float3 n = normalize(cross(pos1 - pos, pos2 - pos));
-				float3 avgPos = (pos + pos1 + pos2) / 3.0f;
+				//float3 n = normalize(cross(pos1 - pos, pos2 - pos));
+				//float3 avgPos = (pos + pos1 + pos2) / 3.0f; 
+
+				float maxWidth = g_fQuadSize / g_Repeat;
+				float maxDepth = g_iDepth * maxWidth;
+				maxWidth *= g_iWidth;
 
 				o.vertex = UnityObjectToClipPos(pos);
-				o.normal = n;
+				o.normal = p[0].normal;
 				o.refl = ComputeNonStereoScreenPos(o.vertex);
+				o.uv = float2(pos.x / (maxWidth), pos.z / (maxDepth));
 
 				o1.vertex = UnityObjectToClipPos(pos1);
-				o1.normal = n;
+				o1.normal = p[1].normal;
 				o1.refl = ComputeNonStereoScreenPos(o1.vertex);
+				o1.uv = float2(pos1.x / (maxWidth), pos1.z / (maxDepth));
 
 				o2.vertex = UnityObjectToClipPos(pos2);
-				o2.normal = n;
+				o2.normal = p[2].normal;
 				o2.refl = ComputeNonStereoScreenPos(o2.vertex);
+				o2.uv = float2(pos2.x / (maxWidth), pos2.z / (maxDepth));
 
 				//TRANSFER_SHADOW(o);
 				//TRANSFER_SHADOW(o1);

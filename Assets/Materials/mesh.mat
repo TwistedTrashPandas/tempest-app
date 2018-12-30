@@ -87,6 +87,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - g_NormalMap:
+        m_Texture: {fileID: 2800000, guid: 1931425b86a63f445b9a37c1830a5699, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
     - PixelSnap: 0
     - _BumpScale: 1
@@ -129,11 +133,13 @@ Material:
     - g_Metallic: 0
     - g_PointLightIntensity: 0
     - g_Reflection: 0.22
+    - g_Repeat: 256
     - g_Shininess: 50
     - g_directionalLight: 0
     - g_fQuadSize: 8
     - g_iDepth: 128
     - g_iWidth: 256
+    - g_lerpNormal: 0.9
     m_Colors:
     - WaveSpeed: {r: 19, g: 9, b: -16, a: -7}
     - _AnimationDirection: {r: 0, g: 0, b: 0, a: 0}

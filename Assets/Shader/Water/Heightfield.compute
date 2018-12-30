@@ -1,6 +1,110 @@
 ﻿#pragma kernel updateHeightfield
 #pragma kernel interpolateVertices
 
+/*
+
+void WaterHeight(float2 pos, float timeStep) {
+
+}
+
+float4 ProfileBuffer::gerstner_wave(float phase /*=knum*x, float knum) {
+	float s = sin(phase);
+	float c = cos(phase);
+	return float4(-s, c, -knum * c, -knum * s);
+}
+
+float ProfileBuffer::cubic_bump(float x) const {
+	if (abs(x) >= 1)
+		return 0.0f;
+	else
+		return x * x * (2 * abs(x) - 3) + 1;
+}
+void integ1(float zeta) {
+
+	float waveLength = pow(2, zeta);
+	float waveNumber = tau / waveLength;
+	float phase1 =
+		waveNumber * p - dispersionRelation(waveNumber) * time;
+	float phase2 = waveNumber * (p - m_period) -
+		dispersionRelation(waveNumber) * time;
+
+	float weight1 = p / m_period;
+	float weight2 = 1 - weight1;
+	return waveLength * spectrum(zeta) *
+		(cubic_bump(weight1) * gerstner_wave(phase1, waveNumber) +
+			cubic_bump(weight2) * gerstner_wave(phase2, waveNumber));
+}
+
+float integrate(int integration_nodes, double x_min, double x_max, int function) {
+
+	double dx = (x_max - x_min) / integration_nodes;
+	double x = x_min + 0.5 * dx;
+
+	float result = dx * integ1(x);				// the first integration node
+	for (int i = 1; i < integration_nodes; i++) { // proceed with other nodes, notice `int i= 1`
+		x += dx;
+		result += dx * integ1(x);
+	}
+
+	return result;
+}
+
+int g_iResolution;
+
+RWStructuredBuffer<float> precomputedBuffer : register(u0);
+
+[numthreads(256, 1, 1)]
+void precomputeBuffer(uint3 id : SV_DispatchThreadID, Spectrum &spectrum, float time, float zeta_min,
+	float zeta_max, int resolution = 4096, int periodicity = 2,
+	int integration_nodes = 100) {
+	m_data.resize(resolution);
+	m_period = periodicity * pow(2, zeta_max);
+
+#pragma omp parallel for
+	for (int i = 0; i < g_iResolution; i++) {
+
+		constexpr float tau = 6.28318530718;
+		float           p = (i * m_period) / resolution;
+		precomputedBuffer[]
+		m_data[i] =
+			integrate(integration_nodes, zeta_min, zeta_max, 0);
+	}
+}
+
+[numthreads(16, 16, 1)]
+void updateHeightfield(uint3 id : SV_DispatchThreadID)
+{
+	float height = 0;
+}
+
+function WaterHeight(x, t)
+7: η ← 0
+8 : for b ← 1, Θη do
+9 : θb ← 2π
+Θη
+b
+10 : ˆk ←(cos θb
+	, sinθb
+)
+11 : p ← ˆk · x + rand(b)
+12 : for c ← 1, Kη do
+13 : η ← η + A(x, kc
+	ˆk) * Ψc(p, t)
+	14 : end for
+	15 : end for
+	16 : end function
+	*/
+static const float SGNLUT[] =
+{
+	-1, -1, 1, 1, 1, -1, -1,
+	-1, 1, -1, -1, -1, 1, -1,
+	1, -1, 1, 1, 1, -1, 1,
+	1, -1, 1, 0, 1, -1, 1,
+	1, -1, 1, 1, 1, -1, 1,
+	-1, 1, -1, -1, -1, 1, -1,
+	-1, -1, 1, 1, 1, -1, -1
+};
+
 struct HeightField {
 	float height;
 	float velocity;
@@ -25,17 +129,6 @@ float g_fDy;
 RWStructuredBuffer<HeightField> heightFieldOut : register(u0);
 StructuredBuffer<HeightField> heightFieldIn : register(t0);
 StructuredBuffer<uint> reflectWaves : register(t1);
-
-static const float SGNLUT[] =
-{
-	-1, -1, 1, 1, 1, -1, -1,
-	-1, 1, -1, -1, -1, 1, -1,
-	1, -1, 1, 1, 1, -1, 1,
-	1, -1, 1, 0, 1, -1, 1,
-	1, -1, 1, 1, 1, -1, 1,
-	-1, 1, -1, -1, -1, 1, -1,
-	-1, -1, 1, 1, 1, -1, -1
-};
 
 [numthreads(16, 16, 1)]
 void updateHeightfield(uint3 id : SV_DispatchThreadID)
@@ -130,13 +223,13 @@ void updateHeightfield(uint3 id : SV_DispatchThreadID)
 		heightFieldOut[i * g_iDepth + j].height = heightFieldIn[i*g_iDepth + j].height + heightFieldOut[i * g_iDepth + j].velocity * g_fDeltaTime;
 
 		//if (i <= r_border && i >= l_border && j >= d_border && j <= u_border) {
-			float2 pos = float2(i - center_x, j - center_y);
-			float2 cos_sin = float2(cos(g_fTotalTime), sin(g_fTotalTime));
-			float dist = distance(pos, cos_sin) + 1.0f;
-			if (dist < 5.0f) {
-				//heightFieldOut[i * g_iDepth + j].velocity += heightFieldOut[i * g_iDepth + j].velocity * 0.01f * SGNLUT[sgn_x + sgn_y * 7] * distance;
-				heightFieldOut[i * g_iDepth + j].height = 64.0f / (dist * dist);
-			}
+		float2 pos = float2(i - center_x, j - center_y);
+		float2 cos_sin = float2(cos(g_fTotalTime), sin(g_fTotalTime));
+		float dist = distance(pos, cos_sin) + 1.0f;
+		if (dist < 5.0f) {
+			//heightFieldOut[i * g_iDepth + j].velocity += heightFieldOut[i * g_iDepth + j].velocity * 0.01f * SGNLUT[sgn_x + sgn_y * 7] * distance;
+			heightFieldOut[i * g_iDepth + j].height = 64.0f / (dist * dist);
+		}
 		//}
 		//	keep average Height of all points at ca. 0
 		// heightFieldOut[i * g_iDepth + j].height -= g_fAvgHeight;
@@ -148,6 +241,7 @@ void updateHeightfield(uint3 id : SV_DispatchThreadID)
 
 RWStructuredBuffer<float3> verticesPosition : register(u1);
 RWStructuredBuffer<float3> verticesNormal : register(u2);
+//RWStructuredBuffer<float2> verticesUV : register(u3);
 StructuredBuffer<float2> randomDisplacement : register(t1);
 
 [numthreads(256, 1, 1)]
@@ -182,8 +276,8 @@ void interpolateVertices(uint3 id : SV_DispatchThreadID) {
 	//	gradX *= -1.0f;
 	verticesNormal[i] = -normalize(float3(2.0f * gradX, -4.0f, 2.0f * gradZ));// gradX;
 
-	pos.x += randomDisplacement[k * g_iDepth + m].x;
-	pos.z += randomDisplacement[k * g_iDepth + m].y;
+	pos.x = k * g_fQuadSize + randomDisplacement[k * g_iDepth + m].x;
+	pos.z = m * g_fQuadSize + randomDisplacement[k * g_iDepth + m].y;
 	if (randomDisplacement[k * g_iDepth + m].x < 0)
 		k -= 1;
 	if (randomDisplacement[k * g_iDepth + m].y < 0)
