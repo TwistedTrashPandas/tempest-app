@@ -186,7 +186,7 @@ namespace MastersOfTempest.Environment.Interacting
                         // hard coded so far larger rocks are slower but deal more damage
                         envObjects[envObjects.Count - 1].GetComponent<Damaging>().damage = 0.25f * randomSize;
                         envObjects[envObjects.Count - 1].speed *= 1f / randomSize;
-                        envObjects[envObjects.Count - 1].moveType = (MoveType) Random.Range(0,3);
+                        envObjects[envObjects.Count - 1].moveType = MoveType.ForceDirect; // (MoveType) Random.Range(0,3);
                         break;
                     case EnvObjectType.DangerZone:
                         Vector3 initialPos = new Vector3(Random.Range(0, dims.x), Random.Range(dims.y * 0.1f, 0.9f * dims.y), Random.Range(0, dims.z)) * cellSize + new Vector3(0.5f,0.5f,0.5f);

@@ -13,7 +13,7 @@ namespace MastersOfTempest.Environment.Interacting
             {
                 // handle interaction (e.g., set status of ship to freezing)
                 Ship ship = other.transform.parent.gameObject.GetComponent<Ship>();
-                ship.GetCurrenStatus().Condition = ShipCondition.Freezing;
+                ship.GetCurrenStatus().Condition |= ShipCondition.Freezing;
             }
         }
 
@@ -23,7 +23,7 @@ namespace MastersOfTempest.Environment.Interacting
             {
                 // handle interaction (e.g., set status of ship to freezing)
                 Ship ship = other.transform.parent.gameObject.GetComponent<Ship>();
-                ship.GetCurrenStatus().Condition = ShipCondition.None;
+                ship.GetCurrenStatus().Condition ^= ShipCondition.Freezing;
             }
         }
     }
