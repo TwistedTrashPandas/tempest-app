@@ -184,19 +184,9 @@ void WorldParamsToOpticalDepthLUTCoords(in float3 f3NormalizedStartPos, in float
 	f4LUTCoords.z = fRayDirLocalZenith;
 	f4LUTCoords.w = fRayDirLocalAzimuth;
 
-	f4LUTCoords.xyzw = f4LUTCoords.xyzw / float4(PI, 2 * PI, PI / 2, 2 * PI) + float4(0.0f, 0.5, 0, 0.5);
-	float offset = 0.0f/2.9f;
+	f4LUTCoords.xyzw = f4LUTCoords.xyzw / float4(PI, 2 * PI, PI / 2.0f, 2 * PI) + float4(0.0f, 0.5, 0, 0.5);
 	// Clamp only zenith (yz) coordinate as azimuth is filtered with wraparound mode
-	f4LUTCoords.z = clamp(f4LUTCoords, 0.5 / OPTICAL_DEPTH_LUT_DIM, 1.0 - 0.5 / OPTICAL_DEPTH_LUT_DIM).z;
-
-	if (f4LUTCoords.x < offset)
-		f4LUTCoords.x += (1.0f - offset);
-	else
-		f4LUTCoords.x = f4LUTCoords.x - offset;
-	f4LUTCoords.x = clamp(f4LUTCoords, 0.5 / OPTICAL_DEPTH_LUT_DIM, 1.0 - 0.5 / OPTICAL_DEPTH_LUT_DIM).x;
-
-	// f4LUTCoords.x = clamp(f4LUTCoords, 0.5 / OPTICAL_DEPTH_LUT_DIM + 1.0f / 3.0f, 1.0 - 0.5 / OPTICAL_DEPTH_LUT_DIM - 1.0f / 3.0f).x;
-	// f4LUTCoords.x = 1.0f - f4LUTCoords.x;
+	f4LUTCoords.xz = clamp(f4LUTCoords, 0.5 / OPTICAL_DEPTH_LUT_DIM, 1.0 - 0.5 / OPTICAL_DEPTH_LUT_DIM).xz;
 }
 
 void GetRaySphereIntersection(in float3 f3RayOrigin,

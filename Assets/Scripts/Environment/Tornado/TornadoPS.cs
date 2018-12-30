@@ -22,7 +22,7 @@ namespace MastersOfTempest.Environment.VisualEffects
         /// sort all particles with respect to the camera position each "sortEach" timestep
         [Range(1, 100)]
         public int sortEach;
-        [Range(15, 20)]
+        [Range(13, 20)]
         public uint particelNumExp;
         [Range(0f, 1f)]
         public float dampVel;

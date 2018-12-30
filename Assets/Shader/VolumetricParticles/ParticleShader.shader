@@ -149,7 +149,7 @@ Shader "Custom/CloudPart" {
 						0, 0, 0, 1
 						);
 					*/
-					matrix f3x3WorldToObjSpaceRotation = (unity_WorldToObject);// mRotCamDirMatrix;//  float4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);//;
+					matrix f3x3WorldToObjSpaceRotation = (unity_WorldToObject);// mRotCamDirMatrix;//  float4x4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);//; float3x3(1, 0, 0, 0, 1, 0,0, 0, 1); //
 					// Compute camera location and view direction in particle's object space:
 					float3 f3CamPosObjSpace = f3CameraPos - ParticleAttrs.f3Pos;
 					f3CamPosObjSpace = mul(f3x3WorldToObjSpaceRotation, float4(f3CamPosObjSpace,1.0f));
@@ -170,7 +170,7 @@ Shader "Custom/CloudPart" {
 					f3ViewRayUSSpace = normalize(f3ViewRayObjSpace.xyz*f3Scale);
 					f3LightDirUSSpace = normalize(f3LightDirObjSpce.xyz*f3Scale);
 					// Scale camera pos and view dir in obj space and compute intersection with the unit sphere:
-					GetRaySphereIntersection(f3ScaledCamPosObjSpace, f3ViewRayUSSpace, 0, 1.f, f2RayIsecs);
+					GetRaySphereIntersection(f3ScaledCamPosObjSpace, f3ViewRayUSSpace, 0, 1.0f, f2RayIsecs);
 
 					f3EntryPointUSSpace = f3ScaledCamPosObjSpace + f3ViewRayUSSpace * f2RayIsecs.x;
 
@@ -200,23 +200,18 @@ Shader "Custom/CloudPart" {
 
 					float4 f4LUTCoords;
 					WorldParamsToOpticalDepthLUTCoords(f3EntryPointUSSpace, f3ViewRayUSSpace, f4LUTCoords);
-					// Randomly rotate the sphere
-					//f4LUTCoords = f4LUTCoords.xyzw;
-					//f4LUTCoords.x += 0.5f;
 					f4LUTCoords.y += ParticleAttrs.fRndAzimuthBias;
 
 					float2 f2NormalizedDensityAndDist;
 					SAMPLE_4D_LUT_FLT2(g_tex3DParticleDensityLUT, OPTICAL_DEPTH_LUT_DIM, f4LUTCoords, 0, f2NormalizedDensityAndDist);
-					//f2NormalizedDensityAndDist = g_tex3DParticleDensityLUT.SampleLevel(MyLinearRepeatSampler, f4LUTCoords.xyz + , 0);
-					//f2NormalizedDensityAndDist.x += f2NormalizedDensityAndDist.y;
+
 					float3 f3FirstMatterPointWS = f3CameraPos + (fDistanceToEntryPoint + (fDistanceToExitPoint - fDistanceToEntryPoint) * f2NormalizedDensityAndDist.y) * f3ViewRay;
 					float3 f3FirstMatterPointUSSpace = f3EntryPointUSSpace + (fIsecLenUSSpace * f2NormalizedDensityAndDist.y) * f3ViewRayUSSpace;
 
 					float3 f3NoiseSamplingPos = f3FirstMatterPointWS;
 					float fNoisePeriod = 3412;
-					float fNoise = bAutoLOD ?
-						(g_tex3DNoise.Sample(MyLinearRepeatSampler, f3NoiseSamplingPos / (fNoisePeriod)) * 2 + g_tex3DNoise.Sample(MyLinearRepeatSampler, f3NoiseSamplingPos / (fNoisePeriod / 3))) / 3 :
-						(g_tex3DNoise.SampleLevel(MyLinearRepeatSampler, f3NoiseSamplingPos / (fNoisePeriod), 0) * 2 + g_tex3DNoise.SampleLevel(MyLinearRepeatSampler, f3NoiseSamplingPos / (fNoisePeriod / 3), 0)) / 3;
+					float fNoise = (g_tex3DNoise.Sample(MyLinearRepeatSampler, f3NoiseSamplingPos / (fNoisePeriod)) * 2 + g_tex3DNoise.Sample(MyLinearRepeatSampler, f3NoiseSamplingPos / (fNoisePeriod / 3))) / 3;
+					//	(g_tex3DNoise.SampleLevel(MyLinearRepeatSampler, f3NoiseSamplingPos / (fNoisePeriod), 0) * 2 + g_tex3DNoise.SampleLevel(MyLinearRepeatSampler, f3NoiseSamplingPos / (fNoisePeriod / 3), 0)) / 3;
 
 					float fNoNoiseY = -0.7;
 					float fTransition = min(1 - fNoNoiseY, 0.5);
@@ -225,7 +220,7 @@ Shader "Custom/CloudPart" {
 					fCloudMass = f2NormalizedDensityAndDist.x * (fDistanceToExitPoint - fDistanceToEntryPoint);
 					fCloudMass *= ParticleAttrs.fDensity *lerp(fNoise, 1, 0.5);
 
-					fTransparency = 1.0f - exp(-fCloudMass); // range 0.01 - 0.1 m^-1
+					fTransparency = 1.0f - exp(-fCloudMass * 1.0f); // range 0.01 - 0.1 m^-1
 
 					float fMultipleScatteringDensityScale = ParticleAttrs.fDensity;
 					float fSingleScatteringDensityScale = fMultipleScatteringDensityScale * (f2NormalizedDensityAndDist.x);
@@ -257,7 +252,7 @@ Shader "Custom/CloudPart" {
 					//f4Color.b = 0;// f4LUTCoords.w;// max((f2NormalizedDensityAndDist.y), 0);// (f3Ambient.rgb + (fSingleScattering + fMultipleScattering) * ParticleLighting.f4SunLight.rgb) * PI;
 					//f4Color.g = 0;// fTransparency;// (f3Ambient.rgb + (fSingleScattering + fMultipleScattering) * ParticleLighting.f4SunLight.rgb) * PI;
 					//f4Color.a = 1.0f;// fTransparency;//  f4Color.g; // 
-					//f4Color.r = f2NormalizedDensityAndDist.x;
+					//f4Color.r = f2NormalizedDensityAndDist.x; // (fDistanceToExitPoint - fDistanceToEntryPoint); // 
 					//f4Color.gb = 0;
 					//if (f4LUTCoords.y < 1.0-sqrt(0.5))
 					//	f4Color.a = 0.0f;
@@ -411,10 +406,11 @@ Shader "Custom/CloudPart" {
 				float3 wpos = mul(_CameraToWorld, vpos).xyz;
 				*/
 				f3CameraPos = _WorldSpaceCameraPos.xyz; // float3(0, 2, 0);//
+				//f3CameraPos.y = 0.0f;
 				float2 uv = In.uv.xy / In.uv.w;
 				//float fDepth = 1.0f - (In.projPos.z);// 1.0f - Linear01Depth(tex2D(_CameraDepthTexture, uv));
-				float4 f4ReconstructedPosWS = mul(UNITY_MATRIX_I_V,float4(In.projPos.xyz, 1.0));
-				float3 f3WorldPos = f4ReconstructedPosWS.xyz;// f4ReconstructedPosWS.w;
+				float4 f4ReconstructedPosWS = mul(UNITY_MATRIX_I_V, float4(In.projPos.xyz, 1.0));
+				float3 f3WorldPos = f4ReconstructedPosWS.xyz / f4ReconstructedPosWS.w;
 				//return float4(fDepth, fDepth, fDepth, 1.0f);
 				/*
 				float2 f2PosPS = UVToProj(In.vertex.xy / f2ScreenDim);
@@ -434,6 +430,7 @@ Shader "Custom/CloudPart" {
 				f3ViewRay = f3WorldPos - f3CameraPos;
 				float fRayLength = length(f3ViewRay);
 				f3ViewRay /= fRayLength;
+
 				float2 f2RayIsecs;
 				float fDistanceToEntryPoint, fDistanceToExitPoint;
 				float3 f3EntryPointUSSpace, f3ViewRayUSSpace, f3LightDirUSSpace;
@@ -444,10 +441,9 @@ Shader "Custom/CloudPart" {
 					discard;
 				if (fRayLength < fDistanceToEntryPoint)
 					discard; // return float4(1.0f, 1.0f, 1.0f, 1.0f);
-				//return float4(f3WorldPos, 1.0f);
+				//return float4(f3ViewRayUSSpace, 1.0f);
 				//return float4(normalize(f3ViewRay * 0.5f + 0.5f), 1.0f);
 				fDistanceToExitPoint = min(fDistanceToExitPoint, fRayLength);
-
 				//return float4(normalize(f3ViewRay), 1.0f);
 				float fCloudMass;
 				float fIsecLenUSSpace = f2RayIsecs.y - f2RayIsecs.x;
