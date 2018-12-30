@@ -15,7 +15,7 @@ namespace MastersOfTempest.PlayerControls
     {
         private const string InteractionMessagePrefabName = "UIPrefabs/Apprentice/InteractionMessage";
 
-        private KeyCode interactionKey = KeyCode.F;
+        private KeyCode interactionKey = KeyCode.Mouse0;
 
         private PlayerAction currentAction;
         private CoroutineCancellationToken currentCancellationToken;
@@ -55,13 +55,18 @@ namespace MastersOfTempest.PlayerControls
 
             //Create a message UI element to show hints to player
             interactionsController = gameObject.AddComponent<InteractionsController>();
-            interactionsController.Setup(CameraDirectionController.FirstPersonCamera, float.MaxValue, () => Input.GetKeyDown(interactionKey));
+            interactionsController.Setup(CameraDirectionController.FirstPersonCamera, 2.0f, InteractionCheck);
             interactionsController.NewInteractable += OnNewInteractable;
             interactionsController.PlayerInteracted += OnPlayerInteracted;
             interactionsController.LostSight += OnLostSight;
 
             var highlighter = gameObject.AddComponent<InteractionsHighlighter>();
             highlighter.InteractionsController = interactionsController;
+        }
+
+        private bool InteractionCheck ()
+        {
+            return Input.GetKeyDown(interactionKey);
         }
 
         private void OnNewInteractable(object sender, EventArgs e)
