@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using MastersOfTempest.Networking;
 using static MastersOfTempest.EnvironmentNetwork;
+using UnityEngine.SceneManagement;
 
 namespace MastersOfTempest.Environment.Interacting
 {
@@ -55,7 +56,12 @@ namespace MastersOfTempest.Environment.Interacting
             if (onServer)
             {
                 vectorField = vf;
+                // Switch active scene so that instantiate creates the object as part of the client scene       
+                Scene previouslyActiveScene = SceneManager.GetActiveScene();
+                SceneManager.SetActiveScene(GameServer.Instance.gameObject.scene);
                 objectContainer = GameObject.Instantiate(objectContainerPrefab);
+                // Switch back to the previously active scene  
+                SceneManager.SetActiveScene(previouslyActiveScene);
                 StartSpawning();
             }
             gamemaster = gm;

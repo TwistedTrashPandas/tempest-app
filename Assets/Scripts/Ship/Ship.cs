@@ -1,7 +1,7 @@
 ﻿using System;
 using MastersOfTempest.Networking;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 
 namespace MastersOfTempest.ShipBL
 {
@@ -31,8 +31,14 @@ namespace MastersOfTempest.ShipBL
         protected override void Start()
         {
             base.Start();
+            // Switch active scene so that instantiate creates the object as part of the client scene       
+            Scene previouslyActiveScene = SceneManager.GetActiveScene();
+            SceneManager.SetActiveScene(gameObject.scene);
+            // Switch back to the previously active scene  
+            SceneManager.SetActiveScene(previouslyActiveScene);
             //both client and server versions need the context object
             context = FindObjectOfType<Gamemaster>();
+
             if (context == null)
             {
                 throw new InvalidOperationException($"{nameof(Ship)} cannot operate without Gamemaster in the same scene!");
