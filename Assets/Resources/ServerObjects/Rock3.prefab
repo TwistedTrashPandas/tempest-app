@@ -68,7 +68,7 @@ MonoBehaviour:
   speed: 50
   closestDistance: 25
   moveType: 0
-  damage: 0
+  damage: 1
 --- !u!114 &114380683948430144
 MonoBehaviour:
   m_ObjectHideFlags: 0

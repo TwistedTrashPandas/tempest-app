@@ -15,7 +15,9 @@ namespace MastersOfTempest.Environment.Interacting
             {/*
                 Ship ship = collision.gameObject.GetComponentInParent<Ship>();
                 ship.GetShipForceManipulator().AddForceAtPosition(collision.impulse, collision.contacts[0].point);*/
-                collision.collider.gameObject.GetComponent<ShipPart>().ResolveCollision(damage, collision.contacts, collision.impulse);
+                ShipPart part = collision.collider.gameObject.GetComponent<ShipPart>();
+                if(part != null)
+                    part.ResolveCollision(damage, collision.contacts, collision.impulse);
                 Explode(false);
             }
         }
