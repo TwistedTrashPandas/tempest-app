@@ -30,8 +30,6 @@ namespace MastersOfTempest.ShipBL
             targetMesh = initialMesh;
             if (initialMesh == null)
                 throw new System.InvalidOperationException("Ship part can only be attached to objects with meshes");
-            if (gameObject.name == "Crystalholder")
-                print(initialMesh.Length);
         }
 
         public float GetDestruction()
