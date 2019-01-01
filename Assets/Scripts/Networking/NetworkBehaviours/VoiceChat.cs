@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
 
 namespace MastersOfTempest.Networking
 {
@@ -27,6 +29,15 @@ namespace MastersOfTempest.Networking
         {
             audioSource = GetComponent<AudioSource>();
             Facepunch.Steamworks.Client.Instance.Voice.OnCompressedData += OnCompressedData;
+
+            // Switch active scene so that instantiate creates the object as part of the client scene       
+            Scene previouslyActiveScene = SceneManager.GetActiveScene();
+            SceneManager.SetActiveScene(gameObject.scene);
+            //both client and server versions need the context object
+            FindObjectOfType<Gamemaster>().Register(this);
+
+            // Switch back to the previously active scene  
+            SceneManager.SetActiveScene(previouslyActiveScene);
         }
 
         protected override void UpdateClient()
@@ -120,6 +131,11 @@ namespace MastersOfTempest.Networking
             {
                 Facepunch.Steamworks.Client.Instance.Voice.OnCompressedData -= OnCompressedData;
             }
+        }
+
+        public void setAudioMixerGroup(AudioMixerGroup audioMixerGrp)
+        {
+            audioSource.outputAudioMixerGroup = audioMixerGrp;
         }
     }
 }

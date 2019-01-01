@@ -34,10 +34,11 @@ namespace MastersOfTempest.ShipBL
             // Switch active scene so that instantiate creates the object as part of the client scene       
             Scene previouslyActiveScene = SceneManager.GetActiveScene();
             SceneManager.SetActiveScene(gameObject.scene);
-            // Switch back to the previously active scene  
-            SceneManager.SetActiveScene(previouslyActiveScene);
             //both client and server versions need the context object
             context = FindObjectOfType<Gamemaster>();
+
+            // Switch back to the previously active scene  
+            SceneManager.SetActiveScene(previouslyActiveScene);
 
             if (context == null)
             {

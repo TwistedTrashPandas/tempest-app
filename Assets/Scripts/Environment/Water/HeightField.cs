@@ -134,7 +134,7 @@ namespace MastersOfTempest.Environment.VisualEffects
         private float totalTime;
 
         private float quadSizeHF;
-
+        
         public void Initialize(Vector3 midPosition)
         {
             inOutCounter = 0;

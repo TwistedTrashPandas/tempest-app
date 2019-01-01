@@ -79,5 +79,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e123f767bda44044afe8231e64a34c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  index: -1
+  index: 1
   radiusCollider: 10

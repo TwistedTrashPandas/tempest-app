@@ -220,7 +220,7 @@ Shader "Custom/CloudPart" {
 					fCloudMass = f2NormalizedDensityAndDist.x * (fDistanceToExitPoint - fDistanceToEntryPoint);
 					fCloudMass *= ParticleAttrs.fDensity *lerp(fNoise, 1, 0.5);
 
-					fTransparency = 1.0f - exp(-fCloudMass * 1.0f); // range 0.01 - 0.1 m^-1
+					fTransparency = 1.0f - exp(-fCloudMass * 0.07f); // range 0.01 - 0.1 m^-1
 
 					float fMultipleScatteringDensityScale = ParticleAttrs.fDensity;
 					float fSingleScatteringDensityScale = fMultipleScatteringDensityScale * (f2NormalizedDensityAndDist.x);
@@ -379,8 +379,8 @@ Shader "Custom/CloudPart" {
 				SCloudParticleLighting ParticleLighting;
 
 				ParticleLighting.f4SunLight = _LightColor0;
-				ParticleLighting.f4LightAttenuation = float4(3.0f,3.0f,1.0f,1.0f); // .x == single scattering; .y == multiple scattering
-				ParticleLighting.f4AmbientLight = float4(0.15,0.15,0.15,1.0);
+				ParticleLighting.f4LightAttenuation = float4(1.0f,1.0f,1.0f,1.0f); // .x == single scattering; .y == multiple scattering
+				ParticleLighting.f4AmbientLight = unity_AmbientSky;// float4(0.15, 0.15, 0.15, 1.0);
 				float fTime = 1.0f; // g_fTimeScale * g_GlobalCloudAttribs.fTime;
 
 				float3 f3CameraPos, f3ViewRay;

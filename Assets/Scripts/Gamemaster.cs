@@ -17,6 +17,7 @@ namespace MastersOfTempest
         private List<Player> players;
         private Player currentPlayer;
         private EnvironmentManager envManager;
+        private VoiceChat voiceChat;
 
         private void Awake()
         {
@@ -60,9 +61,23 @@ namespace MastersOfTempest
             envManager = envMng;
         }
 
+        public void Register(VoiceChat vC)
+        {
+            if (voiceChat != null)
+            {
+                throw new InvalidOperationException($"Gamemaster object {(this.gameObject.name)} already has a voice chat object registered!");
+            }
+            voiceChat = vC;
+        }
+
         public Ship GetShip()
         {
             return ship;
+        }
+
+        public VoiceChat GetVoiceChat()
+        {
+            return voiceChat;
         }
 
         public EnvironmentManager GetEnvironmentManager()

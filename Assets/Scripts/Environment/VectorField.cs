@@ -141,7 +141,7 @@ namespace MastersOfTempest.Environment
 
         private void RefineBorders()
         {
-            float y_vel = 1.0f * yVelScale;
+            float y_vel = 1.0f * yVelScale, minScale = 0.65f, maxScale = 1.35f;
             int nx = v3_dimensions[0], ny = v3_dimensions[1], nz = v3_dimensions[2];
             v2_rotCenter = new Vector2((nx - 1f) / 2f, (nz - 1f) / 2f);
             for (int k = 0; k < ny; k+= 1)
@@ -160,6 +160,8 @@ namespace MastersOfTempest.Environment
                             v3s_vectors[i, k, j] = new Vector3(-diffZ / hypotenuse - (i - v2_rotCenter.x) / 160f, 0f, diffX / hypotenuse - (j - v2_rotCenter.y) / 160f).normalized * magn;
                             v3s_vectors[i, k, j].y = y_vel * velScale;
                         }
+                        v3s_vectors[i, k, j] = Vector3.Scale(v3s_vectors[i, k, j], new Vector3(UnityEngine.Random.Range(minScale, maxScale),
+                            UnityEngine.Random.Range(minScale, maxScale), UnityEngine.Random.Range(minScale, maxScale)));
                     }
                 }
             }

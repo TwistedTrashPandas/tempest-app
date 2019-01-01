@@ -273,16 +273,16 @@ namespace MastersOfTempest.Environment.VisualEffects
 
         private void Load3DTextures()
         {
-            Texture3D t1 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/v3/3DNoiseTex.dds", TextureFormat.Alpha8, 1), TextureFormat.Alpha8);
+            Texture3D t1 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/v4/3DNoiseTex.dds", TextureFormat.Alpha8, 1), TextureFormat.Alpha8);
             material.SetTexture("g_tex3DNoise", t1);
 
-            Texture3D t2 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/v3/Density.dds", TextureFormat.RG16, 2), TextureFormat.RGHalf);
+            Texture3D t2 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/v4/Density.dds", TextureFormat.RGHalf, 4), TextureFormat.RGHalf);
             material.SetTexture("g_tex3DParticleDensityLUT", t2);
 
-            Texture3D t3 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/v3/SingleSctr.dds", TextureFormat.RHalf, 2), TextureFormat.RHalf);
+            Texture3D t3 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/v4/SingleSctr.dds", TextureFormat.RHalf, 2), TextureFormat.RHalf);
             material.SetTexture("g_tex3DSingleScatteringInParticleLUT", t3);
 
-            Texture3D t4 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/v3/MultipleSctr.dds", TextureFormat.RHalf, 2), TextureFormat.RHalf);
+            Texture3D t4 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/v4/MultipleSctr.dds", TextureFormat.RHalf, 2), TextureFormat.RHalf);
             material.SetTexture("g_tex3DMultipleScatteringInParticleLUT", t4);
         }
 

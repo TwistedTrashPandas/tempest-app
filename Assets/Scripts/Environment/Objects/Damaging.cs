@@ -8,6 +8,8 @@ namespace MastersOfTempest.Environment.Interacting
     public class Damaging : EnvObject
     {
         public float damage;
+        public float health;
+        public DamagingStatus status;
 
         protected override void OnCollisionEnter(Collision collision)
         {
@@ -20,6 +22,17 @@ namespace MastersOfTempest.Environment.Interacting
                     part.ResolveCollision(damage, collision.contacts, collision.impulse);
                 Explode(false);
             }
+        }
+
+        // call on server
+        public void RemoveHealth(float h)
+        {
+            if (status == DamagingStatus.Fragile)
+                Explode(false);
+            else
+                health -= h;
+            if (health < 0)
+                Explode(false);
         }
 
         // TODO: spawn new rocks?, explosion animation

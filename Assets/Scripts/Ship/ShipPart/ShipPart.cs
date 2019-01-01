@@ -18,6 +18,7 @@ namespace MastersOfTempest.ShipBL
         ///             == 1:   ship part fully destroyed
         /// </summary>
         public float destruction;
+        public ShipPartStatus status;
 
         private Vector3[] initialMesh;
         private Vector3[] targetMesh;
@@ -41,8 +42,8 @@ namespace MastersOfTempest.ShipBL
         // updates mesh depending on collision (usually called from damaging objects such as rocks)
         public void ResolveCollision(float destruc, ContactPoint[] contactPoints, Vector3 impulse)
         {
-            SendCollision(contactPoints, impulse, destruc);
             AddDestruction(destruc);
+            SendCollision(contactPoints, impulse, destruc);
         }
 
         private void SendCollision(ContactPoint[] contactPoints, Vector3 impulse, float destruc)
@@ -133,7 +134,7 @@ namespace MastersOfTempest.ShipBL
             targetMesh = vertices;*/
             int l = Mathf.FloorToInt(data.Length / 12) - 1;
             print("data:" + l);
-            AddDestruction(BitConverter.ToSingle(data, 0));
+            SetDestruction(BitConverter.ToSingle(data, 0));
             Vector3 impulse = new Vector3(BitConverter.ToSingle(data, 4), BitConverter.ToSingle(data, 8), BitConverter.ToSingle(data, 12));
             Vector3[] contactPoints = new Vector3[l];
             for (int j = 0; j < l; j++)
@@ -146,8 +147,16 @@ namespace MastersOfTempest.ShipBL
         // add or remove destruction value to ship parts
         public void AddDestruction(float destruc)
         {
-            destruction = Mathf.Clamp01(destruction + destruc);
-            //if (destruc < 0)
+            if (status == ShipPartStatus.Fragile)
+                destruction = 1.0f;
+            else
+                destruction = Mathf.Clamp01(destruction + destruc);
+        }
+
+        // add or remove destruction value to ship parts
+        public void SetDestruction(float destruc)
+        {
+            destruction = destruc;
         }
 
         // interpolate between damaged mesh and initial mesh

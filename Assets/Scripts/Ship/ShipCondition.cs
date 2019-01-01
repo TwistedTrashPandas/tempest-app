@@ -12,6 +12,7 @@ namespace MastersOfTempest.ShipBL
         None = 0,
         NoSpells = 1,
         Freezing = 2,
-        Shielded = 4
+        Shielded = 4,
+        Fragile = 8,
     }
 }
