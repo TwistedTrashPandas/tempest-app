@@ -83,7 +83,7 @@ Shader "Custom/HeightFieldRender" {
 			float3 pos = v.vertex.xyz;
 			//uint idnx = ;// round(pos.x / g_fQuadSize) * g_iDepth + round(pos.z / g_fQuadSize);
 			pos = verticesPosition[v.id];
-			o.normal = v.normal; //  verticesNormal[idnx]; // 
+			o.normal = verticesNormal[v.id]; // v.normal; //  
 			o.worldPos = float4(pos, 1.0f);
 			o.vertex = UnityObjectToClipPos(o.worldPos);
 			o.lightingColor = g_Color;
@@ -165,12 +165,14 @@ Shader "Custom/HeightFieldRender" {
 			float4 uv1 = i.refl;
 			uv1.xy -= i.normal.zx * g_DistortionFactor;
 			float4 refl = tex2Dproj(_ReflectionTex, UNITY_PROJ_COORD(uv1));
-			
-			//float3 N = 2 * tex2D(nmap, i.tc) - 1;
 
-			//R.y = max(R.y,0);
+			//return float4(i.normal, 1.0f);
+
+
+			reflectView.y = max(reflectView.y,0);
 			float f = tex1D(_FresnelTex, dot(reflectView, i.normal));
-			
+			//f *= f;
+			//f = 1 - f;
 			//	if an object is close -> change color
 			if (diff < g_DepthVisible) {
 				diff /= g_DepthVisible;
@@ -178,6 +180,7 @@ Shader "Custom/HeightFieldRender" {
 					return float4(1.0f, 1.0f, 1.0f, 1.0f);
 				return lerp((lerp(g_DepthColor, i.lightingColor, float4(diff, diff, diff, diff))), refl, float4(g_Reflection, g_Reflection, g_Reflection, 0.0f));
 			}
+			i.lightingColor = lerp(i.lightingColor, refl,  float4(g_Reflection, g_Reflection, g_Reflection, 0.0f));
 			return lerp(i.lightingColor, refl, float4(f, f, f, 0.0f));
 		}
 

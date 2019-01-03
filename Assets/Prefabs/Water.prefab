@@ -50,12 +50,12 @@ MonoBehaviour:
   waterMode: 1
   heightFieldCS: {fileID: 7200000, guid: 4953ade53a221db458950ff31d7297c6, type: 3}
   mainCam: {fileID: 0}
-  maxRandomDisplacement: 0
+  maxRandomDisplacement: 0.728
   widthHF: 512
   depthHF: 512
-  widthMesh: 256
-  depthMesh: 256
-  quadSize: 32
+  widthMesh: 512
+  depthMesh: 512
+  quadSize: 16
   speed: 6
   gridSpacing: 2
   maxHeight: 256

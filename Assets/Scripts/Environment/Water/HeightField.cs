@@ -109,6 +109,8 @@ namespace MastersOfTempest.Environment.VisualEffects
         private ComputeBuffer heightFieldCBOut;
         private ComputeBuffer verticesCB;
         private ComputeBuffer normalsCB;
+        private ComputeBuffer trianglesRCB;
+        private ComputeBuffer normTrianglesCB;
 
         private Material material;
 
@@ -121,6 +123,8 @@ namespace MastersOfTempest.Environment.VisualEffects
         private uint[] environment;
         private int kernel;                     ///   kernel for computeshader
         private int kernelVertices;
+        private int kernelTriangles;
+        private int kernelNormals;
 
         private Mesh planeMesh;
         private Vector3[] vertices;
@@ -307,8 +311,13 @@ namespace MastersOfTempest.Environment.VisualEffects
             reflectWavesCB = new ComputeBuffer(widthHF * depthHF, 4);
             verticesCB = new ComputeBuffer(widthMesh * depthMesh, 12);
             normalsCB = new ComputeBuffer(widthMesh * depthMesh, 12);
+            trianglesRCB = new ComputeBuffer((widthMesh - 1) * (depthMesh - 1) * 2, 12);
+            normTrianglesCB = new ComputeBuffer((widthMesh - 1) * (depthMesh - 1) * 2, 12);
             environment = new uint[widthHF * depthHF];
-
+            
+            Mesh mesh = GetComponent<MeshFilter>().mesh;
+            verticesCB.SetData(mesh.vertices);
+            trianglesRCB.SetData(mesh.triangles);
 
             heightFieldCB.SetData(hf);
             reflectWavesCB.SetData(environment);
@@ -316,10 +325,14 @@ namespace MastersOfTempest.Environment.VisualEffects
             //  get corresponding kernel index
             kernel = heightFieldCS.FindKernel("updateHeightfield");
             kernelVertices = heightFieldCS.FindKernel("interpolateVertices");
+            kernelTriangles = heightFieldCS.FindKernel("calcNormTriangles");
+            kernelNormals = heightFieldCS.FindKernel("averageNormVertices");
             //  set constants
-            heightFieldCS.SetFloat("g_fQuadSize", quadSizeHF);
+            heightFieldCS.SetFloat("g_fQuadSize", quadSize);
             heightFieldCS.SetInt("g_iDepth", depthHF);
+            heightFieldCS.SetInt("g_iDepthMesh", depthMesh);
             heightFieldCS.SetInt("g_iWidth", widthHF);
+            heightFieldCS.SetInt("g_iWidthMesh", widthMesh);
             heightFieldCS.SetFloat("g_fGridSpacing", gridSpacing); // could be changed to quadSize, but does not yield good results
 
             material.SetFloat("g_fQuadSize", quadSize);
@@ -332,8 +345,14 @@ namespace MastersOfTempest.Environment.VisualEffects
 
             heightFieldCS.SetBuffer(kernelVertices, "heightFieldIn", heightFieldCB);
             heightFieldCS.SetBuffer(kernelVertices, "verticesPosition", verticesCB);
-            heightFieldCS.SetBuffer(kernelVertices, "verticesNormal", normalsCB);
             heightFieldCS.SetBuffer(kernelVertices, "randomDisplacement", randomXZ);
+
+            heightFieldCS.SetBuffer(kernelTriangles, "triangles", trianglesRCB);
+            heightFieldCS.SetBuffer(kernelTriangles, "verticesPosition", verticesCB);
+            heightFieldCS.SetBuffer(kernelTriangles, "normTriangles", normTrianglesCB);
+
+            heightFieldCS.SetBuffer(kernelNormals, "normTriangles", normTrianglesCB);
+            heightFieldCS.SetBuffer(kernelNormals, "verticesNormal", normalsCB);
 
             material.SetBuffer("verticesPosition", verticesCB);
             material.SetBuffer("verticesNormal", normalsCB);
@@ -411,18 +430,20 @@ namespace MastersOfTempest.Environment.VisualEffects
         {
             Mesh mesh = GetComponent<MeshFilter>().mesh;
             Vector3[] verts = mesh.vertices;
-            verticesCB.SetData(mesh.vertices);
+            int[] tris = mesh.triangles;
+            //verticesCB.SetData(mesh.vertices);
 
             //heightFieldCS.SetBuffer(kernelVertices, "verticesPosition", verticesCB);
-            heightFieldCS.Dispatch(kernelVertices, Mathf.CeilToInt(verts.Length / 256f) + 1, 1, 1);
+            heightFieldCS.Dispatch(kernelVertices, Mathf.CeilToInt(widthMesh * depthMesh / 256f), 1, 1);
+            heightFieldCS.Dispatch(kernelTriangles, Mathf.CeilToInt(tris.Length / 256f), 1, 1);
+            heightFieldCS.Dispatch(kernelNormals, Mathf.CeilToInt(widthMesh / 16f), Mathf.CeilToInt(depthMesh / 16f), 1);
 
-            verticesCB.GetData(verts);
-            Vector3[] norms = new Vector3[verts.Length];
-            normalsCB.GetData(norms);
+            //Vector3[] norms = new Vector3[verts.Length];
+            //verticesCB.GetData(verts);
             //material.SetBuffer("verticesPosition", verticesCB);
-            mesh.vertices = verts;
-            // mesh.normals = norms;
-            mesh.RecalculateNormals();
+            //mesh.vertices = verts;
+            //mesh.normals = norms;
+            //mesh.RecalculateNormals();
             GetComponent<MeshFilter>().mesh = mesh;
         }
 
