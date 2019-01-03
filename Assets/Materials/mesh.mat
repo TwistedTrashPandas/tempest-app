@@ -56,7 +56,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _FresnelTex:
-        m_Texture: {fileID: 2800000, guid: a903826e48480634bb9fddf1ad9fbcfa, type: 3}
+        m_Texture: {fileID: 2800000, guid: 2a2f09077eed0bb4a91fd115d39a62ee, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -129,21 +129,22 @@ Material:
     - _WavesDensity: 0
     - _ZWrite: 1
     - _isBending: 0
-    - g_Attenuation: 1
+    - g_Attenuation: 2
     - g_DepthVisible: 426
-    - g_DistortionFactor: 5
+    - g_DistortionFactor: 500
     - g_FoamDepth: 0
     - g_Glossiness: 0.5
     - g_Metallic: 0
     - g_PointLightIntensity: 0
-    - g_Reflection: 0.22
-    - g_Repeat: 2
-    - g_Shininess: 50
+    - g_Reflection: 0.2
+    - g_Refraction: 10
+    - g_Repeat: 2048
+    - g_Shininess: 40
     - g_directionalLight: 0
     - g_fQuadSize: 8
     - g_iDepth: 128
     - g_iWidth: 256
-    - g_lerpNormal: 1
+    - g_lerpNormal: 0.95
     m_Colors:
     - WaveSpeed: {r: 19, g: 9, b: -16, a: -7}
     - _AnimationDirection: {r: 0, g: 0, b: 0, a: 0}
@@ -171,7 +172,7 @@ Material:
     - _SpecularColor: {r: 0, g: 0, b: 0, a: 1}
     - _WavesColor: {r: 0, g: 0, b: 0, a: 0.25}
     - _WorldLightDir: {r: 0, g: 0, b: 0, a: 0}
-    - g_Color: {r: 0.2783019, g: 0.5457042, b: 1, a: 1}
+    - g_Color: {r: 0.2216981, g: 0.50933164, b: 1, a: 1}
     - g_DepthColor: {r: 0.077122435, g: 0.028880388, b: 0.5566038, a: 1}
     - g_LightDir: {r: 1, g: 0.9705882, b: 0.9705882, a: 1}
     - g_SpecColor: {r: 1, g: 1, b: 1, a: 1}

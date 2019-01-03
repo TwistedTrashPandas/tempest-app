@@ -12,7 +12,7 @@ Shader "Custom/HeightFieldRender" {
 		g_Color("Color", Color) = (1,1,1,1)
 		g_SpecColor("Specular Color", Color) = (1,1,1,1)
 		g_DepthColor("Depth Color", Color) = (1,1,1,1)
-		g_Attenuation("Attenuation", Range(0.0, 1.0)) = 1.0
+		g_Attenuation("Attenuation", Range(0.0, 100.0)) = 1.0
 		g_Reflection("Reflection", Range(0.0,1.0)) = 1.0
 		g_Shininess("Shininess", Range(0.0, 2000.0)) = 20.0
 		g_lerpNormal("Lerp Normals", Range(0.0,1.0)) = 0.9
@@ -20,6 +20,7 @@ Shader "Custom/HeightFieldRender" {
 		g_DepthVisible("maximum Depth", Range(1.0, 1000.0)) = 1000.0
 		g_FoamDepth("maximum Foam-Depth", Range(0.0, 1.0)) = 0.1
 		g_DistortionFactor("Distortion", Range(0.0, 500.0)) = 50.0
+		g_Refraction("Refraction", Range(0.0, 256.0)) = 50.0
 		g_NormalMap("Normal Map", 2D) = "bump" {}
 		_FresnelTex("Fresnel", 2D) = "" {}
 		[HideInInspector] _ReflectionTex("Internal Reflection", 2D) = "" {}
@@ -40,6 +41,7 @@ Shader "Custom/HeightFieldRender" {
 		float g_DepthVisible;
 		float g_FoamDepth;
 		float g_DistortionFactor;
+		float g_Refraction;
 		float g_lerpNormal;
 		float g_Repeat;
 		fixed4 g_Color;
@@ -87,7 +89,7 @@ Shader "Custom/HeightFieldRender" {
 			o.worldPos = float4(pos, 1.0f);
 			o.vertex = UnityObjectToClipPos(o.worldPos);
 			o.lightingColor = g_Color;
-			o.projPos = ComputeScreenPos(UnityObjectToClipPos(pos));
+			o.projPos = ComputeScreenPos(o.vertex);
 			o.projPos.z = -UnityObjectToViewPos(pos).z;
 			o.refl = ComputeNonStereoScreenPos(o.vertex);
 
@@ -106,6 +108,7 @@ Shader "Custom/HeightFieldRender" {
 
 			half3 normalDirection = normalize(mul(half4(normal, 1.0f), modelMatrixInverse).xyz);
 			half3 viewDirection = normalize(_WorldSpaceCameraPos - pos);
+			normalDirection = normalize(lerp(normalDirection, -viewDirection, 0.05f));
 			half3 lightDirection;
 			half attenuation = g_Attenuation;
 
@@ -151,40 +154,12 @@ Shader "Custom/HeightFieldRender" {
 			return half4(specularReflection + diffuseReflection + UNITY_LIGHTMODEL_AMBIENT * g_Color.rgb, g_Color.w);
 		}
 
-		fixed4 frag(v2g i) : SV_Target
-		{
-			i.normal = normalize(lerp(UnpackNormal(tex2D(g_NormalMap, i.uv)), i.normal, g_lerpNormal)); // i.normal +
-			//float3 pos = mul(UNITY_MATRIX_IT_MV, mul(unity_CameraInvProjection, i.vertex));
-			float3 reflectView;
-			i.lightingColor = lighting(i.worldPos, i.normal, reflectView);
-			//fixed shadow = SHADOW_ATTENUATION(i);
-			//	load stored z-value
-			float depth = i.projPos.z;
-			float sceneZ = LinearEyeDepth(tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(i.projPos)));
-			float diff = (abs(sceneZ - depth));
-			float4 uv1 = i.refl;
-			uv1.xy -= i.normal.zx * g_DistortionFactor;
-			float4 refl = tex2Dproj(_ReflectionTex, UNITY_PROJ_COORD(uv1));
-
-			//return float4(i.normal, 1.0f);
-
-
-			reflectView.y = max(reflectView.y,0);
-			float f = tex1D(_FresnelTex, dot(reflectView, i.normal));
-			//f *= f;
-			//f = 1 - f;
-			//	if an object is close -> change color
-			if (diff < g_DepthVisible) {
-				diff /= g_DepthVisible;
-				if (diff < g_FoamDepth)
-					return float4(1.0f, 1.0f, 1.0f, 1.0f);
-				return lerp((lerp(g_DepthColor, i.lightingColor, float4(diff, diff, diff, diff))), refl, float4(g_Reflection, g_Reflection, g_Reflection, 0.0f));
-			}
-			i.lightingColor = lerp(i.lightingColor, refl,  float4(g_Reflection, g_Reflection, g_Reflection, 0.0f));
-			return lerp(i.lightingColor, refl, float4(f, f, f, 0.0f));
-		}
-
 			ENDCG
+
+		GrabPass
+		{
+			"_BackgroundTexture"
+		}
 
 			//	pass for directional lights
 		Pass {
@@ -195,31 +170,69 @@ Shader "Custom/HeightFieldRender" {
 				Tags{ "LightMode" = "ForwardBase" }
 				CGPROGRAM
 
+				sampler2D _BackgroundTexture;
+
 				#pragma multi_compile_fwdbase 
 				#pragma vertex vert
 				//#pragma geometry geom
 				#pragma fragment frag
 
-				half3 BlinnPhong(half3 lightDir, half3 normal, half3 viewDir) {
 
-					half3 lightOut;
-					half distance = length(lightDir);
-					lightDir = lightDir / distance;
-					distance = distance * distance;
+			fixed4 frag(v2g i) : SV_Target
+			{
+				i.normal = normalize(lerp(UnpackNormal(tex2D(g_NormalMap, i.uv)), i.normal, g_lerpNormal)); // i.normal +
+				//float3 pos = mul(UNITY_MATRIX_IT_MV, mul(unity_CameraInvProjection, i.vertex));
+				float3 reflectView;
+				i.lightingColor = lighting(i.worldPos, i.normal, reflectView);
+				//fixed shadow = SHADOW_ATTENUATION(i);
+				//	load stored z-value
+				float depth = i.projPos.z;
+				float sceneZ = LinearEyeDepth(tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(i.projPos)));
+				float diff = (abs(sceneZ - depth));
+				float4 uv1 = i.refl;
+				uv1.xy -= i.normal.zx * g_DistortionFactor;
+				float4 refl = tex2Dproj(_ReflectionTex, UNITY_PROJ_COORD(uv1));
 
-					half NdotL = dot(normal, lightDir);
-					half intensity = saturate(NdotL);
-
-					half3 diffuse = intensity * _LightColor0.rgb * g_Color.rgb / distance;
-
-					half3 H = normalize(lightDir + viewDir);
-
-					half NdotH = dot(normal, H);
-					intensity = pow(saturate(NdotH), g_Shininess);
-
-					lightOut = diffuse + intensity * _LightColor0  * g_SpecColor.rgb / distance;
-					return lightOut;
+				half3 refracted = i.normal * abs(i.normal);
+				//half3 refracted = refract( i.normal, half3(0,0,1), 1.333 );
+				i.projPos.xy = refracted.xy * (i.projPos.w * g_Refraction) + i.projPos.xy;
+				float4 refr = tex2Dproj(_BackgroundTexture, i.projPos);
+				//reflectView.y = max(reflectView.y,0);
+				float f = tex1D(_FresnelTex, dot(reflectView, i.normal));
+				f *= f;
+				//f = 1.0f - f;
+				//return float4(f, 0, 0, 1.0f);
+				//	if an object is close -> change color
+				if (diff < g_DepthVisible) {
+					diff /= g_DepthVisible;
+					if (diff < g_FoamDepth)
+						return float4(1.0f, 1.0f, 1.0f, 1.0f);
+					return lerp((lerp(g_DepthColor, i.lightingColor, float4(diff, diff, diff, diff))), refl, float4(g_Reflection, g_Reflection, g_Reflection, 0.0f));
 				}
+				i.lightingColor = lerp(i.lightingColor, refl,  float4(g_Reflection, g_Reflection, g_Reflection, 0.0f));
+				return lerp(i.lightingColor, refr, float4(f, f, f, 0.0f));
+			}
+
+			half3 BlinnPhong(half3 lightDir, half3 normal, half3 viewDir) {
+
+				half3 lightOut;
+				half distance = length(lightDir);
+				lightDir = lightDir / distance;
+				distance = distance * distance;
+
+				half NdotL = dot(normal, lightDir);
+				half intensity = saturate(NdotL);
+
+				half3 diffuse = intensity * _LightColor0.rgb * g_Color.rgb / distance;
+
+				half3 H = normalize(lightDir + viewDir);
+
+				half NdotH = dot(normal, H);
+				intensity = pow(saturate(NdotH), g_Shininess);
+
+				lightOut = diffuse + intensity * _LightColor0  * g_SpecColor.rgb / distance;
+				return lightOut;
+			}
 
 				//	specular lighting model
 			

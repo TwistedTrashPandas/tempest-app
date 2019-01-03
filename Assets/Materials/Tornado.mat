@@ -141,8 +141,8 @@ Material:
     - g_Shininess: 20
     - g_bSize: 0
     - g_fBillboardSize: 2.6
-    - g_fDensity: 3.5
-    - g_fSize: 6
+    - g_fDensity: 0.75
+    - g_fSize: 8
     - g_fTimeDiff: 0.01
     - g_fTimeStepTex: 0.2
     m_Colors:
