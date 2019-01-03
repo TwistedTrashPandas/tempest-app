@@ -71,6 +71,7 @@ Shader "Custom/CloudPart" {
 			float4 projPos: TEXCOORD1;
 			float4 uv: TEXCOORD0;
 			LIGHTING_COORDS(2, 3)
+			UNITY_FOG_COORDS(4)
 		};
 
 
@@ -333,6 +334,7 @@ Shader "Custom/CloudPart" {
 				Outs[iCorner].projPos.xyz = UnityObjectToViewPos(f4CurrCornerWorldPos);
 				Outs[iCorner].projPos.w = 1.0f;
 				Outs[iCorner].uv = ComputeScreenPos(Outs[iCorner].pos);
+				UNITY_TRANSFER_FOG(Outs[iCorner], Outs[iCorner].pos);
 			}
 			// Generate bounding box faces
 			{
@@ -372,6 +374,7 @@ Shader "Custom/CloudPart" {
 			#pragma multi_compile_fwdbase 
 			#pragma geometry geom
 			#pragma fragment frag
+			#pragma multi_compile_fog
 			#pragma target 2.0
 
 		v2g vert(appdata v)
@@ -484,6 +487,7 @@ Shader "Custom/CloudPart" {
 				ParticleLighting,
 				f4Color
 			);
+			UNITY_APPLY_FOG(In.fogCoord, f4Color);
 			return f4Color;
 		}
 		ENDCG
@@ -687,12 +691,13 @@ Shader "Custom/CloudPart" {
 		}
 		ENDCG
 		}*/
-
+		
 	Pass{
 		ZWrite On Cull Front
 		//Blend SrcAlpha OneMinusSrcAlpha
 		Name "ShadowPass"
 		Tags {"LightMode" = "ShadowCaster" "Queue" = "AlphaTest"}
+		Fog{ Mode Off }
 
 		CGPROGRAM
 			#pragma require geometry

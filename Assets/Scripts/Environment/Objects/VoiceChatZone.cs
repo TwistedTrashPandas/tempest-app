@@ -27,8 +27,6 @@ namespace MastersOfTempest.Environment.Interacting
                         if (tempGroups[i].name == type.ToString())
                             toUse = tempGroups[i];
                     }
-                    if (toUse != null)
-                        print(toUse.name);
                     audioMixerGroups.Add(type, toUse);
                 }
             }

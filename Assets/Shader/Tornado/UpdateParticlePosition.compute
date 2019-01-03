@@ -58,7 +58,7 @@ void UpdateParticles(uint3 id : SV_DispatchThreadID)
 	if (distance(particlePosRW[id.x].xz, g_vCenter.xz) > g_fMaxDist || particlePosRW[id.x].y > g_i3Dimensions[1] * g_i3Dimensions.w) {
 		//particlePosRW[id.x].xz = (particlePosRW[id.x].xz - g_vCenter.xz) * ((id.x + 1) % 2) / 1.5f + g_vCenter.xz;
 		float2 dir = particlePosRW[id.x].xz - g_vCenter.xz;
-		particlePosRW[id.x].xz = (dir) * min((id.x) % 2, 1) / 2.2f + (dir) * min((id.x) % 3, 1) / 2.2f + g_vCenter.xz;
+		particlePosRW[id.x].xz = (dir) * ((id.x) % 4) / 2.5f + g_vCenter.xz; // (dir) * min((id.x) % 2, 1) / 2.2f +
 		particlePosRW[id.x].y -= g_vCenter.y * 2;
 		particleVelRW[id.x] *= g_fRandPos;// float3(0.0f, 0.0f, 0.0f);
 	}
