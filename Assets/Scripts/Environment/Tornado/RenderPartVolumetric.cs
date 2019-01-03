@@ -36,10 +36,19 @@ namespace MastersOfTempest.Environment.VisualEffects
             particles.SetData(pos);
             material.SetBuffer("g_vVertices", particles);
             Vector3[] v = new Vector3[10];
-            int[] t = new int[3];
+            int[] t = new int[6];
             t[0] = 0;
-            t[1] = 0;
-            t[2] = 0;
+            t[1] = 1;
+            t[2] = 2;
+            t[3] = 0;
+            t[4] = 1;
+            t[5] = 2;
+            t[3] = 0;
+            t[4] = 1;
+            t[5] = 2;
+            v[0] = new Vector3();
+            v[1] = new Vector3(0,-5,0);
+            v[2] = new Vector3(0,-10,0);
 
             // Camera.main.cameraToWorldMatrix;
             Camera.main.cullingMatrix = Matrix4x4.Ortho(-99999, 99999, -99999, 99999, 2f, 99999) *
@@ -51,7 +60,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             m.vertices = v;
             m.triangles = t;
             Vector3 center = Vector3.zero;
-            GetComponent<MeshFilter>().sharedMesh = m;
+            GetComponent<MeshFilter>().mesh = m;
             //transform.position = new Vector3();
         }
 

@@ -22,7 +22,7 @@ namespace MastersOfTempest.Environment.VisualEffects
         /// sort all particles with respect to the camera position each "sortEach" timestep
         [Range(1, 100)]
         public int sortEach;
-        [Range(13, 20)]
+        [Range(0, 20)]
         public uint particelNumExp;
         [Range(0f, 1f)]
         public float dampVel;
@@ -88,12 +88,13 @@ namespace MastersOfTempest.Environment.VisualEffects
             initBuffers();
             Load3DTextures();
             CreateMesh();
-
             camPos = Camera.main.transform;
             // TODO: seperate script
             Camera.main.cullingMatrix = Matrix4x4.Ortho(-99999, 99999, -99999, 99999, 2f, 99999) *
                                 Matrix4x4.Translate(Vector3.forward * -99999 / 2f) *
                                 Camera.main.worldToCameraMatrix;
+
+            //ComputeAttenuationProperties();
         }
 
         private void initBuffers()
@@ -228,35 +229,37 @@ namespace MastersOfTempest.Environment.VisualEffects
             }
             uint width = BLOCK_SIZE;
             uint height = (numberParticles / BLOCK_SIZE);
-
-            // transpose data and sort transposed columns then rows again
-            for (uint k = (BLOCK_SIZE << 1); k <= numberParticles; k <<= 1)
+            if (BLOCK_SIZE < numberParticles)
             {
-                sortCS.SetInt("k", (int)(k / BLOCK_SIZE));
-                sortCS.SetInt("g_iStage_2", (int)((k & ~numberParticles) / BLOCK_SIZE));
-                sortCS.SetInt("g_iWidth", (int)width);
-                sortCS.SetInt("g_iHeight", (int)height);
-                sortCS.SetBuffer(kernelT, "indicesRW", indicesRCB);
-                sortCS.SetBuffer(kernelT, "indices", indicesCB);
-                sortCS.DispatchIndirect(kernelT, argsBuffer3);
-                //sortCS.Dispatch(kernelT, (int)(width / TRANSPOSE_BLOCK_SIZE), (int)(height / TRANSPOSE_BLOCK_SIZE), 1);
+                // transpose data and sort transposed columns then rows again
+                for (uint k = (BLOCK_SIZE << 1); k <= numberParticles; k <<= 1)
+                {
+                    sortCS.SetInt("k", (int)(k / BLOCK_SIZE));
+                    sortCS.SetInt("g_iStage_2", (int)((k & ~numberParticles) / BLOCK_SIZE));
+                    sortCS.SetInt("g_iWidth", (int)width);
+                    sortCS.SetInt("g_iHeight", (int)height);
+                    sortCS.SetBuffer(kernelT, "indicesRW", indicesRCB);
+                    sortCS.SetBuffer(kernelT, "indices", indicesCB);
+                    sortCS.DispatchIndirect(kernelT, argsBuffer3);
+                    //sortCS.Dispatch(kernelT, (int)(width / TRANSPOSE_BLOCK_SIZE), (int)(height / TRANSPOSE_BLOCK_SIZE), 1);
 
-                sortCS.SetBuffer(kernelS, "indicesRW", indicesRCB);
-                sortCS.DispatchIndirect(kernelS, argsBuffer2);
-                //sortCS.Dispatch(kernelS, groups, 1, 1);
+                    sortCS.SetBuffer(kernelS, "indicesRW", indicesRCB);
+                    sortCS.DispatchIndirect(kernelS, argsBuffer2);
+                    //sortCS.Dispatch(kernelS, groups, 1, 1);
 
-                sortCS.SetInt("k", (int)BLOCK_SIZE);
-                sortCS.SetInt("g_iStage_2", (int)k);
-                sortCS.SetInt("g_iWidth", (int)height);
-                sortCS.SetInt("g_iHeight", (int)width);
-                sortCS.SetBuffer(kernelT, "indicesRW", indicesCB);
-                sortCS.SetBuffer(kernelT, "indices", indicesRCB);
-                sortCS.DispatchIndirect(kernelT, argsBuffer4);
-                //sortCS.Dispatch(kernelT, (int)(height / TRANSPOSE_BLOCK_SIZE), (int)(width / TRANSPOSE_BLOCK_SIZE), 1);
+                    sortCS.SetInt("k", (int)BLOCK_SIZE);
+                    sortCS.SetInt("g_iStage_2", (int)k);
+                    sortCS.SetInt("g_iWidth", (int)height);
+                    sortCS.SetInt("g_iHeight", (int)width);
+                    sortCS.SetBuffer(kernelT, "indicesRW", indicesCB);
+                    sortCS.SetBuffer(kernelT, "indices", indicesRCB);
+                    sortCS.DispatchIndirect(kernelT, argsBuffer4);
+                    //sortCS.Dispatch(kernelT, (int)(height / TRANSPOSE_BLOCK_SIZE), (int)(width / TRANSPOSE_BLOCK_SIZE), 1);
 
-                sortCS.SetBuffer(kernelS, "indicesRW", indicesCB);
-                sortCS.DispatchIndirect(kernelS, argsBuffer2);
-                // sortCS.Dispatch(kernelS, groups, 1, 1);
+                    sortCS.SetBuffer(kernelS, "indicesRW", indicesCB);
+                    sortCS.DispatchIndirect(kernelS, argsBuffer2);
+                    // sortCS.Dispatch(kernelS, groups, 1, 1);
+                }
             }
         }
 
@@ -357,6 +360,33 @@ namespace MastersOfTempest.Environment.VisualEffects
             material.SetFloat("g_bSize", 1.0f);
             sortEach = 1;
         }
+
+        /*
+        private void ComputeAttenuationProperties()
+        {
+            //Graphics.SetRenderTarget()
+            //RenderTexture rt = new RenderTexture(256, 256, 256, RenderTextureFormat.RFloat);
+            //Graphics.SetRenderTarget(rt);
+            RenderBuffer depth = new RenderBuffer();
+            RenderBuffer color = new RenderBuffer();
+            RenderTexture rt = new RenderTexture(1024, 1024, 1);
+            cam.depthTextureMode = DepthTextureMode.Depth;
+            ComputeBuffer bf = new ComputeBuffer(100, 1);
+            //bf.SetData(depth.GetNativeRenderBufferPtr());
+            //cam.forceIntoRenderTexture = true;
+            //cam.worldToCameraMatrix = Matrix4x4.TRS(new Vector3(), Quaternion.Euler(90, 0, 0), Vector3.zero);
+            //cam.projectionMatrix = Matrix4x4.Ortho(-320f, 320f, -320f, 320f, 0.001f, 40f);
+            //cam.SetTargetBuffers(color, depth);
+            //cam.targetTexture = rt;
+            //cam.forceIntoRenderTexture = true;
+            //cam.targetDisplay = 2;
+            //cam.Render();
+            print(Camera.main.depthTextureMode);
+            Camera.main.depthTextureMode = DepthTextureMode.Depth;
+            //Graphics.DrawMesh(GetComponent<MeshFilter>().mesh, Matrix4x4.identity, GetComponent<Renderer>().material, 0, cam);
+            //Graphics.DrawMeshNow()
+        }*/
+        
         void OnApplicationQuit()
         {
             // releasing compute buffers
