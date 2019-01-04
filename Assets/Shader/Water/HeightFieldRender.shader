@@ -87,10 +87,10 @@ Shader "Custom/HeightFieldRender" {
 			pos = verticesPosition[v.id];
 			o.normal = normalize(verticesNormal[v.id]); // v.normal; //  
 			o.worldPos = float4(pos, 1.0f);
-			o.vertex = UnityObjectToClipPos(o.worldPos);
+			o.vertex = mul(UNITY_MATRIX_VP, o.worldPos); // UnityObjectToClipPos
 			o.lightingColor = g_Color;
 			o.projPos = ComputeScreenPos(o.vertex);
-			o.projPos.z = -UnityObjectToViewPos(pos).z;
+			o.projPos.z = -mul(UNITY_MATRIX_V, pos).z;// UnityObjectToViewPos(pos).z;
 			o.refl = ComputeNonStereoScreenPos(o.vertex);
 
 			float maxWidth = g_fQuadSize / g_Repeat;

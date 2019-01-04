@@ -119,7 +119,8 @@ float g_fDeltaTime;		//	timeStep
 float g_fTotalTime;
 float g_fMaxHeight;
 float g_fGridSpacing;
-float g_fQuadSize;		//	size of the quads of the mesh
+float g_fQuadSize_w;		//	size of the quads of the mesh
+float g_fQuadSize_d;		//	size of the quads of the mesh
 float g_fAvgHeight;		//	avgerage height, computed on CPU
 uint g_iDepth;			//	depth of the heightfield
 uint g_iWidth;			//	width "-"
@@ -173,7 +174,7 @@ void updateHeightfield(uint3 id : SV_DispatchThreadID)
 		totalHeight += heightFieldIn[i * g_iDepth + min(g_iDepth - 1, min(j + 1, g_iDepth - 1))].height;
 	else
 		totalHeight += heightFieldIn[i * g_iDepth + j].height;
-	
+
 	float totalHeightDiag = 0.0f;
 	/*
 	if (reflectWaves[max(i - 1, 0) * g_iDepth + max(j - 1, 0)] == 0)
@@ -196,7 +197,7 @@ void updateHeightfield(uint3 id : SV_DispatchThreadID)
 	else
 		totalHeightDiag += heightFieldIn[i * g_iDepth + j].height;
 		*/
-	//	different behaviour at obstacle or wall
+		//	different behaviour at obstacle or wall
 	if (reflectWaves[i * g_iDepth + j] != 0) {
 		heightFieldOut[i * g_iDepth + j].height = (totalHeight + totalHeightDiag) / 4.0f;
 		//heightFieldOut[i * g_iDepth + j].height -= g_fAvgHeight;
@@ -227,12 +228,14 @@ void updateHeightfield(uint3 id : SV_DispatchThreadID)
 		heightFieldOut[i * g_iDepth + j].height = heightFieldIn[i*g_iDepth + j].height + heightFieldOut[i * g_iDepth + j].velocity * g_fDeltaTime;
 
 		//if (i <= r_border && i >= l_border && j >= d_border && j <= u_border) {
-		float2 pos = float2(i - center_x, j - center_y);
-		float2 cos_sin = float2(cos(g_fTotalTime), sin(g_fTotalTime));
-		float dist = distance(pos, cos_sin) + 1.0f;
-		if (dist < 4.0f) {
-			//heightFieldOut[i * g_iDepth + j].velocity += heightFieldOut[i * g_iDepth + j].velocity * 0.01f * SGNLUT[sgn_x + sgn_y * 7] * distance;
-			heightFieldOut[i * g_iDepth + j].height = 64.0f / (dist * dist);
+		if (false) {
+			float2 pos = float2(i - center_x, j - center_y);
+			float2 cos_sin = float2(cos(g_fTotalTime), sin(g_fTotalTime));
+			float dist = distance(pos, cos_sin) + 1.0f;
+			if (dist < 4.0f) {
+				//heightFieldOut[i * g_iDepth + j].velocity += heightFieldOut[i * g_iDepth + j].velocity * 0.01f * SGNLUT[sgn_x + sgn_y * 7] * distance;
+				heightFieldOut[i * g_iDepth + j].height = 64.0f / (dist * dist);
+			}
 		}
 		//}
 		//	keep average Height of all points at ca. 0
@@ -247,62 +250,72 @@ RWStructuredBuffer<float3> verticesPosition : register(u1);
 //RWStructuredBuffer<float2> verticesUV : register(u3);
 StructuredBuffer<float2> randomDisplacement : register(t1);
 
+int g_iIdxOffset;
+float4x4 g_f4x4TransformMatrix;
+float4x4 g_f4SegDisplacements1;
+
 [numthreads(256, 1, 1)]
 void interpolateVertices(uint3 id : SV_DispatchThreadID) {
-	uint i = id.x;
 
-	if (i >= g_iWidthMesh * g_iDepthMesh)
-		return;
+	uint i = id.x + g_iIdxOffset;
+	//if (i >= g_iWidthMesh * g_iDepthMesh)
+	//	return;
 
-	float3 pos = verticesPosition[i];
-	uint k, m = 0;
-	
-	k = round(pos.x / g_fQuadSize);
-	m = round(pos.z / g_fQuadSize);
+	float3 pos = verticesPosition[i]; // mul(g_f4x4TransformMatrix, float4(verticesPosition[i],1.0f)).xyz;//
+	int idxDisplacement = min(floor(i / (g_iWidthMesh * g_iDepthMesh)), 5); //  = 0;// 
+	if (g_iIdxOffset > 0)
+		idxDisplacement = 5;
+	pos.x += g_f4SegDisplacements1[idxDisplacement % 4][floor(idxDisplacement / 4 + 0.1f) * 2];
+	pos.z += g_f4SegDisplacements1[idxDisplacement % 4][1 + floor(idxDisplacement / 4 + 0.1f) * 2];
+	int k, m = 0;
+
+	k = round(pos.x / g_fQuadSize_w / g_iWidthMesh * g_iWidth);
+	m = round(pos.z / g_fQuadSize_d / g_iDepthMesh * g_iDepth);
 
 	// get surrounding vertices to approximate normal by taking the gradient
-	int idx1 = k * g_iDepth + m;
-	int idx3 = k * g_iDepth + min(m + 1, g_iDepth - 1);
-	int idx4 = min((k + 1), g_iWidth - 1) * g_iDepth + m;
-	int idx5 = min((k - 1), 0) * g_iDepth + m;
-	int idx6 = k * g_iDepth + max(m - 1, 0);
-
-	float x1 = heightFieldIn[idx1].height;
-	float x3 = heightFieldIn[idx3].height;
-	float x4 = heightFieldIn[idx4].height;
 	//float x5 = heightFieldIn[idx5].height;
 	//float x6 = heightFieldIn[idx6].height;
 	/*
 	float gradX = (x4 - x5); // float3(1.0f, 0.0f, 0.0f);
-	float gradZ = (x3 - x6); // float3(0.0f, 0.0f, 1.0f); 
+	float gradZ = (x3 - x6); // float3(0.0f, 0.0f, 1.0f);
 	//gradX = -normalize(cross(gradX, gradZ));
 	//if (gradX.y < 0)
 	//	gradX *= -1.0f;
 	verticesNormal[i] = normalize(float3(-2.0f * gradX, 4.0f, -2.0f * gradZ));// gradX;
 	*/
-	pos.x = k * g_fQuadSize + randomDisplacement[k * g_iDepth + m].x;
-	pos.z = m * g_fQuadSize + randomDisplacement[k * g_iDepth + m].y;
+	//pos.x = k * g_fQuadSize + randomDisplacement[k * g_iDepth + m].x;
+	//pos.z = m * g_fQuadSize + randomDisplacement[k * g_iDepth + m].y;
 
-	if (randomDisplacement[k * g_iDepth + m].x < 0)
+	/*if (randomDisplacement[k * g_iDepth + m].x < 0)
 		k -= 1;
 	if (randomDisplacement[k * g_iDepth + m].y < 0)
 		m -= 1;
+		*/
+	if (k < 0)
+		k *= -1;
+	k = fmod(k, g_iWidth);
 
+	if (m < 0)
+		m *= -1;
+	m = fmod(m, g_iDepth);
+
+	int idx1 = k * g_iDepth + m;
 	//	get surrounding height values at the vertex position (can be randomly displaced)
-	x1 = heightFieldIn[k * g_iDepth + m].height;
+	float x1 = heightFieldIn[idx1].height;
 	float x2 = heightFieldIn[min((k + 1), g_iWidth - 1) * g_iDepth + min(m + 1, g_iDepth - 1)].height;
-	x3 = heightFieldIn[k * g_iDepth + min(m + 1, g_iDepth - 1)].height;
-	x4 = heightFieldIn[min((k + 1), g_iWidth - 1) * g_iDepth + m].height;
+	float x3 = heightFieldIn[k * g_iDepth + min(m + 1, g_iDepth - 1)].height;
+	float x4 = heightFieldIn[min((k + 1), g_iWidth - 1) * g_iDepth + m].height;
 
 	//	get x and y value between 0 and 1 for interpolation
-	float x = (pos.x / g_fQuadSize - k);
-	float y = (pos.z / g_fQuadSize - m);
+	float x = (pos.x / g_fQuadSize_w - k * g_iWidthMesh / g_iWidth);
+	float y = (pos.z / g_fQuadSize_d - m * g_iWidthMesh / g_iWidth);
 
 	//	bilinear interpolation to get height at vertex i
 	//	note if x == 0 and y == 0 vertex position is at a heightfield position.
-	float resultingHeight = (x1 * (1 - x) + x4 * (x)) * (1 - y) + (x3 * (1 - x) + x2 * (x)) * (y);
+	float resultingHeight = x1; // (x1 * (1 - x) + x4 * (x)) * (1 - y) + (x3 * (1 - x) + x2 * (x)) * (y);
 	pos.y = resultingHeight;
 
+	//verticesPosition[i].y = resultingHeight;
 	verticesPosition[i] = pos;
 }
 
@@ -313,8 +326,8 @@ RWStructuredBuffer<float3> normTriangles : register(u3);
 void calcNormTriangles(uint3 id : SV_DispatchThreadID) {
 
 	int3 idx = triangles[id.x];
-	if (id.x >= (g_iWidthMesh-1) * (g_iDepthMesh-1)*2)
-		return;
+	//if (id.x >= (g_iWidthMesh - 1) * (g_iDepthMesh - 1) * 2)
+	//	return;
 	float3 pos = verticesPosition[idx.x];
 	float3 pos1 = verticesPosition[idx.y];
 	float3 pos2 = verticesPosition[idx.z];
@@ -323,14 +336,17 @@ void calcNormTriangles(uint3 id : SV_DispatchThreadID) {
 
 RWStructuredBuffer<float3> verticesNormal : register(u2);
 
+uint g_iOffset;
+uint g_iTriangleD;
+
 [numthreads(16, 16, 1)]
 void averageNormVertices(uint3 id : SV_DispatchThreadID) {
 	int i = id.x;
 	int j = id.y;
-	int idx = i * (g_iDepthMesh - 1) + j;
-	int idx1 = (i - 1) * (g_iDepthMesh - 1) + j - 1;
-	int idx2 = (i - 1) * (g_iDepthMesh - 1) + j;
-	int idx3 = i * (g_iDepthMesh - 1) + j - 1;
+	int idx = i * (g_iTriangleD) + j;
+	int idx1 = (i - 1) * (g_iTriangleD) + j - 1;
+	int idx2 = (i - 1) * (g_iTriangleD) + j;
+	int idx3 = i * (g_iTriangleD) + j - 1;
 
 	//if (i >= g_iWidthMesh || j >= g_iDepthMesh)
 	//	return;
@@ -343,11 +359,11 @@ void averageNormVertices(uint3 id : SV_DispatchThreadID) {
 	idcs[4] = idx2 * 2;
 	idcs[5] = idx3 * 2 + 1;
 
-	idx = i * g_iDepthMesh + j;
-	float3 tmpNorm = float3(0,0,0);
+	idx = i * g_iDepthMesh + j;// + (g_iDepthMesh) * (g_iWidthMesh)* id.z;
+	float3 tmpNorm = float3(0, 0, 0);
 	for (int k = 0; k < 6; ++k)
 	{
-		tmpNorm += normTriangles[idcs[k]];
+		tmpNorm += normTriangles[idcs[k] + g_iOffset];
 	}
-	verticesNormal[idx] = normalize(tmpNorm);
+	verticesNormal[idx + g_iIdxOffset] = normalize(tmpNorm); // mul(g_f4x4TransformMatrix, float4(normalize(tmpNorm), 0.0f)).xyz; //
 }

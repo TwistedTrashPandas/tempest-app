@@ -44,7 +44,6 @@ namespace MastersOfTempest.Environment.VisualEffects
         /// </summary>
         public Camera mainCam;
 
-
         /// <summary>
         /// The maximum random displacement of the vertices of the generated mesh
         /// </summary>
@@ -76,6 +75,15 @@ namespace MastersOfTempest.Environment.VisualEffects
         /// Distance between vertices of the generated mesh
         /// </summary>
         public float quadSize;
+
+        [Range(1, 2048)]
+        public int widthDetailedMesh;
+
+        [Range(1, 2048)]
+        public int depthDetailedMesh;
+
+        [Range(1, 2048)]
+        public int detailScaleFactor;
 
         /// <summary>
         /// Speed of waves
@@ -138,12 +146,21 @@ namespace MastersOfTempest.Environment.VisualEffects
         private float totalTime;
 
         private float quadSizeHF;
-        
+
+        private Vector2[,] segmentConfigurations;
+        private int lastConfig;
+        private Vector3 lastPosition;
+
+        private void Start()
+        {
+            //Initialize(Vector3.zero);
+        }
+
         public void Initialize(Vector3 midPosition)
         {
             inOutCounter = 0;
             currentCollision = 1;
-            transform.position = midPosition - new Vector3(widthMesh * quadSize / 2f, midPosition.y, depthMesh * quadSize / 2f);
+            //transform.position = midPosition - new Vector3(widthMesh * quadSize / 2f, midPosition.y, depthMesh * quadSize / 2f);
             totalTime = 0f;
             quadSizeHF = quadSize * widthMesh / (float)widthHF;
 
@@ -160,7 +177,8 @@ namespace MastersOfTempest.Environment.VisualEffects
             randomXZ = new ComputeBuffer(widthMesh * depthMesh, 8);
             material = GetComponent<MeshRenderer>().material;
             setRandomDisplacementBuffer();
-            CreateMesh();
+            CreateMeshWithSubmeshes();
+            //CreateMesh();
             initBuffers();
         }
 
@@ -172,6 +190,8 @@ namespace MastersOfTempest.Environment.VisualEffects
             verticesCB.Release();
             normalsCB.Release();
             randomXZ.Release();
+            trianglesRCB.Release();
+            normTrianglesCB.Release();
         }
 
         void Update()
@@ -196,6 +216,7 @@ namespace MastersOfTempest.Environment.VisualEffects
         {
             //  propagate waves by using linear wave equations
             updateHeightfield();
+            UpdateTransformMatrix();
             updateVertices();
         }
 
@@ -306,16 +327,17 @@ namespace MastersOfTempest.Environment.VisualEffects
         private void initBuffers()
         {
             //  initialize buffers
+            Mesh mesh = GetComponent<MeshFilter>().mesh;
+
             heightFieldCB = new ComputeBuffer(widthHF * depthHF, 8);
             heightFieldCBOut = new ComputeBuffer(widthHF * depthHF, 8);
             reflectWavesCB = new ComputeBuffer(widthHF * depthHF, 4);
-            verticesCB = new ComputeBuffer(widthMesh * depthMesh, 12);
-            normalsCB = new ComputeBuffer(widthMesh * depthMesh, 12);
-            trianglesRCB = new ComputeBuffer((widthMesh - 1) * (depthMesh - 1) * 2, 12);
-            normTrianglesCB = new ComputeBuffer((widthMesh - 1) * (depthMesh - 1) * 2, 12);
+            verticesCB = new ComputeBuffer(mesh.vertices.Length, 12);
+            normalsCB = new ComputeBuffer(mesh.vertices.Length, 12);
+            trianglesRCB = new ComputeBuffer(mesh.triangles.Length / 3, 12);
+            normTrianglesCB = new ComputeBuffer(mesh.triangles.Length / 3, 12);
             environment = new uint[widthHF * depthHF];
-            
-            Mesh mesh = GetComponent<MeshFilter>().mesh;
+
             verticesCB.SetData(mesh.vertices);
             trianglesRCB.SetData(mesh.triangles);
 
@@ -328,7 +350,6 @@ namespace MastersOfTempest.Environment.VisualEffects
             kernelTriangles = heightFieldCS.FindKernel("calcNormTriangles");
             kernelNormals = heightFieldCS.FindKernel("averageNormVertices");
             //  set constants
-            heightFieldCS.SetFloat("g_fQuadSize", quadSize);
             heightFieldCS.SetInt("g_iDepth", depthHF);
             heightFieldCS.SetInt("g_iDepthMesh", depthMesh);
             heightFieldCS.SetInt("g_iWidth", widthHF);
@@ -426,27 +447,208 @@ namespace MastersOfTempest.Environment.VisualEffects
             inOutCounter = (inOutCounter + 1) % 2;
         }
 
+        private void UpdateTransformMatrix()
+        {
+            transform.rotation = Quaternion.identity;
+            transform.position = new Vector3(Mathf.RoundToInt(mainCam.transform.position.x / quadSize - widthMesh * 1.5f) * quadSize, transform.position.y, Mathf.RoundToInt(mainCam.transform.position.z / quadSize -  depthMesh/2f) * quadSize);
+            Vector3 look = mainCam.transform.forward;
+            int idx = 0;
+            if (Mathf.Abs(look.z) > Mathf.Abs(look.x))
+            {
+                if (look.z > 0)
+                {
+                    //transform.RotateAround(mainCam.transform.position, Vector3.up, 0);
+                }
+                else
+                {
+                    //transform.RotateAround(mainCam.transform.position, Vector3.up, 180);
+                    idx = 2;
+                }
+            }
+            else
+            {
+                if (look.x > 0)
+                {
+                    //transform.RotateAround(mainCam.transform.position, Vector3.up, 90);
+                    idx = 1;
+                }
+                else
+                {
+                    //transform.RotateAround(mainCam.transform.position, Vector3.up, 270);
+                    idx = 3;
+                }
+            }
+
+            Matrix4x4 displacementMatrix = Matrix4x4.zero;// new Matrix4x4();
+            for (int i = 0; i < 6; i++)
+            {
+                Vector2 currVec = new Vector2();
+                if (idx != lastConfig)
+                {
+                     currVec = segmentConfigurations[i, idx];
+                     currVec -= segmentConfigurations[i, lastConfig];
+                }
+                displacementMatrix[i % 4, 0 + ((int)(i / 4)) * 2] = currVec.x + transform.position.x - lastPosition.x;
+                displacementMatrix[i % 4, 1 + ((int)(i / 4)) * 2] = currVec.y + transform.position.z - lastPosition.z;
+            }
+            //heightFieldCS.SetMatrix("g_f4x4TransformMatrix", transform.localToWorldMatrix);// Matrix4x4.Rotate(transform.rotation));// Matrix4x4.Translate(translation) * Matrix4x4.Rotate(transform.rotation) * Matrix4x4.Translate(translation));
+            heightFieldCS.SetMatrix("g_f4SegDisplacements1", displacementMatrix);
+            lastConfig = idx;
+            lastPosition = transform.position;
+        }
+
         private void updateVertices()
         {
             Mesh mesh = GetComponent<MeshFilter>().mesh;
-            Vector3[] verts = mesh.vertices;
-            int[] tris = mesh.triangles;
-            //verticesCB.SetData(mesh.vertices);
 
-            //heightFieldCS.SetBuffer(kernelVertices, "verticesPosition", verticesCB);
-            heightFieldCS.Dispatch(kernelVertices, Mathf.CeilToInt(widthMesh * depthMesh / 256f), 1, 1);
-            heightFieldCS.Dispatch(kernelTriangles, Mathf.CeilToInt(tris.Length / 256f), 1, 1);
-            heightFieldCS.Dispatch(kernelNormals, Mathf.CeilToInt(widthMesh / 16f), Mathf.CeilToInt(depthMesh / 16f), 1);
+            /// update vertex x/z pos -------------------------------------------------------------------------------------------------------------------------------
+            Vector3 translation = Vector3.zero;// transform.position - new Vector3(0, 0, mainCam.transform.position.z - quadSize * widthMesh / 2f);
 
-            //Vector3[] norms = new Vector3[verts.Length];
-            //verticesCB.GetData(verts);
-            //material.SetBuffer("verticesPosition", verticesCB);
-            //mesh.vertices = verts;
-            //mesh.normals = norms;
-            //mesh.RecalculateNormals();
-            GetComponent<MeshFilter>().mesh = mesh;
+
+            /// update vertex height --------------------------------------------------------------------------------------------------------------------------------
+            heightFieldCS.SetInt("g_iIdxOffset", 0);
+            heightFieldCS.SetFloat("g_fQuadSize_w", quadSize * 3f);
+            heightFieldCS.SetFloat("g_fQuadSize_d", quadSize * 3f);
+            heightFieldCS.SetInt("g_iWidthMesh", widthMesh);
+            heightFieldCS.SetInt("g_iDepthMesh", depthMesh);
+            heightFieldCS.Dispatch(kernelVertices, Mathf.CeilToInt(widthMesh * depthMesh * 5 / 256f), 1, 1);
+
+            heightFieldCS.SetInt("g_iIdxOffset", widthMesh * depthMesh * 5);
+            heightFieldCS.SetFloat("g_fQuadSize_w", quadSize / detailScaleFactor * 3f);
+            heightFieldCS.SetFloat("g_fQuadSize_d", quadSize / detailScaleFactor * 3f);
+            heightFieldCS.SetInt("g_iWidthMesh", widthMesh * detailScaleFactor);
+            heightFieldCS.SetInt("g_iDepthMesh", depthMesh * detailScaleFactor);
+            heightFieldCS.Dispatch(kernelVertices, Mathf.CeilToInt((vertices.Length - widthMesh * depthMesh * 5) / 256f), 1, 1);
+            
+            /// compute triangle normals ----------------------------------------------------------------------------------------------------------------------------
+            heightFieldCS.Dispatch(kernelTriangles, Mathf.CeilToInt(mesh.triangles.Length / 256f), 1, 1);
+
+            /// compute vertex normals ------------------------------------------------------------------------------------------------------------------------------
+            //heightFieldCS.SetMatrix("g_f4x4TransformMatrix", Matrix4x4.Transpose(Matrix4x4.Inverse(transform.localToWorldMatrix)));
+            heightFieldCS.SetInt("g_iDepthMesh", depthMesh);
+            heightFieldCS.SetInt("g_iTriangleD", depthMesh - 1);
+            for (int i = 0; i < 5; i++)
+            {
+                heightFieldCS.SetInt("g_iIdxOffset", widthMesh * depthMesh * i);
+                heightFieldCS.SetInt("g_iOffset", (depthMesh - 1) * (widthMesh - 1) * 2 * i);
+                heightFieldCS.Dispatch(kernelNormals, Mathf.CeilToInt(widthMesh / 16f), Mathf.CeilToInt(depthMesh / 16f), 1);
+            }
+            heightFieldCS.SetInt("g_iOffset", (depthMesh - 1) * (widthMesh - 1) * 2 * 5);
+            heightFieldCS.SetInt("g_iIdxOffset", widthMesh * depthMesh * 5);
+            heightFieldCS.SetInt("g_iTriangleD", depthMesh * detailScaleFactor - detailScaleFactor + 1);
+            heightFieldCS.SetInt("g_iDepthMesh", depthMesh * detailScaleFactor);
+            heightFieldCS.Dispatch(kernelNormals, Mathf.CeilToInt(widthMesh * detailScaleFactor / 16f), Mathf.CeilToInt(depthMesh * detailScaleFactor / 16f), 1);
         }
 
+        void CreateMeshWithSubmeshes()
+        {
+            Vector3[] subMeshVertices;
+            Vector3[] offsets;
+            int[] newTriangles;
+            Vector2[] newUV;
+
+            int scale = detailScaleFactor;
+            int subM6W = (widthMesh * scale - scale + 1);
+            int subM6D = (depthMesh * scale - scale + 1);
+
+            subMeshVertices = new Vector3[widthMesh * depthMesh * 5 + subM6W * subM6D];
+            newTriangles = new int[(widthMesh - 1) * (depthMesh - 1) * 6 * 5 + (widthMesh * scale - scale) * (depthMesh * scale - scale) * 6];
+            newUV = new Vector2[subMeshVertices.Length];
+            offsets = new Vector3[6];
+
+            // 0 - widthMesh*depthMesh*3: three low detail submeshes
+            // other vertices are part of the detailed submesh
+
+            for (int i = 0; i < widthMesh; i++)
+            {
+                for (int j = 0; j < depthMesh; j++)
+                {
+                    subMeshVertices[i * depthMesh + j] = new Vector3(i * quadSize, 0.0f, j * quadSize);
+                    subMeshVertices[i * depthMesh + j + widthMesh * depthMesh * 1] = new Vector3(i * quadSize, 0.0f, j * quadSize) + new Vector3(0, 0, (depthMesh - 1)) * quadSize;
+                    subMeshVertices[i * depthMesh + j + widthMesh * depthMesh * 2] = new Vector3(i * quadSize, 0.0f, j * quadSize) + new Vector3((widthMesh - 1), 0, (depthMesh - 1)) * quadSize;
+                    subMeshVertices[i * depthMesh + j + widthMesh * depthMesh * 3] = new Vector3(i * quadSize, 0.0f, j * quadSize) + new Vector3((widthMesh - 1) * 2, 0, (depthMesh - 1)) * quadSize;
+                    subMeshVertices[i * depthMesh + j + widthMesh * depthMesh * 4] = new Vector3(i * quadSize, 0.0f, j * quadSize) + new Vector3((widthMesh - 1) * 2, 0, 0) * quadSize;
+                }
+            }
+            for (int i = 0; i < subM6W; i++)
+            {
+                for (int j = 0; j < subM6D; j++)
+                {
+                    subMeshVertices[i * subM6D + j + widthMesh * depthMesh * 5] = new Vector3(i * quadSize / scale, 0.0f, j * quadSize / scale) + new Vector3((widthMesh - 1), 0, 0) * quadSize;
+                }
+            }
+
+            int tri = 0;
+            for (int k = 0; k < 5; k++)
+            {
+                for (int i = 0; i < widthMesh - 1; i++)
+                {
+                    for (int j = 0; j < depthMesh - 1; j++)
+                    {
+                        newTriangles[tri + 2] = (i + 1) * depthMesh + (j + 1) + widthMesh * depthMesh * k;
+                        newTriangles[tri + 1] = i * depthMesh + (j + 1) + widthMesh * depthMesh * k;
+                        newTriangles[tri] = i * depthMesh + j + widthMesh * depthMesh * k;
+                        tri += 3;
+
+                        newTriangles[tri + 2] = (i + 1) * depthMesh + j + widthMesh * depthMesh * k;
+                        newTriangles[tri + 1] = (i + 1) * depthMesh + (j + 1) + widthMesh * depthMesh * k;
+                        newTriangles[tri] = i * depthMesh + j + widthMesh * depthMesh * k;
+                        tri += 3;
+                    }
+                }
+            }
+
+            for (int i = 0; i < widthMesh * scale - scale; i++)
+            {
+                for (int j = 0; j < depthMesh * scale - scale; j++)
+                {
+                    newTriangles[tri + 2] = (i + 1) * (subM6D) + (j + 1) + widthMesh * depthMesh * 5;
+                    newTriangles[tri + 1] = i * (subM6D) + (j + 1) + widthMesh * depthMesh * 5;
+                    newTriangles[tri] = i * (subM6D) + j + widthMesh * depthMesh * 5;
+                    tri += 3;
+
+                    newTriangles[tri + 2] = (i + 1) * (subM6D) + j + widthMesh * depthMesh * 5;
+                    newTriangles[tri + 1] = (i + 1) * (subM6D) + (j + 1) + widthMesh * depthMesh * 5;
+                    newTriangles[tri] = i * (subM6D) + j + widthMesh * depthMesh * 5;
+                    tri += 3;
+                }
+            }
+
+            //  initialize texture coordinates
+            for (int i = 0; i < newUV.Length; i++)
+            {
+                newUV[i] = new Vector2(subMeshVertices[i].x, subMeshVertices[i].z);
+            }
+
+            Mesh mesh = new Mesh();
+            mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+
+            mesh.MarkDynamic();
+            mesh.vertices = subMeshVertices;
+            mesh.triangles = newTriangles;
+            mesh.uv = newUV;
+            vertices = subMeshVertices;
+            mesh.RecalculateNormals();
+
+            GetComponent<MeshFilter>().mesh = mesh;
+            lastConfig = 0;
+            lastPosition = transform.position;
+            segmentConfigurations = new Vector2[6, 4];
+            float[,,] idcs = new float[,,] {
+                {{0,0},{1,-1},{0,0},{0,0} },
+                {{0,0},{2,-2},{0,-2},{0,0} },
+                {{0,0},{0,0},{0,-2},{0,0} },
+                {{0,0},{0,0},{0,-2},{-2,-2} },
+                {{0,0},{0,0},{0,0},{-1,-1} },
+                {{0,0},{0,0},{0,0},{0,0} }};
+            for (int i = 0; i < 6; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    segmentConfigurations[i, j] = new Vector2((widthMesh-1) * quadSize * idcs[i, j, 0], (depthMesh-1) * quadSize * idcs[i, j, 1]);
+                }
+            }
+        }
         //  creates mesh with flat shading
         private void CreateMesh()
         {
