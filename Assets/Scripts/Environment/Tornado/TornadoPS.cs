@@ -19,6 +19,7 @@ namespace MastersOfTempest.Environment.VisualEffects
         public VectorField vectorField;
         public Transform camPos;
 
+
         /// sort all particles with respect to the camera position each "sortEach" timestep
         [Range(1, 100)]
         public int sortEach;
@@ -26,6 +27,9 @@ namespace MastersOfTempest.Environment.VisualEffects
         public uint particelNumExp;
         [Range(0f, 1f)]
         public float dampVel;
+
+        [Range(0, 11)]
+        public int numCloudSkyParticles;
 
         public float[] maxVel;
 
@@ -76,12 +80,26 @@ namespace MastersOfTempest.Environment.VisualEffects
             particlePos = new Vector3[numberParticles];
             particleVel = new Vector3[numberParticles];
             particleIdx = new int[numberParticles];
+            float radius = 7500f;
+            float height = 1422f;
+            Vector3 center = vectorField.GetCenterWS();
+            center.y = height;
             for (int i = 0; i < numberParticles; i++)
             {
-                float x = Random.Range(0f, vectorField.GetDimensions()[0] * vectorField.GetCellSize());
-                float z = Random.Range(0f, vectorField.GetDimensions()[2] * vectorField.GetCellSize());
-                float y = Random.Range(-vectorField.GetDimensions()[1] * vectorField.GetCellSize() * 0.2f, vectorField.GetDimensions()[1] * vectorField.GetCellSize());
-                particlePos[i] = new Vector3(x, y, z);
+                if (i > Mathf.RoundToInt(Mathf.Pow(2, numCloudSkyParticles)))
+                {
+                    float x = Random.Range(0f, vectorField.GetDimensions()[0] * vectorField.GetCellSize());
+                    float z = Random.Range(0f, vectorField.GetDimensions()[2] * vectorField.GetCellSize());
+                    float y = Random.Range(-vectorField.GetDimensions()[1] * vectorField.GetCellSize() * 0.2f, vectorField.GetDimensions()[1] * vectorField.GetCellSize());
+                    particlePos[i] = new Vector3(x, y, z);
+                }
+                else
+                {
+                    do
+                    {
+                        particlePos[i] = new Vector3(Random.Range(-radius, radius), 0, Random.Range(-radius, radius)) + center;
+                    } while (Vector3.Distance(center, particlePos[i]) > radius);
+                }
                 particleIdx[i] = i;
             }
             material = GetComponent<MeshRenderer>().material;
@@ -162,6 +180,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             particlesCS.SetFloats("g_i3Dimensions", dims);
             particlesCS.SetFloats("g_vCenter", center);
             particlesCS.SetFloat("g_fDampVel", dampVel);
+            particlesCS.SetInt("g_iNumCloudSkyParticles", Mathf.RoundToInt(Mathf.Pow(2, numCloudSkyParticles)));
             particlesCS.SetFloats("g_fMaxVel", maxVel);
             particlesCS.SetFloat("g_fMaxDist", maxDist);
 
@@ -169,7 +188,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             material.SetFloat("g_fMaxHeight", dims[1] * dims[3]);
             material.SetVector("g_i3Dimensions", new Vector4(dims[0], dims[1], dims[2], dims[3]));
             material.SetVector("g_vCenter", new Vector4(center[0], center[1], center[2], 1.0f));
-
+            material.SetFloat("g_fTopHeight",  dims[1] * dims[3] * 1.05f);
             //  assume static data for compute buffers
             vectorFieldCBIn.SetData(vectorField.GetVectorField());
             particlePosCB.SetData(particlePos);
@@ -386,7 +405,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             //Graphics.DrawMesh(GetComponent<MeshFilter>().mesh, Matrix4x4.identity, GetComponent<Renderer>().material, 0, cam);
             //Graphics.DrawMeshNow()
         }*/
-        
+
         void OnApplicationQuit()
         {
             // releasing compute buffers

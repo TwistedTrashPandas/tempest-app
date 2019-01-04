@@ -21,6 +21,8 @@ namespace MastersOfTempest.Environment.Interacting
         public float spawnProbS;
         public float spawnProbZ;
 
+        public float rockRotSpeed;
+
         // for initializing a random target position around the ship
         public float minRadiusT;
         public float maxRadiusT;
@@ -192,6 +194,7 @@ namespace MastersOfTempest.Environment.Interacting
                         envObjects.Add(GameObject.Instantiate(damagingPrefabs[prefabNum], position, orientation).GetComponent<EnvObject>());
                         // hard coded so far larger rocks are slower but deal more damage
                         envObjects[envObjects.Count - 1].GetComponent<Damaging>().damage = 0.25f * randomSize;
+                        envObjects[envObjects.Count - 1].GetComponent<Rigidbody>().angularVelocity = new Vector3(Random.Range(-1f,1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f)) * rockRotSpeed;
                         envObjects[envObjects.Count - 1].speed *= 1f / randomSize;
                         //envObjects[envObjects.Count - 1].moveType = MoveType.ForceDirect; // (MoveType) Random.Range(0,3);
                         break;
@@ -199,6 +202,7 @@ namespace MastersOfTempest.Environment.Interacting
                         initialPos = new Vector3(Random.Range(0, dims.x), Random.Range(dims.y * 0.1f, 0.9f * dims.y), Random.Range(0, dims.z)) * cellSize + new Vector3(0.5f,0.5f,0.5f);
                         prefabNum = Mathf.FloorToInt(Random.Range(0f, dangerzonesPrefabs.Length - Mathf.Epsilon));
                         envObjects.Add(GameObject.Instantiate(dangerzonesPrefabs[prefabNum], initialPos, orientation).GetComponent<EnvObject>());
+                        Destroy(envObjects[envObjects.Count - 1].GetComponent<ParticleSystem>());
                         //envObjects[envObjects.Count - 1].moveType = MoveType.Static;
                         break;
                     case EnvObjectType.VoiceChatZone:
@@ -207,6 +211,7 @@ namespace MastersOfTempest.Environment.Interacting
                         envObjects.Add(GameObject.Instantiate(voiceChatZonesPrefabs[prefabNum], initialPos, orientation).GetComponent<EnvObject>());
                        // envObjects[envObjects.Count - 1].moveType = MoveType.Static;
                         envObjects[envObjects.Count - 1].GetComponent<VoiceChatZone>().Initialize();
+                        Destroy(envObjects[envObjects.Count - 1].GetComponent<ParticleSystem>());                          
                         break;
                 }
                 envObjects[envObjects.Count - 1].transform.parent = objectContainer.transform;

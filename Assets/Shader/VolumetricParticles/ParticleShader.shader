@@ -1,16 +1,15 @@
-﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
-// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
-Shader "Custom/CloudPart" {
+﻿Shader "Custom/CloudPart" {
 	Properties{
 		g_tex3DNoise("_NoiseTex", 3D) = ""  {}
 		g_tex3DParticleDensityLUT("_ParticleDensity", 3D) = ""  {}
 		g_tex3DSingleScatteringInParticleLUT("_SingleScatter", 3D) = ""  {}
 		g_tex3DMultipleScatteringInParticleLUT("_MultipleScatter", 3D) = ""  {}
-		g_fSize("Size", Range(0.1,100.0)) = 1.0
-		g_fDensity("Density", Range(0.01,100.0)) = 1
+		g_Color("Color", Color) = (1,1,1,1)
+		g_fSize("Size", Range(0.1,1000.0)) = 1.0
+		g_fSizeTop("g_fSizeTop", Range(1.0,100.0)) = 1.0
+		g_fDensity("Density", Range(0.01,1000.0)) = 1
 		g_bSize("FlexibleSize", Range(0.0,1.0)) = 0.0
+		g_fTopHeight("TopHeight", Range(0.0,10000.0)) = 0.0
 	}
 		SubShader{
 
@@ -28,10 +27,12 @@ Shader "Custom/CloudPart" {
 
 		float4 g_vCenter;
 		float g_fHeightInterp;
+		float g_fSizeTop;
 		float g_fMaxHeight;
 		float g_fBillboardSize;
 		float g_fTimeDiff;
 		float g_fTimeStepTex;
+		float g_fTopHeight;
 
 		static const float g_fCloudExtinctionCoeff = 100;
 
@@ -90,6 +91,7 @@ Shader "Custom/CloudPart" {
 		float g_fSize;
 		float g_bSize;
 		float g_fDensity;
+		float4 g_Color;
 		float4 g_f4ShipPosition;
 
 		// ---------------------------------------------------------------------------------------------------------------------------------
@@ -106,6 +108,7 @@ Shader "Custom/CloudPart" {
 		void IntersectRayWithParticle(const in SParticleAttribs ParticleAttrs,
 			const in float3 f3CameraPos,
 			const in float3 f3ViewRay,
+			const in int id,
 			out float2 f2RayIsecs,
 			out float3 f3EntryPointUSSpace, // Entry point in Unit Sphere (US) space
 			out float3 f3ViewRayUSSpace,    // View ray direction in Unit Sphere (US) space
@@ -153,6 +156,9 @@ Shader "Custom/CloudPart" {
 				float dist = distance(ParticleAttrs.f3Pos, g_f4ShipPosition.xyz) / 312.0f;
 				f3Scale = 1.0f / (g_fSize * max(min(1.0f, dist), 0.15f));
 			}
+			if (ParticleAttrs.f3Pos.y > g_fTopHeight)
+				f3Scale /= g_fSizeTop;
+
 			float3 f3ScaledCamPosObjSpace;
 			f3ScaledCamPosObjSpace = f3CamPosObjSpace.xyz * f3Scale;
 			f3ViewRayUSSpace = normalize(f3ViewRayObjSpace.xyz*f3Scale);
@@ -237,6 +243,8 @@ Shader "Custom/CloudPart" {
 				float fAmbientSSSStrength = (1 - fNoise)*0.5;//0.3;
 				f3Ambient.rgb *= lerp(1, fSubSrfScattering, fAmbientSSSStrength);
 				f4Color.rgb = (f3Ambient.rgb + (fSingleScattering + fMultipleScattering) * ParticleLighting.f4SunLight.rgb) * PI;
+				if (ParticleAttrs.f3Pos.y <= g_fTopHeight)
+					f4Color.rgb *= g_Color.rgb;
 			}
 			else
 				f4Color.rgb = 1.0f;
@@ -320,6 +328,9 @@ Shader "Custom/CloudPart" {
 				float dist = distance(p[0].vertex.xyz, g_f4ShipPosition.xyz) / 312.0f;
 				f3Size = g_fSize * max(min(1.0f, dist), 0.15f);
 			}
+			if (p[0].vertex.y >= g_fTopHeight)
+				f3Size *= g_fSizeTop;
+
 			for (int iCorner = 0; iCorner < 8; ++iCorner)
 			{
 				float4 f4CurrCornerWorldPos;
@@ -380,8 +391,7 @@ Shader "Custom/CloudPart" {
 		v2g vert(appdata v)
 		{
 			v2g o;
-			v.id = g_iIndices[v.id];
-			o.vertex = float4(g_vVertices[v.id], 1.0f);
+			o.vertex = float4(g_vVertices[g_iIndices[v.id]], 1.0f);
 			o.id = v.id;
 			return o;
 		}
@@ -392,8 +402,8 @@ Shader "Custom/CloudPart" {
 			float4 f4Color;
 			SParticleAttribs ParticleAttrs;
 			ParticleAttrs.fDensity = g_fDensity;
-			ParticleAttrs.f3Pos = g_vVertices[In.id];
-			ParticleAttrs.fRndAzimuthBias = g_vRndAzimuth[In.id];
+			ParticleAttrs.f3Pos = g_vVertices[g_iIndices[In.id]];
+			ParticleAttrs.fRndAzimuthBias = g_vRndAzimuth[g_iIndices[In.id]];
 
 			SCloudParticleLighting ParticleLighting;
 
@@ -454,7 +464,7 @@ Shader "Custom/CloudPart" {
 			float2 f2RayIsecs;
 			float fDistanceToEntryPoint, fDistanceToExitPoint;
 			float3 f3EntryPointUSSpace, f3ViewRayUSSpace, f3LightDirUSSpace;
-			IntersectRayWithParticle(ParticleAttrs,  f3CameraPos, f3ViewRay,
+			IntersectRayWithParticle(ParticleAttrs,  f3CameraPos, f3ViewRay, In.id,
 									f2RayIsecs, f3EntryPointUSSpace, f3ViewRayUSSpace,f3LightDirUSSpace,fDistanceToEntryPoint, fDistanceToExitPoint);
 
 			if (f2RayIsecs.y < 0)
@@ -487,7 +497,7 @@ Shader "Custom/CloudPart" {
 				ParticleLighting,
 				f4Color
 			);
-			UNITY_APPLY_FOG(In.fogCoord, f4Color);
+			//UNITY_APPLY_FOG(In.fogCoord, f4Color);
 			return f4Color;
 		}
 		ENDCG
@@ -539,10 +549,10 @@ Shader "Custom/CloudPart" {
 				0, 1, 0, 0,
 				0, 0, 1, 0,
 				0, 0, 0, 1
-				);/*
+				);
 				float3 forward = normalize(UNITY_MATRIX_IT_MV[2].xyz);
-				float3 right = cross(up, forward);*/
-				/*float3 f3Forward = normalize(p[0].vertex - _WorldSpaceCameraPos).xyz;
+				float3 right = cross(up, forward);
+				float3 f3Forward = normalize(p[0].vertex - _WorldSpaceCameraPos).xyz;
 				float cosAng = dot(float3(0, 0, 1), f3Forward);
 				float3 f3RotAxis = normalize(cross(float3(0, 0, 1), f3Forward));
 				if (cosAng < -1) {
@@ -563,16 +573,16 @@ Shader "Custom/CloudPart" {
 					uxy + zSin, cosAng + f3RotAxis.y*f3RotAxis.y*minCos, uyz - xSin, 0,
 					uxz - ySin, uyz + xSin, cosAng + f3RotAxis.z*f3RotAxis.z*minCos, 0,
 					0, 0, 0, 1
-					);*/
+					);
 
 					//matrix ParticleObjToProjSpaceMatr = (UNITY_MATRIX_MVP); // mul(UNITY_MATRIX_VP, mRotCamDirMatrix); // mul(ParticleObjToWorldSpaceMatr, );
-					/*matrix ParticleObjToWorldSpaceMatr;
+					matrix ParticleObjToWorldSpaceMatr;
 					ParticleObjToWorldSpaceMatr[0].xyzw = float4(1, 0, 0, 0);
 					ParticleObjToWorldSpaceMatr[1].xyzw = float4(0, 1, 0, 0);// f3Normal.xyz;
 					ParticleObjToWorldSpaceMatr[2].xyzw = float4(0, 0, 1, 0);//f3Bitangent.xyz;
 					// Add translation to particle world position
 					ParticleObjToWorldSpaceMatr[3].xyzw = p[0].vertex;
-					ParticleObjToWorldSpaceMatr = mul(UNITY_MATRIX_VP, transpose(ParticleObjToWorldSpaceMatr));*/
+					ParticleObjToWorldSpaceMatr = mul(UNITY_MATRIX_VP, transpose(ParticleObjToWorldSpaceMatr));
 
 					float3 f3Size;
 					if (g_bSize < 0.5f)
@@ -581,6 +591,7 @@ Shader "Custom/CloudPart" {
 						float dist = distance(p[0].vertex.xyz, g_f4ShipPosition.xyz) / 312.0f;
 						f3Size = g_fSize * max(min(1.0f, dist), 0.15f);
 					}
+					
 					for (int iCorner = 0; iCorner < 8; ++iCorner)
 					{
 						float4 f4CurrCornerWorldPos;
@@ -625,8 +636,8 @@ Shader "Custom/CloudPart" {
 			float4 f4Color;
 			SParticleAttribs ParticleAttrs;
 			ParticleAttrs.fDensity = g_fDensity;
-			ParticleAttrs.f3Pos = g_vVertices[In.id];
-			ParticleAttrs.fRndAzimuthBias = g_vRndAzimuth[In.id];
+			ParticleAttrs.f3Pos = g_vVertices[g_iIndices[In.id]];
+			ParticleAttrs.fRndAzimuthBias = g_vRndAzimuth[g_iIndices[In.id]];
 
 			SCloudParticleLighting ParticleLighting;
 
@@ -652,7 +663,7 @@ Shader "Custom/CloudPart" {
 			float2 f2RayIsecs;
 			float fDistanceToEntryPoint, fDistanceToExitPoint;
 			float3 f3EntryPointUSSpace, f3ViewRayUSSpace, f3LightDirUSSpace;
-			IntersectRayWithParticle(ParticleAttrs,  f3CameraPos, f3ViewRay,
+			IntersectRayWithParticle(ParticleAttrs,  f3CameraPos, f3ViewRay, In.id,
 									f2RayIsecs, f3EntryPointUSSpace, f3ViewRayUSSpace,f3LightDirUSSpace,fDistanceToEntryPoint, fDistanceToExitPoint);
 
 			if (f2RayIsecs.y < 0)
@@ -711,8 +722,7 @@ Shader "Custom/CloudPart" {
 		v2g vert(appdata v)
 		{
 			v2g o;
-			v.id = g_iIndices[v.id];
-			o.vertex = float4(g_vVertices[v.id],1.0f);// -1.42f * g_fSize * _WorldSpaceLightPos0.xyz, 1.0f);
+			o.vertex = float4(g_vVertices[g_iIndices[v.id]],1.0f);// -1.42f * g_fSize * _WorldSpaceLightPos0.xyz, 1.0f);
 			o.id = v.id;
 			return o;
 		}
@@ -723,8 +733,8 @@ Shader "Custom/CloudPart" {
 			float4 f4Color;
 			SParticleAttribs ParticleAttrs;
 			ParticleAttrs.fDensity = g_fDensity;
-			ParticleAttrs.f3Pos = g_vVertices[In.id];
-			ParticleAttrs.fRndAzimuthBias = g_vRndAzimuth[In.id];
+			ParticleAttrs.f3Pos = g_vVertices[g_iIndices[In.id]];
+			ParticleAttrs.fRndAzimuthBias = g_vRndAzimuth[g_iIndices[In.id]];
 
 			SCloudParticleLighting ParticleLighting;
 			
@@ -748,7 +758,7 @@ Shader "Custom/CloudPart" {
 			float2 f2RayIsecs;
 			float fDistanceToEntryPoint, fDistanceToExitPoint;
 			float3 f3EntryPointUSSpace, f3ViewRayUSSpace, f3LightDirUSSpace;
-			IntersectRayWithParticle(ParticleAttrs,  f3CameraPos, f3ViewRay,
+			IntersectRayWithParticle(ParticleAttrs,  f3CameraPos, f3ViewRay, In.id,
 									f2RayIsecs, f3EntryPointUSSpace, f3ViewRayUSSpace,f3LightDirUSSpace,fDistanceToEntryPoint, fDistanceToExitPoint);
 
 			if (f2RayIsecs.y == -2 && f2RayIsecs.x == -1)

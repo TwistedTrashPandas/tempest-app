@@ -230,7 +230,7 @@ void updateHeightfield(uint3 id : SV_DispatchThreadID)
 		float2 pos = float2(i - center_x, j - center_y);
 		float2 cos_sin = float2(cos(g_fTotalTime), sin(g_fTotalTime));
 		float dist = distance(pos, cos_sin) + 1.0f;
-		if (dist < 5.0f) {
+		if (dist < 4.0f) {
 			//heightFieldOut[i * g_iDepth + j].velocity += heightFieldOut[i * g_iDepth + j].velocity * 0.01f * SGNLUT[sgn_x + sgn_y * 7] * distance;
 			heightFieldOut[i * g_iDepth + j].height = 64.0f / (dist * dist);
 		}

@@ -43,7 +43,7 @@ ParticleSystemForceField:
     m_Shape: 2
     m_StartRange: 0
     m_EndRange: 800
-    m_Length: 1200
+    m_Length: 2000
     m_GravityFocus: 0
     m_RotationRandomness: {x: 0.1, y: 0.1}
     m_DirectionCurveX:
@@ -261,7 +261,7 @@ ParticleSystemForceField:
     m_RotationSpeedCurve:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 100
+      scalar: 75
       minScalar: 0
       maxCurve:
         serializedVersion: 2

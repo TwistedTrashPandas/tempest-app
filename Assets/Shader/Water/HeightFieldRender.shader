@@ -44,9 +44,9 @@ Shader "Custom/HeightFieldRender" {
 		float g_Refraction;
 		float g_lerpNormal;
 		float g_Repeat;
-		fixed4 g_Color;
-		fixed4 g_SpecColor;
-		fixed4 g_DepthColor;
+		float4 g_Color;
+		float4 g_SpecColor;
+		float4 g_DepthColor;
 
 		float g_fQuadSize;
 		int g_iDepth;
@@ -85,7 +85,7 @@ Shader "Custom/HeightFieldRender" {
 			float3 pos = v.vertex.xyz;
 			//uint idnx = ;// round(pos.x / g_fQuadSize) * g_iDepth + round(pos.z / g_fQuadSize);
 			pos = verticesPosition[v.id];
-			o.normal = verticesNormal[v.id]; // v.normal; //  
+			o.normal = normalize(verticesNormal[v.id]); // v.normal; //  
 			o.worldPos = float4(pos, 1.0f);
 			o.vertex = UnityObjectToClipPos(o.worldPos);
 			o.lightingColor = g_Color;
@@ -178,7 +178,7 @@ Shader "Custom/HeightFieldRender" {
 				#pragma fragment frag
 
 
-			fixed4 frag(v2g i) : SV_Target
+			float4 frag(v2g i) : SV_Target
 			{
 				i.normal = normalize(lerp(UnpackNormal(tex2D(g_NormalMap, i.uv)), i.normal, g_lerpNormal)); // i.normal +
 				//float3 pos = mul(UNITY_MATRIX_IT_MV, mul(unity_CameraInvProjection, i.vertex));

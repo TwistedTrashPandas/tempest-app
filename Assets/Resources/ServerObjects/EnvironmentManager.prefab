@@ -69,6 +69,7 @@ MonoBehaviour:
   spawnProbD: 0.9
   spawnProbS: 0.05
   spawnProbZ: 0.05
+  rockRotSpeed: 10
   minRadiusT: 10
   maxRadiusT: 20
   minRadiusS: 20
