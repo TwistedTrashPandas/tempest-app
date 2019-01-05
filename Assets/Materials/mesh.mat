@@ -13,7 +13,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2999
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
@@ -130,21 +130,21 @@ Material:
     - _ZWrite: 1
     - _isBending: 0
     - g_Attenuation: 2
-    - g_DepthVisible: 426
+    - g_DepthVisible: 96
     - g_DistortionFactor: 70
     - g_FoamDepth: 0
     - g_Glossiness: 0.5
     - g_Metallic: 0
     - g_PointLightIntensity: 0
-    - g_Reflection: 0.15
-    - g_Refraction: 10
-    - g_Repeat: 4096
+    - g_Reflection: 0.25
+    - g_Refraction: 0
+    - g_Repeat: 8192
     - g_Shininess: 40
     - g_directionalLight: 0
     - g_fQuadSize: 8
     - g_iDepth: 128
     - g_iWidth: 256
-    - g_lerpNormal: 1
+    - g_lerpNormal: 0.95
     m_Colors:
     - WaveSpeed: {r: 19, g: 9, b: -16, a: -7}
     - _AnimationDirection: {r: 0, g: 0, b: 0, a: 0}
@@ -172,7 +172,7 @@ Material:
     - _SpecularColor: {r: 0, g: 0, b: 0, a: 1}
     - _WavesColor: {r: 0, g: 0, b: 0, a: 0.25}
     - _WorldLightDir: {r: 0, g: 0, b: 0, a: 0}
-    - g_Color: {r: 0.2216981, g: 0.50933164, b: 1, a: 1}
-    - g_DepthColor: {r: 0.077122435, g: 0.028880388, b: 0.5566038, a: 1}
+    - g_Color: {r: 0.22169808, g: 0.5093317, b: 1, a: 1}
+    - g_DepthColor: {r: 0.0771224, g: 0.028880388, b: 0.5566037, a: 1}
     - g_LightDir: {r: 1, g: 0.9705882, b: 0.9705882, a: 1}
     - g_SpecColor: {r: 1, g: 1, b: 1, a: 1}

@@ -76,11 +76,8 @@ namespace MastersOfTempest.Environment.VisualEffects
         /// </summary>
         public float quadSize;
 
-        [Range(1, 2048)]
-        public int widthDetailedMesh;
-
-        [Range(1, 2048)]
-        public int depthDetailedMesh;
+        [Range(0.0f, 180.0f)]
+        public float angleBias;
 
         [Range(1, 2048)]
         public int detailScaleFactor;
@@ -447,21 +444,51 @@ namespace MastersOfTempest.Environment.VisualEffects
             inOutCounter = (inOutCounter + 1) % 2;
         }
 
+        bool intersectPlane(Vector3 normal, Vector3 offsetPlane, Vector3 offsetRay, Vector3 rayDirection, out float t, out Vector3 intersection)
+        {
+            // assuming vectors are all normalized
+            Vector3 intersect = new Vector3();
+            float denom = Vector3.Dot(normal, rayDirection);
+
+            if (Mathf.Abs(denom) > 1e-6)
+            {
+                Vector3 dist = offsetPlane - offsetRay;
+                t = Vector3.Dot(dist, normal) / denom;
+                intersection = offsetRay + t * rayDirection;
+                return (t >= 0);
+            }
+            intersection = intersect;
+            t = 0.0f;
+            return false;
+        }
+
         private void UpdateTransformMatrix()
         {
             transform.rotation = Quaternion.identity;
-            transform.position = new Vector3(Mathf.RoundToInt(mainCam.transform.position.x / quadSize - widthMesh * 1.5f) * quadSize, transform.position.y, Mathf.RoundToInt(mainCam.transform.position.z / quadSize -  depthMesh/2f) * quadSize);
+            float outAngle = mainCam.fieldOfView / 2f + angleBias;
+            float rayHit;
+            Vector3 ray = Vector3.Normalize(Quaternion.AngleAxis(outAngle, mainCam.transform.right) * mainCam.transform.forward);
+            Vector3 destination;
+            Vector3 intersect;
+            if (intersectPlane(Vector3.up, new Vector3(), mainCam.transform.position, ray, out rayHit, out intersect))
+            {
+                destination = intersect;
+            }
+            else
+            {
+                destination = mainCam.transform.position;
+            }
+
+            transform.position = new Vector3(Mathf.RoundToInt(destination.x / quadSize - widthMesh * 1.5f) * quadSize, transform.position.y, Mathf.RoundToInt(destination.z / quadSize - depthMesh / 2f) * quadSize);
             Vector3 look = mainCam.transform.forward;
             int idx = 0;
             if (Mathf.Abs(look.z) > Mathf.Abs(look.x))
             {
                 if (look.z > 0)
                 {
-                    //transform.RotateAround(mainCam.transform.position, Vector3.up, 0);
                 }
                 else
                 {
-                    //transform.RotateAround(mainCam.transform.position, Vector3.up, 180);
                     idx = 2;
                 }
             }
@@ -469,12 +496,10 @@ namespace MastersOfTempest.Environment.VisualEffects
             {
                 if (look.x > 0)
                 {
-                    //transform.RotateAround(mainCam.transform.position, Vector3.up, 90);
                     idx = 1;
                 }
                 else
                 {
-                    //transform.RotateAround(mainCam.transform.position, Vector3.up, 270);
                     idx = 3;
                 }
             }
@@ -485,8 +510,8 @@ namespace MastersOfTempest.Environment.VisualEffects
                 Vector2 currVec = new Vector2();
                 if (idx != lastConfig)
                 {
-                     currVec = segmentConfigurations[i, idx];
-                     currVec -= segmentConfigurations[i, lastConfig];
+                    currVec = segmentConfigurations[i, idx];
+                    currVec -= segmentConfigurations[i, lastConfig];
                 }
                 displacementMatrix[i % 4, 0 + ((int)(i / 4)) * 2] = currVec.x + transform.position.x - lastPosition.x;
                 displacementMatrix[i % 4, 1 + ((int)(i / 4)) * 2] = currVec.y + transform.position.z - lastPosition.z;
@@ -519,7 +544,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             heightFieldCS.SetInt("g_iWidthMesh", widthMesh * detailScaleFactor);
             heightFieldCS.SetInt("g_iDepthMesh", depthMesh * detailScaleFactor);
             heightFieldCS.Dispatch(kernelVertices, Mathf.CeilToInt((vertices.Length - widthMesh * depthMesh * 5) / 256f), 1, 1);
-            
+
             /// compute triangle normals ----------------------------------------------------------------------------------------------------------------------------
             heightFieldCS.Dispatch(kernelTriangles, Mathf.CeilToInt(mesh.triangles.Length / 256f), 1, 1);
 
@@ -645,7 +670,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    segmentConfigurations[i, j] = new Vector2((widthMesh-1) * quadSize * idcs[i, j, 0], (depthMesh-1) * quadSize * idcs[i, j, 1]);
+                    segmentConfigurations[i, j] = new Vector2((widthMesh - 1) * quadSize * idcs[i, j, 0], (depthMesh - 1) * quadSize * idcs[i, j, 1]);
                 }
             }
         }

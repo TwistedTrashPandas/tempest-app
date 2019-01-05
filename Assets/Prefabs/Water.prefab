@@ -55,7 +55,7 @@ MonoBehaviour:
   depthHF: 2048
   widthMesh: 256
   depthMesh: 256
-  quadSize: 32
+  quadSize: 50
   widthDetailedMesh: 0
   depthDetailedMesh: 0
   detailScaleFactor: 2
@@ -63,7 +63,7 @@ MonoBehaviour:
   gridSpacing: 2
   maxHeight: 256
   maxVelocity: 256
-  randomInitialVelocity: 25
+  randomInitialVelocity: 30
   dampingVelocity: 1
 --- !u!33 &33158592106541602
 MeshFilter:

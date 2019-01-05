@@ -16,7 +16,7 @@ Shader "Custom/HeightFieldRender" {
 		g_Reflection("Reflection", Range(0.0,1.0)) = 1.0
 		g_Shininess("Shininess", Range(0.0, 2000.0)) = 20.0
 		g_lerpNormal("Lerp Normals", Range(0.0,1.0)) = 0.9
-		g_Repeat("Tiling", Range(1, 4096)) = 16
+		g_Repeat("Tiling", Range(1, 100000)) = 16
 		g_DepthVisible("maximum Depth", Range(1.0, 1000.0)) = 1000.0
 		g_FoamDepth("maximum Foam-Depth", Range(0.0, 1.0)) = 0.1
 		g_DistortionFactor("Distortion", Range(0.0, 500.0)) = 50.0
@@ -200,6 +200,7 @@ Shader "Custom/HeightFieldRender" {
 				//reflectView.y = max(reflectView.y,0);
 				float f = tex1D(_FresnelTex, dot(reflectView, i.normal));
 				f *= f;
+				f = 0.0f;
 				//f = 1.0f - f;
 				//return float4(f, 0, 0, 1.0f);
 				//	if an object is close -> change color
