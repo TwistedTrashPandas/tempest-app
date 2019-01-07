@@ -388,7 +388,7 @@
 			#pragma geometry geom
 			#pragma fragment frag
 			#pragma multi_compile_fog
-			#pragma target 2.0
+			#pragma target 4.0
 
 		v2g vert(appdata v)
 		{
@@ -719,7 +719,7 @@
 			#pragma vertex vert
 			#pragma geometry geom
 			#pragma fragment frag
-			#pragma target 2.0
+			#pragma target 4.0
 
 		v2g vert(appdata v)
 		{
