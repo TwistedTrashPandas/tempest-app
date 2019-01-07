@@ -108,7 +108,7 @@ Shader "Custom/HeightFieldRender" {
 			half4x4 modelMatrixInverse = unity_WorldToObject;
 			half3 pos = mul(modelMatrix, half4(centerPos, 0.0f)).xyz;
 
-			half3 normalDirection = normalize(mul(half4(normal, 0.0f), modelMatrixInverse).xyz);
+			half3 normalDirection = normal;// normalize(mul(half4(normal, 1.0f), modelMatrixInverse).xyz);
 			half3 viewDirection = normalize(_WorldSpaceCameraPos - pos);
 			normalDirection = normalize(lerp(normalDirection, -viewDirection, 0.05f));
 			half3 lightDirection;

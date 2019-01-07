@@ -161,7 +161,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 1000
+  far clip plane: 100000
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -777,43 +777,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 114274567210673888, guid: 461d256a65e0b4343b1957aad13b0f57,
         type: 3}
-      propertyPath: quadSize
+      propertyPath: randomInitialVelocity
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 114274567210673888, guid: 461d256a65e0b4343b1957aad13b0f57,
+        type: 3}
+      propertyPath: angleBias
       value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 114274567210673888, guid: 461d256a65e0b4343b1957aad13b0f57,
-        type: 3}
-      propertyPath: widthHF
-      value: 1024
-      objectReference: {fileID: 0}
-    - target: {fileID: 114274567210673888, guid: 461d256a65e0b4343b1957aad13b0f57,
-        type: 3}
-      propertyPath: depthHF
-      value: 1024
       objectReference: {fileID: 0}
     - target: {fileID: 114274567210673888, guid: 461d256a65e0b4343b1957aad13b0f57,
         type: 3}
       propertyPath: widthMesh
-      value: 128
+      value: 256
       objectReference: {fileID: 0}
     - target: {fileID: 114274567210673888, guid: 461d256a65e0b4343b1957aad13b0f57,
         type: 3}
       propertyPath: depthMesh
-      value: 128
+      value: 256
       objectReference: {fileID: 0}
     - target: {fileID: 114274567210673888, guid: 461d256a65e0b4343b1957aad13b0f57,
         type: 3}
-      propertyPath: maxHeight
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 114274567210673888, guid: 461d256a65e0b4343b1957aad13b0f57,
-        type: 3}
-      propertyPath: maxVelocity
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 114274567210673888, guid: 461d256a65e0b4343b1957aad13b0f57,
-        type: 3}
-      propertyPath: randomInitialVelocity
-      value: 2
+      propertyPath: quadSize
+      value: 50
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 461d256a65e0b4343b1957aad13b0f57, type: 3}
