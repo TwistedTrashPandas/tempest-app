@@ -19,13 +19,17 @@ namespace MastersOfTempest.Environment.VisualEffects
         public VectorField vectorField;
         public Transform camPos;
 
+
         /// sort all particles with respect to the camera position each "sortEach" timestep
         [Range(1, 100)]
         public int sortEach;
-        [Range(15, 20)]
+        [Range(0, 20)]
         public uint particelNumExp;
         [Range(0f, 1f)]
         public float dampVel;
+
+        [Range(0, 11)]
+        public int numCloudSkyParticles;
 
         public float[] maxVel;
 
@@ -76,24 +80,39 @@ namespace MastersOfTempest.Environment.VisualEffects
             particlePos = new Vector3[numberParticles];
             particleVel = new Vector3[numberParticles];
             particleIdx = new int[numberParticles];
+            float radius = 7500f;
+            float height = 1422f;
+            Vector3 center = vectorField.GetCenterWS();
+            center.y = height;
             for (int i = 0; i < numberParticles; i++)
             {
-                float x = Random.Range(0f, vectorField.GetDimensions()[0] * vectorField.GetCellSize());
-                float z = Random.Range(0f, vectorField.GetDimensions()[2] * vectorField.GetCellSize());
-                float y = Random.Range(-vectorField.GetDimensions()[1] * vectorField.GetCellSize() * 0.2f, vectorField.GetDimensions()[1] * vectorField.GetCellSize());
-                particlePos[i] = new Vector3(x, y, z);
+                if (i > Mathf.RoundToInt(Mathf.Pow(2, numCloudSkyParticles)))
+                {
+                    float x = Random.Range(0f, vectorField.GetDimensions()[0] * vectorField.GetCellSize());
+                    float z = Random.Range(0f, vectorField.GetDimensions()[2] * vectorField.GetCellSize());
+                    float y = Random.Range(-vectorField.GetDimensions()[1] * vectorField.GetCellSize() * 0.2f, vectorField.GetDimensions()[1] * vectorField.GetCellSize());
+                    particlePos[i] = new Vector3(x, y, z);
+                }
+                else
+                {
+                    do
+                    {
+                        particlePos[i] = new Vector3(Random.Range(-radius, radius), 0, Random.Range(-radius, radius)) + center;
+                    } while (Vector3.Distance(center, particlePos[i]) > radius);
+                }
                 particleIdx[i] = i;
             }
             material = GetComponent<MeshRenderer>().material;
             initBuffers();
             Load3DTextures();
             CreateMesh();
-
             camPos = Camera.main.transform;
             // TODO: seperate script
             Camera.main.cullingMatrix = Matrix4x4.Ortho(-99999, 99999, -99999, 99999, 2f, 99999) *
                                 Matrix4x4.Translate(Vector3.forward * -99999 / 2f) *
                                 Camera.main.worldToCameraMatrix;
+
+            //ComputeAttenuationProperties();
         }
 
         private void initBuffers()
@@ -161,6 +180,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             particlesCS.SetFloats("g_i3Dimensions", dims);
             particlesCS.SetFloats("g_vCenter", center);
             particlesCS.SetFloat("g_fDampVel", dampVel);
+            particlesCS.SetInt("g_iNumCloudSkyParticles", Mathf.RoundToInt(Mathf.Pow(2, numCloudSkyParticles)));
             particlesCS.SetFloats("g_fMaxVel", maxVel);
             particlesCS.SetFloat("g_fMaxDist", maxDist);
 
@@ -168,7 +188,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             material.SetFloat("g_fMaxHeight", dims[1] * dims[3]);
             material.SetVector("g_i3Dimensions", new Vector4(dims[0], dims[1], dims[2], dims[3]));
             material.SetVector("g_vCenter", new Vector4(center[0], center[1], center[2], 1.0f));
-
+            material.SetFloat("g_fTopHeight",  dims[1] * dims[3] * 1.05f);
             //  assume static data for compute buffers
             vectorFieldCBIn.SetData(vectorField.GetVectorField());
             particlePosCB.SetData(particlePos);
@@ -228,35 +248,37 @@ namespace MastersOfTempest.Environment.VisualEffects
             }
             uint width = BLOCK_SIZE;
             uint height = (numberParticles / BLOCK_SIZE);
-
-            // transpose data and sort transposed columns then rows again
-            for (uint k = (BLOCK_SIZE << 1); k <= numberParticles; k <<= 1)
+            if (BLOCK_SIZE < numberParticles)
             {
-                sortCS.SetInt("k", (int)(k / BLOCK_SIZE));
-                sortCS.SetInt("g_iStage_2", (int)((k & ~numberParticles) / BLOCK_SIZE));
-                sortCS.SetInt("g_iWidth", (int)width);
-                sortCS.SetInt("g_iHeight", (int)height);
-                sortCS.SetBuffer(kernelT, "indicesRW", indicesRCB);
-                sortCS.SetBuffer(kernelT, "indices", indicesCB);
-                sortCS.DispatchIndirect(kernelT, argsBuffer3);
-                //sortCS.Dispatch(kernelT, (int)(width / TRANSPOSE_BLOCK_SIZE), (int)(height / TRANSPOSE_BLOCK_SIZE), 1);
+                // transpose data and sort transposed columns then rows again
+                for (uint k = (BLOCK_SIZE << 1); k <= numberParticles; k <<= 1)
+                {
+                    sortCS.SetInt("k", (int)(k / BLOCK_SIZE));
+                    sortCS.SetInt("g_iStage_2", (int)((k & ~numberParticles) / BLOCK_SIZE));
+                    sortCS.SetInt("g_iWidth", (int)width);
+                    sortCS.SetInt("g_iHeight", (int)height);
+                    sortCS.SetBuffer(kernelT, "indicesRW", indicesRCB);
+                    sortCS.SetBuffer(kernelT, "indices", indicesCB);
+                    sortCS.DispatchIndirect(kernelT, argsBuffer3);
+                    //sortCS.Dispatch(kernelT, (int)(width / TRANSPOSE_BLOCK_SIZE), (int)(height / TRANSPOSE_BLOCK_SIZE), 1);
 
-                sortCS.SetBuffer(kernelS, "indicesRW", indicesRCB);
-                sortCS.DispatchIndirect(kernelS, argsBuffer2);
-                //sortCS.Dispatch(kernelS, groups, 1, 1);
+                    sortCS.SetBuffer(kernelS, "indicesRW", indicesRCB);
+                    sortCS.DispatchIndirect(kernelS, argsBuffer2);
+                    //sortCS.Dispatch(kernelS, groups, 1, 1);
 
-                sortCS.SetInt("k", (int)BLOCK_SIZE);
-                sortCS.SetInt("g_iStage_2", (int)k);
-                sortCS.SetInt("g_iWidth", (int)height);
-                sortCS.SetInt("g_iHeight", (int)width);
-                sortCS.SetBuffer(kernelT, "indicesRW", indicesCB);
-                sortCS.SetBuffer(kernelT, "indices", indicesRCB);
-                sortCS.DispatchIndirect(kernelT, argsBuffer4);
-                //sortCS.Dispatch(kernelT, (int)(height / TRANSPOSE_BLOCK_SIZE), (int)(width / TRANSPOSE_BLOCK_SIZE), 1);
+                    sortCS.SetInt("k", (int)BLOCK_SIZE);
+                    sortCS.SetInt("g_iStage_2", (int)k);
+                    sortCS.SetInt("g_iWidth", (int)height);
+                    sortCS.SetInt("g_iHeight", (int)width);
+                    sortCS.SetBuffer(kernelT, "indicesRW", indicesCB);
+                    sortCS.SetBuffer(kernelT, "indices", indicesRCB);
+                    sortCS.DispatchIndirect(kernelT, argsBuffer4);
+                    //sortCS.Dispatch(kernelT, (int)(height / TRANSPOSE_BLOCK_SIZE), (int)(width / TRANSPOSE_BLOCK_SIZE), 1);
 
-                sortCS.SetBuffer(kernelS, "indicesRW", indicesCB);
-                sortCS.DispatchIndirect(kernelS, argsBuffer2);
-                // sortCS.Dispatch(kernelS, groups, 1, 1);
+                    sortCS.SetBuffer(kernelS, "indicesRW", indicesCB);
+                    sortCS.DispatchIndirect(kernelS, argsBuffer2);
+                    // sortCS.Dispatch(kernelS, groups, 1, 1);
+                }
             }
         }
 
@@ -273,16 +295,16 @@ namespace MastersOfTempest.Environment.VisualEffects
 
         private void Load3DTextures()
         {
-            Texture3D t1 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/v3/3DNoiseTex.dds", TextureFormat.Alpha8, 1), TextureFormat.Alpha8);
+            Texture3D t1 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/v4/3DNoiseTex.dds", TextureFormat.Alpha8, 1), TextureFormat.Alpha8);
             material.SetTexture("g_tex3DNoise", t1);
 
-            Texture3D t2 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/v3/Density.dds", TextureFormat.RG16, 2), TextureFormat.RGHalf);
+            Texture3D t2 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/v4/Density.dds", TextureFormat.RGHalf, 4), TextureFormat.RGHalf);
             material.SetTexture("g_tex3DParticleDensityLUT", t2);
 
-            Texture3D t3 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/v3/SingleSctr.dds", TextureFormat.RHalf, 2), TextureFormat.RHalf);
+            Texture3D t3 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/v4/SingleSctr.dds", TextureFormat.RHalf, 2), TextureFormat.RHalf);
             material.SetTexture("g_tex3DSingleScatteringInParticleLUT", t3);
 
-            Texture3D t4 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/v3/MultipleSctr.dds", TextureFormat.RHalf, 2), TextureFormat.RHalf);
+            Texture3D t4 = Tools.DDSImport.Tex2DArrtoTex3D(Tools.DDSImport.ReadAndLoadTextures(Application.dataPath + "/Textures/CloudParticles/v4/MultipleSctr.dds", TextureFormat.RHalf, 2), TextureFormat.RHalf);
             material.SetTexture("g_tex3DMultipleScatteringInParticleLUT", t4);
         }
 
@@ -357,6 +379,33 @@ namespace MastersOfTempest.Environment.VisualEffects
             material.SetFloat("g_bSize", 1.0f);
             sortEach = 1;
         }
+
+        /*
+        private void ComputeAttenuationProperties()
+        {
+            //Graphics.SetRenderTarget()
+            //RenderTexture rt = new RenderTexture(256, 256, 256, RenderTextureFormat.RFloat);
+            //Graphics.SetRenderTarget(rt);
+            RenderBuffer depth = new RenderBuffer();
+            RenderBuffer color = new RenderBuffer();
+            RenderTexture rt = new RenderTexture(1024, 1024, 1);
+            cam.depthTextureMode = DepthTextureMode.Depth;
+            ComputeBuffer bf = new ComputeBuffer(100, 1);
+            //bf.SetData(depth.GetNativeRenderBufferPtr());
+            //cam.forceIntoRenderTexture = true;
+            //cam.worldToCameraMatrix = Matrix4x4.TRS(new Vector3(), Quaternion.Euler(90, 0, 0), Vector3.zero);
+            //cam.projectionMatrix = Matrix4x4.Ortho(-320f, 320f, -320f, 320f, 0.001f, 40f);
+            //cam.SetTargetBuffers(color, depth);
+            //cam.targetTexture = rt;
+            //cam.forceIntoRenderTexture = true;
+            //cam.targetDisplay = 2;
+            //cam.Render();
+            print(Camera.main.depthTextureMode);
+            Camera.main.depthTextureMode = DepthTextureMode.Depth;
+            //Graphics.DrawMesh(GetComponent<MeshFilter>().mesh, Matrix4x4.identity, GetComponent<Renderer>().material, 0, cam);
+            //Graphics.DrawMeshNow()
+        }*/
+
         void OnApplicationQuit()
         {
             // releasing compute buffers

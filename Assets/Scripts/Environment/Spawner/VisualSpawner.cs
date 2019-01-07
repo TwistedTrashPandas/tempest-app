@@ -10,6 +10,7 @@ namespace MastersOfTempest.Environment.VisualEffects
         public bool water;
         public bool tornPS;
         public bool tornTex;
+        public bool cpuVF;
 
         public GameObject waterPrefab;
         private HeightField heightField;
@@ -19,6 +20,9 @@ namespace MastersOfTempest.Environment.VisualEffects
 
         public GameObject tornadoTexPrefab;
         private SetTornadoTexture tornadoTex;
+
+        public GameObject cpuParticleVectorFieldPrefab;
+        private GameObject cpuParticleVectorField;
 
         public void Initialize(VectorField vectorField)
         {
@@ -37,6 +41,13 @@ namespace MastersOfTempest.Environment.VisualEffects
                     //heightField.gameObject.layer = 9;
                     heightField.mainCam = Camera.main;
                     heightField.Initialize(vectorField.GetCenterWS());
+                }
+                if (cpuVF)
+                {
+                    if (cpuParticleVectorFieldPrefab == null)
+                        throw new System.InvalidOperationException("Water prefab can't be null");
+                    GameObject temp = GameObject.Instantiate(cpuParticleVectorFieldPrefab,vectorField.GetCenterWS(),Quaternion.identity);
+                    cpuParticleVectorField = temp;
                 }
 
                 if (tornPS)
