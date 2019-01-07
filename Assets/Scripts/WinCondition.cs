@@ -16,7 +16,7 @@ namespace MastersOfTempest
         protected override void StartServer()
         {
             base.StartServer();
-            //StartCoroutine(WinAfter10secs());
+            StartCoroutine(WinAfter10secs());
         }
         
         public void OnWinServer()

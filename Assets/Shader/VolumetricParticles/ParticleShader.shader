@@ -84,6 +84,7 @@
 		StructuredBuffer<float3>	g_vVertices : register(t3);
 		StructuredBuffer<float>		g_vRndAzimuth : register(t7);
 		StructuredBuffer<int>		g_iIndices : register(t5);
+		StructuredBuffer<int>		particleVisibilityRW : register(t8);
 
 
 		sampler2D _CameraDepthTexture;
@@ -271,7 +272,8 @@
 		void geom(point v2g p[1], inout TriangleStream<g2f> Out)
 		{
 			uint uiParticleId = p[0].id;
-
+			if (particleVisibilityRW[g_iIndices[uiParticleId]] == 0)
+				return;
 			// Only visible particles are sent for rendering, so there is no need to
 			// test visibility here
 			//bool bIsValid = g_VisibleParticleFlags[uiParticleId/32] & (1 << (uiParticleId&31));

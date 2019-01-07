@@ -40,6 +40,7 @@ namespace MastersOfTempest.Environment.VisualEffects
         private ComputeBuffer indicesCB;
         private ComputeBuffer indicesRCB;
         private ComputeBuffer vectorFieldCBIn;
+        private ComputeBuffer particleVisibilityCB;
 
         private ComputeBuffer argsBuffer1;
         private ComputeBuffer argsBuffer2;
@@ -50,6 +51,8 @@ namespace MastersOfTempest.Environment.VisualEffects
         private int kernelP;
         private int kernelS;
         private int kernelT;
+
+        private int kernelWA;
 
         /// amount of particles
         private uint numberParticles;
@@ -123,6 +126,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             particleinitialPosCB = new ComputeBuffer((int)numberParticles, 12);
             indicesCB = new ComputeBuffer((int)numberParticles, 4);
             indicesRCB = new ComputeBuffer((int)numberParticles, 4);
+            particleVisibilityCB = new ComputeBuffer((int)numberParticles, 4);
             vectorFieldCBIn = new ComputeBuffer(vectorField.GetAmountOfElements(), 12);
             argsBuffer1 = new ComputeBuffer(3, 4, ComputeBufferType.IndirectArguments);
             argsBuffer2 = new ComputeBuffer(3, 4, ComputeBufferType.IndirectArguments);
@@ -174,19 +178,27 @@ namespace MastersOfTempest.Environment.VisualEffects
                 idcs[i] = i;
 
             float[] rndAzimuthBias = new float[numberParticles];
+            int[] visibilityData = new int[numberParticles];
             for (int i = 0; i < rndAzimuthBias.Length; i++)
+            {
                 rndAzimuthBias[i] = Random.Range(0, Mathf.PI * 2);
+            }
+            for (int i = 0; i < visibilityData.Length; i++)
+            {
+                visibilityData[i] = 1;
+            }
 
             particlesCS.SetFloats("g_i3Dimensions", dims);
-            particlesCS.SetFloats("g_vCenter", center);
+            particlesCS.SetFloats("g_f3Center", center);
             particlesCS.SetFloat("g_fDampVel", dampVel);
             particlesCS.SetInt("g_iNumCloudSkyParticles", Mathf.RoundToInt(Mathf.Pow(2, numCloudSkyParticles)));
-            particlesCS.SetFloats("g_fMaxVel", maxVel);
+            particlesCS.SetFloats("g_f3MaxVel", maxVel);
             particlesCS.SetFloat("g_fMaxDist", maxDist);
+            particlesCS.SetInt("g_bEndAnimation", 0);
 
             material.SetFloat("g_fHeightInterp", dims[1] * dims[3] * 0.333f);
             material.SetFloat("g_fMaxHeight", dims[1] * dims[3]);
-            material.SetVector("g_i3Dimensions", new Vector4(dims[0], dims[1], dims[2], dims[3]));
+            material.SetFloatArray("g_i3Dimensions", dims);
             material.SetVector("g_vCenter", new Vector4(center[0], center[1], center[2], 1.0f));
             material.SetFloat("g_fTopHeight",  dims[1] * dims[3] * 1.05f);
             //  assume static data for compute buffers
@@ -198,11 +210,13 @@ namespace MastersOfTempest.Environment.VisualEffects
             indicesCB.SetData(idcs);
             indicesRCB.SetData(idcs);
             rndAzimuthCB.SetData(rndAzimuthBias);
+            particleVisibilityCB.SetData(visibilityData);
 
             //  assume static vector field (apart from win animation)
             particlesCS.SetBuffer(kernelP, "vectorFieldIn", vectorFieldCBIn);
             particlesCS.SetBuffer(kernelP, "particlePosRW", particlePosCB);
             particlesCS.SetBuffer(kernelP, "particleVelRW", particleVelCB);
+            particlesCS.SetBuffer(kernelP, "particleVisibilityRW", particleVisibilityCB);
             sortCS.SetBuffer(kernelS, "particlePos", particlePosCB);
             sortCS.SetBuffer(kernelS, "indicesRW", indicesCB);
             sortCS.SetBuffer(kernelT, "indices", indicesRCB);
@@ -210,6 +224,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             material.SetBuffer("g_vInitialWorldPos", particleinitialPosCB);
             material.SetBuffer("g_iIndices", indicesCB);
             material.SetBuffer("g_vRndAzimuth", rndAzimuthCB);
+            material.SetBuffer("particleVisibilityRW", particleVisibilityCB);
 
             rndAzimuthCB.Release();
         }
@@ -222,7 +237,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             randPos[0] = Random.Range(-1f, 1f);//(rnd.Next(0, 2) * 2 - 1f) * (0.25f + (float)rnd.NextDouble() * 0.5f);
             randPos[1] = Random.Range(-1f, 1f);
             randPos[2] = Random.Range(-1f, 1f);//(rnd.Next(0, 2) * 2 - 1f) * (0.25f + (float)rnd.NextDouble() * 0.5f);
-            particlesCS.SetFloats("g_fRandPos", randPos);
+            particlesCS.SetFloats("g_f3RandPos", randPos);
 
             particlesCS.DispatchIndirect(kernelP, argsBuffer1);
             // particlesCS.Dispatch(kernelP, Mathf.CeilToInt(numberParticles / 1024f), 1, 1);            
@@ -344,20 +359,13 @@ namespace MastersOfTempest.Environment.VisualEffects
         private void ToggleTargetShip(GameObject ship)
         {
             this.ship = ship;
-            targetShip = true;
+            InitWinAnimationKernel();
         }
 
-        private void UpdateVectorFieldPS()
+        private void InitWinAnimationKernel()
         {
             int kernelWA = winAnimation.FindKernel("UpdateVectorField");
             Vector3Int temp = vectorField.GetDimensions();
-            float[] pos = new float[3];
-            pos[0] = ship.transform.position.x;
-            pos[1] = ship.transform.position.y;
-            pos[2] = ship.transform.position.z;
-            //pos[0] = vectorField.GetCenterWS().x;
-            //pos[1] = vectorField.GetCenterWS().y;
-            //pos[2] = vectorField.GetCenterWS().z;
             maxVel[0] = float.MaxValue;
             maxVel[1] = float.MaxValue;
             maxVel[2] = float.MaxValue;
@@ -366,18 +374,35 @@ namespace MastersOfTempest.Environment.VisualEffects
             dims[1] = temp.y;
             dims[2] = temp.z;
             dims[3] = Mathf.RoundToInt(vectorField.GetCellSize());
-            // hard coded values so far -> TODO: add as variables
-            winAnimation.SetFloats("g_f3ShipPosition", pos);
+            particlesCS.SetInt("g_bEndAnimation", 1);
             winAnimation.SetFloat("g_fVelocityScale", 6000.0f);
             winAnimation.SetVector("g_i3Dimensions", new Vector4(dims[0], dims[1], dims[2], dims[3]));
-            winAnimation.SetBuffer(kernelWA, "vectorField", vectorFieldCBIn);
-            winAnimation.Dispatch(kernelWA, Mathf.CeilToInt(dims[0] / 8f), Mathf.CeilToInt(dims[1] / 8f), Mathf.CeilToInt(dims[2] / 8f));
-            particlesCS.SetFloats("g_fMaxVel", maxVel);
+            particlesCS.SetFloats("g_f3MaxVel", maxVel);
             particlesCS.SetFloat("g_fDampVel", 0.0f);
-            material.SetFloatArray("g_f3ShipPosition", pos);
-            material.SetVector("g_f4ShipPosition", new Vector4(pos[0], pos[1], pos[2]));
             material.SetFloat("g_bSize", 1.0f);
             sortEach = 1;
+            targetShip = true;
+        }
+
+        private void UpdateVectorFieldPS()
+        {
+            Vector3Int temp = vectorField.GetDimensions();
+            float[] dims = new float[4];
+            dims[0] = temp.x;
+            dims[1] = temp.y;
+            dims[2] = temp.z;
+            dims[3] = Mathf.RoundToInt(vectorField.GetCellSize());
+            float[] pos = new float[3];
+            pos[0] = ship.transform.position.x;
+            pos[1] = ship.transform.position.y;
+            pos[2] = ship.transform.position.z;
+            winAnimation.SetFloats("g_f3ShipPosition", pos);
+            winAnimation.SetBuffer(kernelWA, "vectorField", vectorFieldCBIn);
+            particlesCS.SetFloats("g_f3ShipPosition", pos);
+            material.SetFloatArray("g_f3ShipPosition", pos);
+            material.SetVector("g_f4ShipPosition", new Vector4(pos[0], pos[1], pos[2]));
+            // hard coded values so far -> TODO: add as variables
+            winAnimation.Dispatch(kernelWA, Mathf.CeilToInt(dims[0] / 8f), Mathf.CeilToInt(dims[1] / 8f), Mathf.CeilToInt(dims[2] / 4f));
         }
 
         /*
