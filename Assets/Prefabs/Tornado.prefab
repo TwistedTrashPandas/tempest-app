@@ -53,9 +53,9 @@ MonoBehaviour:
     type: 3}
   camPos: {fileID: 0}
   sortEach: 1
-  particelNumExp: 16
+  particelNumExp: 13
   dampVel: 0.998
-  numCloudSkyParticles: 10
+  numCloudSkyParticles: 9
   maxVel:
   - 50
   - 50
