@@ -17,8 +17,8 @@ namespace MastersOfTempest.ShipBL
             {
                 interactionAreas.Add(area, new List<ShipPart>());
             }
-            ShipPart[] shipparts = GetComponentsInChildren<ShipPart>();
 
+            ShipPart[] shipparts = GetComponentsInChildren<ShipPart>();
             if (shipparts == null)
                 throw new System.InvalidOperationException("Ship has to have at least one ship part attached");
             else
