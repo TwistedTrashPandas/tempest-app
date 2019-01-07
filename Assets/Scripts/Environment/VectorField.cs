@@ -231,6 +231,7 @@ namespace MastersOfTempest.Environment
 
         private void OnApplicationQuit()
         {
+            FileHandling.DeleteFile(currentVelFile+".meta");
             FileHandling.DeleteFile(currentVelFile);
         }
     }

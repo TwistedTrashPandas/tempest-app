@@ -550,7 +550,9 @@ namespace MastersOfTempest.Environment.VisualEffects
             heightFieldCS.SetInt("g_iDepthMesh", depthMesh * detailScaleFactor);
             heightFieldCS.Dispatch(kernelVertices, Mathf.CeilToInt((vertices.Length - widthMesh * depthMesh * 5) / 256f), 1, 1);
             
+            /// interpolate vertices of detailed submesh ------------------------------------------------------------------------------------------------------------
             heightFieldCS.Dispatch(kernelVerticesEdges, Mathf.CeilToInt((vertices.Length - widthMesh * depthMesh * 5) / 256f), 1, 1);
+
             /// compute triangle normals ----------------------------------------------------------------------------------------------------------------------------
             heightFieldCS.Dispatch(kernelTriangles, Mathf.CeilToInt(mesh.triangles.Length / 256f), 1, 1);
 
@@ -738,7 +740,7 @@ namespace MastersOfTempest.Environment.VisualEffects
 
         private void CreatePlaneMesh()
         {
-            planeMesh = GetComponent<MeshFilter>().mesh;
+            planeMesh = new Mesh();// GetComponent<MeshFilter>().mesh;
             //  create plane mesh for reflection
             Vector3[] planeVertices = new Vector3[4];
             Vector3[] planeNormals = new Vector3[4];

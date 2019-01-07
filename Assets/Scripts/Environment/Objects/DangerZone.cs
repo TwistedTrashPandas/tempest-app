@@ -50,7 +50,6 @@ namespace MastersOfTempest.Environment.Interacting
                         ship.GetCurrenStatus().Condition &= ~ShipCondition.Freezing;
                     }
                     break;
-                    break;
                 case DangerZoneType.Fragile:
                     if (other.gameObject.tag == "Ship")
                     {
