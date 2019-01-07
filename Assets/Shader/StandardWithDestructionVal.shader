@@ -1,6 +1,6 @@
 ﻿// Unity built-in shader source. Copyright (c) 2016 Unity Technologies. MIT license (see license.txt)
 
-Shader "Custom/StandardVertexDisplacement"
+Shader "Custom/StandardWithDestructionVal"
 {
 	Properties
 	{
@@ -39,7 +39,7 @@ Shader "Custom/StandardVertexDisplacement"
 
 		[Enum(UV0,0,UV1,1)] _UVSec("UV Set for secondary textures", Float) = 0
 
-		_fDestruction("Destruction", Range(0.0, 1.0)) = 1.0
+		_fDestruction("Destruction", Range(0.0, 1.0)) = 0.0
 		_fMaxDistance("MaxDistance", Float) = 10.0
 
 			// Blending state
@@ -92,14 +92,17 @@ Shader "Custom/StandardVertexDisplacement"
 
 			//#pragma vertex vertBase
 			#pragma vertex vert
-			#pragma fragment fragBase
+			#pragma fragment frag
 			#include "UnityStandardCoreForward.cginc"
 			float _fDestruction;
 			float _fMaxDistance;
 
 			VertexOutputForwardBase vert(in VertexInput v) {
-				//v.vertex.xyz -=  * _fDestruction * _fMaxDistance; // min(g_f4ImpulseDirection.w, g_fMaxDistance);
 				return vertForwardBase(v);
+			}
+
+			half4 frag(VertexOutputForwardBase i) : SV_TARGET{
+				return lerp(fragForwardBaseInternal(i), half4(1.0f,0.0f,0.0f,1.0f), _fDestruction / 4.0f);
 			}
 			ENDCG
 		}

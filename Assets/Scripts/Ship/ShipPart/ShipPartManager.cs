@@ -56,5 +56,27 @@ namespace MastersOfTempest.ShipBL
             }
             return result / num;
         }
+
+        public void ChangeShaderDestructionValue()
+        {
+            foreach (List<ShipPart> partList in interactionAreas.Values)
+            {
+                for (int i = 0; i < partList.Count; i++)
+                {
+                    partList[i].ChangeShaderDestructionValue();                    
+                }
+            }
+        }
+
+        public void ResetShaderDestructionValue()
+        {
+            foreach (List<ShipPart> partList in interactionAreas.Values)
+            {
+                for (int i = 0; i < partList.Count; i++)
+                {
+                    partList[i].ResetShaderDestructionValue();
+                }
+            }
+        }
     }
 }

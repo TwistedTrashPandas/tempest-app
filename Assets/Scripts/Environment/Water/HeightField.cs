@@ -128,6 +128,7 @@ namespace MastersOfTempest.Environment.VisualEffects
         private uint[] environment;
         private int kernel;                     ///   kernel for computeshader
         private int kernelVertices;
+        private int kernelVerticesEdges;
         private int kernelTriangles;
         private int kernelNormals;
 
@@ -150,7 +151,7 @@ namespace MastersOfTempest.Environment.VisualEffects
 
         private void Start()
         {
-            //Initialize(Vector3.zero);
+            Initialize(Vector3.zero);
         }
 
         public void Initialize(Vector3 midPosition)
@@ -167,6 +168,7 @@ namespace MastersOfTempest.Environment.VisualEffects
                 gameObject.AddComponent<CreateReflectionTexture>();
                 crt = GetComponent<CreateReflectionTexture>();
             }
+            mainCam = Camera.main;
             mainCam.depthTextureMode = DepthTextureMode.Depth;
 
             CreatePlaneMesh();
@@ -344,6 +346,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             //  get corresponding kernel index
             kernel = heightFieldCS.FindKernel("updateHeightfield");
             kernelVertices = heightFieldCS.FindKernel("interpolateVertices");
+            kernelVerticesEdges = heightFieldCS.FindKernel("interpolateVerticesEdges");
             kernelTriangles = heightFieldCS.FindKernel("calcNormTriangles");
             kernelNormals = heightFieldCS.FindKernel("averageNormVertices");
             //  set constants
@@ -351,6 +354,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             heightFieldCS.SetInt("g_iDepthMesh", depthMesh);
             heightFieldCS.SetInt("g_iWidth", widthHF);
             heightFieldCS.SetInt("g_iWidthMesh", widthMesh);
+            heightFieldCS.SetInt("g_iScale", detailScaleFactor);
             heightFieldCS.SetFloat("g_fGridSpacing", gridSpacing); // could be changed to quadSize, but does not yield good results
 
             material.SetFloat("g_fQuadSize", quadSize);
@@ -364,6 +368,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             heightFieldCS.SetBuffer(kernelVertices, "heightFieldIn", heightFieldCB);
             heightFieldCS.SetBuffer(kernelVertices, "verticesPosition", verticesCB);
             heightFieldCS.SetBuffer(kernelVertices, "randomDisplacement", randomXZ);
+            heightFieldCS.SetBuffer(kernelVerticesEdges, "verticesPosition", verticesCB);
 
             heightFieldCS.SetBuffer(kernelTriangles, "triangles", trianglesRCB);
             heightFieldCS.SetBuffer(kernelTriangles, "verticesPosition", verticesCB);
@@ -544,7 +549,8 @@ namespace MastersOfTempest.Environment.VisualEffects
             heightFieldCS.SetInt("g_iWidthMesh", widthMesh * detailScaleFactor);
             heightFieldCS.SetInt("g_iDepthMesh", depthMesh * detailScaleFactor);
             heightFieldCS.Dispatch(kernelVertices, Mathf.CeilToInt((vertices.Length - widthMesh * depthMesh * 5) / 256f), 1, 1);
-
+            
+            heightFieldCS.Dispatch(kernelVerticesEdges, Mathf.CeilToInt((vertices.Length - widthMesh * depthMesh * 5) / 256f), 1, 1);
             /// compute triangle normals ----------------------------------------------------------------------------------------------------------------------------
             heightFieldCS.Dispatch(kernelTriangles, Mathf.CeilToInt(mesh.triangles.Length / 256f), 1, 1);
 

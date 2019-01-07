@@ -1,4 +1,6 @@
-﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
 
 // Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
 // Upgrade NOTE: replaced '_World2Object' with 'unity_WorldToObject'
@@ -90,7 +92,7 @@ Shader "Custom/HeightFieldRender" {
 			o.vertex = mul(UNITY_MATRIX_VP, o.worldPos); // UnityObjectToClipPos
 			o.lightingColor = g_Color;
 			o.projPos = ComputeScreenPos(o.vertex);
-			o.projPos.z = -mul(UNITY_MATRIX_V, pos).z;// UnityObjectToViewPos(pos).z;
+			o.projPos.z = -mul(UNITY_MATRIX_V, o.worldPos).z;// UnityObjectToViewPos(pos).z;
 			o.refl = ComputeNonStereoScreenPos(o.vertex);
 
 			float maxWidth = g_fQuadSize / g_Repeat;
@@ -104,9 +106,9 @@ Shader "Custom/HeightFieldRender" {
 		half4 lighting(half3 centerPos, half3 normal, out float3 reflection) {
 			half4x4 modelMatrix = unity_ObjectToWorld;
 			half4x4 modelMatrixInverse = unity_WorldToObject;
-			half3 pos = mul(modelMatrix, half4(centerPos, 1.0f)).xyz;
+			half3 pos = mul(modelMatrix, half4(centerPos, 0.0f)).xyz;
 
-			half3 normalDirection = normalize(mul(half4(normal, 1.0f), modelMatrixInverse).xyz);
+			half3 normalDirection = normalize(mul(half4(normal, 0.0f), modelMatrixInverse).xyz);
 			half3 viewDirection = normalize(_WorldSpaceCameraPos - pos);
 			normalDirection = normalize(lerp(normalDirection, -viewDirection, 0.05f));
 			half3 lightDirection;
@@ -183,7 +185,6 @@ Shader "Custom/HeightFieldRender" {
 				i.normal = normalize(lerp(UnpackNormal(tex2D(g_NormalMap, i.uv)), i.normal, g_lerpNormal)); // i.normal +
 				//float3 pos = mul(UNITY_MATRIX_IT_MV, mul(unity_CameraInvProjection, i.vertex));
 				float3 reflectView;
-				i.lightingColor = lighting(i.worldPos, i.normal, reflectView);
 				//fixed shadow = SHADOW_ATTENUATION(i);
 				//	load stored z-value
 				float depth = i.projPos.z;
@@ -192,6 +193,12 @@ Shader "Custom/HeightFieldRender" {
 				float4 uv1 = i.refl;
 				uv1.xy -= i.normal.zx * g_DistortionFactor;
 				float4 refl = tex2Dproj(_ReflectionTex, UNITY_PROJ_COORD(uv1));
+
+				//float fDepth = 1.0f - (In.projPos.z);// 1.0f - Linear01Depth(tex2D(_CameraDepthTexture, uv));
+				//float4 f4ReconstructedPosWS = mul(UNITY_MATRIX_I_V, float4(In.projPos.xyz, 1.0));
+				//float3 f3WorldPos = f4ReconstructedPosWS.xyz / f4ReconstructedPosWS.w;
+
+				i.lightingColor = lighting(i.worldPos, i.normal, reflectView);
 
 				half3 refracted = i.normal * abs(i.normal);
 				//half3 refracted = refract( i.normal, half3(0,0,1), 1.333 );

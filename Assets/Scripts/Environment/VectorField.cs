@@ -52,12 +52,12 @@ namespace MastersOfTempest.Environment
         private void LoadVectorFieldFromFile(int fileIndex)
         {
             // decompress uni file
-            string uni_name = Application.dataPath + uniFilePath + fileName + fileIndex.ToString("D" + 4) + ".uni";
+            string uni_name = Application.streamingAssetsPath + uniFilePath + fileName + fileIndex.ToString("D" + 4) + ".uni";
             FileInfo inf = new FileInfo(uni_name);
             FileHandling.Decompress(inf);
 
             // load decompressed file
-            string file_name = Application.dataPath + uniFilePath + fileName + fileIndex.ToString("D" + 4);
+            string file_name = Application.streamingAssetsPath + uniFilePath + fileName + fileIndex.ToString("D" + 4);
             currentVelFile = file_name;
             inf = new FileInfo(file_name);
             byte[] buffer = FileHandling.ReadFile(inf, header_size + grid_size + 4);

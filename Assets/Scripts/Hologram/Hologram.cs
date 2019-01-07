@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using MastersOfTempest.ShipBL;
 
 public class Hologram : MonoBehaviour
 {
@@ -12,16 +13,23 @@ public class Hologram : MonoBehaviour
 
     public float distance = 20;
 
+    public ShipPartManager shipPartManager;
     private Camera mainCamera;
     private bool renderTextureToggle = true;
 
     private void Start()
     {
         mainCamera = Camera.main;
+        hologramCamera.enabled = false;
+        shipPartManager = FindObjectOfType<ShipPartManager>();
     }
 
     private void Update ()
     {
+        hologramCamera.Render();
+
+        shipPartManager.ChangeShaderDestructionValue();
+
         // Orient the hologram that its always facing the main camera
         transform.LookAt(mainCamera.transform);
         transform.forward *= -1;
@@ -34,5 +42,7 @@ public class Hologram : MonoBehaviour
         // Switch render texture between depth and color
         renderTextureToggle = !renderTextureToggle;
         hologramCamera.targetTexture = renderTextureToggle ? hologramColor : hologramDepth;
-	}
+
+        shipPartManager.ResetShaderDestructionValue();
+    }
 }
