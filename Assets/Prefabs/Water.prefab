@@ -51,17 +51,17 @@ MonoBehaviour:
   heightFieldCS: {fileID: 7200000, guid: 4953ade53a221db458950ff31d7297c6, type: 3}
   mainCam: {fileID: 0}
   maxRandomDisplacement: 0
-  widthHF: 1024
-  depthHF: 1024
+  widthHF: 512
+  depthHF: 512
   widthMesh: 128
   depthMesh: 128
-  quadSize: 100
+  quadSize: 50
   angleBias: 0
   detailScaleFactor: 2
   speed: 6
   gridSpacing: 2
   maxHeight: 256
-  maxVelocity: 256
+  maxVelocity: 225
   randomInitialVelocity: 30
   dampingVelocity: 1
 --- !u!33 &33158592106541602

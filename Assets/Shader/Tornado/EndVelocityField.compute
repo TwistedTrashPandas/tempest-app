@@ -7,7 +7,7 @@ float3 g_f3ShipPosition;
 float g_fVelocityScale;
 float4 g_i3Dimensions;
 
-[numthreads(8, 8, 8)]
+[numthreads(8, 8, 4)]
 void UpdateVectorField(uint3 id : SV_DispatchThreadID)
 {
 	float3 worldPos = (((float3)id) + float3(0.5f,0.5f,0.5f))* g_i3Dimensions.w;

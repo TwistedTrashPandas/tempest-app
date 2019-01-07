@@ -484,7 +484,7 @@ namespace MastersOfTempest.Environment.VisualEffects
                 destination = mainCam.transform.position;
             }
 
-            transform.position = new Vector3(Mathf.RoundToInt(destination.x / quadSize - widthMesh * 1.5f) * quadSize, transform.position.y, Mathf.RoundToInt(destination.z / quadSize - depthMesh / 2f) * quadSize);
+            transform.position = new Vector3(Mathf.RoundToInt(destination.x / quadSize - widthMesh * 1.5f) * quadSize, transform.position.y, Mathf.RoundToInt(destination.z / quadSize - depthMesh / 5f) * quadSize);
             Vector3 look = mainCam.transform.forward;
             int idx = 0;
             if (Mathf.Abs(look.z) > Mathf.Abs(look.x))
