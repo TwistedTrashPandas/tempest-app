@@ -9,7 +9,7 @@ namespace MastersOfTempest.PlayerControls
     {
         public Camera DirectionCamera;
 
-        private const float speed = .5f;
+        private const float speed = .1f;
         private TransformManipulator transformManipulator;
         private bool isActive = true;
         public bool Active
@@ -36,12 +36,12 @@ namespace MastersOfTempest.PlayerControls
         {
             if(isActive)
             {
-                var position = transform.position;
-                var positionChange = speed * (Input.GetAxis("Horizontal") * DirectionCamera.transform.right + Input.GetAxis("Vertical") * DirectionCamera.transform.forward);
+                var position = transform.localPosition;
+                var positionChange = speed * (-Input.GetAxis("Vertical") * DirectionCamera.transform.right + Input.GetAxis("Horizontal") * DirectionCamera.transform.forward);
                 //We don't want our players to float around
                 positionChange.y = 0f;
                 position += positionChange;
-                if(position != transform.position)
+                if(position != transform.localPosition)
                 {
                     transformManipulator.ChangePosition(position);
                 }
