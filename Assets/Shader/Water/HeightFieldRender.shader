@@ -97,7 +97,7 @@ Shader "Custom/HeightFieldRender" {
 			float maxDepth = g_iDepth * maxWidth;
 			maxWidth *= g_iWidth;
 			o.uv = float2(pos.x / (maxWidth), pos.z / (maxDepth));
-			TRANSFER_SHADOW(o);
+			//TRANSFER_SHADOW(o);
 			return o;
 		}
 

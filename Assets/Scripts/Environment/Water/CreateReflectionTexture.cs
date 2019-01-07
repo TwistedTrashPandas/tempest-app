@@ -32,7 +32,7 @@ public class CreateReflectionTexture : MonoBehaviour
 
         clipPlaneOffset = cPO;
 
-        Camera cam = Camera.current;
+        Camera cam = Camera.main;
         if (!cam)
         {
             return;
