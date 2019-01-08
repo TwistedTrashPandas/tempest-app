@@ -21,7 +21,9 @@ public class Hologram : MonoBehaviour
     {
         mainCamera = Camera.main;
         hologramCamera.enabled = false;
-        shipPartManager = FindObjectOfType<ShipPartManager>();
+        shipPartManager = GetComponentInParent<ShipPartManager>();
+        if(shipPartManager == null)
+            shipPartManager = FindObjectOfType<ShipPartManager>();
     }
 
     private void Update ()
