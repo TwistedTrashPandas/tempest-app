@@ -55,7 +55,7 @@ namespace MastersOfTempest.PlayerControls
 
             //Create a message UI element to show hints to player
             interactionsController = gameObject.AddComponent<InteractionsController>();
-            interactionsController.Setup(CameraDirectionController.FirstPersonCamera, 2.0f, InteractionCheck);
+            interactionsController.Setup(CameraDirectionController.FirstPersonCamera, float.MaxValue, InteractionCheck);
             interactionsController.NewInteractable += OnNewInteractable;
             interactionsController.PlayerInteracted += OnPlayerInteracted;
             interactionsController.LostSight += OnLostSight;
@@ -66,8 +66,6 @@ namespace MastersOfTempest.PlayerControls
             // Make sure that the hands are visible
             firstPersonCamera.nearClipPlane = 0.01f;
 
-            // TDOD: For repairing: Call AddDestruction with negative value on all parts in the ShipPartManager interaction area
-
             var highlighter = gameObject.AddComponent<InteractionsHighlighter>();
             highlighter.InteractionsController = interactionsController;
         }
@@ -77,19 +75,31 @@ namespace MastersOfTempest.PlayerControls
             return Input.GetKeyDown(interactionKey);
         }
 
-        private void OnNewInteractable(object sender, EventArgs e)
+        private void OnNewInteractable(object sender, EventArgs args)
         {
             Debug.Log(nameof(OnNewInteractable));
         }
 
-        private void OnPlayerInteracted(object sender, EventArgs e)
+        private void OnPlayerInteracted(object sender, EventArgs args)
         {
             Debug.Log(nameof(OnPlayerInteracted));
+            TriggerActionEvent(new ActionMadeEventArgs(((InteractionEventArgs)args).InteractableObject.GetAction()));
         }
 
         private void OnLostSight(object sender, EventArgs e)
         {
             Debug.Log(nameof(OnLostSight));
+        }
+
+        public void Teleport (TeleportArea target)
+        {
+            Debug.Log("TODO: Teleport to " + target.name);
+        }
+
+        public void Repair (RepairArea target)
+        {
+            // TODO: For repairing: Call AddDestruction with negative value on all parts in the ShipPartManager interaction area on the server only
+            Debug.Log("TODO: Repair " + target.name);
         }
     }
 }
