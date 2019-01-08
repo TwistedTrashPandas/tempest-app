@@ -197,8 +197,11 @@ namespace MastersOfTempest.Environment.Interacting
                         envObjects[envObjects.Count - 1].GetComponent<Damaging>().damage = 0.1f * randomSize;
                         envObjects[envObjects.Count - 1].GetComponent<Rigidbody>().angularVelocity = new Vector3(Random.Range(-1f,1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f)) * rockRotSpeed;
                         envObjects[envObjects.Count - 1].speed *= 1f / randomSize;
-                        if(Random.Range(0,10) == 0)
+                        if (Random.Range(0, 10) == 0)
+                        {
                             envObjects[envObjects.Count - 1].moveType = MoveType.Direct; // (MoveType) Random.Range(0,3);
+                            envObjects[envObjects.Count - 1].speed *= 0.4f;
+                        }
                         else
                             envObjects[envObjects.Count - 1].moveType = MoveType.ForceDirect; // (MoveType) Random.Range(0,3);
                         break;
