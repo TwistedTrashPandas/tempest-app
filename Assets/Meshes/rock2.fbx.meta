@@ -1,21 +1,25 @@
 fileFormatVersion: 2
-guid: 7aa3487d7a038c349b6080f2319ab921
+guid: 932a6880ee4f00c41b847af01a84dc04
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: Cube.001
+    100000: Rock1
     100002: //RootNode
-    400000: Cube.001
+    400000: Rock1
     400002: //RootNode
-    2100000: Material
-    2100002: No Name
-    2300000: Cube.001
+    2100000: Rock
+    2300000: Rock1
     2300002: //RootNode
-    3300000: Cube.001
+    3300000: Rock1
     3300002: //RootNode
     4300000: Rock
-    4300002: Cube.001
-  externalObjects: {}
+    4300002: Rock1
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Rock
+    second: {fileID: 2100000, guid: bb7d04b9025c0564ab2c50324fb56e6d, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -49,6 +53,7 @@ ModelImporter:
     globalScale: 1
     meshCompression: 0
     addColliders: 0
+    useSRGBMaterialColor: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
@@ -73,6 +78,9 @@ ModelImporter:
     normalImportMode: 0
     tangentImportMode: 3
     normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
   importAnimation: 1
   copyAvatar: 0
   humanDescription:

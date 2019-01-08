@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 29ab4209dd5a92649847060b3b3c2b4f
+guid: 372bc72f74396af48bbc341c344e7b24
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
@@ -122,32 +122,34 @@ ModelImporter:
     2100000: Hand
     4300000: Hand_rigged
     4300002: Hand_rigged.001
-    7400000: Armature|IdleBigHammerLeft
-    7400002: Armature|IdleBigHammerRight.001
+    7400000: Left_IdleBigHammer
+    7400002: IdleBigHammerRight.001
     7400004: Armature|IdleLeft
-    7400006: Armature|IdleWithHammer
-    7400008: Armature|IdleWithoutHammer
-    7400010: Armature|MeditateLeft
-    7400012: Armature|MeditateRight
-    7400014: Armature|Repair
-    7400016: Armature|Throw
+    7400006: Left_IdleWithHammer
+    7400008: Left_IdleWithoutHammer
+    7400010: Left_Meditate
+    7400012: Right_Meditate
+    7400014: Left_Repair
+    7400016: Left_Throw
     7400018: Armature|ThrowBigHammerLeft
     7400020: Armature|ThrowBigHammerRight
-    7400022: Armature|WalkaBigHammerLeft
+    7400022: Left_WalkWithHammer
     7400024: Armature|WalkBigHammerRight
     7400026: Armature.001|IdleBigHammerLeft
     7400028: Armature.001|IdleBigHammerRight.001
     7400030: Armature.001|IdleLeft
-    7400032: Armature.001|IdleWithHammer
-    7400034: Armature.001|IdleWithoutHammer
-    7400036: Armature.001|MeditateLeft
-    7400038: Armature.001|MeditateRight
-    7400040: Armature.001|Repair
-    7400042: Armature.001|Throw
+    7400032: Right_IdleWithHammer
+    7400034: Right_IdleWithoutHammer
+    7400036: Right_Meditate
+    7400038: Right_Meditate
+    7400040: Right_Repair
+    7400042: Right_Throw
     7400044: Armature.001|ThrowBigHammerLeft
     7400046: Armature.001|ThrowBigHammerRight
     7400048: Armature.001|WalkaBigHammerLeft
-    7400050: Armature.001|WalkBigHammerRight
+    7400050: Right_WalkWithHammer
+    7400052: Left_Meditate
+    7400054: Armature.001|MeditateLeft
     9500000: //RootNode
     13700000: Hand_rigged
     13700002: Hand_rigged.001
@@ -156,7 +158,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Hand
-    second: {fileID: 2100000, guid: e9bcce3e7f292e6478717e587c08bd0d, type: 2}
+    second: {fileID: 2100000, guid: 8ab6cc761130b864590291a6c327154b, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -183,7 +185,175 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Right_IdleWithHammer
+      takeName: Armature.001|IdleWithHammer
+      firstFrame: 0
+      lastFrame: 36
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Right_Meditate
+      takeName: Armature.001|MeditateRight
+      firstFrame: 0
+      lastFrame: 36
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Right_Repair
+      takeName: Armature.001|Repair
+      firstFrame: 0
+      lastFrame: 30
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Right_Throw
+      takeName: Armature.001|Throw
+      firstFrame: 0
+      lastFrame: 28
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Right_WalkWithHammer
+      takeName: Armature.001|WalkBigHammerRight
+      firstFrame: 0
+      lastFrame: 36
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Left_Meditate
+      takeName: Armature|MeditateLeft
+      firstFrame: 0
+      lastFrame: 36
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []

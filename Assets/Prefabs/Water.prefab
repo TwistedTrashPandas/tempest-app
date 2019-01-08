@@ -53,14 +53,16 @@ MonoBehaviour:
   maxRandomDisplacement: 0
   widthHF: 512
   depthHF: 512
-  widthMesh: 256
-  depthMesh: 256
-  quadSize: 32
-  speed: 6
+  widthMesh: 128
+  depthMesh: 128
+  quadSize: 100
+  angleBias: 10
+  detailScaleFactor: 2
+  speed: 7
   gridSpacing: 2
   maxHeight: 256
   maxVelocity: 256
-  randomInitialVelocity: 20
+  randomInitialVelocity: 75
   dampingVelocity: 1
 --- !u!33 &33158592106541602
 MeshFilter:

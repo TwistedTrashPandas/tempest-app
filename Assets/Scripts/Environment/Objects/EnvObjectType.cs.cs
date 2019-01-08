@@ -4,7 +4,7 @@
     {
         Damaging,
         DangerZone,
-        Supporting,
+        VoiceChatZone,
         Null
     };
 }

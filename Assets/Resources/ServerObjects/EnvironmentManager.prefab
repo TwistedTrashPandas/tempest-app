@@ -62,26 +62,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b481b83ab7320c43aa7cabceab2dbc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnRate: 1
-  dampingFactorVel: 0.99
+  spawnRate: 0.8
+  dampingFactorVel: 0.992
   dampingFactorForce: 0
-  maximumObjVelocity: 50
-  spawnProbD: 0.85
-  spawnProbS: 0
-  spawnProbZ: 0.15
-  minRadiusT: 10
-  maxRadiusT: 20
-  minRadiusS: 20
-  maxRadiusS: 30
-  maxNumObjects: 50
+  maximumObjVelocity: 75
+  spawnProbD: 0.95
+  spawnProbS: 0.025
+  spawnProbZ: 0.025
+  rockRotSpeed: 2
+  minRadiusT: 25
+  maxRadiusT: 30
+  minRadiusS: 25
+  maxRadiusS: 2000
+  maxNumObjects: 100
   vectorField: {fileID: 114404567317752372}
   damagingPrefabs:
   - {fileID: 1476894203371464, guid: e8c9d0a525a3e1b4fba9d4d419b35e72, type: 3}
   - {fileID: 1473021519196324, guid: d2ea04b96bcf76a4abf3fcf4663245d4, type: 3}
   - {fileID: 1451282214639288, guid: 45662c2cd8889d74f825b663d26232c5, type: 3}
-  supportingPrefabs: []
+  voiceChatZonesPrefabs:
+  - {fileID: 6472999409991677478, guid: 022bda4f43498ab4d8b6a1792b73082e, type: 3}
+  - {fileID: 5946238099791307110, guid: 72eebf74c3196aa4e82eaadf1dcf4ba7, type: 3}
+  - {fileID: 3513923623782340462, guid: 7da4671c7d1fa3b469959ce7b61f8325, type: 3}
+  - {fileID: 3818613815823630333, guid: 6d5db02eecf980d47b2cf95e4be6b8d6, type: 3}
   dangerzonesPrefabs:
   - {fileID: 1202199791458096, guid: 961a3386c9e651c4b86b0edd6a7b053a, type: 3}
+  - {fileID: 6612684141440016296, guid: 38b247de81805ec4780f851ae4f5ceca, type: 3}
   moveType: 2
   objectContainerPrefab: {fileID: 1334662344385884, guid: cfec9bd99247e5e4784599f46b23cc50,
     type: 3}
@@ -100,11 +106,14 @@ MonoBehaviour:
   water: 1
   tornPS: 1
   tornTex: 0
+  cpuVF: 1
   waterPrefab: {fileID: 1380528100157064, guid: 461d256a65e0b4343b1957aad13b0f57,
     type: 3}
   tornadoPrefab: {fileID: 1726956007735904, guid: 530d645634bb68d43b9b110b138843ec,
     type: 3}
   tornadoTexPrefab: {fileID: 1598541368082440, guid: 7e3e1d09affcc294382fdf827144ec32,
+    type: 3}
+  cpuParticleVectorFieldPrefab: {fileID: 1332814615016699858, guid: f12ddf854c3afd842b039ff80beb2476,
     type: 3}
 --- !u!114 &114801461701559052
 MonoBehaviour:
@@ -140,8 +149,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   f_cellSize: 4
+  f_cellSize_horizontal: 16
   v3_dimensions: {x: 152, y: 312, z: 152}
   loadFromFile: 1
   vectorFieldFileNum: 999
-  velScale: 50
-  yVelScale: 0.75
+  velScale: 75
+  yVelScale: 1

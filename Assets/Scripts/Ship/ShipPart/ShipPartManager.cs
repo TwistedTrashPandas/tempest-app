@@ -7,7 +7,7 @@ namespace MastersOfTempest.ShipBL
 {
     public class ShipPartManager : MonoBehaviour
     {
-        private Dictionary<ShipPartArea, List<ShipPart>> interactionAreas;
+        public Dictionary<ShipPartArea, List<ShipPart>> interactionAreas { get; private set; }
 
         void Start()
         {
@@ -17,8 +17,8 @@ namespace MastersOfTempest.ShipBL
             {
                 interactionAreas.Add(area, new List<ShipPart>());
             }
-            ShipPart[] shipparts = GetComponentsInChildren<ShipPart>();
 
+            ShipPart[] shipparts = GetComponentsInChildren<ShipPart>();
             if (shipparts == null)
                 throw new System.InvalidOperationException("Ship has to have at least one ship part attached");
             else
@@ -55,6 +55,28 @@ namespace MastersOfTempest.ShipBL
                 }
             }
             return result / num;
+        }
+
+        public void ChangeShaderDestructionValue()
+        {
+            foreach (List<ShipPart> partList in interactionAreas.Values)
+            {
+                for (int i = 0; i < partList.Count; i++)
+                {
+                    partList[i].ChangeShaderDestructionValue();                    
+                }
+            }
+        }
+
+        public void ResetShaderDestructionValue()
+        {
+            foreach (List<ShipPart> partList in interactionAreas.Values)
+            {
+                for (int i = 0; i < partList.Count; i++)
+                {
+                    partList[i].ResetShaderDestructionValue();
+                }
+            }
         }
     }
 }

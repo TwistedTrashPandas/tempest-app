@@ -4,12 +4,13 @@
 RWStructuredBuffer<float3> vectorField: register(u0);
 
 float3 g_f3ShipPosition;
-float g_fVelocityScale;
-float4 g_i3Dimensions;
+float g_fVelocityScale; 
+float3 g_i3Dimensions;
+float3 g_f3CellSizes;
 
-[numthreads(8, 8, 8)]
+[numthreads(8, 8, 4)]
 void UpdateVectorField(uint3 id : SV_DispatchThreadID)
 {
-	float3 worldPos = (((float3)id) + float3(0.5f,0.5f,0.5f))* g_i3Dimensions.w;
+	float3 worldPos = (((float3)id) + float3(0.5f,0.5f,0.5f)) * g_f3CellSizes;
 	vectorField[id.x * g_i3Dimensions.y * g_i3Dimensions.z + id.y * g_i3Dimensions.z + id.z] = normalize(g_f3ShipPosition - worldPos) * g_fVelocityScale;
 }

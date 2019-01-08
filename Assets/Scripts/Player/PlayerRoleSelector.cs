@@ -27,7 +27,7 @@ namespace MastersOfTempest.PlayerControls
         private void SetRole (PlayerRole playerRole)
         {
             PlayerRoleExtensions.SetPlayerRoleAsActive(playerRole);
-            Client.Instance.Lobby.SetMemberData("Role", "" + (int)playerRole);
+            Client.Instance.Lobby.SetMemberData(PlayerRoleExtensions.LobbyDataKey, "" + (int)playerRole);
         }
     }
 }

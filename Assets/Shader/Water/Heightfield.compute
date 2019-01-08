@@ -1,5 +1,112 @@
 ﻿#pragma kernel updateHeightfield
 #pragma kernel interpolateVertices
+#pragma kernel interpolateVerticesEdges
+#pragma kernel calcNormTriangles
+#pragma kernel averageNormVertices
+
+/*
+
+void WaterHeight(float2 pos, float timeStep) {
+
+}
+
+float4 ProfileBuffer::gerstner_wave(float phase /*=knum*x, float knum) {
+	float s = sin(phase);
+	float c = cos(phase);
+	return float4(-s, c, -knum * c, -knum * s);
+}
+
+float ProfileBuffer::cubic_bump(float x) const {
+	if (abs(x) >= 1)
+		return 0.0f;
+	else
+		return x * x * (2 * abs(x) - 3) + 1;
+}
+void integ1(float zeta) {
+
+	float waveLength = pow(2, zeta);
+	float waveNumber = tau / waveLength;
+	float phase1 =
+		waveNumber * p - dispersionRelation(waveNumber) * time;
+	float phase2 = waveNumber * (p - m_period) -
+		dispersionRelation(waveNumber) * time;
+
+	float weight1 = p / m_period;
+	float weight2 = 1 - weight1;
+	return waveLength * spectrum(zeta) *
+		(cubic_bump(weight1) * gerstner_wave(phase1, waveNumber) +
+			cubic_bump(weight2) * gerstner_wave(phase2, waveNumber));
+}
+
+float integrate(int integration_nodes, double x_min, double x_max, int function) {
+
+	double dx = (x_max - x_min) / integration_nodes;
+	double x = x_min + 0.5 * dx;
+
+	float result = dx * integ1(x);				// the first integration node
+	for (int i = 1; i < integration_nodes; i++) { // proceed with other nodes, notice `int i= 1`
+		x += dx;
+		result += dx * integ1(x);
+	}
+
+	return result;
+}
+
+int g_iResolution;
+
+RWStructuredBuffer<float> precomputedBuffer : register(u0);
+
+[numthreads(256, 1, 1)]
+void precomputeBuffer(uint3 id : SV_DispatchThreadID, Spectrum &spectrum, float time, float zeta_min,
+	float zeta_max, int resolution = 4096, int periodicity = 2,
+	int integration_nodes = 100) {
+	m_data.resize(resolution);
+	m_period = periodicity * pow(2, zeta_max);
+
+#pragma omp parallel for
+	for (int i = 0; i < g_iResolution; i++) {
+
+		constexpr float tau = 6.28318530718;
+		float           p = (i * m_period) / resolution;
+		precomputedBuffer[]
+		m_data[i] =
+			integrate(integration_nodes, zeta_min, zeta_max, 0);
+	}
+}
+
+[numthreads(16, 16, 1)]
+void updateHeightfield(uint3 id : SV_DispatchThreadID)
+{
+	float height = 0;
+}
+
+function WaterHeight(x, t)
+7: η ← 0
+8 : for b ← 1, Θη do
+9 : θb ← 2π
+Θη
+b
+10 : ˆk ←(cos θb
+	, sinθb
+)
+11 : p ← ˆk · x + rand(b)
+12 : for c ← 1, Kη do
+13 : η ← η + A(x, kc
+	ˆk) * Ψc(p, t)
+	14 : end for
+	15 : end for
+	16 : end function
+	*/
+static const float SGNLUT[] =
+{
+	-1, -1, 1, 1, 1, -1, -1,
+	-1, 1, -1, -1, -1, 1, -1,
+	1, -1, 1, 1, 1, -1, 1,
+	1, -1, 1, 0, 1, -1, 1,
+	1, -1, 1, 1, 1, -1, 1,
+	-1, 1, -1, -1, -1, 1, -1,
+	-1, -1, 1, 1, 1, -1, -1
+};
 
 struct HeightField {
 	float height;
@@ -13,10 +120,13 @@ float g_fDeltaTime;		//	timeStep
 float g_fTotalTime;
 float g_fMaxHeight;
 float g_fGridSpacing;
-float g_fQuadSize;		//	size of the quads of the mesh
+float g_fQuadSize_w;		//	size of the quads of the mesh
+float g_fQuadSize_d;		//	size of the quads of the mesh
 float g_fAvgHeight;		//	avgerage height, computed on CPU
 uint g_iDepth;			//	depth of the heightfield
 uint g_iWidth;			//	width "-"
+uint g_iDepthMesh;			//	depth of the heightfield
+uint g_iWidthMesh;			//	width "-"
 float g_fGravity;
 float g_fManning;
 float g_fDx;
@@ -26,17 +136,6 @@ RWStructuredBuffer<HeightField> heightFieldOut : register(u0);
 StructuredBuffer<HeightField> heightFieldIn : register(t0);
 StructuredBuffer<uint> reflectWaves : register(t1);
 
-static const float SGNLUT[] =
-{
-	-1, -1, 1, 1, 1, -1, -1,
-	-1, 1, -1, -1, -1, 1, -1,
-	1, -1, 1, 1, 1, -1, 1,
-	1, -1, 1, 0, 1, -1, 1,
-	1, -1, 1, 1, 1, -1, 1,
-	-1, 1, -1, -1, -1, 1, -1,
-	-1, -1, 1, 1, 1, -1, -1
-};
-
 [numthreads(16, 16, 1)]
 void updateHeightfield(uint3 id : SV_DispatchThreadID)
 {
@@ -44,8 +143,8 @@ void updateHeightfield(uint3 id : SV_DispatchThreadID)
 	//	http://matthias-mueller-fischer.ch/talks/GDC2008.pdf
 
 	//	get corresponding indices of current thread
-	int i = id.x;
-	int j = id.y;
+	uint i = id.x;
+	uint j = id.y;
 
 	if (i >= g_iWidth || j >= g_iDepth)
 		return;
@@ -78,7 +177,7 @@ void updateHeightfield(uint3 id : SV_DispatchThreadID)
 		totalHeight += heightFieldIn[i * g_iDepth + j].height;
 
 	float totalHeightDiag = 0.0f;
-
+	/*
 	if (reflectWaves[max(i - 1, 0) * g_iDepth + max(j - 1, 0)] == 0)
 		totalHeightDiag += heightFieldIn[max(i - 1, 0) * g_iDepth + max(j - 1, 0)].height;
 	else
@@ -98,10 +197,10 @@ void updateHeightfield(uint3 id : SV_DispatchThreadID)
 		totalHeightDiag += heightFieldIn[max(i - 1, 0) * g_iDepth + min(j + 1, g_iDepth - 1)].height;
 	else
 		totalHeightDiag += heightFieldIn[i * g_iDepth + j].height;
-
-	//	different behaviour at obstacle or wall
+		*/
+		//	different behaviour at obstacle or wall
 	if (reflectWaves[i * g_iDepth + j] != 0) {
-		heightFieldOut[i * g_iDepth + j].height = (totalHeight + totalHeightDiag) / 8.0f;
+		heightFieldOut[i * g_iDepth + j].height = (totalHeight + totalHeightDiag) / 4.0f;
 		//heightFieldOut[i * g_iDepth + j].height -= g_fAvgHeight;
 	}
 	else {
@@ -110,17 +209,7 @@ void updateHeightfield(uint3 id : SV_DispatchThreadID)
 		//	v[i, j]_(t+1) = v_t + dt * c * c * ((h[i - 1, j] + h[i + 1, j] + h[i, j + 1] + h[i, j - 1])- 4 * h[i, j]_t)	/ (g_fGridSpacing * g_fGridSpacing)
 		heightFieldOut[i * g_iDepth + j].velocity = heightFieldIn[i * g_iDepth + j].velocity * g_fDamping + g_fDeltaTime * g_fSpeed * g_fSpeed *
 			(totalHeight - 4 * (heightFieldIn[i * g_iDepth + j].height)) / (g_fGridSpacing * g_fGridSpacing); // + (totalHeightDiag - 4 * (heightFieldIn[i * g_iDepth + j].height)) / 1.0f
-
-		int center_x = (int)g_iDepth / 2;
-		int center_y = (int)g_iWidth / 2;
-		int l_border = center_x;
-		int r_border = center_x;
-		r_border += 2;
-		l_border -= 2;
-		int u_border = center_y;
-		int d_border = center_y;
-		u_border += 2;
-		d_border -= 2;
+	
 
 		//	clamping and damping of velocity
 		heightFieldOut[i * g_iDepth + j].velocity = clamp(heightFieldOut[i * g_iDepth + j].velocity, -g_fMaxVelocity, g_fMaxVelocity);
@@ -128,15 +217,29 @@ void updateHeightfield(uint3 id : SV_DispatchThreadID)
 
 		//	integrate height at timestep t+1:  h[i,j]_t+1 = h[i,j]_t + v[i,j]_t * dt 
 		heightFieldOut[i * g_iDepth + j].height = heightFieldIn[i*g_iDepth + j].height + heightFieldOut[i * g_iDepth + j].velocity * g_fDeltaTime;
+	
+	/*
+	int center_x = (int)g_iDepth / 2;
+	int center_y = (int)g_iWidth / 2;
+	int l_border = center_x;
+	int r_border = center_x;
+	r_border += 2;
+	l_border -= 2;
+	int u_border = center_y;
+	int d_border = center_y;
+	u_border += 2;
+	d_border -= 2;
 
 		//if (i <= r_border && i >= l_border && j >= d_border && j <= u_border) {
+		if (false) {
 			float2 pos = float2(i - center_x, j - center_y);
 			float2 cos_sin = float2(cos(g_fTotalTime), sin(g_fTotalTime));
 			float dist = distance(pos, cos_sin) + 1.0f;
-			if (dist < 5.0f) {
+			if (dist < 4.0f) {
 				//heightFieldOut[i * g_iDepth + j].velocity += heightFieldOut[i * g_iDepth + j].velocity * 0.01f * SGNLUT[sgn_x + sgn_y * 7] * distance;
 				heightFieldOut[i * g_iDepth + j].height = 64.0f / (dist * dist);
 			}
+		}*/
 		//}
 		//	keep average Height of all points at ca. 0
 		// heightFieldOut[i * g_iDepth + j].height -= g_fAvgHeight;
@@ -147,62 +250,189 @@ void updateHeightfield(uint3 id : SV_DispatchThreadID)
 }
 
 RWStructuredBuffer<float3> verticesPosition : register(u1);
-RWStructuredBuffer<float3> verticesNormal : register(u2);
+//RWStructuredBuffer<float2> verticesUV : register(u3);
 StructuredBuffer<float2> randomDisplacement : register(t1);
+
+uint g_iIdxOffset;
+uint g_iScale;
+float4x4 g_f4x4TransformMatrix;
+float4x4 g_f4SegDisplacements1;
 
 [numthreads(256, 1, 1)]
 void interpolateVertices(uint3 id : SV_DispatchThreadID) {
-	uint i = id.x;
 
-	if (i >= g_iWidth * g_iDepth)
-		return;
-	float3 pos = verticesPosition[i];
-	uint k, m = 0;
+	uint i = id.x + g_iIdxOffset;
+	//if (i >= g_iWidthMesh * g_iDepthMesh)
+	//	return;
 
-	k = round(pos.x / g_fQuadSize);
-	m = round(pos.z / g_fQuadSize);
+	float w = g_iWidthMesh;
+	float d = g_iDepthMesh;
+	float q_w = g_fQuadSize_w;
+	float q_d = g_fQuadSize_d;
+
+	float3 pos = verticesPosition[i]; // mul(g_f4x4TransformMatrix, float4(verticesPosition[i],1.0f)).xyz;//
+	uint idxDisplacement = min(floor(i / (g_iWidthMesh * g_iDepthMesh)), 4); //  = 0;// 
+	if (g_iIdxOffset > 0)
+		idxDisplacement = 5;
+	pos.x += g_f4SegDisplacements1[idxDisplacement % 4][floor(idxDisplacement / 4 + 0.1f) * 2];
+	pos.z += g_f4SegDisplacements1[idxDisplacement % 4][1 + floor(idxDisplacement / 4 + 0.1f) * 2];
+	int k, m = 0;
+	int kM, mM = 0;
+
+	k = (pos.x / q_w / w * g_iWidth);
+	m = (pos.z / q_d / d * g_iDepth);
 
 	// get surrounding vertices to approximate normal by taking the gradient
-	int idx1 = k * g_iDepth + m;
-	int idx3 = k * g_iDepth + min(m + 1, g_iDepth - 1);
-	int idx4 = min((k + 1), g_iWidth - 1) * g_iDepth + m;
-	int idx5 = min((k - 1), 0) * g_iDepth + m;
-	int idx6 = k * g_iDepth + max(m - 1, 0);
-
-	float x1 = heightFieldIn[idx1].height;
-	float x3 = heightFieldIn[idx3].height;
-	float x4 = heightFieldIn[idx4].height;
-	float x5 = heightFieldIn[idx5].height;
-	float x6 = heightFieldIn[idx6].height;
-
+	//float x5 = heightFieldIn[idx5].height;
+	//float x6 = heightFieldIn[idx6].height;
+	/*
 	float gradX = (x4 - x5); // float3(1.0f, 0.0f, 0.0f);
-	float gradZ = (x3 - x6); // float3(0.0f, 0.0f, 1.0f); 
+	float gradZ = (x3 - x6); // float3(0.0f, 0.0f, 1.0f);
 	//gradX = -normalize(cross(gradX, gradZ));
 	//if (gradX.y < 0)
 	//	gradX *= -1.0f;
-	verticesNormal[i] = -normalize(float3(2.0f * gradX, -4.0f, 2.0f * gradZ));// gradX;
+	verticesNormal[i] = normalize(float3(-2.0f * gradX, 4.0f, -2.0f * gradZ));// gradX;
+	*/
+	//pos.x = k * g_fQuadSize + randomDisplacement[k * g_iDepth + m].x;
+	//pos.z = m * g_fQuadSize + randomDisplacement[k * g_iDepth + m].y;
 
-	pos.x += randomDisplacement[k * g_iDepth + m].x;
-	pos.z += randomDisplacement[k * g_iDepth + m].y;
-	if (randomDisplacement[k * g_iDepth + m].x < 0)
+	/*if (randomDisplacement[k * g_iDepth + m].x < 0)
 		k -= 1;
 	if (randomDisplacement[k * g_iDepth + m].y < 0)
 		m -= 1;
+		*/
+	if (k < 0) {
+		k *= -1;
+	}
+	k = floor(fmod(k, g_iWidth));
 
+	if (m < 0) {
+		m *= -1;
+	}
+	m = floor(fmod(m, g_iDepth));
+
+	int idx1 = k * g_iDepth + m;
 	//	get surrounding height values at the vertex position (can be randomly displaced)
-	x1 = heightFieldIn[k * g_iDepth + m].height;
-	float x2 = heightFieldIn[min((k + 1), g_iWidth - 1) * g_iDepth + min(m + 1, g_iDepth - 1)].height;
-	x3 = heightFieldIn[k * g_iDepth + min(m + 1, g_iDepth - 1)].height;
-	x4 = heightFieldIn[min((k + 1), g_iWidth - 1) * g_iDepth + m].height;
+	float x1 = heightFieldIn[idx1].height;
+	//float x2 = heightFieldIn[min((k + 1), g_iWidth - 1) * g_iDepth + min(m + 1, g_iDepth - 1)].height;
+	//float x3 = heightFieldIn[k * g_iDepth + min(m + 1, g_iDepth - 1)].height;
+	//float x4 = heightFieldIn[min((k + 1), g_iWidth - 1) * g_iDepth + m].height;
 
 	//	get x and y value between 0 and 1 for interpolation
-	float x = (pos.x / g_fQuadSize - k);
-	float y = (pos.z / g_fQuadSize - m);
+	//  float x = saturate(pos.x / q_w - k * w / g_iWidth);
+	//  float y = saturate(pos.z / q_d - m * d / g_iWidth);
 
 	//	bilinear interpolation to get height at vertex i
-	//	note if x == 0 and y == 0 vertex position is at heightfield position.
-	float resultingHeight = (x1 * (1 - x) + x4 * (x)) * (1 - y) + (x3 * (1 - x) + x2 * (x)) * (y);
-	pos.y = resultingHeight;
+	//	note if x == 0 and y == 0 vertex position is at a heightfield position.
+	float resultingHeight;/*
+	if (g_iIdxOffset > 0) {
+		if (mesh_idx.x == 0 || mesh_idx.x == g_iWidthMesh - 1) {
+			int mod_y = mesh_idx.y % g_iScale;
+			if (mod_y != 0) {
+				float posz2 = pos.z + q_d;
+				int m2 = floor(posz2 / q_d / d * g_iDepth);
+				if (m2 < 0) {
+					m2 *= -1;
+				}
+				m2 = floor(fmod(m2, g_iDepth));
+				int idx2 = k * g_iDepth + m2;
+				float x2 = heightFieldIn[idx2].height;
+				idx1 = k * g_iDepth + floor((pos.z + q_d) / q_d / d * g_iDepth);
+				x1 = heightFieldIn[idx1].height;
+				float x_val = (mod_y) / ((float)g_iScale);
+				resultingHeight = x2;// *(1.0f - x_val) + (x_val)* x2; // (x1 * (1 - x) + x4 * (x)) * (1 - y) + (x3 * (1 - x) + x2 * (x)) * (y); // x1; //
+			}
+			else
+				resultingHeight = x1;
+		}
+		else if (mesh_idx.y == 0 || mesh_idx.y == g_iDepthMesh - 1) {
+			int idx2 = (k + (q_w / w * g_iWidth)) * g_iDepth + m;
+			float x2 = heightFieldIn[idx2].height;
+			float x_val = (mesh_idx.x % g_iScale) / ((float)g_iScale);
+			resultingHeight = x1 * (1.0f - x_val) + (x_val)* x2;// *0.5f + x2 * 0.5f; // (x1 * (1 - x) + x4 * (x)) * (1 - y) + (x3 * (1 - x) + x2 * (x)) * (y); // x1; //
+		}
+		else {
+			resultingHeight = x1;
+		}
+	}
+	else {
+	}*/
+	resultingHeight = x1;
 
+	pos.y = resultingHeight;
 	verticesPosition[i] = pos;
+}
+
+[numthreads(256, 1, 1)]
+void interpolateVerticesEdges(uint3 id : SV_DispatchThreadID) {
+	uint i = id.x + g_iIdxOffset;
+
+	int d = g_iDepthMesh - 1;
+	int w = g_iWidthMesh - 1;
+
+	int2 mesh_idx = int2((int)floor(id.x / (d)), id.x % (d));
+	float lerp_val = 0.5f;
+	int stride = 1;
+	if (mesh_idx.x == 0 || mesh_idx.x == w - 1) {
+		int mod_y = mesh_idx.y % g_iScale;
+		if (mod_y != 0) {
+			verticesPosition[i] = lerp(verticesPosition[(mesh_idx.x)* d + (mesh_idx.y + stride) + g_iIdxOffset], verticesPosition[(mesh_idx.x) * d + (mesh_idx.y - stride) + g_iIdxOffset], lerp_val);
+		}
+	}
+	else if (mesh_idx.y == 0 || mesh_idx.y == d - 1) {
+		int mod_x = mesh_idx.x % g_iScale;
+		if (mod_x != 0) {
+			verticesPosition[i] = lerp(verticesPosition[(mesh_idx.x + stride) * d + (mesh_idx.y) + g_iIdxOffset], verticesPosition[(mesh_idx.x - stride) * d + (mesh_idx.y) + g_iIdxOffset], lerp_val);
+		}
+	}
+}
+
+
+StructuredBuffer<int3> triangles : register(t2);
+RWStructuredBuffer<float3> normTriangles : register(u3);
+
+[numthreads(256, 1, 1)]
+void calcNormTriangles(uint3 id : SV_DispatchThreadID) {
+
+	int3 idx = triangles[id.x];
+	//if (id.x >= (g_iWidthMesh - 1) * (g_iDepthMesh - 1) * 2)
+	//	return;
+	float3 pos = verticesPosition[idx.x];
+	float3 pos1 = verticesPosition[idx.y];
+	float3 pos2 = verticesPosition[idx.z];
+	normTriangles[id.x] = normalize(cross(pos - pos1, pos - pos2));
+}
+
+RWStructuredBuffer<float3> verticesNormal : register(u2);
+
+uint g_iOffset;
+uint g_iTriangleD;
+
+[numthreads(16, 16, 1)]
+void averageNormVertices(uint3 id : SV_DispatchThreadID) {
+	int i = id.x;
+	int j = id.y;
+	int idx = i * (g_iTriangleD)+j;
+	int idx1 = (i - 1) * (g_iTriangleD)+j - 1;
+	int idx2 = (i - 1) * (g_iTriangleD)+j;
+	int idx3 = i * (g_iTriangleD)+j - 1;
+
+	//if (i >= g_iWidthMesh || j >= g_iDepthMesh)
+	//	return;
+
+	int idcs[6];
+	idcs[0] = idx * 2;
+	idcs[1] = idx * 2 + 1;
+	idcs[2] = idx1 * 2;
+	idcs[3] = idx1 * 2 + 1;
+	idcs[4] = idx2 * 2;
+	idcs[5] = idx3 * 2 + 1;
+
+	idx = i * g_iDepthMesh + j;// + (g_iDepthMesh) * (g_iWidthMesh)* id.z;
+	float3 tmpNorm = float3(0, 0, 0);
+	for (int k = 0; k < 6; ++k)
+	{
+		tmpNorm += normTriangles[idcs[k] + g_iOffset];
+	}
+	verticesNormal[idx + g_iIdxOffset] = normalize(tmpNorm); // mul(g_f4x4TransformMatrix, float4(normalize(tmpNorm), 0.0f)).xyz; //
 }

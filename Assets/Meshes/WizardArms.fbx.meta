@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: efddd530ec2c2e746ad0210e76b82f81
+guid: 40030c38e0787ee4bb5bea6c85179565
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
@@ -196,17 +196,17 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Coat
-    second: {fileID: 2100000, guid: 1ed57c4019bf5e24e83653be985158d1, type: 2}
+    second: {fileID: 2100000, guid: ca45d002be1bd6a438fc2fa213caedec, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Gloves
-    second: {fileID: 2100000, guid: f4689abd89700b841b9f233955f4c7ba, type: 2}
+    second: {fileID: 2100000, guid: 18bb1e98cd4693946a5a5b548625de9f, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Skin
-    second: {fileID: 2100000, guid: 43459ac1b41e49c4a9cc026094d10289, type: 2}
+    second: {fileID: 2100000, guid: bd661ac6636f9af4ba05fc10c6d84749, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

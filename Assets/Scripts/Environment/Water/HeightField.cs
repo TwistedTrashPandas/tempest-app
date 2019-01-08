@@ -44,7 +44,6 @@ namespace MastersOfTempest.Environment.VisualEffects
         /// </summary>
         public Camera mainCam;
 
-
         /// <summary>
         /// The maximum random displacement of the vertices of the generated mesh
         /// </summary>
@@ -76,6 +75,12 @@ namespace MastersOfTempest.Environment.VisualEffects
         /// Distance between vertices of the generated mesh
         /// </summary>
         public float quadSize;
+
+        [Range(0.0f, 180.0f)]
+        public float angleBias;
+
+        [Range(1, 2048)]
+        public int detailScaleFactor;
 
         /// <summary>
         /// Speed of waves
@@ -109,6 +114,8 @@ namespace MastersOfTempest.Environment.VisualEffects
         private ComputeBuffer heightFieldCBOut;
         private ComputeBuffer verticesCB;
         private ComputeBuffer normalsCB;
+        private ComputeBuffer trianglesRCB;
+        private ComputeBuffer normTrianglesCB;
 
         private Material material;
 
@@ -121,6 +128,9 @@ namespace MastersOfTempest.Environment.VisualEffects
         private uint[] environment;
         private int kernel;                     ///   kernel for computeshader
         private int kernelVertices;
+        private int kernelVerticesEdges;
+        private int kernelTriangles;
+        private int kernelNormals;
 
         private Mesh planeMesh;
         private Vector3[] vertices;
@@ -132,15 +142,28 @@ namespace MastersOfTempest.Environment.VisualEffects
 
         private CreateReflectionTexture crt;
         private float totalTime;
+        private float totalTimeX;
+        private float totalTimeY;
 
         private float quadSizeHF;
+
+        private Vector2[,] segmentConfigurations;
+        private int lastConfig;
+        private Vector3 lastPosition;
+
+        private void Start()
+        {
+            Initialize(Vector3.zero);
+        }
 
         public void Initialize(Vector3 midPosition)
         {
             inOutCounter = 0;
             currentCollision = 1;
-            transform.position = midPosition - new Vector3(widthMesh * quadSize / 2f, midPosition.y, depthMesh * quadSize / 2f);
+            //transform.position = midPosition - new Vector3(widthMesh * quadSize / 2f, midPosition.y, depthMesh * quadSize / 2f);
             totalTime = 0f;
+            totalTimeX = 0f;
+            totalTimeY = 0f;
             quadSizeHF = quadSize * widthMesh / (float)widthHF;
 
             crt = GetComponent<CreateReflectionTexture>();
@@ -149,6 +172,7 @@ namespace MastersOfTempest.Environment.VisualEffects
                 gameObject.AddComponent<CreateReflectionTexture>();
                 crt = GetComponent<CreateReflectionTexture>();
             }
+            mainCam = Camera.main;
             mainCam.depthTextureMode = DepthTextureMode.Depth;
 
             CreatePlaneMesh();
@@ -156,7 +180,8 @@ namespace MastersOfTempest.Environment.VisualEffects
             randomXZ = new ComputeBuffer(widthMesh * depthMesh, 8);
             material = GetComponent<MeshRenderer>().material;
             setRandomDisplacementBuffer();
-            CreateMesh();
+            CreateMeshWithSubmeshes();
+            //CreateMesh();
             initBuffers();
         }
 
@@ -168,6 +193,8 @@ namespace MastersOfTempest.Environment.VisualEffects
             verticesCB.Release();
             normalsCB.Release();
             randomXZ.Release();
+            trianglesRCB.Release();
+            normTrianglesCB.Release();
         }
 
         void Update()
@@ -182,6 +209,10 @@ namespace MastersOfTempest.Environment.VisualEffects
 
         public void OnWillRenderObject()
         {
+            material.SetFloat("g_fTimeMoveNoiseX", totalTimeX * Mathf.PI / 2000f);
+            material.SetFloat("g_fTimeMoveNoiseY", totalTimeY * Mathf.PI / 2000f);
+            totalTimeX += (UnityEngine.Random.Range(0f, 1f)) * Time.deltaTime;
+            totalTimeY += (UnityEngine.Random.Range(0f, 1f)) * Time.deltaTime;
             if (waterMode == WaterMode.ReflAndObstcl || waterMode == WaterMode.Reflection)
             {
                 crt.renderReflection(planeMesh, averageHeight);
@@ -192,6 +223,7 @@ namespace MastersOfTempest.Environment.VisualEffects
         {
             //  propagate waves by using linear wave equations
             updateHeightfield();
+            UpdateTransformMatrix();
             updateVertices();
         }
 
@@ -302,13 +334,19 @@ namespace MastersOfTempest.Environment.VisualEffects
         private void initBuffers()
         {
             //  initialize buffers
+            Mesh mesh = GetComponent<MeshFilter>().mesh;
+
             heightFieldCB = new ComputeBuffer(widthHF * depthHF, 8);
             heightFieldCBOut = new ComputeBuffer(widthHF * depthHF, 8);
             reflectWavesCB = new ComputeBuffer(widthHF * depthHF, 4);
-            verticesCB = new ComputeBuffer(widthMesh * depthMesh, 12);
-            normalsCB = new ComputeBuffer(widthMesh * depthMesh, 12);
+            verticesCB = new ComputeBuffer(mesh.vertices.Length, 12);
+            normalsCB = new ComputeBuffer(mesh.vertices.Length, 12);
+            trianglesRCB = new ComputeBuffer(mesh.triangles.Length / 3, 12);
+            normTrianglesCB = new ComputeBuffer(mesh.triangles.Length / 3, 12);
             environment = new uint[widthHF * depthHF];
 
+            verticesCB.SetData(mesh.vertices);
+            trianglesRCB.SetData(mesh.triangles);
 
             heightFieldCB.SetData(hf);
             reflectWavesCB.SetData(environment);
@@ -316,10 +354,15 @@ namespace MastersOfTempest.Environment.VisualEffects
             //  get corresponding kernel index
             kernel = heightFieldCS.FindKernel("updateHeightfield");
             kernelVertices = heightFieldCS.FindKernel("interpolateVertices");
+            kernelVerticesEdges = heightFieldCS.FindKernel("interpolateVerticesEdges");
+            kernelTriangles = heightFieldCS.FindKernel("calcNormTriangles");
+            kernelNormals = heightFieldCS.FindKernel("averageNormVertices");
             //  set constants
-            heightFieldCS.SetFloat("g_fQuadSize", quadSizeHF);
             heightFieldCS.SetInt("g_iDepth", depthHF);
+            heightFieldCS.SetInt("g_iDepthMesh", depthMesh);
             heightFieldCS.SetInt("g_iWidth", widthHF);
+            heightFieldCS.SetInt("g_iWidthMesh", widthMesh);
+            heightFieldCS.SetInt("g_iScale", detailScaleFactor);
             heightFieldCS.SetFloat("g_fGridSpacing", gridSpacing); // could be changed to quadSize, but does not yield good results
 
             material.SetFloat("g_fQuadSize", quadSize);
@@ -332,8 +375,15 @@ namespace MastersOfTempest.Environment.VisualEffects
 
             heightFieldCS.SetBuffer(kernelVertices, "heightFieldIn", heightFieldCB);
             heightFieldCS.SetBuffer(kernelVertices, "verticesPosition", verticesCB);
-            heightFieldCS.SetBuffer(kernelVertices, "verticesNormal", normalsCB);
             heightFieldCS.SetBuffer(kernelVertices, "randomDisplacement", randomXZ);
+            heightFieldCS.SetBuffer(kernelVerticesEdges, "verticesPosition", verticesCB);
+
+            heightFieldCS.SetBuffer(kernelTriangles, "triangles", trianglesRCB);
+            heightFieldCS.SetBuffer(kernelTriangles, "verticesPosition", verticesCB);
+            heightFieldCS.SetBuffer(kernelTriangles, "normTriangles", normTrianglesCB);
+
+            heightFieldCS.SetBuffer(kernelNormals, "normTriangles", normTrianglesCB);
+            heightFieldCS.SetBuffer(kernelNormals, "verticesNormal", normalsCB);
 
             material.SetBuffer("verticesPosition", verticesCB);
             material.SetBuffer("verticesNormal", normalsCB);
@@ -368,7 +418,8 @@ namespace MastersOfTempest.Environment.VisualEffects
             if (totalTime < -1f)
                 totalTime += 1f;
 
-            heightFieldCS.SetFloat("g_fDeltaTime", dt);
+
+            heightFieldCS.SetFloat("g_fDeltaTime", Mathf.Min(dt, 0.02f));
             heightFieldCS.SetFloat("g_fTotalTime", totalTime * 2 * Mathf.PI);
             heightFieldCS.SetFloat("g_fSpeed", speed);
             heightFieldCS.SetFloat("g_fMaxVelocity", maxVelocity);
@@ -376,6 +427,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             heightFieldCS.SetFloat("g_fDamping", dampingVelocity);
             heightFieldCS.SetFloat("g_fAvgHeight", averageHeight);
             heightFieldCS.SetFloat("g_fGridSpacing", Mathf.Max(gridSpacing, 1f));
+            //heightFieldCS.SetFloat("g_fTimeMoveNoiseY", Time.time);
 
             if (inOutCounter == 0)
             {
@@ -407,25 +459,239 @@ namespace MastersOfTempest.Environment.VisualEffects
             inOutCounter = (inOutCounter + 1) % 2;
         }
 
+        bool intersectPlane(Vector3 normal, Vector3 offsetPlane, Vector3 offsetRay, Vector3 rayDirection, out float t, out Vector3 intersection)
+        {
+            // assuming vectors are all normalized
+            Vector3 intersect = new Vector3();
+            float denom = Vector3.Dot(normal, rayDirection);
+
+            if (Mathf.Abs(denom) > 1e-6)
+            {
+                Vector3 dist = offsetPlane - offsetRay;
+                t = Vector3.Dot(dist, normal) / denom;
+                intersection = offsetRay + t * rayDirection;
+                return (t >= 0);
+            }
+            intersection = intersect;
+            t = 0.0f;
+            return false;
+        }
+
+        private void UpdateTransformMatrix()
+        {
+            transform.rotation = Quaternion.identity;
+            float outAngle = mainCam.fieldOfView / 2f + angleBias;
+            float rayHit;
+            Vector3 ray = Vector3.Normalize(Quaternion.AngleAxis(outAngle, mainCam.transform.right) * mainCam.transform.forward);
+            Vector3 destination;
+            Vector3 intersect;
+            if (intersectPlane(Vector3.up, new Vector3(), mainCam.transform.position, ray, out rayHit, out intersect))
+            {
+                destination = intersect;
+            }
+            else
+            {
+                destination = mainCam.transform.position;
+            }
+
+            transform.position = new Vector3(Mathf.RoundToInt(destination.x / quadSize - widthMesh * 1.5f) * quadSize, transform.position.y, Mathf.RoundToInt(destination.z / quadSize - depthMesh / 5f) * quadSize);
+            Vector3 look = mainCam.transform.forward;
+            int idx = 0;
+            if (Mathf.Abs(look.z) > Mathf.Abs(look.x))
+            {
+                if (look.z > 0)
+                {
+                }
+                else
+                {
+                    idx = 2;
+                }
+            }
+            else
+            {
+                if (look.x > 0)
+                {
+                    idx = 1;
+                }
+                else
+                {
+                    idx = 3;
+                }
+            }
+
+            Matrix4x4 displacementMatrix = Matrix4x4.zero;// new Matrix4x4();
+            for (int i = 0; i < 6; i++)
+            {
+                Vector2 currVec = new Vector2();
+                if (idx != lastConfig)
+                {
+                    currVec = segmentConfigurations[i, idx];
+                    currVec -= segmentConfigurations[i, lastConfig];
+                }
+                displacementMatrix[i % 4, 0 + ((int)(i / 4)) * 2] = currVec.x + transform.position.x - lastPosition.x;
+                displacementMatrix[i % 4, 1 + ((int)(i / 4)) * 2] = currVec.y + transform.position.z - lastPosition.z;
+            }
+            //heightFieldCS.SetMatrix("g_f4x4TransformMatrix", transform.localToWorldMatrix);// Matrix4x4.Rotate(transform.rotation));// Matrix4x4.Translate(translation) * Matrix4x4.Rotate(transform.rotation) * Matrix4x4.Translate(translation));
+            heightFieldCS.SetMatrix("g_f4SegDisplacements1", displacementMatrix);
+            lastConfig = idx;
+            lastPosition = transform.position;
+        }
+
         private void updateVertices()
         {
             Mesh mesh = GetComponent<MeshFilter>().mesh;
-            Vector3[] verts = mesh.vertices;
-            verticesCB.SetData(mesh.vertices);
 
-            //heightFieldCS.SetBuffer(kernelVertices, "verticesPosition", verticesCB);
-            heightFieldCS.Dispatch(kernelVertices, Mathf.CeilToInt(verts.Length / 256f) + 1, 1, 1);
+            /// update vertex x/z pos -------------------------------------------------------------------------------------------------------------------------------
+            Vector3 translation = Vector3.zero;// transform.position - new Vector3(0, 0, mainCam.transform.position.z - quadSize * widthMesh / 2f);
 
-            verticesCB.GetData(verts);
-            Vector3[] norms = new Vector3[verts.Length];
-            normalsCB.GetData(norms);
-            //material.SetBuffer("verticesPosition", verticesCB);
-            mesh.vertices = verts;
-            // mesh.normals = norms;
-            mesh.RecalculateNormals();
-            GetComponent<MeshFilter>().mesh = mesh;
+
+            /// update vertex height --------------------------------------------------------------------------------------------------------------------------------
+            heightFieldCS.SetInt("g_iIdxOffset", 0);
+            heightFieldCS.SetFloat("g_fQuadSize_w", quadSize * 3f);
+            heightFieldCS.SetFloat("g_fQuadSize_d", quadSize * 3f);
+            heightFieldCS.SetInt("g_iWidthMesh", widthMesh);
+            heightFieldCS.SetInt("g_iDepthMesh", depthMesh);
+            heightFieldCS.Dispatch(kernelVertices, Mathf.CeilToInt(widthMesh * depthMesh * 5 / 256f), 1, 1);
+
+            heightFieldCS.SetInt("g_iIdxOffset", widthMesh * depthMesh * 5);
+            heightFieldCS.SetFloat("g_fQuadSize_w", quadSize / detailScaleFactor * 3f);
+            heightFieldCS.SetFloat("g_fQuadSize_d", quadSize / detailScaleFactor * 3f);
+            heightFieldCS.SetInt("g_iWidthMesh", widthMesh * detailScaleFactor);
+            heightFieldCS.SetInt("g_iDepthMesh", depthMesh * detailScaleFactor);
+            heightFieldCS.Dispatch(kernelVertices, Mathf.CeilToInt((vertices.Length - widthMesh * depthMesh * 5) / 256f), 1, 1);
+
+            /// interpolate vertices of detailed submesh ------------------------------------------------------------------------------------------------------------
+            heightFieldCS.Dispatch(kernelVerticesEdges, Mathf.CeilToInt((vertices.Length - widthMesh * depthMesh * 5) / 256f), 1, 1);
+
+            /// compute triangle normals ----------------------------------------------------------------------------------------------------------------------------
+            heightFieldCS.Dispatch(kernelTriangles, Mathf.CeilToInt(mesh.triangles.Length / 256f), 1, 1);
+
+            /// compute vertex normals ------------------------------------------------------------------------------------------------------------------------------
+            //heightFieldCS.SetMatrix("g_f4x4TransformMatrix", Matrix4x4.Transpose(Matrix4x4.Inverse(transform.localToWorldMatrix)));
+            heightFieldCS.SetInt("g_iDepthMesh", depthMesh);
+            heightFieldCS.SetInt("g_iTriangleD", depthMesh - 1);
+            for (int i = 0; i < 5; i++)
+            {
+                heightFieldCS.SetInt("g_iIdxOffset", widthMesh * depthMesh * i);
+                heightFieldCS.SetInt("g_iOffset", (depthMesh - 1) * (widthMesh - 1) * 2 * i);
+                heightFieldCS.Dispatch(kernelNormals, Mathf.CeilToInt(widthMesh / 16f), Mathf.CeilToInt(depthMesh / 16f), 1);
+            }
+            heightFieldCS.SetInt("g_iOffset", (depthMesh - 1) * (widthMesh - 1) * 2 * 5);
+            heightFieldCS.SetInt("g_iIdxOffset", widthMesh * depthMesh * 5);
+            heightFieldCS.SetInt("g_iTriangleD", depthMesh * detailScaleFactor - detailScaleFactor + 1);
+            heightFieldCS.SetInt("g_iDepthMesh", depthMesh * detailScaleFactor);
+            heightFieldCS.Dispatch(kernelNormals, Mathf.CeilToInt(widthMesh * detailScaleFactor / 16f), Mathf.CeilToInt(depthMesh * detailScaleFactor / 16f), 1);
         }
 
+        void CreateMeshWithSubmeshes()
+        {
+            Vector3[] subMeshVertices;
+            Vector3[] offsets;
+            int[] newTriangles;
+            Vector2[] newUV;
+
+            int scale = detailScaleFactor;
+            int subM6W = (widthMesh * scale - scale + 1);
+            int subM6D = (depthMesh * scale - scale + 1);
+
+            subMeshVertices = new Vector3[widthMesh * depthMesh * 5 + subM6W * subM6D];
+            newTriangles = new int[(widthMesh - 1) * (depthMesh - 1) * 6 * 5 + (widthMesh * scale - scale) * (depthMesh * scale - scale) * 6];
+            newUV = new Vector2[subMeshVertices.Length];
+            offsets = new Vector3[6];
+
+            // 0 - widthMesh*depthMesh*3: three low detail submeshes
+            // other vertices are part of the detailed submesh
+
+            for (int i = 0; i < widthMesh; i++)
+            {
+                for (int j = 0; j < depthMesh; j++)
+                {
+                    subMeshVertices[i * depthMesh + j] = new Vector3(i * quadSize, 0.0f, j * quadSize);
+                    subMeshVertices[i * depthMesh + j + widthMesh * depthMesh * 1] = new Vector3(i * quadSize, 0.0f, j * quadSize) + new Vector3(0, 0, (depthMesh - 1)) * quadSize;
+                    subMeshVertices[i * depthMesh + j + widthMesh * depthMesh * 2] = new Vector3(i * quadSize, 0.0f, j * quadSize) + new Vector3((widthMesh - 1), 0, (depthMesh - 1)) * quadSize;
+                    subMeshVertices[i * depthMesh + j + widthMesh * depthMesh * 3] = new Vector3(i * quadSize, 0.0f, j * quadSize) + new Vector3((widthMesh - 1) * 2, 0, (depthMesh - 1)) * quadSize;
+                    subMeshVertices[i * depthMesh + j + widthMesh * depthMesh * 4] = new Vector3(i * quadSize, 0.0f, j * quadSize) + new Vector3((widthMesh - 1) * 2, 0, 0) * quadSize;
+                }
+            }
+            for (int i = 0; i < subM6W; i++)
+            {
+                for (int j = 0; j < subM6D; j++)
+                {
+                    subMeshVertices[i * subM6D + j + widthMesh * depthMesh * 5] = new Vector3(i * quadSize / scale, 0.0f, j * quadSize / scale) + new Vector3((widthMesh - 1), 0, 0) * quadSize;
+                }
+            }
+
+            int tri = 0;
+            for (int k = 0; k < 5; k++)
+            {
+                for (int i = 0; i < widthMesh - 1; i++)
+                {
+                    for (int j = 0; j < depthMesh - 1; j++)
+                    {
+                        newTriangles[tri + 2] = (i + 1) * depthMesh + (j + 1) + widthMesh * depthMesh * k;
+                        newTriangles[tri + 1] = i * depthMesh + (j + 1) + widthMesh * depthMesh * k;
+                        newTriangles[tri] = i * depthMesh + j + widthMesh * depthMesh * k;
+                        tri += 3;
+
+                        newTriangles[tri + 2] = (i + 1) * depthMesh + j + widthMesh * depthMesh * k;
+                        newTriangles[tri + 1] = (i + 1) * depthMesh + (j + 1) + widthMesh * depthMesh * k;
+                        newTriangles[tri] = i * depthMesh + j + widthMesh * depthMesh * k;
+                        tri += 3;
+                    }
+                }
+            }
+
+            for (int i = 0; i < widthMesh * scale - scale; i++)
+            {
+                for (int j = 0; j < depthMesh * scale - scale; j++)
+                {
+                    newTriangles[tri + 2] = (i + 1) * (subM6D) + (j + 1) + widthMesh * depthMesh * 5;
+                    newTriangles[tri + 1] = i * (subM6D) + (j + 1) + widthMesh * depthMesh * 5;
+                    newTriangles[tri] = i * (subM6D) + j + widthMesh * depthMesh * 5;
+                    tri += 3;
+
+                    newTriangles[tri + 2] = (i + 1) * (subM6D) + j + widthMesh * depthMesh * 5;
+                    newTriangles[tri + 1] = (i + 1) * (subM6D) + (j + 1) + widthMesh * depthMesh * 5;
+                    newTriangles[tri] = i * (subM6D) + j + widthMesh * depthMesh * 5;
+                    tri += 3;
+                }
+            }
+
+            //  initialize texture coordinates
+            for (int i = 0; i < newUV.Length; i++)
+            {
+                newUV[i] = new Vector2(subMeshVertices[i].x, subMeshVertices[i].z);
+            }
+
+            Mesh mesh = new Mesh();
+            mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+
+            mesh.MarkDynamic();
+            mesh.vertices = subMeshVertices;
+            mesh.triangles = newTriangles;
+            mesh.uv = newUV;
+            vertices = subMeshVertices;
+            mesh.RecalculateNormals();
+
+            GetComponent<MeshFilter>().mesh = mesh;
+            lastConfig = 0;
+            lastPosition = transform.position;
+            segmentConfigurations = new Vector2[6, 4];
+            float[,,] idcs = new float[,,] {
+                {{0,0},{1,-1},{0,0},{0,0} },
+                {{0,0},{2,-2},{0,-2},{0,0} },
+                {{0,0},{0,0},{0,-2},{0,0} },
+                {{0,0},{0,0},{0,-2},{-2,-2} },
+                {{0,0},{0,0},{0,0},{-1,-1} },
+                {{0,0},{0,0},{0,0},{0,0} }};
+            for (int i = 0; i < 6; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    segmentConfigurations[i, j] = new Vector2((widthMesh - 1) * quadSize * idcs[i, j, 0], (depthMesh - 1) * quadSize * idcs[i, j, 1]);
+                }
+            }
+        }
         //  creates mesh with flat shading
         private void CreateMesh()
         {
@@ -484,7 +750,7 @@ namespace MastersOfTempest.Environment.VisualEffects
 
         private void CreatePlaneMesh()
         {
-            planeMesh = GetComponent<MeshFilter>().mesh;
+            planeMesh = new Mesh();// GetComponent<MeshFilter>().mesh;
             //  create plane mesh for reflection
             Vector3[] planeVertices = new Vector3[4];
             Vector3[] planeNormals = new Vector3[4];

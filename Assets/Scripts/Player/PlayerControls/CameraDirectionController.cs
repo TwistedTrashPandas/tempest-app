@@ -33,7 +33,7 @@ namespace MastersOfTempest.PlayerControls
                     Cursor.lockState = CursorLockMode.Locked;
                     Cursor.visible = false;
                 }
-                else 
+                else
                 {
                     Cursor.lockState = CursorLockMode.Confined;
                     Cursor.visible = true;
