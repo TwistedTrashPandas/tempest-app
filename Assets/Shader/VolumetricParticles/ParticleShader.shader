@@ -72,7 +72,7 @@
 			float4 projPos: TEXCOORD1;
 			float4 uv: TEXCOORD0;
 			LIGHTING_COORDS(2, 3)
-			UNITY_FOG_COORDS(4)
+			//UNITY_FOG_COORDS(4)
 		};
 
 
@@ -347,7 +347,7 @@
 				Outs[iCorner].projPos.xyz = UnityObjectToViewPos(f4CurrCornerWorldPos);
 				Outs[iCorner].projPos.w = 1.0f;
 				Outs[iCorner].uv = ComputeScreenPos(Outs[iCorner].pos);
-				UNITY_TRANSFER_FOG(Outs[iCorner], Outs[iCorner].pos);
+				//UNITY_TRANSFER_FOG(Outs[iCorner], Outs[iCorner].pos);
 			}
 			// Generate bounding box faces
 			{
@@ -387,7 +387,7 @@
 			#pragma multi_compile_fwdbase 
 			#pragma geometry geom
 			#pragma fragment frag
-			#pragma multi_compile_fog
+			//#pragma multi_compile_fog
 			#pragma target 4.0
 
 		v2g vert(appdata v)
@@ -715,7 +715,7 @@
 		CGPROGRAM
 			#pragma require geometry
 			#pragma multi_compile_fwdbase 
-			#pragma multi_compile_fog
+			//#pragma multi_compile_fog
 			#pragma vertex vert
 			#pragma geometry geom
 			#pragma fragment frag

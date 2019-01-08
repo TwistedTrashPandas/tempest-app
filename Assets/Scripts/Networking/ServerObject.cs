@@ -12,7 +12,9 @@ namespace MastersOfTempest.Networking
         public int resourceID = -1;
         [ReadOnly]
         public bool onServer = true;
+        [ReadOnly]
         public int serverID = 0;
+        [ReadOnly]
         public float lastUpdate = 0;
 
         // Used when the server object is a child in a server object resource (resourceID < 0), set by editor script

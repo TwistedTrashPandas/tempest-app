@@ -63,7 +63,7 @@ namespace MastersOfTempest.PlayerControls
         {
             if (serverObject.onServer)
             {
-                this.transform.position = position;
+                this.transform.localPosition = position;
             }
             else
             {

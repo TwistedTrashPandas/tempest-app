@@ -7,7 +7,7 @@ namespace MastersOfTempest.ShipBL
 {
     public class ShipPartManager : MonoBehaviour
     {
-        private Dictionary<ShipPartArea, List<ShipPart>> interactionAreas;
+        public Dictionary<ShipPartArea, List<ShipPart>> interactionAreas { get; private set; }
 
         void Start()
         {

@@ -9,11 +9,14 @@ namespace MastersOfTempest.PlayerControls {
         Spectator = 0,
         Apprentice = 1,
         Wizard = 2
+
     }
 
     public static class PlayerRoleExtensions
-    {   
+    {
+        public const string LobbyDataKey = "Role";
         const string ActiveRoleKey = "ActivePlayerRole";
+
         public static string GetUserFriendlyName(this PlayerRole role)
         {
             switch(role)
@@ -43,6 +46,17 @@ namespace MastersOfTempest.PlayerControls {
                 case PlayerRole.Wizard: return gameObject.AddComponent<WizardInput>();
                 case PlayerRole.Apprentice: return gameObject.AddComponent<ApprenticeInput>();
                 case PlayerRole.Spectator: return gameObject.AddComponent<SpectatorInput>();
+                default: throw new InvalidOperationException($"Unexpected {nameof(PlayerRole)} value of {role}");
+            }
+        }
+
+        public static GameObject GetSpawnPoint(this PlayerRole role)
+        {
+            switch(role)
+            {
+                case PlayerRole.Wizard: return GameObject.FindGameObjectWithTag("WizardSpawn");
+                case PlayerRole.Apprentice: return GameObject.FindGameObjectWithTag("ApprenticeSpawn");
+                case PlayerRole.Spectator: return null;
                 default: throw new InvalidOperationException($"Unexpected {nameof(PlayerRole)} value of {role}");
             }
         }
