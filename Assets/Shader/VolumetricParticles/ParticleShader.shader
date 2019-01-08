@@ -8,6 +8,10 @@
 		g_fSize("Size", Range(0.1,1000.0)) = 1.0
 		g_fSizeTop("g_fSizeTop", Range(1.0,100.0)) = 1.0
 		g_fDensity("Density", Range(0.01,1000.0)) = 1
+		g_fLightAttenuation("Attenuation", Range(0.01,1000.0)) = 1
+		g_fMinTransparency("MinTransparency", Range(0.001,1.0)) = 0.25
+		g_fMaxTransparency("MaxTransparency", Range(0.001,1.0)) = 1
+		g_fMaxTransparencyDist("MaxTransparencyDist", Range(0.001,10000.0)) = 100.0
 		g_bSize("FlexibleSize", Range(0.0,1.0)) = 0.0
 		g_fTopHeight("TopHeight", Range(0.0,10000.0)) = 0.0
 	}
@@ -33,6 +37,9 @@
 		float g_fTimeDiff;
 		float g_fTimeStepTex;
 		float g_fTopHeight;
+		float g_fMinTransparency;
+		float g_fMaxTransparency;
+		float g_fMaxTransparencyDist;
 
 		static const float g_fCloudExtinctionCoeff = 100;
 
@@ -71,8 +78,8 @@
 			uint id : VertexID;
 			float4 projPos: TEXCOORD1;
 			float4 uv: TEXCOORD0;
-			LIGHTING_COORDS(2, 3)
-			//UNITY_FOG_COORDS(4)
+			//LIGHTING_COORDS(2, 3)
+				//UNITY_FOG_COORDS(4)
 		};
 
 
@@ -84,6 +91,7 @@
 		StructuredBuffer<float3>	g_vVertices : register(t3);
 		StructuredBuffer<float>		g_vRndAzimuth : register(t7);
 		StructuredBuffer<int>		g_iIndices : register(t5);
+		StructuredBuffer<int>		particleVisibilityRW : register(t8);
 
 
 		sampler2D _CameraDepthTexture;
@@ -91,6 +99,7 @@
 		float g_fSize;
 		float g_bSize;
 		float g_fDensity;
+		float g_fLightAttenuation;
 		float4 g_Color;
 		float4 g_f4ShipPosition;
 
@@ -271,7 +280,8 @@
 		void geom(point v2g p[1], inout TriangleStream<g2f> Out)
 		{
 			uint uiParticleId = p[0].id;
-
+			if (particleVisibilityRW[g_iIndices[uiParticleId]] == 0)
+				return;
 			// Only visible particles are sent for rendering, so there is no need to
 			// test visibility here
 			//bool bIsValid = g_VisibleParticleFlags[uiParticleId/32] & (1 << (uiParticleId&31));
@@ -407,9 +417,9 @@
 
 			SCloudParticleLighting ParticleLighting;
 
-			float atten = 1.0f;// LIGHT_ATTENUATION(In);
+			//float atten = 1.0f;// LIGHT_ATTENUATION(In);
 			ParticleLighting.f4SunLight = _LightColor0;
-			ParticleLighting.f4LightAttenuation = float4(atten,atten,1.0f,1.0f); // .x == single scattering; .y == multiple scattering
+			ParticleLighting.f4LightAttenuation = float4(g_fLightAttenuation, g_fLightAttenuation,1.0f,1.0f); // .x == single scattering; .y == multiple scattering
 			ParticleLighting.f4AmbientLight = unity_AmbientSky;// float4(0.15, 0.15, 0.15, 1.0);
 			float fTime = 1.0f; // g_fTimeScale * g_GlobalCloudAttribs.fTime;
 
@@ -497,6 +507,9 @@
 				ParticleLighting,
 				f4Color
 			);
+			float fTransparencyOnDistance = fRayLength / g_fMaxTransparencyDist;
+			fTransparencyOnDistance = clamp(fTransparencyOnDistance, g_fMinTransparency, g_fMaxTransparency);
+			f4Color.a *= fTransparencyOnDistance;
 			//UNITY_APPLY_FOG(In.fogCoord, f4Color);
 			return f4Color;
 		}

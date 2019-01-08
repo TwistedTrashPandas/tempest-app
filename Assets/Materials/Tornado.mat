@@ -13,7 +13,7 @@ Material:
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3000
+  m_CustomRenderQueue: 3001
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
@@ -141,9 +141,13 @@ Material:
     - g_Shininess: 20
     - g_bSize: 0
     - g_fBillboardSize: 2.6
-    - g_fDensity: 0.75
-    - g_fSize: 8
-    - g_fSizeTop: 60
+    - g_fDensity: 0.6
+    - g_fLightAttenuation: 1
+    - g_fMaxTransparency: 1
+    - g_fMaxTransparencyDist: 1000
+    - g_fMinTransparency: 0.3
+    - g_fSize: 64
+    - g_fSizeTop: 8
     - g_fTimeDiff: 0.01
     - g_fTimeStepTex: 0.2
     - g_fTopHeight: 0
@@ -155,6 +159,6 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
     - _TintColor: {r: 1, g: 0.07585368, b: 0, a: 0.5}
-    - g_Color: {r: 0.3301887, g: 0.3301887, b: 0.3301887, a: 0.46666667}
+    - g_Color: {r: 0.8301887, g: 0.8301887, b: 0.8301887, a: 1}
     - g_DepthColor: {r: 1, g: 1, b: 1, a: 1}
     - g_SpecColor: {r: 1, g: 1, b: 1, a: 1}

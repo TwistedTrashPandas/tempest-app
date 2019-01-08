@@ -38,7 +38,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             //material.SetFloat("g_fTimeStepTex", g_fTimeStepTex);
             transform.position = vectorField.GetCenterWS();
             Vector3 dims = vectorField.GetDimensions();
-            transform.localScale = new Vector3(dims.x, dims.z, dims.y) * vectorField.GetCellSize() / 10f;
+            transform.localScale = new Vector3(dims.x * vectorField.GetHorizontalCellSize(), dims.y * vectorField.GetCellSize(), dims.z * vectorField.GetHorizontalCellSize()) / 10f;
             StartCoroutine(UpdateTextures());
             if (camPos == null)
                 camPos = Camera.main.transform;

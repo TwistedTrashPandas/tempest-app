@@ -19,14 +19,16 @@ namespace MastersOfTempest.Environment.Interacting
                     if (other.gameObject.tag == "Ship")
                     {
                         Ship ship = other.transform.parent.gameObject.GetComponent<Ship>();
-                        ship.GetCurrenStatus().Condition |= ShipCondition.Freezing;
+                        if (ship != null)
+                            ship.GetCurrenStatus().Condition |= ShipCondition.Freezing;
                     }
                     break;
                 case DangerZoneType.Fragile:
                     if (other.gameObject.tag == "Ship")
                     {
                         ShipPart part = other.gameObject.GetComponent<ShipPart>();
-                        part.status ^= ShipPartStatus.Fragile;
+                        if (part != null)
+                            part.status ^= ShipPartStatus.Fragile;
                     }
                     else if (other.GetComponent<Damaging>() != null)
                     {
@@ -47,17 +49,18 @@ namespace MastersOfTempest.Environment.Interacting
                     if (other.gameObject.tag == "Ship")
                     {
                         Ship ship = other.transform.parent.gameObject.GetComponent<Ship>();
-                        ship.GetCurrenStatus().Condition &= ~ShipCondition.Freezing;
+                        if (ship != null)
+                            ship.GetCurrenStatus().Condition &= ~ShipCondition.Freezing;
                     }
-                    break;
                     break;
                 case DangerZoneType.Fragile:
                     if (other.gameObject.tag == "Ship")
                     {
                         ShipPart part = other.gameObject.GetComponent<ShipPart>();
-                        part.status ^= ShipPartStatus.Fragile;
+                        if (part != null)
+                            part.status ^= ShipPartStatus.Fragile;
                     }
-                    else if(other.GetComponent<Damaging>() != null)
+                    else if (other.GetComponent<Damaging>() != null)
                     {
                         other.GetComponent<Damaging>().status ^= DamagingStatus.Fragile;
                     }

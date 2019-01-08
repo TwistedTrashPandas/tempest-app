@@ -29,14 +29,16 @@ namespace MastersOfTempest.ShipBL
                     throw new System.InvalidOperationException("EnvironmentManager has to be in the same scene as the ship.");
                 targetView = transform.forward;
             }
+            else
+                this.enabled = false;
         }
 
         private void FixedUpdate()
         {
-            if(vectorField != null && rb != null)
+            if (vectorField != null && rb != null)
             {
                 // apply force depending on position in vectorfield and adjust viewing direction accordingly
-                targetForce = vectorField.GetVectorAtPos(transform.position) + pullStrength *(vectorField.GetCenterWS() - transform.position);
+                targetForce = vectorField.GetVectorAtPos(transform.position) + pullStrength * (vectorField.GetCenterWS() - transform.position);
                 targetForce.y = 0f;
                 targetView = rb.velocity.normalized;
                 targetView.y = 0f;
