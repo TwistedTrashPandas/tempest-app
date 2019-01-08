@@ -15,7 +15,7 @@ float3 g_f3ShipPosition;
 float g_fTimestep;
 float g_fDampVel;
 float g_fMaxDist;
-int g_iNumCloudSkyParticles;
+uint g_iNumCloudSkyParticles;
 int g_bEndAnimation;
 
 [numthreads(256, 1, 1)]
