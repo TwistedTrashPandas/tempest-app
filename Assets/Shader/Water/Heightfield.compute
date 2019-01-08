@@ -370,19 +370,22 @@ void interpolateVerticesEdges(uint3 id : SV_DispatchThreadID) {
 
 	int2 mesh_idx = int2((int)floor(id.x / (d)), id.x % (d));
 	float lerp_val = 0.5f;
-	int stride = 1;
+	int stride_x = 0;
+	int stride_y = 0;
 	if (mesh_idx.x == 0 || mesh_idx.x == w - 1) {
 		int mod_y = mesh_idx.y % g_iScale;
 		if (mod_y != 0) {
-			verticesPosition[i] = lerp(verticesPosition[(mesh_idx.x)* d + (mesh_idx.y + stride) + g_iIdxOffset], verticesPosition[(mesh_idx.x) * d + (mesh_idx.y - stride) + g_iIdxOffset], lerp_val);
+			stride_y = 1;
+			//verticesPosition[i] = lerp(verticesPosition[(mesh_idx.x)* d + (mesh_idx.y + stride) + g_iIdxOffset], verticesPosition[(mesh_idx.x) * d + (mesh_idx.y - stride) + g_iIdxOffset], lerp_val);
 		}
 	}
 	else if (mesh_idx.y == 0 || mesh_idx.y == d - 1) {
 		int mod_x = mesh_idx.x % g_iScale;
 		if (mod_x != 0) {
-			verticesPosition[i] = lerp(verticesPosition[(mesh_idx.x + stride) * d + (mesh_idx.y) + g_iIdxOffset], verticesPosition[(mesh_idx.x - stride) * d + (mesh_idx.y) + g_iIdxOffset], lerp_val);
+			stride_x = 1;
 		}
 	}
+	verticesPosition[i] = lerp(verticesPosition[(mesh_idx.x + stride_x) * d + (mesh_idx.y + stride_y) + g_iIdxOffset], verticesPosition[(mesh_idx.x - stride_x) * d + (mesh_idx.y * stride_y) + g_iIdxOffset], lerp_val);
 }
 
 
@@ -396,9 +399,9 @@ void calcNormTriangles(uint3 id : SV_DispatchThreadID) {
 	//if (id.x >= (g_iWidthMesh - 1) * (g_iDepthMesh - 1) * 2)
 	//	return;
 	float3 pos = verticesPosition[idx.x];
-	float3 pos1 = verticesPosition[idx.y];
-	float3 pos2 = verticesPosition[idx.z];
-	normTriangles[id.x] = normalize(cross(pos - pos1, pos - pos2));
+	//float3 pos1 = ;
+	//float3 pos2 = ;
+	normTriangles[id.x] = normalize(cross(pos - verticesPosition[idx.y], pos - verticesPosition[idx.z]));
 }
 
 RWStructuredBuffer<float3> verticesNormal : register(u2);

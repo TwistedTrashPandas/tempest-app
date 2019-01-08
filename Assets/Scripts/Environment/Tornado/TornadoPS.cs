@@ -439,6 +439,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             particleinitialPosCB.Release();
             indicesRCB.Release();
             indicesCB.Release();
+            particleVisibilityCB.Release();
             vectorFieldCBIn.Release();
             argsBuffer1.Release();
             argsBuffer2.Release();
