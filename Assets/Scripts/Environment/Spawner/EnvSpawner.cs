@@ -181,6 +181,7 @@ namespace MastersOfTempest.Environment.Interacting
             Vector3 dims = vectorField.GetDimensions();
             Vector3 initialPos = Vector3.zero;
             float cellSize = vectorField.GetCellSize();
+            float cellSizeH = vectorField.GetHorizontalCellSize();
             position += randOffset;
             {
                 int prefabNum = 0;
@@ -199,14 +200,14 @@ namespace MastersOfTempest.Environment.Interacting
                         //envObjects[envObjects.Count - 1].moveType = MoveType.ForceDirect; // (MoveType) Random.Range(0,3);
                         break;
                     case EnvObjectType.DangerZone:
-                        initialPos = new Vector3(Random.Range(0, dims.x), Random.Range(dims.y * 0.1f, 0.9f * dims.y), Random.Range(0, dims.z)) * cellSize + new Vector3(0.5f,0.5f,0.5f);
+                        initialPos = new Vector3(Random.Range(0, dims.x) * cellSizeH, Random.Range(dims.y * 0.1f, 0.9f * dims.y)* cellSize, Random.Range(0, dims.z)* cellSizeH) + new Vector3(0.5f,0.5f,0.5f);
                         prefabNum = Mathf.FloorToInt(Random.Range(0f, dangerzonesPrefabs.Length - Mathf.Epsilon));
                         envObjects.Add(GameObject.Instantiate(dangerzonesPrefabs[prefabNum], initialPos, orientation).GetComponent<EnvObject>());
                         Destroy(envObjects[envObjects.Count - 1].GetComponent<ParticleSystem>());
                         //envObjects[envObjects.Count - 1].moveType = MoveType.Static;
                         break;
                     case EnvObjectType.VoiceChatZone:
-                        initialPos = new Vector3(Random.Range(0, dims.x), Random.Range(dims.y * 0.1f, 0.9f * dims.y), Random.Range(0, dims.z)) * cellSize + new Vector3(0.5f, 0.5f, 0.5f);
+                        initialPos = new Vector3(Random.Range(0, dims.x)* cellSizeH, Random.Range(dims.y * 0.1f, 0.9f * dims.y)* cellSize, Random.Range(0, dims.z)* cellSizeH)  + new Vector3(0.5f, 0.5f, 0.5f);
                         prefabNum = Mathf.FloorToInt(Random.Range(0f, voiceChatZonesPrefabs.Length - Mathf.Epsilon));
                         envObjects.Add(GameObject.Instantiate(voiceChatZonesPrefabs[prefabNum], initialPos, orientation).GetComponent<EnvObject>());
                        // envObjects[envObjects.Count - 1].moveType = MoveType.Static;

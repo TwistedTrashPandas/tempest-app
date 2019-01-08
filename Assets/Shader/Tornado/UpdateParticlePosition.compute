@@ -6,7 +6,8 @@ RWStructuredBuffer<float3> particleVelRW: register(u1);
 RWStructuredBuffer<int> particleVisibilityRW: register(u2);
 StructuredBuffer<float3> vectorFieldIn: register(t0);
 
-float4 g_i3Dimensions;
+float3 g_i3Dimensions;
+float3 g_f3CellSizes;
 float3 g_f3Center;
 float3 g_f3MaxVel;
 float3 g_f3RandPos;
@@ -25,7 +26,7 @@ void UpdateParticles(uint3 id : SV_DispatchThreadID)
 	if (id.x >= g_iNumCloudSkyParticles) {
 		// get idx of grid for every particle
 		float3 position = particlePosRW[id.x];
-		int3 idx = (int3)(position / ((float)g_i3Dimensions.w));
+		int3 idx = (int3)(position / (g_f3CellSizes));
 		idx.y = min(g_i3Dimensions.y - 1, max(idx.y, 0));
 		float x_proj = position.x - g_f3Center.x;
 		float z_proj = position.z - g_f3Center.z;
@@ -69,10 +70,10 @@ void UpdateParticles(uint3 id : SV_DispatchThreadID)
 
 		position += velocity * g_fTimestep;
 
-		if (distance(position.xz, g_f3Center.xz) > g_fMaxDist || position.y > g_i3Dimensions[1] * g_i3Dimensions.w) {
+		if (distance(position.xz, g_f3Center.xz) > g_fMaxDist || position.y > g_i3Dimensions[1] * g_f3CellSizes.y) {
 			//particlePosRW[id.x].xz = (particlePosRW[id.x].xz - g_f3Center.xz) * ((id.x + 1) % 2) / 1.5f + g_f3Center.xz;
 			float2 dir = position.xz - g_f3Center.xz;
-			position.xz = (dir) * ((id.x) % 6) / 3.0f + g_f3Center.xz; // (dir) * min((id.x) % 2, 1) / 2.2f +
+			position.xz = (dir) * ((id.x) % 4) / 2.9f + g_f3Center.xz; // (dir) * min((id.x) % 2, 1) / 2.2f +
 			position.y -= g_f3Center.y * 2;
 			velocity *= g_f3RandPos;// float3(0.0f, 0.0f, 0.0f);
 		}

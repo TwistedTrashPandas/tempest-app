@@ -91,9 +91,9 @@ namespace MastersOfTempest.Environment.VisualEffects
             {
                 if (i > Mathf.RoundToInt(Mathf.Pow(2, numCloudSkyParticles)))
                 {
-                    float x = Random.Range(0f, vectorField.GetDimensions()[0] * vectorField.GetCellSize());
-                    float z = Random.Range(0f, vectorField.GetDimensions()[2] * vectorField.GetCellSize());
-                    float y = Random.Range(-vectorField.GetDimensions()[1] * vectorField.GetCellSize() * 0.2f, vectorField.GetDimensions()[1] * vectorField.GetCellSize());
+                    float x = Random.Range(0f, vectorField.GetDimensions()[0] * vectorField.GetHorizontalCellSize());
+                    float z = Random.Range(0f, vectorField.GetDimensions()[2] * vectorField.GetHorizontalCellSize());
+                    float y = Random.Range(-vectorField.GetDimensions()[1] * vectorField.GetCellSize() * 0.15f, vectorField.GetDimensions()[1] * vectorField.GetCellSize());
                     particlePos[i] = new Vector3(x, y, z);
                 }
                 else
@@ -161,18 +161,18 @@ namespace MastersOfTempest.Environment.VisualEffects
             kernelP = particlesCS.FindKernel("UpdateParticles");
             kernelS = sortCS.FindKernel("BitonicSort");
             kernelT = sortCS.FindKernel("Transpose");
-            float[] dims = new float[4];
+            float[] dims = new float[3];
             //  assume static grid size
             Vector3Int temp = vectorField.GetDimensions();
             dims[0] = temp.x;
             dims[1] = temp.y;
             dims[2] = temp.z;
-            dims[3] = Mathf.RoundToInt(vectorField.GetCellSize());
-            maxDist = temp.x * vectorField.GetCellSize() * 3.5f;
+            float[] cellsizes = {vectorField.GetHorizontalCellSize(), vectorField.GetCellSize(),vectorField.GetHorizontalCellSize() };
+            maxDist = temp.x * vectorField.GetHorizontalCellSize() * 3.5f;
             float[] center = new float[3];
-            center[0] = (temp.x - 1) * 0.5f * dims[3];
-            center[1] = (temp.y - 1) * 0.5f * dims[3];
-            center[2] = (temp.z - 1) * 0.5f * dims[3];
+            center[0] = (temp.x - 1) * 0.5f * cellsizes[0];
+            center[1] = (temp.y - 1) * 0.5f * cellsizes[1];
+            center[2] = (temp.z - 1) * 0.5f * cellsizes[2];
             int[] idcs = new int[numberParticles];
             for (int i = 0; i < numberParticles; i++)
                 idcs[i] = i;
@@ -189,6 +189,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             }
 
             particlesCS.SetFloats("g_i3Dimensions", dims);
+            particlesCS.SetFloats("g_f3CellSizes", cellsizes);
             particlesCS.SetFloats("g_f3Center", center);
             particlesCS.SetFloat("g_fDampVel", dampVel);
             particlesCS.SetInt("g_iNumCloudSkyParticles", Mathf.RoundToInt(Mathf.Pow(2, numCloudSkyParticles)));
@@ -196,11 +197,11 @@ namespace MastersOfTempest.Environment.VisualEffects
             particlesCS.SetFloat("g_fMaxDist", maxDist);
             particlesCS.SetInt("g_bEndAnimation", 0);
 
-            material.SetFloat("g_fHeightInterp", dims[1] * dims[3] * 0.333f);
-            material.SetFloat("g_fMaxHeight", dims[1] * dims[3]);
-            material.SetFloatArray("g_i3Dimensions", dims);
+            material.SetFloat("g_fHeightInterp", dims[1] * cellsizes[1] * 0.333f);
+            material.SetFloat("g_fMaxHeight", dims[1] * cellsizes[1]);
+            //material.SetFloatArray("g_i3Dimensions", dims);
             material.SetVector("g_vCenter", new Vector4(center[0], center[1], center[2], 1.0f));
-            material.SetFloat("g_fTopHeight",  dims[1] * dims[3] * 1.05f);
+            material.SetFloat("g_fTopHeight",  dims[1] * cellsizes[1] * 1.05f);
             //  assume static data for compute buffers
             vectorFieldCBIn.SetData(vectorField.GetVectorField());
             particlePosCB.SetData(particlePos);
@@ -369,14 +370,15 @@ namespace MastersOfTempest.Environment.VisualEffects
             maxVel[0] = float.MaxValue;
             maxVel[1] = float.MaxValue;
             maxVel[2] = float.MaxValue;
-            float[] dims = new float[4];
+            float[] cellsizes = { vectorField.GetHorizontalCellSize(), vectorField.GetCellSize(), vectorField.GetHorizontalCellSize() };
+            float[] dims = new float[3];
             dims[0] = temp.x;
             dims[1] = temp.y;
             dims[2] = temp.z;
-            dims[3] = Mathf.RoundToInt(vectorField.GetCellSize());
             particlesCS.SetInt("g_bEndAnimation", 1);
             winAnimation.SetFloat("g_fVelocityScale", 6000.0f);
-            winAnimation.SetVector("g_i3Dimensions", new Vector4(dims[0], dims[1], dims[2], dims[3]));
+            winAnimation.SetFloats("g_i3Dimensions", dims);
+            winAnimation.SetFloats("g_f3CellSizes", cellsizes);
             particlesCS.SetFloats("g_f3MaxVel", maxVel);
             particlesCS.SetFloat("g_fDampVel", 0.0f);
             material.SetFloat("g_bSize", 1.0f);
@@ -387,11 +389,10 @@ namespace MastersOfTempest.Environment.VisualEffects
         private void UpdateVectorFieldPS()
         {
             Vector3Int temp = vectorField.GetDimensions();
-            float[] dims = new float[4];
+            float[] dims = new float[3];
             dims[0] = temp.x;
             dims[1] = temp.y;
             dims[2] = temp.z;
-            dims[3] = Mathf.RoundToInt(vectorField.GetCellSize());
             float[] pos = new float[3];
             pos[0] = ship.transform.position.x;
             pos[1] = ship.transform.position.y;

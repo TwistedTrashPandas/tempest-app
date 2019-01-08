@@ -39,10 +39,10 @@ namespace MastersOfTempest
             VectorField vectorField = GetComponent<Gamemaster>().GetEnvironmentManager().vectorField;
             winCondition = gameObject.AddComponent<CapsuleCollider>();
             winCondition.center = vectorField.GetCenterWS();
-            winCondition.height = vectorField.GetCellSize() * vectorField.GetDimensions().y * 1.5f;
+            winCondition.height = vectorField.GetCellSize() * vectorField.GetDimensions().y * 1.75f;
             winCondition.direction = 1;
             winCondition.isTrigger = true;
-            winCondition.radius = 10f;
+            winCondition.radius = 15f;
             if (serverObject.onServer)
             {
                 OnWinServer();

@@ -149,8 +149,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   f_cellSize: 4
+  f_cellSize_horizontal: 16
   v3_dimensions: {x: 152, y: 312, z: 152}
   loadFromFile: 1
   vectorFieldFileNum: 999
-  velScale: 50
-  yVelScale: 0.75
+  velScale: 75
+  yVelScale: 1
