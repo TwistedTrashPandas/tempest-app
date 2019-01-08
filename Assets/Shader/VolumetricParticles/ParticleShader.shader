@@ -78,8 +78,8 @@
 			uint id : VertexID;
 			float4 projPos: TEXCOORD1;
 			float4 uv: TEXCOORD0;
-			LIGHTING_COORDS(2, 3)
-			//UNITY_FOG_COORDS(4)
+			//LIGHTING_COORDS(2, 3)
+				//UNITY_FOG_COORDS(4)
 		};
 
 

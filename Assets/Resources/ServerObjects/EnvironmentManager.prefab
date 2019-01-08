@@ -62,19 +62,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b481b83ab7320c43aa7cabceab2dbc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnRate: 1
-  dampingFactorVel: 0.99
+  spawnRate: 0.8
+  dampingFactorVel: 0.992
   dampingFactorForce: 0
-  maximumObjVelocity: 50
-  spawnProbD: 0.9
-  spawnProbS: 0.05
-  spawnProbZ: 0.05
-  rockRotSpeed: 10
-  minRadiusT: 10
-  maxRadiusT: 20
-  minRadiusS: 20
-  maxRadiusS: 30
-  maxNumObjects: 75
+  maximumObjVelocity: 75
+  spawnProbD: 0.95
+  spawnProbS: 0.025
+  spawnProbZ: 0.025
+  rockRotSpeed: 2
+  minRadiusT: 25
+  maxRadiusT: 30
+  minRadiusS: 25
+  maxRadiusS: 2000
+  maxNumObjects: 100
   vectorField: {fileID: 114404567317752372}
   damagingPrefabs:
   - {fileID: 1476894203371464, guid: e8c9d0a525a3e1b4fba9d4d419b35e72, type: 3}

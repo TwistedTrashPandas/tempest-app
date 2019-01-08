@@ -84,7 +84,7 @@ Shader "Custom/HeightFieldRender" {
 			float4 refl : TEXCOORD1;
 			float4 worldPos : TEXCOORD2;
 			float2 uv : TEXCOORD3;
-			SHADOW_COORDS(3)
+			//SHADOW_COORDS(3)
 		};
 
 		v2g vert(appdata v)

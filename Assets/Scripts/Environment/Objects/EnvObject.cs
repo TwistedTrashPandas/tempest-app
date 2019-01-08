@@ -6,7 +6,7 @@ namespace MastersOfTempest.Environment.Interacting
 {
     public class EnvObject : MonoBehaviour
     {
-        public int instanceID;
+        public int listIndex;
         public Vector3 relativeTargetPos;
         public EnvObjectType type;
         public float speed;
@@ -25,6 +25,7 @@ namespace MastersOfTempest.Environment.Interacting
 
         public void MoveNext(Vector3 targetPos, Vector3 vectorVal)
         {
+            vectorVal.y = 0f;
             switch (moveType)
             {
                 case MoveType.Direct:
