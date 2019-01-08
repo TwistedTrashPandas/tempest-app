@@ -55,8 +55,8 @@ MonoBehaviour:
   depthHF: 512
   widthMesh: 128
   depthMesh: 128
-  quadSize: 50
-  angleBias: 0
+  quadSize: 100
+  angleBias: 10
   detailScaleFactor: 2
   speed: 6
   gridSpacing: 2

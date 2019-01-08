@@ -136,7 +136,7 @@ Material:
     - g_Glossiness: 0.5
     - g_Metallic: 0
     - g_PointLightIntensity: 0
-    - g_Reflection: 0.25
+    - g_Reflection: 0.3
     - g_Refraction: 0
     - g_Repeat: 8192
     - g_Shininess: 40
