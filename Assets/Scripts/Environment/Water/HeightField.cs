@@ -142,6 +142,8 @@ namespace MastersOfTempest.Environment.VisualEffects
 
         private CreateReflectionTexture crt;
         private float totalTime;
+        private float totalTimeX;
+        private float totalTimeY;
 
         private float quadSizeHF;
 
@@ -160,6 +162,8 @@ namespace MastersOfTempest.Environment.VisualEffects
             currentCollision = 1;
             //transform.position = midPosition - new Vector3(widthMesh * quadSize / 2f, midPosition.y, depthMesh * quadSize / 2f);
             totalTime = 0f;
+            totalTimeX = 0f;
+            totalTimeY = 0f;
             quadSizeHF = quadSize * widthMesh / (float)widthHF;
 
             crt = GetComponent<CreateReflectionTexture>();
@@ -205,6 +209,10 @@ namespace MastersOfTempest.Environment.VisualEffects
 
         public void OnWillRenderObject()
         {
+            material.SetFloat("g_fTimeMoveNoiseX", totalTimeX * Mathf.PI / 2000f);
+            material.SetFloat("g_fTimeMoveNoiseY", totalTimeY * Mathf.PI / 2000f);
+            totalTimeX += (UnityEngine.Random.Range(0f, 1f)) * Time.deltaTime;
+            totalTimeY += (UnityEngine.Random.Range(0f, 1f)) * Time.deltaTime;
             if (waterMode == WaterMode.ReflAndObstcl || waterMode == WaterMode.Reflection)
             {
                 crt.renderReflection(planeMesh, averageHeight);
@@ -410,7 +418,8 @@ namespace MastersOfTempest.Environment.VisualEffects
             if (totalTime < -1f)
                 totalTime += 1f;
 
-            heightFieldCS.SetFloat("g_fDeltaTime", dt);
+
+            heightFieldCS.SetFloat("g_fDeltaTime", Mathf.Min(dt, 0.02f));
             heightFieldCS.SetFloat("g_fTotalTime", totalTime * 2 * Mathf.PI);
             heightFieldCS.SetFloat("g_fSpeed", speed);
             heightFieldCS.SetFloat("g_fMaxVelocity", maxVelocity);
@@ -418,6 +427,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             heightFieldCS.SetFloat("g_fDamping", dampingVelocity);
             heightFieldCS.SetFloat("g_fAvgHeight", averageHeight);
             heightFieldCS.SetFloat("g_fGridSpacing", Mathf.Max(gridSpacing, 1f));
+            //heightFieldCS.SetFloat("g_fTimeMoveNoiseY", Time.time);
 
             if (inOutCounter == 0)
             {
@@ -549,7 +559,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             heightFieldCS.SetInt("g_iWidthMesh", widthMesh * detailScaleFactor);
             heightFieldCS.SetInt("g_iDepthMesh", depthMesh * detailScaleFactor);
             heightFieldCS.Dispatch(kernelVertices, Mathf.CeilToInt((vertices.Length - widthMesh * depthMesh * 5) / 256f), 1, 1);
-            
+
             /// interpolate vertices of detailed submesh ------------------------------------------------------------------------------------------------------------
             heightFieldCS.Dispatch(kernelVerticesEdges, Mathf.CeilToInt((vertices.Length - widthMesh * depthMesh * 5) / 256f), 1, 1);
 

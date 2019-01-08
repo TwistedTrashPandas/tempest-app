@@ -58,11 +58,11 @@ MonoBehaviour:
   quadSize: 100
   angleBias: 10
   detailScaleFactor: 2
-  speed: 6
+  speed: 7
   gridSpacing: 2
   maxHeight: 256
-  maxVelocity: 225
-  randomInitialVelocity: 30
+  maxVelocity: 256
+  randomInitialVelocity: 75
   dampingVelocity: 1
 --- !u!33 &33158592106541602
 MeshFilter:

@@ -25,6 +25,8 @@ Shader "Custom/HeightFieldRender" {
 		g_Refraction("Refraction", Range(0.0, 256.0)) = 50.0
 		g_NormalMap("Normal Map", 2D) = "bump" {}
 		_FresnelTex("Fresnel", 2D) = "" {}
+		[HideInInspector] g_fTimeMoveNoiseX("g_fTimeMoveNoiseX", Range(0.0,1000000.0)) = 0.9
+		[HideInInspector] g_fTimeMoveNoiseY("g_fTimeMoveNoiseY", Range(0.0,1000000.0)) = 0.0
 		[HideInInspector] _ReflectionTex("Internal Reflection", 2D) = "" {}
 	}
 		SubShader{
@@ -46,6 +48,10 @@ Shader "Custom/HeightFieldRender" {
 		float g_Refraction;
 		float g_lerpNormal;
 		float g_Repeat;
+
+		float g_fTimeMoveNoiseX;
+		float g_fTimeMoveNoiseY;
+
 		float4 g_Color;
 		float4 g_SpecColor;
 		float4 g_DepthColor;
@@ -182,6 +188,9 @@ Shader "Custom/HeightFieldRender" {
 
 			float4 frag(v2g i) : SV_Target
 			{
+				i.uv.x += sin(g_fTimeMoveNoiseX);
+				i.uv.y += cos(g_fTimeMoveNoiseY);
+
 				i.normal = normalize(lerp(UnpackNormal(tex2D(g_NormalMap, i.uv)), i.normal, g_lerpNormal)); // i.normal +
 				//float3 pos = mul(UNITY_MATRIX_IT_MV, mul(unity_CameraInvProjection, i.vertex));
 				float3 reflectView;
