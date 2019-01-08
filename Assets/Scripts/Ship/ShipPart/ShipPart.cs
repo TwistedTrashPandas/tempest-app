@@ -22,6 +22,7 @@ namespace MastersOfTempest.ShipBL
 
         private Vector3[] initialMesh;
         private Vector3[] targetMesh;
+        private Material material;
 
         protected override void Start()
         {
@@ -30,6 +31,7 @@ namespace MastersOfTempest.ShipBL
             targetMesh = initialMesh;
             if (initialMesh == null)
                 throw new System.InvalidOperationException("Ship part can only be attached to objects with meshes");
+            material = GetComponent<MeshRenderer>().material;
         }
 
         public float GetDestruction()
@@ -177,6 +179,16 @@ namespace MastersOfTempest.ShipBL
             GetComponent<MeshFilter>().mesh.vertices = vert;
             targetMesh = vert;
             SendToAllClients(buffer, Facepunch.Steamworks.Networking.SendType.Reliable);*/
+        }
+
+        public void ChangeShaderDestructionValue()
+        {
+            material.SetFloat("_fDestruction", destruction);
+        }
+
+        public void ResetShaderDestructionValue()
+        {
+            material.SetFloat("_fDestruction", 0.0f);
         }
     }
 }

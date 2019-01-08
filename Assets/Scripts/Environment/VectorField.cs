@@ -9,6 +9,7 @@ namespace MastersOfTempest.Environment
     {
         /// cellSize for the vector field
         public float f_cellSize = 1.0f;
+        public float f_cellSize_horizontal = 1.0f;
         /// dimensions of the field
         public Vector3Int v3_dimensions;
         /// actual values
@@ -18,10 +19,10 @@ namespace MastersOfTempest.Environment
         public int vectorFieldFileNum;
 
         /// scaling of vector field
-        [Range(0.01f, 256f)]
+        [Range(0.01f, 512f)]
         public float velScale;
 
-        [Range(0.001f, 1.0f)]
+        [Range(-1.0f, 1.0f)]
         public float yVelScale;
 
         private Vector2 v2_rotCenter;
@@ -52,12 +53,12 @@ namespace MastersOfTempest.Environment
         private void LoadVectorFieldFromFile(int fileIndex)
         {
             // decompress uni file
-            string uni_name = Application.dataPath + uniFilePath + fileName + fileIndex.ToString("D" + 4) + ".uni";
+            string uni_name = Application.streamingAssetsPath + uniFilePath + fileName + fileIndex.ToString("D" + 4) + ".uni";
             FileInfo inf = new FileInfo(uni_name);
             FileHandling.Decompress(inf);
 
             // load decompressed file
-            string file_name = Application.dataPath + uniFilePath + fileName + fileIndex.ToString("D" + 4);
+            string file_name = Application.streamingAssetsPath + uniFilePath + fileName + fileIndex.ToString("D" + 4);
             currentVelFile = file_name;
             inf = new FileInfo(file_name);
             byte[] buffer = FileHandling.ReadFile(inf, header_size + grid_size + 4);
@@ -180,6 +181,11 @@ namespace MastersOfTempest.Environment
             return f_cellSize;
         }
 
+        public float GetHorizontalCellSize()
+        {
+            return f_cellSize_horizontal;
+        }
+
         public Vector3Int GetDimensions()
         {
             return v3_dimensions;
@@ -192,7 +198,7 @@ namespace MastersOfTempest.Environment
 
         public Vector3 GetCenterWS()
         {
-            return new Vector3(v3_dimensions[0] * f_cellSize / 2f - 0.5f, v3_dimensions[0] * f_cellSize / 2f - 0.5f, v3_dimensions[0] * f_cellSize / 2f - 0.5f);
+            return new Vector3(v3_dimensions[0] * f_cellSize_horizontal / 2f - 0.5f, v3_dimensions[0] * f_cellSize / 2f - 0.5f, v3_dimensions[0] * f_cellSize_horizontal / 2f - 0.5f);
         }
 
         // calculates the extrapolated position in the grid (in a circular fashion)
@@ -201,9 +207,9 @@ namespace MastersOfTempest.Environment
             Vector3 tmp = pos - transform.position;
             float x_proj = tmp.x - v2_rotCenter.x;
             float z_proj = tmp.z - v2_rotCenter.y;
-            int i = (int)(tmp.x / f_cellSize),
+            int i = (int)(tmp.x / f_cellSize_horizontal),
                 j = (int)Mathf.Clamp((tmp.y / f_cellSize), 0, v3_dimensions[1] - 1),
-                k = (int)(tmp.z / f_cellSize);
+                k = (int)(tmp.z / f_cellSize_horizontal);
             if ((i < 0 || i >= v3_dimensions[0]) || (k < 0 || k >= v3_dimensions[2]))
             {
                 if (Mathf.Abs(x_proj) > Mathf.Abs(z_proj))
@@ -231,6 +237,7 @@ namespace MastersOfTempest.Environment
 
         private void OnApplicationQuit()
         {
+            FileHandling.DeleteFile(currentVelFile+".meta");
             FileHandling.DeleteFile(currentVelFile);
         }
     }
