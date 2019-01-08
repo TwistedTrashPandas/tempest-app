@@ -26,10 +26,8 @@ public class Hologram : MonoBehaviour
 
     private void Update ()
     {
-        hologramCamera.Render();
-
         shipPartManager.ChangeShaderDestructionValue();
-
+        
         // Orient the hologram that its always facing the main camera
         transform.LookAt(mainCamera.transform);
         transform.forward *= -1;
@@ -42,6 +40,8 @@ public class Hologram : MonoBehaviour
         // Switch render texture between depth and color
         renderTextureToggle = !renderTextureToggle;
         hologramCamera.targetTexture = renderTextureToggle ? hologramColor : hologramDepth;
+
+        hologramCamera.Render();
 
         shipPartManager.ResetShaderDestructionValue();
     }
