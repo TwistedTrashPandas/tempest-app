@@ -11,6 +11,11 @@ namespace MastersOfTempest.Environment.Interacting
         public float health;
         public DamagingStatus status;
 
+        /*Rock Animation Code Starts*/
+        public List<GameObject> rockParts;
+        
+        /*Rock Animation Code Ends*/
+
         protected override void OnCollisionEnter(Collision collision)
         {
             if (collision.gameObject.tag == "Ship" && collision.gameObject.GetComponent<Ship>().GetCurrenStatus().Condition != ShipCondition.Shielded)
@@ -42,6 +47,23 @@ namespace MastersOfTempest.Environment.Interacting
                 Destroy(this.gameObject);
             else
             {
+                /*Rock Animation Code Starts*/
+                //Get all seperate Objects
+                foreach (Transform child in transform)
+                {
+                    rockParts.Add(child.gameObject);
+                }
+                rockParts.Add(this.transform.parent.gameObject);
+
+                rockParts.ToArray();
+
+                //Seperate those
+                this.transform.parent = null;
+
+                this.gameObject.AddComponent<RockAnimator>();
+
+
+                /*Rock AnimationCode Ends*/
 
             }
         }
