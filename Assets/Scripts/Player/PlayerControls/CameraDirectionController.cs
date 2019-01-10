@@ -35,7 +35,7 @@ namespace MastersOfTempest.PlayerControls
                 }
                 else
                 {
-                    Cursor.lockState = CursorLockMode.Confined;
+                    Cursor.lockState = CursorLockMode.None;
                     Cursor.visible = true;
                 }
             }
@@ -61,6 +61,10 @@ namespace MastersOfTempest.PlayerControls
                 pitch -= speedV * Input.GetAxis("Mouse Y");
                 pitch = Mathf.Clamp(pitch, PitchMin, PitchMax);
                 FirstPersonCamera.transform.localEulerAngles = new Vector3(pitch, yaw, 0.0f);
+            }
+            if(Input.GetKeyDown(KeyCode.Escape))
+            {
+                Active ^= true;
             }
         }
     }
