@@ -81,7 +81,10 @@ namespace MastersOfTempest.Environment.Interacting
                 {
                     if (envObjects[i] == null)
                     {
-                        envObjects.RemoveAt(i);
+                        if (envObjects[i].GetComponent<Damaging>() != null)
+                            envObjects[i].GetComponent<Damaging>().Explode(true);
+                        else
+                            envObjects.RemoveAt(i);
                         continue;
                     }
                     else
@@ -188,7 +191,7 @@ namespace MastersOfTempest.Environment.Interacting
                 switch (type)
                 {
                     case EnvObjectType.Damaging:
-                        float randomSize = Random.Range(1f, 8.0f);
+                        float randomSize = Random.Range(1f, 2.0f);
                         localScale = new Vector3(randomSize, randomSize, randomSize);
                         prefabNum = Mathf.FloorToInt(Random.Range(0f, damagingPrefabs.Length - Mathf.Epsilon));
                         position.y = Random.Range(0f, dims.y * cellSize);
