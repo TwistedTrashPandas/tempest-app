@@ -81,10 +81,7 @@ namespace MastersOfTempest.Environment.Interacting
                 {
                     if (envObjects[i] == null)
                     {
-                        if (envObjects[i].GetComponent<Damaging>() != null)
-                            envObjects[i].GetComponent<Damaging>().Explode(true);
-                        else
-                            envObjects.RemoveAt(i);
+                        envObjects.RemoveAt(i);
                         continue;
                     }
                     else
@@ -98,6 +95,25 @@ namespace MastersOfTempest.Environment.Interacting
                     }
                 }
             }
+        }
+
+        private void RemoveFirstEnvObject()
+        {
+            if (envObjects.Count > maxNumObjects)
+            {
+                EnvObject toDestroy;
+                toDestroy = envObjects[0];
+                toDestroy.EnableGravity();
+                envObjects.RemoveAt(0);
+                //Destroy(toDestroy.gameObject, 10f);
+                //spawnRate = 2f; // set variable for this (TOOD)
+            }
+        }
+
+        public void AddEnvObject(EnvObject envObject)
+        {
+            RemoveFirstEnvObject();
+            envObjects.Add(envObject);
         }
 
         private Vector3 GetRandomPointOnSphere(float minRadius, float maxRadius)
@@ -118,13 +134,8 @@ namespace MastersOfTempest.Environment.Interacting
         private IEnumerator SpawnObject()
         {
             yield return new WaitForSeconds(spawnRate);
-            if (envObjects.Count > maxNumObjects)
-            {
-                GameObject toDestroy;
-                toDestroy = envObjects[0].gameObject;
-                envObjects.RemoveAt(0);
-                Destroy(toDestroy);
-            }
+            RemoveFirstEnvObject();
+
             Vector3 centerPos = vectorField.GetCenterWS();
             centerPos.y = 0f;
             EnvObjectType type;
@@ -197,13 +208,14 @@ namespace MastersOfTempest.Environment.Interacting
                         position.y = Random.Range(0f, dims.y * cellSize);
                         envObjects.Add(GameObject.Instantiate(damagingPrefabs[prefabNum], position, orientation).GetComponent<EnvObject>());
                         // hard coded so far larger rocks are slower but deal more damage
-                        envObjects[envObjects.Count - 1].GetComponent<Damaging>().damage = 0.1f * randomSize;
+                        envObjects[envObjects.Count - 1].GetComponent<Damaging>().damage = 0.25f * randomSize;
+                        envObjects[envObjects.Count - 1].GetComponent<Damaging>().envSpawner = this;
                         envObjects[envObjects.Count - 1].GetComponent<Rigidbody>().angularVelocity = new Vector3(Random.Range(-1f,1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f)) * rockRotSpeed;
                         envObjects[envObjects.Count - 1].speed *= 1f / randomSize;
                         if (Random.Range(0, 10) == 0)
                         {
                             envObjects[envObjects.Count - 1].moveType = MoveType.Direct; // (MoveType) Random.Range(0,3);
-                            envObjects[envObjects.Count - 1].speed *= 0.4f;
+                            envObjects[envObjects.Count - 1].speed *= 0.3f;
                         }
                         else
                             envObjects[envObjects.Count - 1].moveType = MoveType.ForceDirect; // (MoveType) Random.Range(0,3);

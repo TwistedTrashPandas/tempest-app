@@ -107,6 +107,11 @@ namespace MastersOfTempest.Environment.Interacting
             rigidbody.AddForce(-damping_factor * rigidbody.velocity);
         }
 
+        public void EnableGravity()
+        {
+            rigidbody.useGravity = true;
+        }
+
         protected virtual void OnCollisionEnter(Collision collision)
         {
 

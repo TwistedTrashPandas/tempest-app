@@ -1,4 +1,5 @@
-﻿using MastersOfTempest.ShipBL;
+﻿using MastersOfTempest.Networking;
+using MastersOfTempest.ShipBL;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,11 +11,7 @@ namespace MastersOfTempest.Environment.Interacting
         public float damage;
         public float health;
         public DamagingStatus status;
-
-        /*Rock Animation Code Starts*/
-        public List<GameObject> rockParts;
-        
-        /*Rock Animation Code Ends*/
+        public EnvSpawner envSpawner;
 
         protected override void OnCollisionEnter(Collision collision)
         {
@@ -23,10 +20,12 @@ namespace MastersOfTempest.Environment.Interacting
                 Ship ship = collision.gameObject.GetComponentInParent<Ship>();
                 ship.GetShipForceManipulator().AddForceAtPosition(collision.impulse, collision.contacts[0].point);*/
                 ShipPart part = collision.collider.gameObject.GetComponent<ShipPart>();
-                if(part != null)
+                if (part != null)
                     part.ResolveCollision(damage, collision.contacts, collision.impulse);
                 Explode(false);
             }
+            else if (collision.gameObject.layer == LayerMask.NameToLayer("Water"))
+                Destroy(this.gameObject);
         }
 
         // call on server
@@ -37,10 +36,9 @@ namespace MastersOfTempest.Environment.Interacting
             else
                 health -= h;
             if (health < 0)
-                Explode(false);
+                Explode(true);
         }
-
-        // TODO: spawn new rocks?, explosion animation
+        
         public void Explode(bool split)
         {
             if (!split)
@@ -48,23 +46,22 @@ namespace MastersOfTempest.Environment.Interacting
             else
             {
                 /*Rock Animation Code Starts*/
-                //Get all seperate Objects
-                foreach (Transform child in transform)
+                GameObject[] children = transform.GetComponentsInChildren<GameObject>();
+
+                for (int i = 1; i < children.Length; i++)
                 {
-                    rockParts.Add(child.gameObject);
+                    // TODO change rigidbody parameters
+                    GameObject currentRockPart = GameObject.Instantiate(this.gameObject);
+                    GameObject[] children_2 = currentRockPart.transform.GetComponentsInChildren<GameObject>();
+                    for (int j = 1; j < children_2.Length; j++)
+                    {
+                        if (i != j)
+                            children_2[i].SetActive(false);
+                    }
+                    envSpawner.AddEnvObject(currentRockPart.GetComponent<Damaging>());
                 }
-                rockParts.Add(this.transform.parent.gameObject);
-
-                rockParts.ToArray();
-
-                //Seperate those
-                this.transform.parent = null;
-
-                this.gameObject.AddComponent<RockAnimator>();
-
-
+                Destroy(this.gameObject);
                 /*Rock AnimationCode Ends*/
-
             }
         }
     }
