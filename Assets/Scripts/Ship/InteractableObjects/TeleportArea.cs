@@ -16,7 +16,6 @@ namespace MastersOfTempest.ShipBL
 
         public override float GetDistance()
         {
-            // TODO
             return float.MaxValue;
         }
     }
