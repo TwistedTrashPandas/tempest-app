@@ -8,7 +8,10 @@ namespace MastersOfTempest.PlayerControls
     public class WizardInputAnimations : MonoBehaviour
     {
         public WizardInput WizardInput;
-        //public Animator anim; 
+        public Camera FirstPersonCamera;
+        private const string ArmsPrefabPath = "WizardArms";
+        private WizardArmsController armsController;
+
 
         private void Start()
         {
@@ -16,51 +19,50 @@ namespace MastersOfTempest.PlayerControls
             {
                 throw new InvalidOperationException($"{nameof(WizardInput)} is not specified!");
             }
+            var arms = Resources.Load<WizardArmsController>(ArmsPrefabPath);
+            armsController = Instantiate(arms, FirstPersonCamera.transform);
             WizardInput.StartedCharging += OnChargeStarted;
             WizardInput.ChargingCancelled += OnChargeCancelled;
             WizardInput.ChargingCompleted += OnChargeCompleted;
             WizardInput.DischargeHit += OnDischargeHit;
             WizardInput.DischargeMiss += OnDischargeMiss;
-
-            //anim = GetComponent<Animator>();
-            //anim.Play("Armature | Idle");
-            
         }
 
         private void OnChargeStarted(object sender, EventArgs args)
         {
-            
-            //anim.CrossFade("Armature|GrabMagicRight", 0.5f);
-            //anim.CrossFade("Armature|RightHandGrab", 0.5f);
-            //anim.CrossFade("Armature|RightHandHold", 0.1f);
+            armsController.HoldSpell();
             Debug.Log("Animation for charge starting showed");
         }
 
         private void OnChargeCancelled(object sender, EventArgs args)
         {
-            
-            //anim.CrossFade("Armature|Idle", 0.5f);
-            Debug.Log("Animation for charge cancelled showed");   
+
+            armsController.PulseRightHand();
+            armsController.ReleaseSpell();
+            Debug.Log("Animation for charge cancelled showed");
         }
 
         private void OnChargeCompleted(object sender, EventArgs args)
         {
-            
-            //anim.CrossFade("Armature|Idle", 0.5f);
+
+            //TODO: some particles effect prob
+            armsController.PulseRightHand();
             Debug.Log("Animation for charge completion showed");
         }
 
         private void OnDischargeHit(object sender, EventArgs args)
         {
-            //anim.CrossFade("Armature|RightHandGrab", 0.5f);
+            armsController.PulseRightHand();
+            armsController.ReleaseSpell();
             Debug.Log("Animation for discharge hit showed");
         }
 
         private void OnDischargeMiss(object sender, EventArgs args)
         {
 
-            //anim.CrossFade("Armature|RightHandGrab", 0.5f); //Placeholder Animation atm
-            Debug.Log("Animation for discharge miss showed");   
+            armsController.PulseRightHand();
+            armsController.ReleaseSpell();
+            Debug.Log("Animation for discharge miss showed");
         }
     }
 }

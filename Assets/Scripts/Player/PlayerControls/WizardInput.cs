@@ -166,6 +166,7 @@ namespace MastersOfTempest.PlayerControls
 
             var animations = gameObject.AddComponent<WizardInputAnimations>();
             animations.WizardInput = this;
+            animations.FirstPersonCamera = CameraDirectionController.FirstPersonCamera;
         }
 
         private bool UserInteracts()
