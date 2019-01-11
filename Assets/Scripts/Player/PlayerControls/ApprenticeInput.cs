@@ -15,8 +15,6 @@ namespace MastersOfTempest.PlayerControls
     {
         private const string InteractionMessagePrefabName = "UIPrefabs/Apprentice/InteractionMessage";
 
-        private KeyCode interactionKey = KeyCode.Mouse0;
-
         private PlayerAction currentAction;
         private CoroutineCancellationToken currentCancellationToken;
         private bool isActive = true;
@@ -72,7 +70,16 @@ namespace MastersOfTempest.PlayerControls
 
         private bool InteractionCheck ()
         {
-            return Input.GetKeyDown(interactionKey);
+            if (interactionsController.CurrentlyLookedAt is TeleportArea)
+            {
+                return Input.GetKeyDown(KeyCode.E);
+            }
+            else if (interactionsController.CurrentlyLookedAt is RepairArea)
+            {
+                return Input.GetKeyDown(KeyCode.Mouse0);
+            }
+
+            return false;
         }
 
         private void OnNewInteractable(object sender, EventArgs args)

@@ -16,8 +16,8 @@ namespace MastersOfTempest.ShipBL
 
         public override float GetDistance()
         {
-            // TODO
-            return float.MaxValue;
+            // Apprentice has to be close in order to interact
+            return 0.5f;
         }
     }
 }
