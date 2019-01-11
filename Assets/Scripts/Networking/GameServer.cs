@@ -80,9 +80,8 @@ namespace MastersOfTempest.Networking
 
             foreach (ServerObject serverObject in serverObjects.Values)
             {
-                if (!onlySendChangedTransforms || serverObject.transform.hasChanged)
+                if (!onlySendChangedTransforms || serverObject.HasChanged())
                 {
-                    serverObject.transform.hasChanged = false;
                     KeyValuePair<int, ServerObject> serverObjectToAdd = new KeyValuePair<int, ServerObject>(GetHierarchyDepthOfTransform(serverObject.transform, 0), serverObject);
                     serverObjectsToSend.Add(serverObjectToAdd);
                 }
