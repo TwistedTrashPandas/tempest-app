@@ -3,11 +3,10 @@ namespace MastersOfTempest.Environment.Interacting
 {
     public enum VoiceChatZoneType
     {
-        Distortion,
-        LowPitch,
-        HighPitch,
-        Echo,
-        Master,
-        Normalized
+        Distortion = 1,
+        LowPitch = 2,
+        HighPitch = 4,
+        Echo = 8,
+        Normalized = 16
     };
 }

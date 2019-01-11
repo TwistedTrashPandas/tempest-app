@@ -22,14 +22,14 @@ public class Hologram : MonoBehaviour
         mainCamera = Camera.main;
         hologramCamera.enabled = false;
         shipPartManager = GetComponentInParent<ShipPartManager>();
-        if(shipPartManager == null)
+        if (shipPartManager == null)
             shipPartManager = FindObjectOfType<ShipPartManager>();
     }
 
-    private void Update ()
+    private void Update()
     {
         shipPartManager.ChangeShaderDestructionValue();
-        
+
         // Orient the hologram that its always facing the main camera
         transform.LookAt(mainCamera.transform);
         transform.forward *= -1;

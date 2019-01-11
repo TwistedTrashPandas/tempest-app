@@ -28,6 +28,7 @@ namespace MastersOfTempest.Networking
         protected override void StartClient()
         {
             audioSource = GetComponent<AudioSource>();
+
             Facepunch.Steamworks.Client.Instance.Voice.OnCompressedData += OnCompressedData;
 
             // Switch active scene so that instantiate creates the object as part of the client scene       
@@ -40,6 +41,12 @@ namespace MastersOfTempest.Networking
             SceneManager.SetActiveScene(previouslyActiveScene);
         }
 
+
+        protected override void StartServer()
+        {
+            base.StartServer();
+            Destroy(GetComponent<Environment.Interacting.VoiceChatZoneNetwork>());
+        }
         protected override void UpdateClient()
         {
             if (Input.GetKey(recordKey))
