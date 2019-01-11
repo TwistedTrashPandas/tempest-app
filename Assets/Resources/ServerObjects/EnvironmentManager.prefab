@@ -62,7 +62,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b481b83ab7320c43aa7cabceab2dbc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  index: 1
   spawnRate: 0.8
   dampingFactorVel: 0.992
   dampingFactorForce: 0
@@ -71,8 +70,8 @@ MonoBehaviour:
   spawnProbS: 0.025
   spawnProbZ: 0.025
   rockRotSpeed: 2
-  minRadiusT: 25
-  maxRadiusT: 30
+  minRadiusT: 10
+  maxRadiusT: 15
   minRadiusS: 25
   maxRadiusS: 2000
   maxNumObjects: 100

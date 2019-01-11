@@ -351,7 +351,7 @@ MonoBehaviour:
   - {fileID: 2748882870044940088}
   - {fileID: 394533449578786364}
   interpolateOnClient: 1
-  removeChildColliders: 0
+  removeChildColliders: 1
   removeChildRigidbodies: 1
 --- !u!114 &114739895200692124
 MonoBehaviour:
