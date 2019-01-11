@@ -70,7 +70,9 @@ MonoBehaviour:
   moveType: 2
   damage: 0
   health: 1
+  splitForce: 10
   status: 0
+  envSpawner: {fileID: 0}
 --- !u!114 &114395870487560930
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -41,6 +41,8 @@ Shader "Custom/StandardWithDestructionVal"
 
 		_fDestruction("Destruction", Range(0.0, 1.0)) = 0.0
 		_fMaxDistance("MaxDistance", Float) = 10.0
+		_ColorInterp1("Color1", Color) = (1,0,0,1)
+		_ColorInterp2("Color2", Color) = (1,1,0,1)
 
 			// Blending state
 			[HideInInspector] _Mode("__mode", Float) = 0.0
@@ -96,13 +98,16 @@ Shader "Custom/StandardWithDestructionVal"
 			#include "UnityStandardCoreForward.cginc"
 			float _fDestruction;
 			float _fMaxDistance;
+			half4 _ColorInterp1;
+			half4 _ColorInterp2;
 
 			VertexOutputForwardBase vert(in VertexInput v) {
 				return vertForwardBase(v);
 			}
 
+			// Colors hard coded
 			half4 frag(VertexOutputForwardBase i) : SV_TARGET{
-				return lerp(fragForwardBaseInternal(i), half4(1.0f,0.0f,0.0f,1.0f), _fDestruction / 4.0f);
+				return lerp(lerp(fragForwardBaseInternal(i), _ColorInterp2, min(_fDestruction * 2.0f,1.0f)), _ColorInterp1, min(max(0.0f, _fDestruction - 0.5f)*4.0f,1.0f));
 			}
 			ENDCG
 		}

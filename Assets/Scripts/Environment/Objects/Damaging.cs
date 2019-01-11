@@ -10,6 +10,7 @@ namespace MastersOfTempest.Environment.Interacting
     {
         public float damage;
         public float health;
+        public float splitForce;
         public DamagingStatus status;
         public EnvSpawner envSpawner;
 
@@ -58,6 +59,7 @@ namespace MastersOfTempest.Environment.Interacting
                         if (i != j)
                             children_2[i].SetActive(false);
                     }
+                    currentRockPart.GetComponent<Rigidbody>().AddForce(splitForce * new Vector3(UnityEngine.Random.Range(0.5f, 2f), UnityEngine.Random.Range(0.5f, 2f), UnityEngine.Random.Range(0.5f, 2f)));
                     envSpawner.AddEnvObject(currentRockPart.GetComponent<Damaging>());
                 }
                 Destroy(this.gameObject);
