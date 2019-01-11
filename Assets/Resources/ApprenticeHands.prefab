@@ -1217,8 +1217,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8a63353133dcf548a7b190d1ed2d3dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ApprenticeInput: {fileID: 0}
-  anim: {fileID: 0}
+  leftHandAnimator: {fileID: 8188718392640708852}
+  rightHandAnimator: {fileID: 7670250809723004943}
 --- !u!1 &3410360313346560396
 GameObject:
   m_ObjectHideFlags: 0

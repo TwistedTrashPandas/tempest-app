@@ -1,28 +1,28 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace MastersOfTempest.PlayerControls
 {
-public class ApprenticeInputAnimations : MonoBehaviour
-{
-        public ApprenticeInput ApprenticeInput;
-        public Animator anim;
- 
-    private void Start()
+    public class ApprenticeInputAnimations : MonoBehaviour
     {
-        if (ApprenticeInput == null)
-            {
-                throw new InvalidProgramException($"{nameof(ApprenticeInput)} is not specified!");
-            }
-        
-    }
+        public Animator leftHandAnimator;
+        public Animator rightHandAnimator;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        public void Repair ()
+        {
+            rightHandAnimator.SetTrigger("Repair");
+        }
+
+        public void Throw ()
+        {
+            rightHandAnimator.SetTrigger("Throw");
+        }
+
+        public void Meditate ()
+        {
+            leftHandAnimator.SetTrigger("Meditate");
+            rightHandAnimator.SetTrigger("Meditate");
+        }
     }
-}
 }

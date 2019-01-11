@@ -20,9 +20,24 @@ namespace MastersOfTempest.PlayerControls
         private bool isActive = true;
         private Camera firstPersonCamera;
         private InteractionsController interactionsController;
+        private ApprenticeInputAnimations animations;
 
         protected void Start()
         {
+        }
+
+        protected void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Mouse1))
+            {
+                Debug.Log("TODO: Throw");
+                animations.Throw();
+            }
+            else if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Debug.Log("TODO: Meditate");
+                animations.Meditate();
+            }
         }
 
         public override void Interrupt()
@@ -60,6 +75,8 @@ namespace MastersOfTempest.PlayerControls
 
             // Spawn and attach hands
             Instantiate(Resources.Load<GameObject>("ApprenticeHands"), firstPersonCamera.transform, false);
+
+            animations = GetComponentInChildren<ApprenticeInputAnimations>();
 
             // Make sure that the hands are visible
             firstPersonCamera.nearClipPlane = 0.01f;
@@ -107,6 +124,7 @@ namespace MastersOfTempest.PlayerControls
         {
             // TODO: For repairing: Call AddDestruction with negative value on all parts in the ShipPartManager interaction area on the server only
             Debug.Log("TODO: Repair " + target.name);
+            animations.Repair();
         }
     }
 }
