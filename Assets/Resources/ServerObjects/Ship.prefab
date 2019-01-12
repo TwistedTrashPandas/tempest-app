@@ -350,9 +350,11 @@ MonoBehaviour:
   - {fileID: 8371197114597836668}
   - {fileID: 2748882870044940088}
   - {fileID: 394533449578786364}
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &114739895200692124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -393,7 +395,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 126
+  m_Constraints: 0
   m_CollisionDetection: 1
 --- !u!114 &8073123671162140756
 MonoBehaviour:
@@ -527,6 +529,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 182a00f0ab8db424bb2b94ad7d7b13ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shipPartArea: 0
 --- !u!114 &776381191052681535
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -599,9 +602,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &6240998923623626765
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -663,9 +668,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!65 &8075033005196756455
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -697,9 +704,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &1017223872249325929
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -757,9 +766,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!65 &6876012982521333245
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -791,9 +802,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &3006791559745434615
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -851,9 +864,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &2016522916596783513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -872,9 +887,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!1 &2950533832352523136
 GameObject:
   m_ObjectHideFlags: 0
@@ -1099,6 +1116,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 182a00f0ab8db424bb2b94ad7d7b13ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shipPartArea: 0
 --- !u!114 &3090281862215717165
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1162,9 +1180,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!65 &9202124662215506815
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1196,9 +1216,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &1752574705247017078
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1343,6 +1365,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 182a00f0ab8db424bb2b94ad7d7b13ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shipPartArea: 0
 --- !u!114 &8197584618961955415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1455,9 +1478,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &1912359753450562906
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1589,9 +1614,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &3511646312594298532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1723,9 +1750,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &858645869008185151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1857,9 +1886,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &5158370058248450766
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1991,9 +2022,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &3263739328223622057
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2201,9 +2234,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &5474882040675574366
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2334,9 +2369,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &704969996273817691
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4316,9 +4353,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &1589960257166819724
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4449,9 +4488,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &2951607102373423989
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4582,9 +4623,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &552787598808282150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4716,9 +4759,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &683004927125640209
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4850,9 +4895,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &982753522405005472
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4983,9 +5030,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &4744909853301228155
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5116,9 +5165,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &4126325807407070396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5249,9 +5300,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &2137439444189116224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5382,9 +5435,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &1362275687069811220
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5517,9 +5572,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &8743958451629267199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5650,9 +5707,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &6020317912167091808
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5783,9 +5842,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &3402703825650314540
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5916,9 +5977,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &7384372941658732455
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6049,9 +6112,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &5515887217459295754
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6183,9 +6248,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &7169357895716033884
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6316,9 +6383,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &8169658005565882094
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6541,9 +6610,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &2248923176419813416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6674,9 +6745,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &7237319176646748720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7083,9 +7156,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &243685825144554430
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7987,9 +8062,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &6284336166406843728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8120,9 +8197,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &5065813266933637634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8561,9 +8640,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &7383728966927319662
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8695,9 +8776,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &3924634717962627846
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8983,9 +9066,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &7836439871357406768
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9116,9 +9201,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &8820513105087484091
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9249,9 +9336,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &542421216753666036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9383,9 +9472,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &4722844687643282041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9517,9 +9608,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &6719248204471327544
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9651,9 +9744,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &9082263912633823732
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9785,9 +9880,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &5861599129619852258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10168,9 +10265,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &45702678278583303
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10340,9 +10439,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &5322082513171565310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12886,9 +12987,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!1 &8628087025640942175
 GameObject:
   m_ObjectHideFlags: 0
@@ -12945,9 +13048,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &9215889453479219005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12966,9 +13071,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!1001 &819169047082282768
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13058,15 +13165,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fc2f4f6b9e15b3549b314eda165ba7e9, type: 3}
---- !u!4 &6711495774774704472 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6231363615240132168, guid: fc2f4f6b9e15b3549b314eda165ba7e9,
-    type: 3}
-  m_PrefabInstance: {fileID: 819169047082282768}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2719939164065889725 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3378103972421456557, guid: fc2f4f6b9e15b3549b314eda165ba7e9,
+    type: 3}
+  m_PrefabInstance: {fileID: 819169047082282768}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6711495774774704472 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6231363615240132168, guid: fc2f4f6b9e15b3549b314eda165ba7e9,
     type: 3}
   m_PrefabInstance: {fileID: 819169047082282768}
   m_PrefabAsset: {fileID: 0}
@@ -13205,21 +13312,9 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1223159550849639083}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1633979876698736829 stripped
+--- !u!1 &8424858032213719884 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 456157876206381590, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
-    type: 3}
-  m_PrefabInstance: {fileID: 1223159550849639083}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1705823135407074011 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 528544289363331184, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
-    type: 3}
-  m_PrefabInstance: {fileID: 1223159550849639083}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &7303331475228656071 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8476667756176728940, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
+  m_CorrespondingSourceObject: {fileID: 7210987168480958951, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
     type: 3}
   m_PrefabInstance: {fileID: 1223159550849639083}
   m_PrefabAsset: {fileID: 0}
@@ -13229,9 +13324,21 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1223159550849639083}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &8424858032213719884 stripped
+--- !u!1 &7303331475228656071 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 7210987168480958951, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
+  m_CorrespondingSourceObject: {fileID: 8476667756176728940, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
+    type: 3}
+  m_PrefabInstance: {fileID: 1223159550849639083}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1705823135407074011 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 528544289363331184, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
+    type: 3}
+  m_PrefabInstance: {fileID: 1223159550849639083}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1633979876698736829 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 456157876206381590, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
     type: 3}
   m_PrefabInstance: {fileID: 1223159550849639083}
   m_PrefabAsset: {fileID: 0}
@@ -13324,15 +13431,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 93839aa4fdb6e934bb47c57d1f51c7e2, type: 3}
---- !u!4 &3287890178507215572 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 645421218217816172, guid: 93839aa4fdb6e934bb47c57d1f51c7e2,
-    type: 3}
-  m_PrefabInstance: {fileID: 2689794252786131640}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2027368807277309206 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4140699971291500462, guid: 93839aa4fdb6e934bb47c57d1f51c7e2,
+    type: 3}
+  m_PrefabInstance: {fileID: 2689794252786131640}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3287890178507215572 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 645421218217816172, guid: 93839aa4fdb6e934bb47c57d1f51c7e2,
     type: 3}
   m_PrefabInstance: {fileID: 2689794252786131640}
   m_PrefabAsset: {fileID: 0}
@@ -13641,15 +13748,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1299142fd5abc91449a9e1a51b8846fb, type: 3}
---- !u!4 &8456561395426564345 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2692766165717669358, guid: 1299142fd5abc91449a9e1a51b8846fb,
-    type: 3}
-  m_PrefabInstance: {fileID: 5766047090197417239}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2787276063009563417 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8551061944994770446, guid: 1299142fd5abc91449a9e1a51b8846fb,
+    type: 3}
+  m_PrefabInstance: {fileID: 5766047090197417239}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8456561395426564345 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2692766165717669358, guid: 1299142fd5abc91449a9e1a51b8846fb,
     type: 3}
   m_PrefabInstance: {fileID: 5766047090197417239}
   m_PrefabAsset: {fileID: 0}
