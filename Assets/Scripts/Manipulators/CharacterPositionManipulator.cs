@@ -114,7 +114,7 @@ namespace MastersOfTempest.PlayerControls
 
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {
-            Debug.Log($"Hit! {hit.collider.gameObject.name}");
+            //Debug.Log($"Hit! {hit.collider.gameObject.name}");
         }
     }
 }

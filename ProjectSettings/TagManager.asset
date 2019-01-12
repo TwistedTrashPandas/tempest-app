@@ -24,8 +24,8 @@ TagManager:
   - Hologram
   - ServerShipPlayer
   - ServerPlayer
-  - 
-  - 
+  - ServerEnvironment
+  - ServerShipEnvironment
   - 
   - 
   - 

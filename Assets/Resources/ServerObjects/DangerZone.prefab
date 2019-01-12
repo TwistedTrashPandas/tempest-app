@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 114946308849238226}
   - component: {fileID: 7118407494416652003}
   - component: {fileID: 451546168476743181}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: DangerZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,9 +102,12 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114946308849238226}
   children: []
+  serverLayer: ServerEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!198 &7118407494416652003
 ParticleSystem:
   m_ObjectHideFlags: 0

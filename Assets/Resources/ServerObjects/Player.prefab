@@ -145,6 +145,7 @@ MonoBehaviour:
   root: {fileID: 4905722058083218960}
   children: []
   serverLayer: ServerPlayer
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1

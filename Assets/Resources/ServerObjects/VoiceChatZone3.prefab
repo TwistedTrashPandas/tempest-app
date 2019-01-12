@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3846755106723178527}
   - component: {fileID: 6211481530833501742}
   - component: {fileID: 3656362925539106496}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: VoiceChatZone3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84,7 +84,6 @@ MonoBehaviour:
   closestDistance: 0
   moveType: 4
   zoneType: 2
-  audioMixer: {fileID: 24100000, guid: b9971ab818e01194593dd346eecc440c, type: 2}
 --- !u!114 &3846755106723178527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -103,9 +102,12 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 3846755106723178527}
   children: []
+  serverLayer: ServerEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!198 &6211481530833501742
 ParticleSystem:
   m_ObjectHideFlags: 0
