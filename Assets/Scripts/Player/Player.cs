@@ -4,6 +4,7 @@ using MastersOfTempest.Networking;
 using MastersOfTempest.PlayerControls.QTE;
 using UnityEngine;
 using static Facepunch.Steamworks.Networking;
+using System.Linq;
 
 namespace MastersOfTempest
 {
@@ -42,7 +43,7 @@ namespace MastersOfTempest
         protected override void Start()
         {
             base.Start();
-            context = FindObjectOfType<Gamemaster>();
+            context = FindObjectsOfType<Gamemaster>().First(gm => gm.gameObject.scene == gameObject.scene);
             if (context == null)
             {
                 throw new InvalidOperationException($"{nameof(Player)} cannot operate without Gamemaster in the same scene!");

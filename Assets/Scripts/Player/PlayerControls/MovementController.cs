@@ -9,7 +9,6 @@ namespace MastersOfTempest.PlayerControls
     {
         public Camera DirectionCamera;
 
-        // public Transform Ship;
 
         private const float speed = .1f;
         private CharacterPositionManipulator positionManipulator;
@@ -33,8 +32,6 @@ namespace MastersOfTempest.PlayerControls
             {
                 throw new InvalidOperationException($"{nameof(positionManipulator)} is not specified!");
             }
-
-            // Ship = FindObjectOfType<ShipBL.Ship>().transform;
         }
         private void FixedUpdate()
         {
@@ -43,7 +40,6 @@ namespace MastersOfTempest.PlayerControls
                 if (!(Mathf.Approximately(Input.GetAxis("Vertical"), 0f) && Mathf.Approximately(Input.GetAxis("Horizontal"), 0f)))
                 {
                     positionManipulator.MoveCharacter(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), DirectionCamera.transform.forward, DirectionCamera.transform.right);
-                    // positionManipulator.MoveCharacter(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), Vector3.forward, Vector3.right);
                 }
             }
         }

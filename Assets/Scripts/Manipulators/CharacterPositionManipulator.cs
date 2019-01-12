@@ -4,6 +4,7 @@ using UnityEngine;
 using MastersOfTempest.Networking;
 using System;
 using UnityEngine.SceneManagement;
+using System.Linq;
 
 namespace MastersOfTempest.PlayerControls
 {
@@ -19,12 +20,7 @@ namespace MastersOfTempest.PlayerControls
             {
                 if (serverObject.onServer && shipPhysics == null)
                 {
-                    Scene previouslyActiveScene = SceneManager.GetActiveScene();
-                    Scene shit = GameServer.Instance.gameObject.scene;
-                    SceneManager.SetActiveScene(shit);
-                    var ships = FindObjectsOfType<ShipBL.Ship>();
-                    shipPhysics = FindObjectOfType<ShipBL.Ship>().GetComponent<Rigidbody>();
-                    SceneManager.SetActiveScene(previouslyActiveScene);
+                    shipPhysics = FindObjectsOfType<ShipBL.Ship>().First(ship => ship.gameObject.scene == gameObject.scene).GetComponent<Rigidbody>();
                 }
                 return shipPhysics;
             }
