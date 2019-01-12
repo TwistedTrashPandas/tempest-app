@@ -7,6 +7,7 @@ using static Facepunch.Steamworks.Networking;
 
 namespace MastersOfTempest
 {
+    [RequireComponent(typeof(CharacterPositionManipulator))]
     public class Player : NetworkBehaviour
     {
         [Serializable]
@@ -18,16 +19,23 @@ namespace MastersOfTempest
         public ulong PlayerId { get; set; }
         private Gamemaster context;
         private PlayerInputController playerInput;
-        public TransformManipulator TransformManipulator { get; private set; }
+        public CharacterPositionManipulator CharacterPositionManipulator { get; private set; }
+
+        public CharacterController CharacterController { get; private set; }
 
         public PlayerRole Role;
 
         private void Awake()
         {
-            TransformManipulator = GetComponent<TransformManipulator>();
-            if (TransformManipulator == null)
+            CharacterPositionManipulator = GetComponent<CharacterPositionManipulator>();
+            if (CharacterPositionManipulator == null)
             {
-                throw new InvalidOperationException($"{nameof(TransformManipulator)} is not specified!");
+                throw new InvalidOperationException($"{nameof(CharacterPositionManipulator)} is not specified!");
+            }
+            CharacterController = GetComponent<CharacterController>();
+            if (CharacterController == null)
+            {
+                throw new InvalidOperationException($"{nameof(CharacterController)} is not specified!");
             }
         }
 
@@ -40,6 +48,15 @@ namespace MastersOfTempest
                 throw new InvalidOperationException($"{nameof(Player)} cannot operate without Gamemaster in the same scene!");
             }
             context.Register(this);
+            CharacterController = GetComponent<CharacterController>();
+            if(serverObject.onServer)
+            {
+                CharacterPositionManipulator.Character = CharacterController;
+            }
+            else
+            {
+                Destroy(CharacterController);
+            }
         }
 
         protected override void StartServer()
