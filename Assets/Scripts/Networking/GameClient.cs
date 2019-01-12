@@ -219,6 +219,11 @@ namespace MastersOfTempest.Networking
             objectsFromServer[message.serverID].HandleNetworkBehaviourInitializedMessage(message.typeID, steamID);
         }
 
+        public ServerObject GetObjectFromServer(int serverID)
+        {
+            return objectsFromServer[serverID];
+        }
+
         public bool IsInitialized ()
         {
             return initialized;

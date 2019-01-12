@@ -91,7 +91,7 @@ MonoBehaviour:
   root: {fileID: 114334480994139150}
   children: []
   interpolateOnClient: 1
-  removeChildColliders: 1
+  removeChildColliders: 0
   removeChildRigidbodies: 1
 --- !u!135 &8491807412834537929
 SphereCollider:

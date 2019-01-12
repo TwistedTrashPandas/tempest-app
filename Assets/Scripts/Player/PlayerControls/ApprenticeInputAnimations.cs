@@ -26,7 +26,7 @@ namespace MastersOfTempest.PlayerControls
         {
             if (!isThrowing)
             {
-                StartCoroutine(ThrowAnimation(firstPersonCamera, 5, 1.0f, 1000));
+                StartCoroutine(ThrowAnimation(firstPersonCamera, 50, 1.0f, 1000));
             }
         }
 
@@ -48,6 +48,7 @@ namespace MastersOfTempest.PlayerControls
             Quaternion startRotation = hammer.transform.localRotation;
 
             float t = 0;
+            hammer.EnableCollider(true);
             hammer.transform.SetParent(firstPersonCamera.transform, true);
 
             while (t < time)
@@ -85,6 +86,7 @@ namespace MastersOfTempest.PlayerControls
 
             hammer.transform.localPosition = startPosition;
             hammer.transform.localRotation = startRotation;
+            hammer.EnableCollider(false);
             isThrowing = false;
         }
     }
