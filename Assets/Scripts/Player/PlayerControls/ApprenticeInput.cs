@@ -95,18 +95,23 @@ namespace MastersOfTempest.PlayerControls
 
         private void OnNewInteractable(object sender, EventArgs args)
         {
-            Debug.Log(nameof(OnNewInteractable));
+            if (((InteractionEventArgs)args).InteractableObject is TeleportArea)
+            {
+                ((InteractionEventArgs)args).InteractableObject.GetComponent<MeshRenderer>().enabled = true;
+            }
         }
 
         private void OnPlayerInteracted(object sender, EventArgs args)
         {
-            Debug.Log(nameof(OnPlayerInteracted));
             TriggerActionEvent(new ActionMadeEventArgs(((InteractionEventArgs)args).InteractableObject.GetAction()));
         }
 
-        private void OnLostSight(object sender, EventArgs e)
+        private void OnLostSight(object sender, EventArgs args)
         {
-            Debug.Log(nameof(OnLostSight));
+            if (((InteractionEventArgs)args).InteractableObject is TeleportArea)
+            {
+                ((InteractionEventArgs)args).InteractableObject.GetComponent<MeshRenderer>().enabled = false;
+            }
         }
 
         public void Teleport (TeleportArea target)
