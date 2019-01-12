@@ -157,7 +157,7 @@ namespace MastersOfTempest.PlayerControls
         public override void Bootstrap()
         {
             interactionsController = gameObject.AddComponent<InteractionsController>();
-            interactionsController.Setup(CameraDirectionController.FirstPersonCamera, float.MaxValue, UserInteracts);
+            interactionsController.Setup(CameraDirectionController.FirstPersonCamera, float.MaxValue, UserInteracts, PlayerRole.Wizard);
             interactionsController.PlayerInteracted += OnUserInteraction;
             interactionsController.LostSight += OnUserLostSight;
 

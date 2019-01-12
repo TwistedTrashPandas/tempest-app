@@ -62,7 +62,7 @@ namespace MastersOfTempest.PlayerControls
 
             //Create a message UI element to show hints to player
             interactionsController = gameObject.AddComponent<InteractionsController>();
-            interactionsController.Setup(CameraDirectionController.FirstPersonCamera, float.MaxValue, InteractionCheck);
+            interactionsController.Setup(CameraDirectionController.FirstPersonCamera, float.MaxValue, InteractionCheck, PlayerRole.Apprentice);
             interactionsController.NewInteractable += OnNewInteractable;
             interactionsController.PlayerInteracted += OnPlayerInteracted;
             interactionsController.LostSight += OnLostSight;

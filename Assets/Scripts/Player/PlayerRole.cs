@@ -28,6 +28,17 @@ namespace MastersOfTempest.PlayerControls {
             }
         }
 
+        public static ShipBL.InteractablePart.Access GetAccessLevel(this PlayerRole role)
+        {
+            switch(role)
+            {
+                case PlayerRole.Wizard: return ShipBL.InteractablePart.Access.Wizard;
+                case PlayerRole.Apprentice: return ShipBL.InteractablePart.Access.Apprentice;
+                case PlayerRole.Spectator: return ShipBL.InteractablePart.Access.Spectator;
+                default: throw new InvalidOperationException($"Unexpected {nameof(PlayerRole)} value of {role}");
+            }
+        }
+
         public static void SetPlayerRoleAsActive(this PlayerRole role)
         {
             PlayerPrefs.SetInt(ActiveRoleKey, (int)role);
