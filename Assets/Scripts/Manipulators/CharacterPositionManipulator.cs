@@ -69,9 +69,18 @@ namespace MastersOfTempest.PlayerControls
 
         private uint lastMessage = 0;
 
+        private int counterOffset;
+
         protected override void StartServer()
         {
+            counterOffset = 0;
+        }
 
+        protected override void UpdateServer()
+        {
+            counterOffset = (counterOffset + 1) % 2;
+            Character.transform.localPosition += new Vector3(0f, 0.000001f, 0f) * (counterOffset * 2 - 1);
+            //Character.SimpleMove(Vector3.zero);
         }
 
         public void MoveCharacter(float horizontal, float vertical, Vector3 cameraFoward, Vector3 cameraRight)

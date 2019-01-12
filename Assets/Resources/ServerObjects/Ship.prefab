@@ -351,8 +351,9 @@ MonoBehaviour:
   - {fileID: 2748882870044940088}
   - {fileID: 394533449578786364}
   interpolateOnClient: 1
-  removeChildColliders: 0
+  removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 0
 --- !u!114 &114739895200692124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -393,7 +394,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 126
   m_CollisionDetection: 1
 --- !u!114 &8073123671162140756
 MonoBehaviour:
@@ -593,6 +594,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!1 &2950533832352523136
 GameObject:
   m_ObjectHideFlags: 0
@@ -883,6 +885,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!1 &7825216585770401636
 GameObject:
   m_ObjectHideFlags: 0
@@ -1103,6 +1106,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &1912359753450562906
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1237,6 +1241,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &3511646312594298532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1371,6 +1376,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &858645869008185151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1505,6 +1511,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &5158370058248450766
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1639,6 +1646,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &3263739328223622057
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1849,6 +1857,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &5474882040675574366
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1982,6 +1991,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &704969996273817691
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3964,6 +3974,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &1589960257166819724
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4097,6 +4108,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &2951607102373423989
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4230,6 +4242,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &552787598808282150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4364,6 +4377,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &683004927125640209
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4498,6 +4512,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &982753522405005472
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4631,6 +4646,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &4744909853301228155
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4764,6 +4780,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &4126325807407070396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4897,6 +4914,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &2137439444189116224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5030,6 +5048,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &1362275687069811220
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5165,6 +5184,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &8743958451629267199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5195,8 +5215,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.016489204, y: 0.053234648, z: 0.00020320562}
-  m_Center: {x: -3.7783404e-15, y: 0.016617322, z: 2.3614627e-16}
+  m_Size: {x: 0.01872255, y: 0.057399243, z: 0.0014955323}
+  m_Center: {x: 0.000030663556, y: 0.016217504, z: -0.0006461636}
 --- !u!1 &7952002934638850165
 GameObject:
   m_ObjectHideFlags: 0
@@ -5298,6 +5318,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &6020317912167091808
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5431,6 +5452,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &3402703825650314540
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5564,6 +5586,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &7384372941658732455
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5697,6 +5720,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &5515887217459295754
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5831,6 +5855,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &7169357895716033884
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5964,6 +5989,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &8169658005565882094
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6189,6 +6215,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &2248923176419813416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6322,6 +6349,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &7237319176646748720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6731,6 +6759,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &243685825144554430
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7635,6 +7664,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &6284336166406843728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7768,6 +7798,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &5065813266933637634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8209,6 +8240,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &7383728966927319662
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8343,6 +8375,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &3924634717962627846
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8631,6 +8664,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &7836439871357406768
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8764,6 +8798,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &8820513105087484091
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8897,6 +8932,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &542421216753666036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9031,6 +9067,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &4722844687643282041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9165,6 +9202,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &6719248204471327544
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9299,6 +9337,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &9082263912633823732
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9433,6 +9472,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &5861599129619852258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9728,6 +9768,7 @@ GameObject:
   - component: {fileID: 5988639058068084824}
   - component: {fileID: 6309402829833852027}
   - component: {fileID: 5934511904531938059}
+  - component: {fileID: 6186097964324116826}
   m_Layer: 0
   m_Name: shipfinal
   m_TagString: Ship
@@ -9815,6 +9856,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &45702678278583303
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9845,8 +9887,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.022151465, y: 0.014670369, z: 0.017445669}
-  m_Center: {x: -0.0000025176982, y: -0.025965065, z: -0.0014714036}
+  m_Size: {x: 0.020974668, y: 0.008734812, z: 0.014108814}
+  m_Center: {x: -0.00025468942, y: -0.028932825, z: 0.00019703194}
 --- !u!65 &6309402829833852027
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9858,8 +9900,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.022151465, y: 0.023004493, z: 0.01629808}
-  m_Center: {x: -0.0000025176985, y: 0.028134584, z: -0.0008976058}
+  m_Size: {x: 0.022151463, y: 0.021040509, z: 0.011079045}
+  m_Center: {x: -0.0000025176942, y: 0.029326247, z: -0.0026929236}
 --- !u!65 &5934511904531938059
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9871,8 +9913,21 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.021275587, y: 0.035281908, z: 0.010064916}
-  m_Center: {x: 0.00010647766, y: -0.0009168983, z: -0.0051617934}
+  m_Size: {x: 0.0024583815, y: 0.04512498, z: 0.008577835}
+  m_Center: {x: 0.009145141, y: -0.0030855516, z: -0.004418253}
+--- !u!65 &6186097964324116826
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7952002934638850493}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.0024583803, y: 0.044784766, z: 0.008577835}
+  m_Center: {x: -0.009145141, y: -0.0027190228, z: -0.004418253}
 --- !u!1 &7952002934638850495
 GameObject:
   m_ObjectHideFlags: 0
@@ -9974,6 +10029,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &5322082513171565310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12571,16 +12627,6 @@ PrefabInstance:
       propertyPath: root
       value: 
       objectReference: {fileID: 114449933113175548}
-    - target: {fileID: 2873443016534071626, guid: e1294c427963740d5b7f166b554f84ae,
-        type: 3}
-      propertyPath: resourceID
-      value: -17
-      objectReference: {fileID: 0}
-    - target: {fileID: 2873443016534071626, guid: e1294c427963740d5b7f166b554f84ae,
-        type: 3}
-      propertyPath: root
-      value: 
-      objectReference: {fileID: 114449933113175548}
     - target: {fileID: 8217434630741968297, guid: e1294c427963740d5b7f166b554f84ae,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -12636,8 +12682,96 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2873443016534071626, guid: e1294c427963740d5b7f166b554f84ae,
+        type: 3}
+      propertyPath: resourceID
+      value: -17
+      objectReference: {fileID: 0}
+    - target: {fileID: 2873443016534071626, guid: e1294c427963740d5b7f166b554f84ae,
+        type: 3}
+      propertyPath: root
+      value: 
+      objectReference: {fileID: 114449933113175548}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e1294c427963740d5b7f166b554f84ae, type: 3}
+--- !u!114 &6669247244850858769 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 34622468, guid: e1294c427963740d5b7f166b554f84ae,
+    type: 3}
+  m_PrefabInstance: {fileID: 6669247244883379989}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8202987610482925654 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3268259613983975235, guid: e1294c427963740d5b7f166b554f84ae,
+    type: 3}
+  m_PrefabInstance: {fileID: 6669247244883379989}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3224408714420324389 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8084677855544626992, guid: e1294c427963740d5b7f166b554f84ae,
+    type: 3}
+  m_PrefabInstance: {fileID: 6669247244883379989}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &3352890662094144188 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8217434630741968297, guid: e1294c427963740d5b7f166b554f84ae,
+    type: 3}
+  m_PrefabInstance: {fileID: 6669247244883379989}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2625737652132023611 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8718286576497740334, guid: e1294c427963740d5b7f166b554f84ae,
+    type: 3}
+  m_PrefabInstance: {fileID: 6669247244883379989}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6231102431974335006 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 789466586030400779, guid: e1294c427963740d5b7f166b554f84ae,
+    type: 3}
+  m_PrefabInstance: {fileID: 6669247244883379989}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6153549041790638264 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 713857136499007405, guid: e1294c427963740d5b7f166b554f84ae,
+    type: 3}
+  m_PrefabInstance: {fileID: 6669247244883379989}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &5104263215736283856 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1898286283877983685, guid: e1294c427963740d5b7f166b554f84ae,
@@ -12665,84 +12799,6 @@ MonoBehaviour:
 --- !u!114 &8062352925201725612 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3706135166469291961, guid: e1294c427963740d5b7f166b554f84ae,
-    type: 3}
-  m_PrefabInstance: {fileID: 6669247244883379989}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &6153549041790638264 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 713857136499007405, guid: e1294c427963740d5b7f166b554f84ae,
-    type: 3}
-  m_PrefabInstance: {fileID: 6669247244883379989}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &6231102431974335006 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 789466586030400779, guid: e1294c427963740d5b7f166b554f84ae,
-    type: 3}
-  m_PrefabInstance: {fileID: 6669247244883379989}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &3224408714420324389 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8084677855544626992, guid: e1294c427963740d5b7f166b554f84ae,
-    type: 3}
-  m_PrefabInstance: {fileID: 6669247244883379989}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &8202987610482925654 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3268259613983975235, guid: e1294c427963740d5b7f166b554f84ae,
-    type: 3}
-  m_PrefabInstance: {fileID: 6669247244883379989}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &6669247244850858769 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 34622468, guid: e1294c427963740d5b7f166b554f84ae,
-    type: 3}
-  m_PrefabInstance: {fileID: 6669247244883379989}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &3352890662094144188 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8217434630741968297, guid: e1294c427963740d5b7f166b554f84ae,
-    type: 3}
-  m_PrefabInstance: {fileID: 6669247244883379989}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2625737652132023611 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8718286576497740334, guid: e1294c427963740d5b7f166b554f84ae,
     type: 3}
   m_PrefabInstance: {fileID: 6669247244883379989}
   m_PrefabAsset: {fileID: 0}
