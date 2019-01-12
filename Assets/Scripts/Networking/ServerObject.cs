@@ -16,17 +16,21 @@ namespace MastersOfTempest.Networking
         public int serverID = 0;
         [ReadOnly]
         public float lastUpdate = 0;
-
+        
         // Used when the server object is a child in a server object resource (resourceID < 0), set by editor script
         [SerializeField, HideInInspector]
         public ServerObject root = null;
         [SerializeField, HideInInspector]
         public ServerObject[] children = null;
 
+        [Header("Server Parameters")]
+        public string serverLayer = "Server";
+
         [Header("Client Parameters")]
         public bool interpolateOnClient = true;
         public bool removeChildColliders = true;
         public bool removeChildRigidbodies = true;
+        public bool setChildCollidersTriggers = true;
 
         // Interpolation variables
         private MessageServerObject currentMessage = null;
@@ -55,7 +59,7 @@ namespace MastersOfTempest.Networking
                 serverID = transform.GetInstanceID();
 
                 // Set layer, also for children
-                SetLayerOfThisGameObjectAndAllChildren("Server");
+                SetLayerOfThisGameObjectAndAllChildren(serverLayer);
 
                 // Register to game server
                 GameServer.Instance.RegisterAndSendMessageServerObject(this);
@@ -101,6 +105,17 @@ namespace MastersOfTempest.Networking
                 foreach (Collider c in colliders)
                 {
                     Destroy(c);
+                }
+            }
+
+            if (setChildCollidersTriggers)
+            {
+                Collider[] colliders = GetComponentsInChildren<Collider>();
+
+                foreach (Collider c in colliders)
+                {
+                    if(!(c is CharacterController))
+                        c.isTrigger = true;
                 }
             }
 
