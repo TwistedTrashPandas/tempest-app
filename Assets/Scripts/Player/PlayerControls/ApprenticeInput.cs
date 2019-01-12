@@ -122,8 +122,19 @@ namespace MastersOfTempest.PlayerControls
 
         public void Repair (RepairArea target)
         {
-            // TODO: For repairing: Call AddDestruction with negative value on all parts in the ShipPartManager interaction area on the server only
-            Debug.Log("TODO: Repair " + target.name);
+            // Find the ship network behaviour on the client
+            // Send message to repair parts from the ShipPartManager
+            Ship[] ships = FindObjectsOfType<Ship>();
+
+            foreach (Ship ship in ships)
+            {
+                if (ship.gameObject.scene.Equals(Networking.GameClient.Instance.gameObject.scene))
+                {
+                    ship.RepairShipPartAreaOnServer(target.shipPartArea, 0.2f);
+                    break;
+                }
+            }
+
             animations.Repair();
         }
     }

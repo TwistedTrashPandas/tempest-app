@@ -4,6 +4,8 @@ namespace MastersOfTempest.ShipBL
 {
     public class RepairArea : InteractablePart
     {
+        public ShipPartArea shipPartArea;
+
         public override Access GetAccess()
         {
             return Access.Apprentice;
