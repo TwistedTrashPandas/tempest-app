@@ -98,7 +98,7 @@ namespace MastersOfTempest.PlayerControls
             else
             {
                 var message = new MoveMessage(horizontal, vertical, cameraFoward, cameraRight, ++lastMessage);
-                SendToServer(ByteSerializer.GetBytes(message), Facepunch.Steamworks.Networking.SendType.Reliable);
+                SendToServer(ByteSerializer.GetBytes(message), Facepunch.Steamworks.Networking.SendType.Unreliable);
             }
         }
 
