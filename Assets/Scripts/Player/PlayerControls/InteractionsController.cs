@@ -16,6 +16,7 @@ namespace MastersOfTempest.PlayerControls
 
         public Camera FirstPersonCamera;
         public float MaxInteractionDistance;
+        public InteractablePart.Access CurrentAccessLevel;
 
         public Func<bool> PlayerInteractionCheck;
 
@@ -34,11 +35,12 @@ namespace MastersOfTempest.PlayerControls
 
         public InteractablePart CurrentlyLookedAt { get; private set; }
 
-        public void Setup(Camera cameraToShootFrom, float maxInteractionDistance, Func<bool> interactionCheck)
+        public void Setup(Camera cameraToShootFrom, float maxInteractionDistance, Func<bool> interactionCheck, PlayerRole role)
         {
             FirstPersonCamera = cameraToShootFrom;
             MaxInteractionDistance = maxInteractionDistance;
             PlayerInteractionCheck = interactionCheck;
+            CurrentAccessLevel = role.GetAccessLevel();
             isActive = true;
         }
 
@@ -70,15 +72,15 @@ namespace MastersOfTempest.PlayerControls
                             }
                             CurrentlyLookedAt = hit.transform.GetComponent<InteractablePart>();
                         }
-                        //Object is within interactable distance
-                        if (hit.distance < CurrentlyLookedAt.GetDistance())
+                        //Object is within interactable distance and is available to the player
+                        if (CurrentlyLookedAt.GetAccess().HasFlag(CurrentAccessLevel) && hit.distance < CurrentlyLookedAt.GetDistance())
                         {
                             //The first time we came to the interactable distance
                             if (!hasObjectReadyToInteract)
                             {
                                 LookingAtNewObject();
                             }
-                        } //Object is out of its interactable distance
+                        } //Object is out of its interactable distance or is not available to the player
                         else
                         {
                             //The first time we went out of interactable distance
@@ -102,7 +104,7 @@ namespace MastersOfTempest.PlayerControls
                             CurrentlyLookedAt = null;
                         }
                     }
-                } 
+                }
                 else //Not looking at anything
                 {
                     if (hasObjectReadyToInteract)
