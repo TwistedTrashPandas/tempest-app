@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 114380683948430144}
   m_Layer: 10
   m_Name: Rock3
-  m_TagString: Untagged
+  m_TagString: Rock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -71,6 +71,7 @@ MonoBehaviour:
   damage: 1
   health: 1
   status: 0
+  rockParts: []
 --- !u!114 &114380683948430144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -188,6 +189,18 @@ PrefabInstance:
     - target: {fileID: 100004, guid: ad44c428d90868941aa8d1f0ac56e22b, type: 3}
       propertyPath: m_Name
       value: rock3
+      objectReference: {fileID: 0}
+    - target: {fileID: 100004, guid: ad44c428d90868941aa8d1f0ac56e22b, type: 3}
+      propertyPath: m_TagString
+      value: Rock
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: ad44c428d90868941aa8d1f0ac56e22b, type: 3}
+      propertyPath: m_TagString
+      value: Rock
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: ad44c428d90868941aa8d1f0ac56e22b, type: 3}
+      propertyPath: m_TagString
+      value: Rock
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ad44c428d90868941aa8d1f0ac56e22b, type: 3}
