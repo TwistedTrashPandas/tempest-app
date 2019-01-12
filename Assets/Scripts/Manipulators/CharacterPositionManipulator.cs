@@ -25,7 +25,7 @@ namespace MastersOfTempest.PlayerControls
                 return shipPhysics;
             }
         }
-        private const float speed = .1f;
+        private const float speed = .6f;
 
         [Serializable]
         private struct MoveMessage
@@ -68,8 +68,9 @@ namespace MastersOfTempest.PlayerControls
         }
 
         private uint lastMessage = 0;
-
         private int counterOffset;
+        private MoveMessage lastMoveMessage;
+        private Vector3 lastMoveDirection;
 
         protected override void StartServer()
         {
@@ -79,8 +80,12 @@ namespace MastersOfTempest.PlayerControls
         protected override void UpdateServer()
         {
             counterOffset = (counterOffset + 1) % 2;
-            Character.transform.localPosition += new Vector3(0f, 0.000001f, 0f) * (counterOffset * 2 - 1);
-            //Character.SimpleMove(Vector3.zero);
+            Character.transform.position += new Vector3(0f, 0.000000001f, 0f) * (counterOffset * 2 - 1);
+
+            Transform parent = Character.transform.parent;
+            Character.transform.SetParent(null);
+            Character.SimpleMove(lastMoveDirection);
+            Character.transform.SetParent(parent);
         }
 
         public void MoveCharacter(float horizontal, float vertical, Vector3 cameraFoward, Vector3 cameraRight)
@@ -88,30 +93,28 @@ namespace MastersOfTempest.PlayerControls
             if (serverObject.onServer)
             {
                 var moveDirection = speed * (vertical * cameraFoward + horizontal * cameraRight);
-                Debug.Log($"Moving with speed: {moveDirection}");
-                Character.SimpleMove(moveDirection);// - ShipPhysics.velocity));
+                lastMoveDirection = moveDirection;
             }
             else
             {
                 var message = new MoveMessage(horizontal, vertical, cameraFoward, cameraRight, ++lastMessage);
-                SendToServer(ByteSerializer.GetBytes(message), Facepunch.Steamworks.Networking.SendType.Unreliable);
+                SendToServer(ByteSerializer.GetBytes(message), Facepunch.Steamworks.Networking.SendType.Reliable);
             }
         }
 
         protected override void OnServerReceivedMessageRaw(byte[] data, ulong steamID)
         {
-            var message = ByteSerializer.FromBytes<MoveMessage>(data);
-            if (message.messageNumber > lastMessage)
+            var moveMessage = ByteSerializer.FromBytes<MoveMessage>(data);
+            if (moveMessage.messageNumber > lastMessage)
             {
-                lastMessage = message.messageNumber;
-                MoveCharacter(message.horizontal, message.vertical, message.Forward, message.Right);
+                lastMessage = moveMessage.messageNumber;
+                MoveCharacter(moveMessage.horizontal, moveMessage.vertical, moveMessage.Forward, moveMessage.Right);
             }
         }
 
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {
             Debug.Log($"Hit! {hit.collider.gameObject.name}");
-            Debug.Log(hit.moveDirection);
         }
     }
 }

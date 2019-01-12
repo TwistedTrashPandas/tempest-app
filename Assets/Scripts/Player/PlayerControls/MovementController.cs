@@ -8,8 +8,7 @@ namespace MastersOfTempest.PlayerControls
     public class MovementController : MonoBehaviour
     {
         public Camera DirectionCamera;
-
-
+        
         private const float speed = .1f;
         private CharacterPositionManipulator positionManipulator;
         private bool isActive = true;
@@ -41,12 +40,9 @@ namespace MastersOfTempest.PlayerControls
             {
                 if (isActive)
                 {
-                    if (!(Mathf.Approximately(Input.GetAxis("Vertical"), 0f) && Mathf.Approximately(Input.GetAxis("Horizontal"), 0f)))
-                    {
-                        positionManipulator.MoveCharacter(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), DirectionCamera.transform.forward, DirectionCamera.transform.right);
-                    }
+                    positionManipulator.MoveCharacter(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), DirectionCamera.transform.forward, DirectionCamera.transform.right);
                 }
-                yield return new WaitForSeconds(1 / 20f);
+                yield return new WaitForSeconds(1f / 10f);
             }
         }
     }

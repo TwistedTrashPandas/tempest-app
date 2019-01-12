@@ -21,8 +21,8 @@ TagManager:
   - Client
   - Server
   - Hologram
-  - 
-  - 
+  - ServerShipPlayer
+  - ServerPlayer
   - 
   - 
   - 
