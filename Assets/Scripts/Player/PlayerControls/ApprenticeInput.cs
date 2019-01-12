@@ -23,7 +23,7 @@ namespace MastersOfTempest.PlayerControls
         private InteractionsController interactionsController;
         private ApprenticeInputAnimations animations;
 
-        private bool teleported = false;
+        private TeleportArea lastTeleportArea = null;
 
         protected void Update()
         {
@@ -119,11 +119,19 @@ namespace MastersOfTempest.PlayerControls
 
         public void Teleport (TeleportArea target)
         {
-            // TODO: Make it possible to teleport between teleport areas
-            // Right now this is just a quick approach to simply make it work in most cases
-            // Also it might make sense to disable player movement when you are currently at a crowsnest
-            target.gameObject.GetComponent<TeleportActionNetworked>().TeleportOnServer(GetComponent<ServerObject>().serverID, teleported);
-            teleported = !teleported;
+            bool goBack = lastTeleportArea != null && lastTeleportArea == target;
+
+            // It might make sense to disable player movement when you are currently at a crowsnest
+            target.gameObject.GetComponent<TeleportActionNetworked>().TeleportOnServer(GetComponent<ServerObject>().serverID, goBack);
+
+            if (goBack)
+            {
+                lastTeleportArea = null;
+            }
+            else
+            {
+                lastTeleportArea = target;
+            }
         }
 
         public void Repair (RepairArea target)
