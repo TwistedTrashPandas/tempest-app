@@ -37,6 +37,10 @@ namespace MastersOfTempest.Networking
         private Dictionary<int, Action<byte[], ulong>> networkBehaviourEvents = new Dictionary<int, Action<byte[], ulong>>();
         private Dictionary<int, Action<ulong>> networkBehaviourInitializedEvents = new Dictionary<int, Action<ulong>>();
 
+        private Vector3 lastLocalPosition;
+        private Quaternion lastLocalRotation;
+        private Vector3 lastLocalScale;
+
         void Start()
         {
             if (onServer)
@@ -109,6 +113,18 @@ namespace MastersOfTempest.Networking
                     Destroy(r);
                 }
             }
+        }
+
+        public bool HasChanged ()
+        {
+            bool changed = (transform.localPosition != lastLocalPosition) | (transform.localRotation != lastLocalRotation) | (transform.localScale != lastLocalScale);
+
+            // Save new values
+            lastLocalPosition = transform.localPosition;
+            lastLocalRotation = transform.localRotation;
+            lastLocalScale = transform.localScale;
+
+            return changed;
         }
 
         public void UpdateTransformFromMessageServerObject(MessageServerObject messageServerObject)

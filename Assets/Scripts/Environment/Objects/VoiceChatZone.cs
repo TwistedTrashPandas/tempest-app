@@ -34,13 +34,13 @@ namespace MastersOfTempest.Environment.Interacting
 
         protected override void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.tag == "ship")
+            if (other.gameObject.tag == "Ship")
                 audioMixer.outputAudioMixerGroup = audioMixerGroups[zoneType];
         }
 
         protected override void OnTriggerExit(Collider other)
         {
-            if (other.gameObject.tag == "ship")
+            if (other.gameObject.tag == "Ship")
                 audioMixer.outputAudioMixerGroup = audioMixerGroups[VoiceChatZoneType.Normalized];
         }
     }
