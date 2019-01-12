@@ -25,6 +25,7 @@ namespace MastersOfTempest.Networking
 
         [Header("Server Parameters")]
         public string serverLayer = "Server";
+        public bool removeServerChildColliders = false;
 
         [Header("Client Parameters")]
         public bool interpolateOnClient = true;
@@ -61,6 +62,9 @@ namespace MastersOfTempest.Networking
                 // Set layer, also for children
                 SetLayerOfThisGameObjectAndAllChildren(serverLayer);
 
+                // Remove colliders on the server
+                RemoveCollidersAndRigidbodiesServer();
+
                 // Register to game server
                 GameServer.Instance.RegisterAndSendMessageServerObject(this);
             }
@@ -96,7 +100,7 @@ namespace MastersOfTempest.Networking
             }
         }
 
-        private void RemoveCollidersAndRigidbodies ()
+        private void RemoveCollidersAndRigidbodies()
         {
             if (removeChildColliders)
             {
@@ -114,7 +118,7 @@ namespace MastersOfTempest.Networking
 
                 foreach (Collider c in colliders)
                 {
-                    if(!(c is CharacterController))
+                    if (!(c is CharacterController))
                         c.isTrigger = true;
                 }
             }
@@ -126,6 +130,19 @@ namespace MastersOfTempest.Networking
                 foreach (Rigidbody r in rigidbodies)
                 {
                     Destroy(r);
+                }
+            }
+        }
+
+        private void RemoveCollidersAndRigidbodiesServer()
+        {
+            if (removeServerChildColliders)
+            {
+                Collider[] colliders = GetComponentsInChildren<Collider>();
+
+                foreach (Collider c in colliders)
+                {
+                    Destroy(c);
                 }
             }
         }

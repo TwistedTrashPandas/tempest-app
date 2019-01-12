@@ -144,9 +144,12 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 4905722058083218960}
   children: []
+  serverLayer: ServerPlayer
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!143 &871945350983052573
 CharacterController:
   m_ObjectHideFlags: 0

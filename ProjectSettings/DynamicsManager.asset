@@ -7,8 +7,8 @@ PhysicsManager:
   m_Gravity: {x: 0, y: -9.81, z: 0}
   m_DefaultMaterial: {fileID: 0}
   m_BounceThreshold: 2
-  m_SleepThreshold: 0.005
-  m_DefaultContactOffset: 0.01
+  m_SleepThreshold: 0.02
+  m_DefaultContactOffset: 0.02
   m_DefaultSolverIterations: 6
   m_DefaultSolverVelocityIterations: 1
   m_QueriesHitBackfaces: 0
@@ -17,7 +17,7 @@ PhysicsManager:
   m_ClothInterCollisionDistance: 0
   m_ClothInterCollisionStiffness: 0
   m_ContactsGeneration: 1
-  m_LayerCollisionMatrix: efcbffffefcbffffefcbffffffffffffc8c8ffffefcbffffffffffffffffffffefcbffffefcbffffc8c4ffffffebffffc8e0ffffc8f8ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+  m_LayerCollisionMatrix: ef09ffffef09ffffef09ffffffffffffc88cffffef09ffffffffffffffffffffef09ffffc808ffffd804ffffff2bffffc820ffffc838ffffc880ffffd840ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
   m_AutoSimulation: 1
   m_AutoSyncTransforms: 1
   m_ReuseCollisionCallbacks: 0
@@ -25,9 +25,9 @@ PhysicsManager:
   m_ContactPairsMode: 0
   m_BroadphaseType: 0
   m_WorldBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 250, y: 250, z: 250}
-  m_WorldSubdivisions: 8
+    m_Center: {x: 1216, y: 2432, z: 1216}
+    m_Extent: {x: 2432, y: 4864, z: 2432}
+  m_WorldSubdivisions: 16
   m_FrictionType: 0
   m_EnableEnhancedDeterminism: 0
   m_EnableUnifiedHeightmaps: 1

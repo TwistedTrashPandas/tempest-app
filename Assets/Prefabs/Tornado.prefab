@@ -52,7 +52,7 @@ MonoBehaviour:
   vectorField: {fileID: 114404567317752372, guid: 941dacf29dd13114da83072443e844b1,
     type: 3}
   camPos: {fileID: 0}
-  sortEach: 1
+  sortEach: 10
   particelNumExp: 12
   dampVel: 0.998
   numCloudSkyParticles: 9

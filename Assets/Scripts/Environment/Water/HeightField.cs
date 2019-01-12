@@ -691,6 +691,9 @@ namespace MastersOfTempest.Environment.VisualEffects
                     segmentConfigurations[i, j] = new Vector2((widthMesh - 1) * quadSize * idcs[i, j, 0], (depthMesh - 1) * quadSize * idcs[i, j, 1]);
                 }
             }
+
+            GetComponent<BoxCollider>().size = new Vector3(quadSize * widthMesh * 20f, maxHeight / 4.0f, quadSize * depthMesh * 20f);
+            GetComponent<BoxCollider>().center = new Vector3(quadSize * widthMesh / 2.0f, maxHeight / 4.0f, quadSize * depthMesh / 2.0f);
         }
         //  creates mesh with flat shading
         private void CreateMesh()

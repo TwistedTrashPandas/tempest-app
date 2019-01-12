@@ -337,6 +337,11 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 8073123671162140756, guid: b1a1c1a46495e48d4990bf09f3b4339a,
+        type: 3}
+      propertyPath: angularMomentumFactor
+      value: 0.05
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b1a1c1a46495e48d4990bf09f3b4339a, type: 3}
 --- !u!1 &1311779109

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 54846408806076376}
   - component: {fileID: 114160001440440854}
   - component: {fileID: 114395870487560930}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: Rock2
   m_TagString: Rock
   m_Icon: {fileID: 0}
@@ -65,13 +65,14 @@ MonoBehaviour:
   listIndex: 0
   relativeTargetPos: {x: 0, y: 0, z: 0}
   type: 0
-  speed: 200
+  speed: 100
   closestDistance: 5
   moveType: 2
   damage: 0
   health: 1
+  splitForce: 10
   status: 0
-  rockParts: []
+  envSpawner: {fileID: 0}
 --- !u!114 &114395870487560930
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90,9 +91,12 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114395870487560930}
   children: []
+  serverLayer: ServerEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!135 &9086170987443360169
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -179,9 +183,17 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Rock
       objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 932a6880ee4f00c41b847af01a84dc04, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 932a6880ee4f00c41b847af01a84dc04, type: 3}
       propertyPath: m_TagString
       value: Rock
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 932a6880ee4f00c41b847af01a84dc04, type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 932a6880ee4f00c41b847af01a84dc04, type: 3}

@@ -302,7 +302,6 @@ MonoBehaviour:
   - {fileID: 34622467}
   - {fileID: 34622466}
   - {fileID: 7276889038248845053}
-  - {fileID: 92865334584912933}
   - {fileID: 7121638406006189214}
   - {fileID: 4012375614886816747}
   - {fileID: 7546481962722662483}
@@ -335,24 +334,23 @@ MonoBehaviour:
   - {fileID: 7922871384775297178}
   - {fileID: 8968330451165636416}
   - {fileID: 4712063277867749918}
-  - {fileID: 7292505177371863240}
   - {fileID: 1564769364490298148}
   - {fileID: 2235801376445000646}
-  - {fileID: 5267651498442308766}
   - {fileID: 306543250206102188}
   - {fileID: 281326969508223681}
-  - {fileID: 4587068030095810423}
   - {fileID: 5456418702017657601}
   - {fileID: 2193220958916760936}
-  - {fileID: 2074970999771678277}
   - {fileID: 6832910089456134391}
   - {fileID: 4750966707922097487}
   - {fileID: 8371197114597836668}
   - {fileID: 2748882870044940088}
   - {fileID: 394533449578786364}
+  serverLayer: Server
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &114739895200692124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -393,8 +391,8 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 126
-  m_CollisionDetection: 1
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!114 &8073123671162140756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -407,9 +405,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2c3a733c5cfaa548b7411b6c2ab025c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  angularMomentumFactor: 0.1
-  velocityDamp: 0.9975
-  pullStrength: 0.15
+  angularMomentumFactor: 0.2
+  velocityDamp: 0.995
+  pullStrength: 0.125
 --- !u!114 &3798610760229167962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -527,6 +525,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 182a00f0ab8db424bb2b94ad7d7b13ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shipPartArea: 0
 --- !u!114 &776381191052681535
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -593,15 +592,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -16
+  resourceID: -15
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &6240998923623626765
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -663,9 +665,12 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!65 &8075033005196756455
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -691,15 +696,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -15
+  resourceID: -14
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &1017223872249325929
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -751,15 +759,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -20
+  resourceID: -19
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!65 &6876012982521333245
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -785,15 +796,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -17
+  resourceID: -16
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &3006791559745434615
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -845,15 +859,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -19
+  resourceID: -18
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &2016522916596783513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -866,15 +883,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -21
+  resourceID: -20
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!1 &2950533832352523136
 GameObject:
   m_ObjectHideFlags: 0
@@ -1099,6 +1119,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 182a00f0ab8db424bb2b94ad7d7b13ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shipPartArea: 0
 --- !u!114 &3090281862215717165
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1162,9 +1183,12 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!65 &9202124662215506815
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1190,15 +1214,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -14
+  resourceID: -13
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &1752574705247017078
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1343,6 +1370,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 182a00f0ab8db424bb2b94ad7d7b13ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shipPartArea: 0
 --- !u!114 &8197584618961955415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1370,7 +1398,7 @@ GameObject:
   - component: {fileID: 7952002934640848449}
   - component: {fileID: 5487032219182360256}
   - component: {fileID: 1912359753450562906}
-  - component: {fileID: 4854917553542586650}
+  - component: {fileID: 1368332536718978593}
   m_Layer: 0
   m_Name: MiddleSailBack.001
   m_TagString: Ship
@@ -1449,15 +1477,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -26
+  resourceID: -25
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: ServerShipEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &1912359753450562906
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1477,8 +1508,8 @@ MonoBehaviour:
   maxDisplacementDist: 20
   destruction: 0
   status: 0
---- !u!64 &4854917553542586650
-MeshCollider:
+--- !u!65 &1368332536718978593
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1487,10 +1518,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 1
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 4300074, guid: e7d9f0ef9705de647ae4b54b0d58bde2, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 0.000038442395, y: 0.042191263, z: 0.011788193}
+  m_Center: {x: -6.941036e-17, y: 0.01281028, z: -0.0041148006}
 --- !u!1 &7952002934638850051
 GameObject:
   m_ObjectHideFlags: 0
@@ -1583,15 +1613,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -32
+  resourceID: -31
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: ServerShipEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &3511646312594298532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1717,15 +1750,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -48
+  resourceID: -43
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: ServerShipEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &858645869008185151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1851,15 +1887,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -50
+  resourceID: -45
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: ServerShipEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &5158370058248450766
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1985,15 +2024,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -31
+  resourceID: -30
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &3263739328223622057
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2195,15 +2237,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -34
+  resourceID: -33
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: ServerShipEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &5474882040675574366
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2249,7 +2294,7 @@ GameObject:
   - component: {fileID: 7952002934640848463}
   - component: {fileID: 3765198654847723288}
   - component: {fileID: 704969996273817691}
-  - component: {fileID: 6402890649932584696}
+  - component: {fileID: 2014922415753319222}
   m_Layer: 0
   m_Name: MiddleSailBack
   m_TagString: Ship
@@ -2328,15 +2373,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -25
+  resourceID: -24
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: ServerShipEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &704969996273817691
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2356,8 +2404,8 @@ MonoBehaviour:
   maxDisplacementDist: 20
   destruction: 0
   status: 0
---- !u!64 &6402890649932584696
-MeshCollider:
+--- !u!65 &2014922415753319222
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -2366,10 +2414,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 1
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 4300080, guid: e7d9f0ef9705de647ae4b54b0d58bde2, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 0.000038442395, y: 0.042191263, z: 0.011788193}
+  m_Center: {x: -6.941036e-17, y: 0.01281028, z: -0.0041148006}
 --- !u!1 &7952002934638850065
 GameObject:
   m_ObjectHideFlags: 0
@@ -4310,15 +4357,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -24
+  resourceID: -23
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: ServerShipEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &1589960257166819724
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4443,15 +4493,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -28
+  resourceID: -27
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: ServerShipEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &2951607102373423989
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4497,7 +4550,7 @@ GameObject:
   - component: {fileID: 7952002934640848549}
   - component: {fileID: 3758020209927820591}
   - component: {fileID: 552787598808282150}
-  - component: {fileID: 8012646835235226591}
+  - component: {fileID: 3261988867280611817}
   m_Layer: 0
   m_Name: Crystalbeard
   m_TagString: Ship
@@ -4576,15 +4629,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -8
+  resourceID: -7
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: ServerShipEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &552787598808282150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4604,8 +4660,8 @@ MonoBehaviour:
   maxDisplacementDist: 20
   destruction: 0
   status: 0
---- !u!64 &8012646835235226591
-MeshCollider:
+--- !u!136 &3261988867280611817
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -4614,10 +4670,10 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 1
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 4300024, guid: e7d9f0ef9705de647ae4b54b0d58bde2, type: 3}
+  m_Radius: 0.0032539628
+  m_Height: 0.026032986
+  m_Direction: 1
+  m_Center: {x: -0.000027445487, y: 0.042576693, z: -0.013531533}
 --- !u!1 &7952002934638850151
 GameObject:
   m_ObjectHideFlags: 0
@@ -4631,7 +4687,7 @@ GameObject:
   - component: {fileID: 7952002934640848551}
   - component: {fileID: 7081046557891680985}
   - component: {fileID: 683004927125640209}
-  - component: {fileID: 792413359562615992}
+  - component: {fileID: 6547620314893734075}
   m_Layer: 0
   m_Name: Crystalholder
   m_TagString: Ship
@@ -4710,15 +4766,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -9
+  resourceID: -8
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: ServerShipEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &683004927125640209
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4738,8 +4797,8 @@ MonoBehaviour:
   maxDisplacementDist: 20
   destruction: 0
   status: 0
---- !u!64 &792413359562615992
-MeshCollider:
+--- !u!65 &6547620314893734075
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -4748,10 +4807,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 1
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 4300022, guid: e7d9f0ef9705de647ae4b54b0d58bde2, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 0.014472623, y: 0.009095115, z: 0.007670117}
+  m_Center: {x: 1.2109386e-17, y: 0.033154823, z: -0.0074869967}
 --- !u!1 &7952002934638850153
 GameObject:
   m_ObjectHideFlags: 0
@@ -4763,9 +4821,6 @@ GameObject:
   - component: {fileID: 7952002934638947401}
   - component: {fileID: 7952002934641847401}
   - component: {fileID: 7952002934640848553}
-  - component: {fileID: 92865334584912933}
-  - component: {fileID: 982753522405005472}
-  - component: {fileID: 8173982376330394597}
   m_Layer: 0
   m_Name: BackSail
   m_TagString: Ship
@@ -4832,59 +4887,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &92865334584912933
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850153}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -4
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 114449933113175548}
-  children: []
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
---- !u!114 &982753522405005472
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850153}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b354a2ab54aca94eb7680b2351d8734, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  index: 0
-  interactionArea: 0
-  cutOffDist: 20
-  impulseScaling: 0.25
-  maxDisplacementDist: 20
-  destruction: 0
-  status: 0
---- !u!65 &8173982376330394597
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850153}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.00022388338, y: 0.01258915, z: 0.011107989}
-  m_Center: {x: 0.0000022149106, y: 0.002495832, z: 0.0022205138}
 --- !u!1 &7952002934638850155
 GameObject:
   m_ObjectHideFlags: 0
@@ -4977,15 +4979,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -22
+  resourceID: -21
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: ServerShipEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &4744909853301228155
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5110,15 +5115,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -23
+  resourceID: -22
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: ServerShipEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &4126325807407070396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5243,15 +5251,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -7
+  resourceID: -6
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: ServerShipEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &2137439444189116224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5376,15 +5387,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -10
+  resourceID: -9
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: ServerShipEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &1362275687069811220
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5511,15 +5525,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -11
+  resourceID: -10
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: ServerShipEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 0
 --- !u!114 &8743958451629267199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5644,15 +5661,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -27
+  resourceID: -26
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: ServerShipEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
-  removeChildColliders: 0
+  removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &6020317912167091808
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5777,15 +5797,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -33
+  resourceID: -32
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: ServerShipEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &3402703825650314540
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5910,15 +5933,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -5
+  resourceID: -4
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: ServerShipEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &7384372941658732455
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5964,7 +5990,7 @@ GameObject:
   - component: {fileID: 7952002934640848571}
   - component: {fileID: 4012375614886816747}
   - component: {fileID: 5515887217459295754}
-  - component: {fileID: 7771308778509288232}
+  - component: {fileID: 3091617635886444800}
   m_Layer: 0
   m_Name: BackSail2
   m_TagString: Ship
@@ -6043,15 +6069,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -6
+  resourceID: -5
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: ServerShipEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &5515887217459295754
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6071,8 +6100,8 @@ MonoBehaviour:
   maxDisplacementDist: 20
   destruction: 0
   status: 0
---- !u!64 &7771308778509288232
-MeshCollider:
+--- !u!65 &3091617635886444800
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -6081,10 +6110,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 1
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 4300004, guid: e7d9f0ef9705de647ae4b54b0d58bde2, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 0.000014755023, y: 0.010565107, z: 0.0085992}
+  m_Center: {x: 0, y: -0.0010057722, z: 0.001240985}
 --- !u!1 &7952002934638850173
 GameObject:
   m_ObjectHideFlags: 0
@@ -6177,15 +6205,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -29
+  resourceID: -28
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: ServerShipEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &7169357895716033884
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6310,15 +6341,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -30
+  resourceID: -29
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: ServerShipEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &8169658005565882094
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6535,15 +6569,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -49
+  resourceID: -44
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: ServerShipEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &2248923176419813416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6668,15 +6705,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -51
+  resourceID: -46
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: ServerShipEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &7237319176646748720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6720,7 +6760,6 @@ GameObject:
   - component: {fileID: 7952002934638947753}
   - component: {fileID: 7952002934641847625}
   - component: {fileID: 7952002934640848777}
-  - component: {fileID: 3924736279738460676}
   m_Layer: 0
   m_Name: StairsDown
   m_TagString: Ship
@@ -6787,20 +6826,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &3924736279738460676
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850377}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 1
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 4300236, guid: e7d9f0ef9705de647ae4b54b0d58bde2, type: 3}
 --- !u!1 &7952002934638850379
 GameObject:
   m_ObjectHideFlags: 0
@@ -7077,15 +7102,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -47
+  resourceID: -42
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: ServerShipEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &243685825144554430
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7981,15 +8009,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -41
+  resourceID: -38
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: ServerShipEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &6284336166406843728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8114,15 +8145,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -35
+  resourceID: -34
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: ServerShipEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &5065813266933637634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8555,15 +8589,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -39
+  resourceID: -37
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: ServerShipEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &7383728966927319662
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8689,15 +8726,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -45
+  resourceID: -41
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: ServerShipEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &3924634717962627846
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8977,15 +9017,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -38
+  resourceID: -36
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: ServerShipEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &7836439871357406768
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9110,15 +9153,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -44
+  resourceID: -40
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: ServerShipEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &8820513105087484091
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9243,15 +9289,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -42
+  resourceID: -39
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: ServerShipEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &542421216753666036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9377,15 +9426,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -36
+  resourceID: -35
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: ServerShipEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &4722844687643282041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9430,9 +9482,6 @@ GameObject:
   - component: {fileID: 7952002934638947729}
   - component: {fileID: 7952002934641847729}
   - component: {fileID: 7952002934640848881}
-  - component: {fileID: 7292505177371863240}
-  - component: {fileID: 6719248204471327544}
-  - component: {fileID: 5491605271364173550}
   m_Layer: 0
   m_Name: SideSailLeftBig.001
   m_TagString: Ship
@@ -9499,60 +9548,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &7292505177371863240
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850481}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -37
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 114449933113175548}
-  children: []
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
---- !u!114 &6719248204471327544
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850481}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b354a2ab54aca94eb7680b2351d8734, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  index: 0
-  interactionArea: 0
-  cutOffDist: 20
-  impulseScaling: 0.25
-  maxDisplacementDist: 20
-  destruction: 0
-  status: 0
---- !u!64 &5491605271364173550
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850481}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 1
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 4300028, guid: e7d9f0ef9705de647ae4b54b0d58bde2, type: 3}
 --- !u!1 &7952002934638850483
 GameObject:
   m_ObjectHideFlags: 0
@@ -9564,9 +9559,6 @@ GameObject:
   - component: {fileID: 7952002934638947731}
   - component: {fileID: 7952002934641847731}
   - component: {fileID: 7952002934640848883}
-  - component: {fileID: 2074970999771678277}
-  - component: {fileID: 9082263912633823732}
-  - component: {fileID: 2442744218566947248}
   m_Layer: 0
   m_Name: SideSailRightBig
   m_TagString: Ship
@@ -9633,60 +9625,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &2074970999771678277
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850483}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -46
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 114449933113175548}
-  children: []
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
---- !u!114 &9082263912633823732
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850483}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b354a2ab54aca94eb7680b2351d8734, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  index: 0
-  interactionArea: 0
-  cutOffDist: 20
-  impulseScaling: 0.25
-  maxDisplacementDist: 20
-  destruction: 0
-  status: 0
---- !u!64 &2442744218566947248
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850483}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 1
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 4300038, guid: e7d9f0ef9705de647ae4b54b0d58bde2, type: 3}
 --- !u!1 &7952002934638850485
 GameObject:
   m_ObjectHideFlags: 0
@@ -9698,9 +9636,6 @@ GameObject:
   - component: {fileID: 7952002934638947733}
   - component: {fileID: 7952002934641847733}
   - component: {fileID: 7952002934640848885}
-  - component: {fileID: 4587068030095810423}
-  - component: {fileID: 5861599129619852258}
-  - component: {fileID: 9058321384448689551}
   m_Layer: 0
   m_Name: SideSailRightBig.001
   m_TagString: Ship
@@ -9767,60 +9702,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &4587068030095810423
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850485}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -43
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 114449933113175548}
-  children: []
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
---- !u!114 &5861599129619852258
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850485}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b354a2ab54aca94eb7680b2351d8734, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  index: 0
-  interactionArea: 0
-  cutOffDist: 20
-  impulseScaling: 0.25
-  maxDisplacementDist: 20
-  destruction: 0
-  status: 0
---- !u!64 &9058321384448689551
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850485}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 1
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 4300040, guid: e7d9f0ef9705de647ae4b54b0d58bde2, type: 3}
 --- !u!1 &7952002934638850487
 GameObject:
   m_ObjectHideFlags: 0
@@ -10168,9 +10049,12 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: ServerShipEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &45702678278583303
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10253,9 +10137,6 @@ GameObject:
   - component: {fileID: 7952002934638947743}
   - component: {fileID: 7952002934641847743}
   - component: {fileID: 7952002934640848895}
-  - component: {fileID: 5267651498442308766}
-  - component: {fileID: 5322082513171565310}
-  - component: {fileID: 6354606670508655444}
   m_Layer: 0
   m_Name: SideSailLeftBig
   m_TagString: Ship
@@ -10322,60 +10203,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &5267651498442308766
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850495}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -40
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 114449933113175548}
-  children: []
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
---- !u!114 &5322082513171565310
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850495}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b354a2ab54aca94eb7680b2351d8734, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  index: 0
-  interactionArea: 0
-  cutOffDist: 20
-  impulseScaling: 0.25
-  maxDisplacementDist: 20
-  destruction: 0
-  status: 0
---- !u!64 &6354606670508655444
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850495}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 1
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 4300026, guid: e7d9f0ef9705de647ae4b54b0d58bde2, type: 3}
 --- !u!1 &7952002934638850497
 GameObject:
   m_ObjectHideFlags: 0
@@ -12880,15 +12707,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -13
+  resourceID: -12
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!1 &8628087025640942175
 GameObject:
   m_ObjectHideFlags: 0
@@ -12939,15 +12769,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -12
+  resourceID: -11
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
+  removeServerChildColliders: 1
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &9215889453479219005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12960,15 +12793,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceID: -18
+  resourceID: -17
   onServer: 1
   serverID: 0
   lastUpdate: 0
   root: {fileID: 114449933113175548}
   children: []
+  serverLayer: Server
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!1001 &819169047082282768
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13199,9 +13035,27 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 124018664b00b466590393aea6ddb1b0, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f, type: 3}
+--- !u!1 &8424858032213719884 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7210987168480958951, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
+    type: 3}
+  m_PrefabInstance: {fileID: 1223159550849639083}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8978423430486577918 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7809327154272317525, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
+    type: 3}
+  m_PrefabInstance: {fileID: 1223159550849639083}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2615673267394055396 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3798001079422479951, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
+    type: 3}
+  m_PrefabInstance: {fileID: 1223159550849639083}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7303331475228656071 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8476667756176728940, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
     type: 3}
   m_PrefabInstance: {fileID: 1223159550849639083}
   m_PrefabAsset: {fileID: 0}
@@ -13214,24 +13068,6 @@ GameObject:
 --- !u!1 &1705823135407074011 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 528544289363331184, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
-    type: 3}
-  m_PrefabInstance: {fileID: 1223159550849639083}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &7303331475228656071 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8476667756176728940, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
-    type: 3}
-  m_PrefabInstance: {fileID: 1223159550849639083}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &8978423430486577918 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7809327154272317525, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
-    type: 3}
-  m_PrefabInstance: {fileID: 1223159550849639083}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &8424858032213719884 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7210987168480958951, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
     type: 3}
   m_PrefabInstance: {fileID: 1223159550849639083}
   m_PrefabAsset: {fileID: 0}
@@ -13324,15 +13160,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 93839aa4fdb6e934bb47c57d1f51c7e2, type: 3}
---- !u!4 &3287890178507215572 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 645421218217816172, guid: 93839aa4fdb6e934bb47c57d1f51c7e2,
-    type: 3}
-  m_PrefabInstance: {fileID: 2689794252786131640}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2027368807277309206 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4140699971291500462, guid: 93839aa4fdb6e934bb47c57d1f51c7e2,
+    type: 3}
+  m_PrefabInstance: {fileID: 2689794252786131640}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3287890178507215572 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 645421218217816172, guid: 93839aa4fdb6e934bb47c57d1f51c7e2,
     type: 3}
   m_PrefabInstance: {fileID: 2689794252786131640}
   m_PrefabAsset: {fileID: 0}
@@ -13421,7 +13257,7 @@ PrefabInstance:
     - target: {fileID: 20669329079659068, guid: 13b5913f603625242870c830094ccd32,
         type: 3}
       propertyPath: m_CullingMask.m_Bits
-      value: 2871
+      value: 2822
       objectReference: {fileID: 0}
     - target: {fileID: 20669329079659068, guid: 13b5913f603625242870c830094ccd32,
         type: 3}

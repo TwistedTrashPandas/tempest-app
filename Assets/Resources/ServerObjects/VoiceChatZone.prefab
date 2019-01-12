@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6361524419116573124}
   - component: {fileID: 4258534053645907957}
   - component: {fileID: 6887346432863868699}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: VoiceChatZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,9 +102,12 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 6361524419116573124}
   children: []
+  serverLayer: ServerEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!198 &4258534053645907957
 ParticleSystem:
   m_ObjectHideFlags: 0
