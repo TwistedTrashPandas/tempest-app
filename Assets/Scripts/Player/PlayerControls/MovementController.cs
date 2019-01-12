@@ -8,9 +8,9 @@ namespace MastersOfTempest.PlayerControls
     public class MovementController : MonoBehaviour
     {
         public Camera DirectionCamera;
-
+        
         private const float speed = .1f;
-        private TransformManipulator transformManipulator;
+        private CharacterPositionManipulator positionManipulator;
         private bool isActive = true;
         public bool Active
         {
@@ -26,25 +26,23 @@ namespace MastersOfTempest.PlayerControls
 
         private void Start()
         {
-            transformManipulator = GetComponent<TransformManipulator>();
-            if (transformManipulator == null)
+            positionManipulator = GetComponent<CharacterPositionManipulator>();
+            if (positionManipulator == null)
             {
-                throw new InvalidOperationException($"{nameof(transformManipulator)} is not specified!");
+                throw new InvalidOperationException($"{nameof(positionManipulator)} is not specified!");
             }
+            StartCoroutine(ListenMovement());
         }
-        private void FixedUpdate()
+
+        private IEnumerator ListenMovement()
         {
-            if(isActive)
+            while (true)
             {
-                var position = transform.localPosition;
-                var positionChange = speed * (-Input.GetAxis("Vertical") * DirectionCamera.transform.right + Input.GetAxis("Horizontal") * DirectionCamera.transform.forward);
-                //We don't want our players to float around
-                positionChange.y = 0f;
-                position += positionChange;
-                if(position != transform.localPosition)
+                if (isActive)
                 {
-                    transformManipulator.ChangePosition(position);
+                    positionManipulator.MoveCharacter(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), DirectionCamera.transform.forward, DirectionCamera.transform.right);
                 }
+                yield return new WaitForSeconds(1f / 10f);
             }
         }
     }

@@ -5,6 +5,7 @@ using UnityEngine;
 using System;
 using UnityEngine.SceneManagement;
 using UnityEngine.Audio;
+using System.Linq;
 
 namespace MastersOfTempest.Networking
 {
@@ -28,18 +29,18 @@ namespace MastersOfTempest.Networking
         protected override void StartClient()
         {
             audioSource = GetComponent<AudioSource>();
+
             Facepunch.Steamworks.Client.Instance.Voice.OnCompressedData += OnCompressedData;
-
-            // Switch active scene so that instantiate creates the object as part of the client scene       
-            Scene previouslyActiveScene = SceneManager.GetActiveScene();
-            SceneManager.SetActiveScene(gameObject.scene);
-            //both client and server versions need the context object
-            FindObjectOfType<Gamemaster>().Register(this);
-
-            // Switch back to the previously active scene  
-            SceneManager.SetActiveScene(previouslyActiveScene);
+            //FindObjectOfType doesn't care about the scene, so we need to find everything and pick the one we need
+            FindObjectsOfType<Gamemaster>().First(gm => gm.gameObject.scene == gameObject.scene).Register(this);
         }
 
+
+        protected override void StartServer()
+        {
+            base.StartServer();
+            Destroy(GetComponent<Environment.Interacting.VoiceChatZoneNetwork>());
+        }
         protected override void UpdateClient()
         {
             if (Input.GetKey(recordKey))

@@ -61,7 +61,6 @@ namespace MastersOfTempest.ShipBL
                 Buffer.BlockCopy(BitConverter.GetBytes(contactPoints[j].point.z), 0, buffer, 24 + j * 12, 4);
             }
             SendToAllClients(buffer, Facepunch.Steamworks.Networking.SendType.Reliable);
-            print("buffer:" + contactPoints.Length);
         }
 
         public void UpdateMesh(Vector3[] contactPoints, Vector3 impulse)
@@ -133,7 +132,7 @@ namespace MastersOfTempest.ShipBL
             GetComponent<MeshFilter>().mesh.vertices = vertices;
             targetMesh = vertices;*/
             int l = Mathf.FloorToInt(data.Length / 12) - 1;
-            print("data:" + l);
+
             SetDestruction(BitConverter.ToSingle(data, 0));
             Vector3 impulse = new Vector3(BitConverter.ToSingle(data, 4), BitConverter.ToSingle(data, 8), BitConverter.ToSingle(data, 12));
             Vector3[] contactPoints = new Vector3[l];

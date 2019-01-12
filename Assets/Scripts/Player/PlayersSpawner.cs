@@ -36,7 +36,9 @@ namespace MastersOfTempest.PlayerControls
                 var spawnPoint = role.GetSpawnPoint();
                 if(spawnPoint != null)
                 {
-                    playerInstance.transform.SetParent(spawnPoint.transform, false);
+                    playerInstance.transform.position = spawnPoint.transform.position;
+                    StartCoroutine(SetParent(playerInstance.transform, spawnPoint.transform));
+                    //playerInstance.transform.SetParent(spawnPoint.transform, true);
                 }
 
                 Debug.Log($"Spawned for player# {playerId}");
@@ -45,7 +47,12 @@ namespace MastersOfTempest.PlayerControls
             SceneManager.SetActiveScene(previouslyActiveScene);
 
             //We don't need it anymore after its job is done
-            Destroy(this.gameObject);
+            Destroy(this.gameObject, 10f);
+        }
+        private IEnumerator SetParent(Transform child, Transform parent)
+        {
+            yield return new WaitForFixedUpdate();
+            child.SetParent(parent.transform, true);
         }
     }
 }

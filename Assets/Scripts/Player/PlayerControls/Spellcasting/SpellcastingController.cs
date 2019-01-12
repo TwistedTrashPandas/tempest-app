@@ -28,7 +28,7 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
 
         private void Start()
         {
-            context = FindObjectOfType<Gamemaster>();
+            context = FindObjectsOfType<Gamemaster>().First(gm => gm.gameObject.scene == gameObject.scene);
             if (context == null)
             {
                 throw new InvalidOperationException($"{nameof(context)} is not specified!");

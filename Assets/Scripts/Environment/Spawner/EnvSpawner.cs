@@ -231,8 +231,7 @@ namespace MastersOfTempest.Environment.Interacting
                         initialPos = new Vector3(Random.Range(0, dims.x)* cellSizeH, Random.Range(dims.y * 0.1f, 0.8f * dims.y)* cellSize, Random.Range(0, dims.z)* cellSizeH)  + new Vector3(0.5f, 0.5f, 0.5f);
                         prefabNum = Mathf.FloorToInt(Random.Range(0f, voiceChatZonesPrefabs.Length - Mathf.Epsilon));
                         envObjects.Add(GameObject.Instantiate(voiceChatZonesPrefabs[prefabNum], initialPos, orientation).GetComponent<EnvObject>());
-                       // envObjects[envObjects.Count - 1].moveType = MoveType.Static;
-                        envObjects[envObjects.Count - 1].GetComponent<VoiceChatZone>().Initialize();
+                       // envObjects[envObjects.Count - 1].moveType = MoveType.Static;                    
                         Destroy(envObjects[envObjects.Count - 1].GetComponent<ParticleSystem>());                          
                         break;
                 }

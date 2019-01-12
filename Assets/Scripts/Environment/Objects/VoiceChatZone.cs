@@ -10,38 +10,28 @@ namespace MastersOfTempest.Environment.Interacting
     public class VoiceChatZone : EnvObject
     {
         public VoiceChatZoneType zoneType;
-        public AudioMixer audioMixer;
-        public Dictionary<VoiceChatZoneType, AudioMixerGroup> audioMixerGroups;
+        private VoiceChatZoneNetwork voiceChatZoneNetwork;
 
-        public void Initialize()
+        private void Start()
         {
-            audioMixerGroups = new Dictionary<VoiceChatZoneType, AudioMixerGroup>();
-            AudioMixerGroup[] tempGroups = audioMixer.FindMatchingGroups(string.Empty);
-            foreach (VoiceChatZoneType type in Enum.GetValues(typeof(VoiceChatZoneType)))
-            {
-                if (type == VoiceChatZoneType.Normalized || type == zoneType)
-                {
-                    AudioMixerGroup toUse = tempGroups[0];
-                    for (int i = 0; i < tempGroups.Length; i++)
-                    {
-                        if (tempGroups[i].name == type.ToString())
-                            toUse = tempGroups[i];
-                    }
-                    audioMixerGroups.Add(type, toUse);
-                }
-            }
+            voiceChatZoneNetwork = GameObject.FindObjectOfType<VoiceChatZoneNetwork>();
         }
 
         protected override void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.tag == "ship")
-                audioMixer.outputAudioMixerGroup = audioMixerGroups[zoneType];
+            if (other.gameObject.tag == "Ship")
+            {
+                voiceChatZoneNetwork.SetVoiceChatZoneType((uint)zoneType);
+            }
         }
 
         protected override void OnTriggerExit(Collider other)
         {
-            if (other.gameObject.tag == "ship")
-                audioMixer.outputAudioMixerGroup = audioMixerGroups[VoiceChatZoneType.Normalized];
+            Debug.Log(other.gameObject.tag);
+            if (other.gameObject.tag == "Ship")
+            {
+                voiceChatZoneNetwork.SetVoiceChatZoneType((uint)VoiceChatZoneType.Normalized);
+            }
         }
     }
 }
