@@ -22,20 +22,14 @@ namespace MastersOfTempest.PlayerControls
         private InteractionsController interactionsController;
         private ApprenticeInputAnimations animations;
 
-        protected void Start()
-        {
-        }
-
         protected void Update()
         {
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
-                Debug.Log("TODO: Throw");
-                animations.Throw();
+                animations.Throw(firstPersonCamera);
             }
             else if (Input.GetKeyDown(KeyCode.Space))
             {
-                Debug.Log("TODO: Meditate");
                 animations.Meditate();
             }
         }
@@ -76,10 +70,10 @@ namespace MastersOfTempest.PlayerControls
             // Spawn and attach hands
             Instantiate(Resources.Load<GameObject>("ApprenticeHands"), firstPersonCamera.transform, false);
 
-            animations = GetComponentInChildren<ApprenticeInputAnimations>();
-
             // Make sure that the hands are visible
             firstPersonCamera.nearClipPlane = 0.01f;
+
+            animations = GetComponentInChildren<ApprenticeInputAnimations>();
 
             var highlighter = gameObject.AddComponent<InteractionsHighlighter>();
             highlighter.InteractionsController = interactionsController;
@@ -122,8 +116,19 @@ namespace MastersOfTempest.PlayerControls
 
         public void Repair (RepairArea target)
         {
-            // TODO: For repairing: Call AddDestruction with negative value on all parts in the ShipPartManager interaction area on the server only
-            Debug.Log("TODO: Repair " + target.name);
+            // Find the ship network behaviour on the client
+            // Send message to repair parts from the ShipPartManager
+            Ship[] ships = FindObjectsOfType<Ship>();
+
+            foreach (Ship ship in ships)
+            {
+                if (ship.gameObject.scene.Equals(Networking.GameClient.Instance.gameObject.scene))
+                {
+                    ship.RepairShipPartAreaOnServer(target.shipPartArea, 0.2f);
+                    break;
+                }
+            }
+
             animations.Repair();
         }
     }

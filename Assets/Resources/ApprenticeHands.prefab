@@ -1219,6 +1219,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   leftHandAnimator: {fileID: 8188718392640708852}
   rightHandAnimator: {fileID: 7670250809723004943}
+  meditate: {fileID: 5694507806207177584}
 --- !u!1 &3410360313346560396
 GameObject:
   m_ObjectHideFlags: 0
@@ -1534,6 +1535,36 @@ SkinnedMeshRenderer:
     m_Center: {x: -1.2111421, y: -0.116536826, z: -0.0069088936}
     m_Extent: {x: 2.3327425, y: 0.7617582, z: 0.31085825}
   m_DirtyAABB: 0
+--- !u!1 &3933098111590250374
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5694507806207177584}
+  m_Layer: 0
+  m_Name: MeditateTransform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5694507806207177584
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3933098111590250374}
+  m_LocalRotation: {x: 0.36299434, y: 0.6218134, z: 0.39613888, w: -0.56978697}
+  m_LocalPosition: {x: 1.5, y: 3.5, z: 0.1}
+  m_LocalScale: {x: -10, y: -10, z: -10}
+  m_Children: []
+  m_Father: {fileID: 591007956241987198}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: -65, y: 265, z: 0}
 --- !u!1 &3960945082106027397
 GameObject:
   m_ObjectHideFlags: 0
@@ -2577,6 +2608,7 @@ Transform:
   m_Children:
   - {fileID: 1439319385760938375}
   - {fileID: 5997168310353294644}
+  - {fileID: 5694507806207177584}
   m_Father: {fileID: 4353615519528310622}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3827,21 +3859,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 2.3070002
-      objectReference: {fileID: 0}
-    - target: {fileID: 8953131243605370625, guid: 044a09cd61b42be4293ee13a0284227d,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: -10.000014
-      objectReference: {fileID: 0}
-    - target: {fileID: 8953131243605370625, guid: 044a09cd61b42be4293ee13a0284227d,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: -10
-      objectReference: {fileID: 0}
-    - target: {fileID: 8953131243605370625, guid: 044a09cd61b42be4293ee13a0284227d,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: -10.000013
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 044a09cd61b42be4293ee13a0284227d, type: 3}
