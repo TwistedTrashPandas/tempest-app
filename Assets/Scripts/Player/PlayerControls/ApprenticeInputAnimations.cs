@@ -26,7 +26,7 @@ namespace MastersOfTempest.PlayerControls
         {
             if (!isThrowing)
             {
-                StartCoroutine(ThrowAnimation(firstPersonCamera, 5, 1.0f));
+                StartCoroutine(ThrowAnimation(firstPersonCamera, 5, 1.0f, 1000));
             }
         }
 
@@ -36,7 +36,7 @@ namespace MastersOfTempest.PlayerControls
             rightHandAnimator.SetTrigger("Meditate");
         }
 
-        private IEnumerator ThrowAnimation (Camera firstPersonCamera, float distance, float time)
+        private IEnumerator ThrowAnimation (Camera firstPersonCamera, float distance, float time, float rotationSpeed)
         {
             isThrowing = true;
             rightHandAnimator.SetTrigger("Throw");
@@ -48,21 +48,20 @@ namespace MastersOfTempest.PlayerControls
             Quaternion startRotation = hammer.transform.localRotation;
 
             float t = 0;
-            hammer.transform.SetParent(null, true);
+            hammer.transform.SetParent(firstPersonCamera.transform, true);
 
             while (t < time)
             {
                 Vector3 endPosition = firstPersonCamera.transform.position + distance * firstPersonCamera.transform.forward;
 
                 hammer.transform.position = Vector3.Lerp(startParent.TransformPoint(startPosition), endPosition, t / time);
-                hammer.transform.Rotate(1000 * Time.deltaTime, 0, 0, Space.Self);
+                hammer.transform.Rotate(rotationSpeed * Time.deltaTime, 0, 0, Space.Self);
 
                 yield return new WaitForEndOfFrame();
                 t += Time.deltaTime;
             }
 
             t = 0;
-
             hammer.transform.SetParent(startParent, true);
 
             while (t < time)
@@ -73,7 +72,7 @@ namespace MastersOfTempest.PlayerControls
 
                 if (t <  0.9f * time)
                 {
-                    hammer.transform.Rotate(1000 * Time.deltaTime, 0, 0, Space.Self);
+                    hammer.transform.Rotate(rotationSpeed * Time.deltaTime, 0, 0, Space.Self);
                 }
                 else
                 {
