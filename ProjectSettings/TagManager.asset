@@ -8,6 +8,7 @@ TagManager:
   - Ship
   - WizardSpawn
   - ApprenticeSpawn
+  - Rock
   layers:
   - Default
   - TransparentFX

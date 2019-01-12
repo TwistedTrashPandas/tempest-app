@@ -14,6 +14,12 @@ namespace MastersOfTempest.Environment
         public EnvSpawner envSpawner { get; private set; }
         private Gamemaster gamemaster;
 
+        private struct DamageRockMessage
+        {
+            public int rockServerID;
+            public float damage;
+        }
+
         protected override void StartServer()
         {
             base.StartServer();
@@ -52,6 +58,28 @@ namespace MastersOfTempest.Environment
                 if (visualSpawner == null)
                     throw new System.InvalidOperationException("Spawner for visual effects is not specified");
                 visualSpawner.Initialize(vectorField);
+            }
+        }
+
+        protected override void OnServerReceivedMessageRaw(byte[] data, ulong steamID)
+        {
+            DamageRockMessage message = ByteSerializer.FromBytes<DamageRockMessage>(data);
+            ServerObject rock = GameServer.Instance.GetServerObject(message.rockServerID);
+            rock.GetComponent<Damaging>().RemoveHealth(message.damage);
+        }
+
+        public void DamageRockOnServer (int rockServerID, float damage)
+        {
+            if (serverObject.onServer)
+            {
+                Debug.LogError(nameof(DamageRockOnServer) + " should not be called on the server!");
+            }
+            else
+            {
+                DamageRockMessage message = new DamageRockMessage();
+                message.rockServerID = rockServerID;
+                message.damage = damage;
+                SendToServer(ByteSerializer.GetBytes(message), Facepunch.Steamworks.Networking.SendType.Reliable);
             }
         }
     }

@@ -155,6 +155,11 @@ namespace MastersOfTempest.Networking
             serverObjects.Add(serverObject.serverID, serverObject);
         }
 
+        public ServerObject GetServerObject (int serverID)
+        {
+            return serverObjects[serverID];
+        }
+
         public void RemoveServerObject (ServerObject serverObject)
         {
             serverObjects.Remove(serverObject.serverID);

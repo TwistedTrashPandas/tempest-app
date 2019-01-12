@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 114334480994139150}
   m_Layer: 10
   m_Name: Rock1
-  m_TagString: Untagged
+  m_TagString: Rock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -71,6 +71,7 @@ MonoBehaviour:
   damage: 0
   health: 1
   status: 0
+  rockParts: []
 --- !u!114 &114334480994139150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90,7 +91,7 @@ MonoBehaviour:
   root: {fileID: 114334480994139150}
   children: []
   interpolateOnClient: 1
-  removeChildColliders: 1
+  removeChildColliders: 0
   removeChildRigidbodies: 1
 --- !u!135 &8491807412834537929
 SphereCollider:
@@ -172,6 +173,14 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 58e9cc6418e03e24d8b7a8e0c39d5e75, type: 3}
       propertyPath: m_Name
       value: rock1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 58e9cc6418e03e24d8b7a8e0c39d5e75, type: 3}
+      propertyPath: m_TagString
+      value: Rock
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 58e9cc6418e03e24d8b7a8e0c39d5e75, type: 3}
+      propertyPath: m_TagString
+      value: Rock
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 58e9cc6418e03e24d8b7a8e0c39d5e75, type: 3}

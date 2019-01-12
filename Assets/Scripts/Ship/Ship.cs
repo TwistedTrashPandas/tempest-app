@@ -15,6 +15,12 @@ namespace MastersOfTempest.ShipBL
         private ShipTornadoInteraction shipTornInteraction;
         private ShipStatus currentStatus;
 
+        private struct RepairShipPartAreaMessage
+        {
+            public ShipPartArea shipPartArea;
+            public float repairAmount;
+        }
+
         private void Awake()
         {
             forceManipulator = GetComponent<ForceManilpulator>();
@@ -40,6 +46,32 @@ namespace MastersOfTempest.ShipBL
             context.Register(this);
             currentStatus = new ShipStatus();
             currentStatus.Condition = ShipCondition.None;
+        }
+
+        protected override void OnServerReceivedMessageRaw(byte[] data, ulong steamID)
+        {
+            RepairShipPartAreaMessage message = ByteSerializer.FromBytes<RepairShipPartAreaMessage>(data);
+
+            foreach (ShipPart shipPart in shipPartManager.interactionAreas[message.shipPartArea])
+            {
+                // Negative destruction equals repairing
+                shipPart.AddDestruction(-message.repairAmount);
+            }
+        }
+
+        public void RepairShipPartAreaOnServer (ShipPartArea shipPartArea, float repairAmount)
+        {
+            if (serverObject.onServer)
+            {
+                Debug.LogError(nameof(RepairShipPartAreaOnServer) + " should not be called on the server!");
+            }
+            else
+            {
+                RepairShipPartAreaMessage message = new RepairShipPartAreaMessage();
+                message.shipPartArea = shipPartArea;
+                message.repairAmount = repairAmount;
+                SendToServer(ByteSerializer.GetBytes(message), Facepunch.Steamworks.Networking.SendType.Reliable);
+            }
         }
 
         public ForceManilpulator GetShipForceManipulator()
