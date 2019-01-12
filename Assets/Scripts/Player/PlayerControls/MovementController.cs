@@ -32,15 +32,21 @@ namespace MastersOfTempest.PlayerControls
             {
                 throw new InvalidOperationException($"{nameof(positionManipulator)} is not specified!");
             }
+            StartCoroutine(ListenMovement());
         }
-        private void FixedUpdate()
+
+        private IEnumerator ListenMovement()
         {
-            if (isActive)
+            while (true)
             {
-                if (!(Mathf.Approximately(Input.GetAxis("Vertical"), 0f) && Mathf.Approximately(Input.GetAxis("Horizontal"), 0f)))
+                if (isActive)
                 {
-                    positionManipulator.MoveCharacter(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), DirectionCamera.transform.forward, DirectionCamera.transform.right);
+                    if (!(Mathf.Approximately(Input.GetAxis("Vertical"), 0f) && Mathf.Approximately(Input.GetAxis("Horizontal"), 0f)))
+                    {
+                        positionManipulator.MoveCharacter(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), DirectionCamera.transform.forward, DirectionCamera.transform.right);
+                    }
                 }
+                yield return new WaitForSeconds(1 / 20f);
             }
         }
     }
