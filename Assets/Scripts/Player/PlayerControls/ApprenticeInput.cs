@@ -1,4 +1,5 @@
 ﻿using System;
+using MastersOfTempest.Networking;
 using MastersOfTempest.PlayerControls.QTE;
 using MastersOfTempest.ShipBL;
 using TMPro;
@@ -21,6 +22,8 @@ namespace MastersOfTempest.PlayerControls
         private Camera firstPersonCamera;
         private InteractionsController interactionsController;
         private ApprenticeInputAnimations animations;
+
+        private bool teleported = false;
 
         protected void Update()
         {
@@ -116,7 +119,11 @@ namespace MastersOfTempest.PlayerControls
 
         public void Teleport (TeleportArea target)
         {
-            Debug.Log("TODO: Teleport to " + target.name);
+            // TODO: Make it possible to teleport between teleport areas
+            // Right now this is just a quick approach to simply make it work in most cases
+            // Also it might make sense to disable player movement when you are currently at a crowsnest
+            target.gameObject.GetComponent<TeleportActionNetworked>().TeleportOnServer(GetComponent<ServerObject>().serverID, teleported);
+            teleported = !teleported;
         }
 
         public void Repair (RepairArea target)
