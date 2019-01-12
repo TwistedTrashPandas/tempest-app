@@ -8,9 +8,12 @@ namespace MastersOfTempest.PlayerControls
     {
         public Animator leftHandAnimator;
         public Animator rightHandAnimator;
+        public Transform meditate;
 
         private Hammer hammer;
+        private bool isRepairing = false;
         private bool isThrowing = false;
+        private bool isMeditating = false;
 
         protected void Start()
         {
@@ -19,21 +22,79 @@ namespace MastersOfTempest.PlayerControls
 
         public void Repair ()
         {
-            rightHandAnimator.SetTrigger("Repair");
+            if (!IsBusy())
+            {
+                StartCoroutine(RepairAnimation(1));
+            }
         }
 
         public void Throw (Camera firstPersonCamera)
         {
-            if (!isThrowing)
+            if (!IsBusy())
             {
-                StartCoroutine(ThrowAnimation(firstPersonCamera, 50, 1.0f, 1000));
+                StartCoroutine(ThrowAnimation(firstPersonCamera, 5, 1.0f, 1000));
             }
         }
 
         public void Meditate ()
         {
+            if (!IsBusy())
+            {
+                StartCoroutine(MeditateAnimation(1));
+            }
+        }
+
+        private bool IsBusy ()
+        {
+            return isRepairing || isMeditating || isThrowing;
+        }
+
+        private IEnumerator RepairAnimation (float time)
+        {
+            isRepairing = true;
+            rightHandAnimator.SetTrigger("Repair");
+            yield return new WaitForSeconds(time / 2);
+            hammer.charge = Mathf.Clamp01(hammer.charge - 0.2f);
+            yield return new WaitForSeconds(time / 2);
+            isRepairing = false;
+        }
+
+        private IEnumerator MeditateAnimation (float time)
+        {
+            isMeditating = true;
             leftHandAnimator.SetTrigger("Meditate");
             rightHandAnimator.SetTrigger("Meditate");
+
+            float t = 0;
+            float startCharge = hammer.charge;
+            Vector3 startPosition = hammer.transform.localPosition;
+            Quaternion startRotation = hammer.transform.localRotation;
+
+            while (t < time)
+            {
+                hammer.transform.localPosition = Vector3.Lerp(hammer.transform.localPosition, meditate.transform.localPosition, t / time);
+                hammer.transform.localRotation = Quaternion.Lerp(hammer.transform.localRotation, meditate.transform.localRotation, t / time);
+
+                hammer.charge = Mathf.Clamp01(startCharge + 0.33f * (t / time));
+
+                t += Time.deltaTime;
+                yield return new WaitForEndOfFrame();
+            }
+
+            t = 0;
+
+            while (t < time)
+            {
+                hammer.transform.localPosition = Vector3.Lerp(hammer.transform.localPosition, startPosition, t / time);
+                hammer.transform.localRotation = Quaternion.Lerp(hammer.transform.localRotation, startRotation, t / time);
+
+                t += Time.deltaTime;
+                yield return new WaitForEndOfFrame();
+            }
+
+            hammer.transform.localPosition = startPosition;
+            hammer.transform.localRotation = startRotation;
+            isMeditating = false;
         }
 
         private IEnumerator ThrowAnimation (Camera firstPersonCamera, float distance, float time, float rotationSpeed)

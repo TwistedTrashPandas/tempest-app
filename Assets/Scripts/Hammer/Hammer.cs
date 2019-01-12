@@ -7,13 +7,28 @@ using UnityEngine;
 public class Hammer : MonoBehaviour
 {
     public Transform top;
-    public float damage = 0.5f;
+    [Range(0, 1)]
+    public float charge = 0;
+    [SerializeField]
+    private float scaleSmall;
+    [SerializeField]
+    private float scaleLarge;
+    [SerializeField]
+    private float smallPosY;
+    [SerializeField]
+    private float largePosY;
 
     private Collider collider;
 
     protected void Start()
     {
         collider = GetComponent<Collider>();
+    }
+
+    protected void Update()
+    {
+        top.localPosition = new Vector3(0, (1.0f - charge) * smallPosY + charge * largePosY, 0);
+        top.localScale = ((1.0f - charge) * scaleSmall + charge * scaleLarge) * Vector3.one;
     }
 
     public void EnableCollider (bool enable)
@@ -34,7 +49,8 @@ public class Hammer : MonoBehaviour
             {
                 if (e.gameObject.scene.Equals(GameClient.Instance.gameObject.scene))
                 {
-                    e.DamageRockOnServer(collision.gameObject.GetComponent<ServerObject>().serverID, damage);
+                    e.DamageRockOnServer(collision.gameObject.GetComponent<ServerObject>().serverID, 0.1f + charge);
+                    charge = 0;
                     break;
                 }
             }

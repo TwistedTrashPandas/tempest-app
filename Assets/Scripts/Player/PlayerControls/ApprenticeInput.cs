@@ -22,20 +22,14 @@ namespace MastersOfTempest.PlayerControls
         private InteractionsController interactionsController;
         private ApprenticeInputAnimations animations;
 
-        protected void Start()
-        {
-        }
-
         protected void Update()
         {
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
-                Debug.Log("TODO: Throw");
                 animations.Throw(firstPersonCamera);
             }
             else if (Input.GetKeyDown(KeyCode.Space))
             {
-                Debug.Log("TODO: Meditate");
                 animations.Meditate();
             }
         }
