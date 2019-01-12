@@ -84,7 +84,6 @@ MonoBehaviour:
   closestDistance: 0
   moveType: 4
   zoneType: 1
-  audioMixer: {fileID: 24100000, guid: b9971ab818e01194593dd346eecc440c, type: 2}
 --- !u!114 &6361524419116573124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2362,7 +2361,7 @@ ParticleSystem:
     inWorldSpace: 0
     randomizePerFrame: 0
   ExternalForcesModule:
-    enabled: 1
+    enabled: 0
     multiplier: 1
     influenceFilter: 0
     influenceMask:

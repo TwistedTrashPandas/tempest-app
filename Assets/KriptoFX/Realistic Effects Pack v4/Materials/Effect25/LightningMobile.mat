@@ -8,12 +8,12 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: LightningMobile
-  m_Shader: {fileID: 4800000, guid: 01077abf0b0ab344cbf2f73af9d26938, type: 3}
+  m_Shader: {fileID: 4800000, guid: d42f8b2e947658c4896a7d6238a1ed6d, type: 3}
   m_ShaderKeywords: BlendAdd Clip_OFF FrameBlend_OFF SoftParticles_OFF VertLight_OFF
   m_LightmapFlags: 5
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 3000
+  m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
@@ -99,4 +99,4 @@ Material:
     - _DistortSpeed: {r: 2.5, g: 0.2, b: 10, a: 0.05}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Tiling: {r: 800, g: 800, b: 8, a: 8}
-    - _TintColor: {r: 0.2561813, g: 1.3925751, b: 0.28547722, a: 1}
+    - _TintColor: {r: 0.044455323, g: 0.3490566, b: 0.051930223, a: 1}
