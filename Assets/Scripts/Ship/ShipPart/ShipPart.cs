@@ -158,7 +158,7 @@ namespace MastersOfTempest.ShipBL
                 destruction = Mathf.Clamp01(destruction + destruc);
             
             byte[] buffer = new byte[4];
-            Buffer.BlockCopy(BitConverter.GetBytes(destruc), 0, buffer, 0, 4);
+            Buffer.BlockCopy(BitConverter.GetBytes(destruction), 0, buffer, 0, 4);
             SendToAllClients(buffer, Facepunch.Steamworks.Networking.SendType.Reliable);
         }
 
