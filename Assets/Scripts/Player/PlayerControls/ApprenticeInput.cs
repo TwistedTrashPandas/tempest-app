@@ -31,7 +31,7 @@ namespace MastersOfTempest.PlayerControls
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
                 Debug.Log("TODO: Throw");
-                animations.Throw();
+                animations.Throw(firstPersonCamera);
             }
             else if (Input.GetKeyDown(KeyCode.Space))
             {
@@ -76,10 +76,10 @@ namespace MastersOfTempest.PlayerControls
             // Spawn and attach hands
             Instantiate(Resources.Load<GameObject>("ApprenticeHands"), firstPersonCamera.transform, false);
 
-            animations = GetComponentInChildren<ApprenticeInputAnimations>();
-
             // Make sure that the hands are visible
             firstPersonCamera.nearClipPlane = 0.01f;
+
+            animations = GetComponentInChildren<ApprenticeInputAnimations>();
 
             var highlighter = gameObject.AddComponent<InteractionsHighlighter>();
             highlighter.InteractionsController = interactionsController;
