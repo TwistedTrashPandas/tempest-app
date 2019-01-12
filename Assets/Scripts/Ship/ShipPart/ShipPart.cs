@@ -131,16 +131,22 @@ namespace MastersOfTempest.ShipBL
             }
             GetComponent<MeshFilter>().mesh.vertices = vertices;
             targetMesh = vertices;*/
-            int l = Mathf.FloorToInt(data.Length / 12) - 1;
-
-            SetDestruction(BitConverter.ToSingle(data, 0));
-            Vector3 impulse = new Vector3(BitConverter.ToSingle(data, 4), BitConverter.ToSingle(data, 8), BitConverter.ToSingle(data, 12));
-            Vector3[] contactPoints = new Vector3[l];
-            for (int j = 0; j < l; j++)
+            if (data.Length == 4)
             {
-                contactPoints[j] = new Vector3(BitConverter.ToSingle(data, j * 12 + 16), BitConverter.ToSingle(data, j * 12 + 20), BitConverter.ToSingle(data, j * 12 + 24));
+                SetDestruction(BitConverter.ToSingle(data, 0));
             }
-            UpdateMesh(contactPoints, impulse);
+            else
+            {
+                int l = Mathf.FloorToInt(data.Length / 12) - 1;
+
+                Vector3 impulse = new Vector3(BitConverter.ToSingle(data, 4), BitConverter.ToSingle(data, 8), BitConverter.ToSingle(data, 12));
+                Vector3[] contactPoints = new Vector3[l];
+                for (int j = 0; j < l; j++)
+                {
+                    contactPoints[j] = new Vector3(BitConverter.ToSingle(data, j * 12 + 16), BitConverter.ToSingle(data, j * 12 + 20), BitConverter.ToSingle(data, j * 12 + 24));
+                }
+                UpdateMesh(contactPoints, impulse);
+            }
         }
 
         // add or remove destruction value to ship parts
@@ -150,6 +156,10 @@ namespace MastersOfTempest.ShipBL
                 destruction = 1.0f;
             else
                 destruction = Mathf.Clamp01(destruction + destruc);
+            
+            byte[] buffer = new byte[4];
+            Buffer.BlockCopy(BitConverter.GetBytes(destruc), 0, buffer, 0, 4);
+            SendToAllClients(buffer, Facepunch.Steamworks.Networking.SendType.Reliable);
         }
 
         // add or remove destruction value to ship parts
@@ -166,7 +176,7 @@ namespace MastersOfTempest.ShipBL
             for (int i = 0; i < vert.Length; i++)
                 vert[i] = Vector3.Lerp(initialMesh[i], targetMesh[i], destruction);
             GetComponent<MeshFilter>().mesh.vertices = vert;
-            
+
             /*
             byte[] buffer = new byte[vert.Length * 12];
             for (int j = 0; j < vert.Length; j++)
