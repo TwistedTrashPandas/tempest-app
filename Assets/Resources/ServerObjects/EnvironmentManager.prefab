@@ -70,11 +70,11 @@ MonoBehaviour:
   spawnProbS: 0.025
   spawnProbZ: 0.025
   rockRotSpeed: 2
-  minRadiusT: 10
-  maxRadiusT: 15
+  minRadiusT: 1
+  maxRadiusT: 8
   minRadiusS: 25
-  maxRadiusS: 2000
-  maxNumObjects: 25
+  maxRadiusS: 2500
+  maxNumObjects: 100
   vectorField: {fileID: 114404567317752372}
   damagingPrefabs:
   - {fileID: 1476894203371464, guid: e8c9d0a525a3e1b4fba9d4d419b35e72, type: 3}
@@ -134,6 +134,7 @@ MonoBehaviour:
   root: {fileID: 114801461701559052}
   children: []
   serverLayer: Server
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1

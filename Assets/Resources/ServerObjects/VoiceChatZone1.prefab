@@ -47,7 +47,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 130, y: 70, z: 130}
+  m_Size: {x: 600, y: 200, z: 600}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &5926798005920803298
 Rigidbody:
@@ -743,7 +743,7 @@ ParticleSystem:
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
     m_Rotation: {x: 0, y: 0, z: 0}
-    m_Scale: {x: 130, y: 70, z: 130}
+    m_Scale: {x: 600, y: 200, z: 600}
     placementMode: 0
     m_MeshMaterialIndex: 0
     m_MeshNormalOffset: 0
@@ -941,7 +941,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 100
+      scalar: 200
       minScalar: 10
       maxCurve:
         serializedVersion: 2
