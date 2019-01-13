@@ -38,22 +38,24 @@ namespace MastersOfTempest
         private IEnumerator ChannelCoroutine(Transform target, CoroutineCancellationToken cancellationToken)
         {
             Vector3 vecToTarget;
+            float distToTarget;
+            int length;
             const float speed = 2f;
-            vecToTarget = (target.position - transform.position).normalized * speed;
             ps.Play();
-            if(modifiedParticles == null)
+            if (modifiedParticles == null)
             {
                 modifiedParticles = new ParticleSystem.Particle[1000];
             }
             while (!cancellationToken.CancellationRequested)
             {
-                int length = ps.GetParticles(modifiedParticles);
-
+                length = ps.GetParticles(modifiedParticles);
+                vecToTarget = (target.position - transform.position).normalized * speed;
+                distToTarget = (target.position - transform.position).sqrMagnitude;
                 for (var i = 0; i < length; i++)
                 {
-                    if (modifiedParticles[i].position == target.position)
+                    // if (modifiedParticles[i].position == target.position)
+                    if ((modifiedParticles[i].position - transform.position).sqrMagnitude > distToTarget)
                     {
-                        //TODO: make sure it works
                         modifiedParticles[i].remainingLifetime = 0f;
                         continue;
                     }
@@ -62,6 +64,12 @@ namespace MastersOfTempest
                 ps.SetParticles(modifiedParticles, length);
                 yield return null;
             }
+            length = ps.GetParticles(modifiedParticles);
+            for (int i = 0; i < length; ++i)
+            {
+                modifiedParticles[i].remainingLifetime = 0f;
+            }
+            ps.SetParticles(modifiedParticles, length);
             ps.Stop();
             currentToken = null;
         }
