@@ -10,6 +10,7 @@ namespace MastersOfTempest.ShipBL
 {
     public class ShipPart : NetworkBehaviour
     {
+        public event EventHandler ShipPartHit;
         public ShipPartArea interactionArea;
         public float cutOffDist = 25f;
         public float impulseScaling = 0.15f;
@@ -106,7 +107,7 @@ namespace MastersOfTempest.ShipBL
             }
             targetMesh = currVerts;
             InterpolateCurrentMesh();
-            /*            
+            /*
             byte[] buffer = new byte[currVerts.Length * 12];
             for (int j = 0; j < currVerts.Length; j++)
             {
@@ -164,6 +165,7 @@ namespace MastersOfTempest.ShipBL
                     contactPoints[j] = new Vector3(BitConverter.ToSingle(data, j * 12 + 16), BitConverter.ToSingle(data, j * 12 + 20), BitConverter.ToSingle(data, j * 12 + 24));
                 }
                 UpdateMesh(contactPoints, impulse);
+                ShipPartHit?.Invoke(this, new ShipPartHitEventArgs(BitConverter.ToSingle(data, 0)));
             }
         }
 
