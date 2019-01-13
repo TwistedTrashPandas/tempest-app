@@ -7,6 +7,7 @@ using UnityEngine;
 public class Hammer : MonoBehaviour
 {
     public Transform top;
+    public Transform center;
     [Range(0, 1)]
     public float charge = 0;
     [SerializeField]

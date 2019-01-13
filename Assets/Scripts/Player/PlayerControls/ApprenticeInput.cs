@@ -23,7 +23,8 @@ namespace MastersOfTempest.PlayerControls
         private InteractionsController interactionsController;
         private ApprenticeInputAnimations animations;
 
-        private TeleportArea lastTeleportArea = null;
+        private TeleportArea teleportArea = null;
+        private bool teleported = false;
 
         protected void Update()
         {
@@ -34,6 +35,10 @@ namespace MastersOfTempest.PlayerControls
             else if (Input.GetKeyDown(KeyCode.Space))
             {
                 animations.Meditate();
+            }
+            else if (teleported && Input.GetKeyDown(KeyCode.E))
+            {
+                Teleport(teleportArea);
             }
         }
 
@@ -119,18 +124,19 @@ namespace MastersOfTempest.PlayerControls
 
         public void Teleport (TeleportArea target)
         {
-            bool goBack = lastTeleportArea != null && lastTeleportArea == target;
+            bool goBack = teleported && !(interactionsController.CurrentlyLookedAt is TeleportArea);
 
-            // It might make sense to disable player movement when you are currently at a crowsnest
             target.gameObject.GetComponent<TeleportActionNetworked>().TeleportOnServer(GetComponent<ServerObject>().serverID, goBack);
 
             if (goBack)
             {
-                lastTeleportArea = null;
+                target = null;
+                teleported = false;
             }
             else
             {
-                lastTeleportArea = target;
+                teleported = true;
+                teleportArea = target;
             }
         }
 
