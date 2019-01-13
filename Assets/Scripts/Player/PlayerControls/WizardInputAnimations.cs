@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using MastersOfTempest.ShipBL;
 using UnityEngine;
 
 namespace MastersOfTempest.PlayerControls
@@ -28,9 +29,16 @@ namespace MastersOfTempest.PlayerControls
             WizardInput.DischargeMiss += OnDischargeMiss;
         }
 
+        private CoroutineCancellationToken chargeCancellationToken;
         private void OnChargeStarted(object sender, EventArgs args)
         {
             armsController.HoldSpell();
+            var ps = WizardInput.GetCurrentInteractable() as PowerSource;
+            if(ps != null)
+            {
+                chargeCancellationToken = new CoroutineCancellationToken();
+                ps.Particles.StartChannel(armsController.SuckPoint, chargeCancellationToken);
+            }
             Debug.Log("Animation for charge starting showed");
         }
 
@@ -39,6 +47,11 @@ namespace MastersOfTempest.PlayerControls
 
             armsController.PulseRightHand();
             armsController.ReleaseSpell();
+            if(chargeCancellationToken != null)
+            {
+                chargeCancellationToken.CancellationRequested = true;
+                chargeCancellationToken = null;
+            }
             Debug.Log("Animation for charge cancelled showed");
         }
 
@@ -47,6 +60,11 @@ namespace MastersOfTempest.PlayerControls
 
             //TODO: some particles effect prob
             armsController.PulseRightHand();
+            if(chargeCancellationToken != null)
+            {
+                chargeCancellationToken.CancellationRequested = true;
+                chargeCancellationToken = null;
+            }
             Debug.Log("Animation for charge completion showed");
         }
 
