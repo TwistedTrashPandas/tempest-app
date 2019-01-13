@@ -80,30 +80,13 @@ namespace MastersOfTempest.Networking
 
         private void OnMessageLobbyStartGame(byte[] data, ulong steamID)
         {
-            StartCoroutine(LoadScenes());
-        }
-
-        private IEnumerator LoadScenes ()
-        {
-            LoadingScreen.Instantiate();
-
             // Load client scene
-            AsyncOperation asynchClient = SceneManager.LoadSceneAsync(clientSceneName);
+            SceneManager.LoadScene(clientSceneName);
 
             // Also load server scene if you are the owner of the lobby
             if (Client.Instance.Lobby.Owner == Client.Instance.SteamId)
             {
-                AsyncOperation asynchServer = SceneManager.LoadSceneAsync(serverSceneName, LoadSceneMode.Additive);
-
-                while (!asynchServer.isDone)
-                {
-                    yield return null;
-                }
-            }
-
-            while (!asynchClient.isDone)
-            {
-                yield return null;
+                SceneManager.LoadScene(serverSceneName, LoadSceneMode.Additive);
             }
         }
 

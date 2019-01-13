@@ -16,9 +16,4 @@ public class LoadingScreen : MonoBehaviour
     {
         Destroy(gameObject);
     }
-
-    public static void Instantiate ()
-    {
-        Instantiate(Resources.Load<GameObject>("Loading Screen Canvas"));
-    }
 }
