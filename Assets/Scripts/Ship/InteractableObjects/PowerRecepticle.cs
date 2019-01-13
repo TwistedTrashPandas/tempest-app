@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using MastersOfTempest.Glow;
 using MastersOfTempest.PlayerControls;
 using MastersOfTempest.PlayerControls.Spellcasting;
 using UnityEngine;
@@ -12,7 +13,9 @@ namespace MastersOfTempest.ShipBL
     {
         //TODO: when charge changed we need to stop the energy drawing of a wizard if any
         public Charge CurrentCharge { get; private set; }
+        public MeshRenderer mat;
         private PowerRecepticleController controller;
+        private GlowObject glowObj;
 
         private void Awake()
         {
@@ -20,6 +23,15 @@ namespace MastersOfTempest.ShipBL
             if (controller == null)
             {
                 throw new InvalidOperationException($"{nameof(controller)} is not specified!");
+            }
+            if (mat == null)
+            {
+                throw new InvalidOperationException($"{nameof(mat)} is not specified!");
+            }
+            glowObj = GetComponent<GlowObject>();
+            if (glowObj == null)
+            {
+                throw new InvalidOperationException($"{nameof(glowObj)} is not specified!");
             }
         }
 
@@ -68,6 +80,9 @@ namespace MastersOfTempest.ShipBL
         {
             //TODO: animation for being charged/not charged
             CurrentCharge = chargeType;
+            glowObj.GlowColor = CurrentCharge.CorrespondingColor();
+            glowObj.TurnGlowOn();
+            mat.material.color = CurrentCharge.CorrespondingColor();;
             Debug.Log($"Received charge {CurrentCharge}");
         }
 
