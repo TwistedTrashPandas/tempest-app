@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Runtime.InteropServices;
 using MastersOfTempest.Networking;
 using System;
+using System.Linq;
 
 namespace MastersOfTempest.ShipBL
 {
@@ -33,7 +34,7 @@ namespace MastersOfTempest.ShipBL
             if (initialMesh == null)
                 throw new System.InvalidOperationException("Ship part can only be attached to objects with meshes");
             material = GetComponent<MeshRenderer>().material;
-            loseCondition = GameObject.Find("Gamemaster").GetComponent<LoseCondition>();
+            loseCondition = FindObjectsOfType<Gamemaster>().First(gm => gm.gameObject.scene == gameObject.scene).GetComponent<LoseCondition>(); 
         }
 
         public float GetDestruction()
