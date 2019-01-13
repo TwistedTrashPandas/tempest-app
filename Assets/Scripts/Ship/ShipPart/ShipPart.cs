@@ -152,7 +152,7 @@ namespace MastersOfTempest.ShipBL
         // add or remove destruction value to ship parts
         public void AddDestruction(float destruc)
         {
-            if (status == ShipPartStatus.Fragile)
+            if (status == ShipPartStatus.Fragile && destruc > 0f)
                 destruction = 1.0f;
             else
                 destruction = Mathf.Clamp01(destruction + destruc);
