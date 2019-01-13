@@ -32,7 +32,7 @@ namespace MastersOfTempest.PlayerControls
         {
             if (!IsBusy())
             {
-                StartCoroutine(ThrowAnimation(firstPersonCamera, 5, 1.0f, 1000));
+                StartCoroutine(ThrowAnimation(firstPersonCamera, 50, 1.0f, -1000));
             }
         }
 
@@ -106,18 +106,22 @@ namespace MastersOfTempest.PlayerControls
 
             Transform startParent = hammer.transform.parent;
             Vector3 startPosition = hammer.transform.localPosition;
+            Vector3 startScale = hammer.transform.localScale;
             Quaternion startRotation = hammer.transform.localRotation;
 
             float t = 0;
+            float scaleFactor = distance / 2;
             hammer.EnableCollider(true);
             hammer.transform.SetParent(firstPersonCamera.transform, true);
+            Vector3 localScale = hammer.transform.lossyScale;
 
             while (t < time)
             {
                 Vector3 endPosition = firstPersonCamera.transform.position + distance * firstPersonCamera.transform.forward;
 
                 hammer.transform.position = Vector3.Lerp(startParent.TransformPoint(startPosition), endPosition, t / time);
-                hammer.transform.Rotate(rotationSpeed * Time.deltaTime, 0, 0, Space.Self);
+                hammer.transform.RotateAround(hammer.center.position, hammer.transform.right, rotationSpeed * Time.deltaTime);
+                hammer.transform.localScale = localScale * (1.0f + scaleFactor * (t / time));
 
                 yield return new WaitForEndOfFrame();
                 t += Time.deltaTime;
@@ -131,10 +135,11 @@ namespace MastersOfTempest.PlayerControls
                 Vector3 endPosition = firstPersonCamera.transform.position + distance * firstPersonCamera.transform.forward;
 
                 hammer.transform.position = Vector3.Lerp(endPosition, startParent.TransformPoint(startPosition), t / time);
+                hammer.transform.localScale = startScale * (1.0f + (scaleFactor * (1.0f - (t / time))));
 
                 if (t <  0.9f * time)
                 {
-                    hammer.transform.Rotate(rotationSpeed * Time.deltaTime, 0, 0, Space.Self);
+                    hammer.transform.RotateAround(hammer.center.position, hammer.transform.right, rotationSpeed * Time.deltaTime);
                 }
                 else
                 {
@@ -147,6 +152,7 @@ namespace MastersOfTempest.PlayerControls
 
             hammer.transform.localPosition = startPosition;
             hammer.transform.localRotation = startRotation;
+            hammer.transform.localScale = startScale;
             hammer.EnableCollider(false);
             isThrowing = false;
         }

@@ -91,6 +91,11 @@ namespace MastersOfTempest.ShipBL
             return currentStatus;
         }
 
+        public ShipPartManager GetShipPartManager()
+        {
+            return shipPartManager;
+        }
+
         private void ExecuteAction(object sender, EventArgs args)
         {
             var action = ((ActionMadeEventArgs)args).Action;

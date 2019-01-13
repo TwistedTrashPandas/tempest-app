@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 114416851725316804}
   - component: {fileID: 114013144028399348}
   - component: {fileID: 9166808241863759962}
+  - component: {fileID: 910838310309382196}
   m_Layer: 10
   m_Name: Gamemaster
   m_TagString: Untagged
@@ -51,9 +52,12 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114416851725316804}
   children: []
+  serverLayer: Server
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &114013144028399348
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81,3 +85,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 1
   radiusCollider: 10
+--- !u!114 &910838310309382196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1461727536662182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 583a2b6cd9d191e47989e0b0633d1988, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  index: 2
+  overallDestructionThreshold: 0.9

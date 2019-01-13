@@ -96,7 +96,7 @@ MonoBehaviour:
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
+  setChildCollidersTriggers: 0
 --- !u!64 &5764054804496714041
 MeshCollider:
   m_ObjectHideFlags: 0

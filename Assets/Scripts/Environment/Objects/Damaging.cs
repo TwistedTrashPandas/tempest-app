@@ -32,14 +32,16 @@ namespace MastersOfTempest.Environment.Interacting
         // call on server
         public void RemoveHealth(float h)
         {
-            if (status == DamagingStatus.Fragile)
+            if ((status & DamagingStatus.Fragile) == DamagingStatus.Fragile)
                 Explode(false);
             else
                 health -= h;
-            if (health < 0)
+            if (health < 0.0f)
+                Explode(false);
+            else if (health < 0.25f)
                 Explode(true);
         }
-        
+
         public void Explode(bool split)
         {
             if (!split)
@@ -47,21 +49,21 @@ namespace MastersOfTempest.Environment.Interacting
             else
             {
                 /*Rock Animation Code Starts*/
-                GameObject[] children = transform.GetComponentsInChildren<GameObject>();
+                Transform[] children = transform.GetComponentsInChildren<Transform>();
 
                 for (int i = 1; i < children.Length; i++)
                 {
                     // TODO change rigidbody parameters
                     GameObject currentRockPart = GameObject.Instantiate(this.gameObject);
-                    GameObject[] children_2 = currentRockPart.transform.GetComponentsInChildren<GameObject>();
+                    Transform[] children_2 = currentRockPart.transform.GetComponentsInChildren<Transform>();
                     for (int j = 1; j < children_2.Length; j++)
                     {
                         if (i != j)
-                            children_2[i].SetActive(false);
+                            children_2[i].gameObject.SetActive(false);
                     }
                     currentRockPart.GetComponent<Rigidbody>().AddForce(splitForce * new Vector3(UnityEngine.Random.Range(0.5f, 2f), UnityEngine.Random.Range(0.5f, 2f), UnityEngine.Random.Range(0.5f, 2f)));
                     envSpawner.AddEnvObject(currentRockPart.GetComponent<Damaging>());
-                    currentRockPart.GetComponent<Damaging>().health = 0.4f;
+                    currentRockPart.GetComponent<Damaging>().health = 0.15f;
                     currentRockPart.GetComponent<Damaging>().moveType = MoveType.Force;
                 }
                 Destroy(this.gameObject);

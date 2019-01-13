@@ -217,7 +217,8 @@ namespace MastersOfTempest.Networking
 
             foreach (Transform child in children)
             {
-                child.gameObject.layer = layerToSet;
+                if(child.GetComponent<ServerObject>() == null || child.GetComponent<ServerObject>().serverLayer == serverLayer)
+                    child.gameObject.layer = layerToSet;
             }
 
             gameObject.layer = layerToSet;

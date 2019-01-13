@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1219929536582908988}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30,6 +30,36 @@ Transform:
   - {fileID: 8953131243605370629}
   - {fileID: 8953131243605370631}
   m_Father: {fileID: 8953131243605370625}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4204412136638798870
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7303738359942645550}
+  m_Layer: 9
+  m_Name: Center
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7303738359942645550
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4204412136638798870}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.25, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8953131243605370625}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8953131243605277473
@@ -43,7 +73,8 @@ GameObject:
   - component: {fileID: 8953131243605370625}
   - component: {fileID: 7807555269589160930}
   - component: {fileID: 6339525011258337166}
-  m_Layer: 0
+  - component: {fileID: 1362447921823431763}
+  m_Layer: 9
   m_Name: Hammer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -62,6 +93,7 @@ Transform:
   m_LocalScale: {x: -10.000014, y: -10, z: -10.000013}
   m_Children:
   - {fileID: 8953131243605370627}
+  - {fileID: 7303738359942645550}
   - {fileID: 1219929536582908988}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -79,6 +111,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   top: {fileID: 1219929536582908988}
+  center: {fileID: 7303738359942645550}
   charge: 0
   scaleSmall: 0.4
   scaleLarge: 1
@@ -97,6 +130,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.31, y: 0.533465, z: 0.18488938}
   m_Center: {x: 0, y: 0.26627126, z: 0.0013018233}
+--- !u!54 &1362447921823431763
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8953131243605277473}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 3
 --- !u!1 &8953131243605277475
 GameObject:
   m_ObjectHideFlags: 0
@@ -108,7 +157,7 @@ GameObject:
   - component: {fileID: 8953131243605370627}
   - component: {fileID: 8953131243608270625}
   - component: {fileID: 8953131243607270881}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Handle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -185,7 +234,7 @@ GameObject:
   - component: {fileID: 8953131243605370629}
   - component: {fileID: 8953131243608270627}
   - component: {fileID: 8953131243607270883}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -262,7 +311,7 @@ GameObject:
   - component: {fileID: 8953131243605370631}
   - component: {fileID: 8953131243608270629}
   - component: {fileID: 8953131243607270885}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ring
   m_TagString: Untagged
   m_Icon: {fileID: 0}

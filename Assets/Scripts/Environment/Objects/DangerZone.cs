@@ -28,11 +28,14 @@ namespace MastersOfTempest.Environment.Interacting
                     {
                         ShipPart part = other.gameObject.GetComponent<ShipPart>();
                         if (part != null)
-                            part.status ^= ShipPartStatus.Fragile;
+                            part.status |= ShipPartStatus.Fragile;
+                        Ship ship = other.transform.parent.gameObject.GetComponent<Ship>();
+                        if (ship != null)
+                            ship.GetCurrenStatus().Condition |= ShipCondition.Fragile;
                     }
-                    else if (other.GetComponent<Damaging>() != null)
+                    else if (other.GetComponentInParent<Damaging>() != null)
                     {
-                        other.GetComponent<Damaging>().status ^= DamagingStatus.Fragile;
+                        other.GetComponentInParent<Damaging>().status |= DamagingStatus.Fragile;
                     }
                     break;
                 default:
@@ -58,11 +61,14 @@ namespace MastersOfTempest.Environment.Interacting
                     {
                         ShipPart part = other.gameObject.GetComponent<ShipPart>();
                         if (part != null)
-                            part.status ^= ShipPartStatus.Fragile;
+                            part.status &= ~ShipPartStatus.Fragile;
+                        Ship ship = other.transform.parent.gameObject.GetComponent<Ship>();
+                        if (ship != null)
+                            ship.GetCurrenStatus().Condition &= ~ShipCondition.Fragile;
                     }
-                    else if (other.GetComponent<Damaging>() != null)
+                    else if (other.GetComponentInParent<Damaging>() != null)
                     {
-                        other.GetComponent<Damaging>().status ^= DamagingStatus.Fragile;
+                        other.GetComponentInParent<Damaging>().status &= ~DamagingStatus.Fragile;
                     }
                     break;
                 default:

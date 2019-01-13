@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Runtime.InteropServices;
 using MastersOfTempest.Networking;
 using System;
+using System.Linq;
 
 namespace MastersOfTempest.ShipBL
 {
@@ -11,9 +12,9 @@ namespace MastersOfTempest.ShipBL
     {
         public event EventHandler ShipPartHit;
         public ShipPartArea interactionArea;
-        public float cutOffDist = 25f;
-        public float impulseScaling = 0.15f;
-        public float maxDisplacementDist = 20f;
+        private const float cutOffDist = 0.75f;
+        private const float impulseScaling = 0.05f;
+        private const float maxDisplacementDist = 1.5f;
         /// <summary>
         /// destruction == 0:   ship part fully repaired
         ///             == 1:   ship part fully destroyed
@@ -24,6 +25,7 @@ namespace MastersOfTempest.ShipBL
         private Vector3[] initialMesh;
         private Vector3[] targetMesh;
         private Material material;
+        private LoseCondition loseCondition;
 
         protected override void Start()
         {
@@ -33,6 +35,7 @@ namespace MastersOfTempest.ShipBL
             if (initialMesh == null)
                 throw new System.InvalidOperationException("Ship part can only be attached to objects with meshes");
             material = GetComponent<MeshRenderer>().material;
+            loseCondition = FindObjectsOfType<Gamemaster>().First(gm => gm.gameObject.scene == gameObject.scene).GetComponent<LoseCondition>(); 
         }
 
         public float GetDestruction()
@@ -49,6 +52,9 @@ namespace MastersOfTempest.ShipBL
             }
             AddDestruction(destruc);
             SendCollision(contactPoints, impulse, destruc);
+
+            // lose condition checks if the overall destruction value is above the threshold (after collision)
+            loseCondition.CheckOverAllDestruction();
         }
 
         private void SendCollision(ContactPoint[] contactPoints, Vector3 impulse, float destruc)

@@ -210,12 +210,12 @@ namespace MastersOfTempest.Environment.Interacting
                         // hard coded so far larger rocks are slower but deal more damage
                         envObjects[envObjects.Count - 1].GetComponent<Damaging>().damage = 0.25f * randomSize;
                         envObjects[envObjects.Count - 1].GetComponent<Damaging>().envSpawner = this;
-                        envObjects[envObjects.Count - 1].GetComponent<Rigidbody>().angularVelocity = new Vector3(Random.Range(-1f,1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f)) * rockRotSpeed;
+                        envObjects[envObjects.Count - 1].GetComponent<Rigidbody>().AddTorque(new Vector3(Random.Range(-1f,1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f)) * rockRotSpeed);
                         envObjects[envObjects.Count - 1].speed *= 1f / randomSize;
                         if (Random.Range(0, 10) == 0)
                         {
                             envObjects[envObjects.Count - 1].moveType = MoveType.Direct; // (MoveType) Random.Range(0,3);
-                            envObjects[envObjects.Count - 1].speed *= 0.3f;
+                            envObjects[envObjects.Count - 1].speed *= 0.2f;
                         }
                         else
                             envObjects[envObjects.Count - 1].moveType = MoveType.ForceDirect; // (MoveType) Random.Range(0,3);
@@ -225,13 +225,13 @@ namespace MastersOfTempest.Environment.Interacting
                         prefabNum = Mathf.FloorToInt(Random.Range(0f, dangerzonesPrefabs.Length - Mathf.Epsilon));
                         envObjects.Add(GameObject.Instantiate(dangerzonesPrefabs[prefabNum], initialPos, orientation).GetComponent<EnvObject>());
                         Destroy(envObjects[envObjects.Count - 1].GetComponent<ParticleSystem>());
-                        //envObjects[envObjects.Count - 1].moveType = MoveType.Static;
+                        envObjects[envObjects.Count - 1].moveType = MoveType.Static;
                         break;
                     case EnvObjectType.VoiceChatZone:
                         initialPos = new Vector3(Random.Range(0, dims.x)* cellSizeH, Random.Range(dims.y * 0.1f, 0.8f * dims.y)* cellSize, Random.Range(0, dims.z)* cellSizeH)  + new Vector3(0.5f, 0.5f, 0.5f);
                         prefabNum = Mathf.FloorToInt(Random.Range(0f, voiceChatZonesPrefabs.Length - Mathf.Epsilon));
                         envObjects.Add(GameObject.Instantiate(voiceChatZonesPrefabs[prefabNum], initialPos, orientation).GetComponent<EnvObject>());
-                       // envObjects[envObjects.Count - 1].moveType = MoveType.Static;                    
+                        envObjects[envObjects.Count - 1].moveType = MoveType.Static;                    
                         Destroy(envObjects[envObjects.Count - 1].GetComponent<ParticleSystem>());                          
                         break;
                 }
