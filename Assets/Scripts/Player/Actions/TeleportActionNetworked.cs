@@ -17,7 +17,16 @@ public class TeleportActionNetworked : NetworkBehaviour
     {
         if (serverObject.onServer)
         {
-            Debug.LogError(nameof(TeleportOnServer) + " should not be called on the server!");
+            if (goBack)
+            {
+                // Go to the return transform
+                GameServer.Instance.GetServerObject(objectToTeleportServerID).transform.position = GetComponent<TeleportArea>().returnTransform.position;
+            }
+            else
+            {
+                // Go to the teleport area
+                GameServer.Instance.GetServerObject(objectToTeleportServerID).transform.position = transform.position;
+            }
         }
         else
         {
@@ -31,16 +40,6 @@ public class TeleportActionNetworked : NetworkBehaviour
     protected override void OnServerReceivedMessageRaw(byte[] data, ulong steamID)
     {
         TeleportMessage message = ByteSerializer.FromBytes<TeleportMessage>(data);
-
-        if (message.goBack)
-        {
-            // Go to the return transform
-            GameServer.Instance.GetServerObject(message.objectToTeleportServerID).transform.position = GetComponent<TeleportArea>().returnTransform.position;
-        }
-        else
-        {
-            // Go to the teleport area
-            GameServer.Instance.GetServerObject(message.objectToTeleportServerID).transform.position = transform.position;
-        }
+        TeleportOnServer(message.objectToTeleportServerID, message.goBack);
     }
 }
