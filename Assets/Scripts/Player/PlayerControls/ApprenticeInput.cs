@@ -1,4 +1,5 @@
 ﻿using System;
+using MastersOfTempest.Networking;
 using MastersOfTempest.PlayerControls.QTE;
 using MastersOfTempest.ShipBL;
 using TMPro;
@@ -21,6 +22,8 @@ namespace MastersOfTempest.PlayerControls
         private Camera firstPersonCamera;
         private InteractionsController interactionsController;
         private ApprenticeInputAnimations animations;
+
+        private TeleportArea lastTeleportArea = null;
 
         protected void Update()
         {
@@ -116,7 +119,19 @@ namespace MastersOfTempest.PlayerControls
 
         public void Teleport (TeleportArea target)
         {
-            Debug.Log("TODO: Teleport to " + target.name);
+            bool goBack = lastTeleportArea != null && lastTeleportArea == target;
+
+            // It might make sense to disable player movement when you are currently at a crowsnest
+            target.gameObject.GetComponent<TeleportActionNetworked>().TeleportOnServer(GetComponent<ServerObject>().serverID, goBack);
+
+            if (goBack)
+            {
+                lastTeleportArea = null;
+            }
+            else
+            {
+                lastTeleportArea = target;
+            }
         }
 
         public void Repair (RepairArea target)
