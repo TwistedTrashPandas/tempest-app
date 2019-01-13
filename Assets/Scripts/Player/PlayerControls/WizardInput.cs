@@ -178,5 +178,10 @@ namespace MastersOfTempest.PlayerControls
         {
             TriggerActionEvent(new ActionMadeEventArgs(((InteractionEventArgs) args).InteractableObject.GetAction()));
         }
+
+        public InteractablePart GetCurrentInteractable()
+        {
+            return interactionsController.CurrentlyLookedAt;
+        }
     }
 }

@@ -10,6 +10,20 @@ namespace MastersOfTempest.ShipBL
     public class PowerSource : InteractablePart
     {
         public Charge Charge;
+        public ParticlesSucker Particles;
+
+        private void Awake()
+        {
+            if (Particles == null)
+            {
+                throw new InvalidOperationException($"{nameof(Particles)} is not specified!");
+            }
+            if(Charge == Charge.None)
+            {
+                throw new InvalidOperationException($"{nameof(Charge)} should not be {nameof(Charge.None)}");
+            }
+        }
+
         private const float ChargeTime = 1f;
 
         public override Access GetAccess()

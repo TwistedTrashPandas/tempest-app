@@ -20,10 +20,15 @@ namespace MastersOfTempest.PlayerControls
         *  bool holdSpell : true -> enter RightHandHoldAnimation; false -> end RightHandHoldAnimation
         *  trigger pulse : "trigger" works like a onetime bool. It will let the animation "Pulse" loop one time, bevor leaving it again
         * */
+        public Transform SuckPoint;
         private Animator anim;
 
         void Start()
         {
+            if (SuckPoint == null)
+            {
+                throw new InvalidOperationException($"{nameof(SuckPoint)} is not specified!");
+            }
             anim = GetComponent<Animator>();
             if (anim == null)
             {
