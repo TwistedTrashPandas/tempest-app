@@ -51,19 +51,18 @@ namespace MastersOfTempest.ShipBL
         protected override void OnServerReceivedMessageRaw(byte[] data, ulong steamID)
         {
             RepairShipPartAreaMessage message = ByteSerializer.FromBytes<RepairShipPartAreaMessage>(data);
-
-            foreach (ShipPart shipPart in shipPartManager.interactionAreas[message.shipPartArea])
-            {
-                // Negative destruction equals repairing
-                shipPart.AddDestruction(-message.repairAmount);
-            }
+            RepairShipPartAreaOnServer(message.shipPartArea, message.repairAmount);
         }
 
         public void RepairShipPartAreaOnServer (ShipPartArea shipPartArea, float repairAmount)
         {
             if (serverObject.onServer)
             {
-                Debug.LogError(nameof(RepairShipPartAreaOnServer) + " should not be called on the server!");
+                foreach (ShipPart shipPart in shipPartManager.interactionAreas[shipPartArea])
+                {
+                    // Negative destruction equals repairing
+                    shipPart.AddDestruction(-repairAmount);
+                }
             }
             else
             {

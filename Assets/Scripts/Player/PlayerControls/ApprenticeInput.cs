@@ -136,19 +136,8 @@ namespace MastersOfTempest.PlayerControls
 
         public void Repair (RepairArea target)
         {
-            // Find the ship network behaviour on the client
             // Send message to repair parts from the ShipPartManager
-            Ship[] ships = FindObjectsOfType<Ship>();
-
-            foreach (Ship ship in ships)
-            {
-                if (ship.gameObject.scene.Equals(Networking.GameClient.Instance.gameObject.scene))
-                {
-                    ship.RepairShipPartAreaOnServer(target.shipPartArea, 0.2f);
-                    break;
-                }
-            }
-
+            FindObjectOfType<Ship>().RepairShipPartAreaOnServer(target.shipPartArea, 0.2f);
             animations.Repair();
         }
     }
