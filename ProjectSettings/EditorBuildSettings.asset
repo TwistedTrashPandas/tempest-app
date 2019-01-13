@@ -32,4 +32,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_scenes/MergedServer.unity
     guid: 6ac0b1891c52b4f3390be802e80ca795
+  - enabled: 1
+    path: Assets/_scenes/IntroCinematicClient.unity
+    guid: 9a9518a0a186b9942919f007c727fada
+  - enabled: 1
+    path: Assets/_scenes/IntroCinematicServer.unity
+    guid: e438d229beb0b954d9166c0de44dad32
   m_configObjects: {}
