@@ -26,6 +26,11 @@ namespace MastersOfTempest
 
         public PlayerRole Role;
 
+        public CameraDirectionController GetPlayerCameraController()
+        {
+            return GetComponent<CameraDirectionController>() ?? throw new InvalidOperationException($"The player doesn't have {nameof(CameraDirectionController)} attached!");
+        }
+
         private void Awake()
         {
             CharacterPositionManipulator = GetComponent<CharacterPositionManipulator>();

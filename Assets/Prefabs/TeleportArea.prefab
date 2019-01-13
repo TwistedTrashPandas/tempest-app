@@ -11,9 +11,13 @@ GameObject:
   - component: {fileID: 3456524495442100836}
   - component: {fileID: 3456524495442100837}
   - component: {fileID: 3456524495442100838}
-  m_Layer: 0
+  - component: {fileID: 1978937431931282037}
+  - component: {fileID: 380100692025838625}
+  - component: {fileID: 6134438180382222839}
+  - component: {fileID: 6897182292701799700}
+  m_Layer: 10
   m_Name: TeleportArea
-  m_TagString: Untagged
+  m_TagString: Interactable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 3456524495442100839}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -13.84, y: 0, z: -7.72}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.45, y: 0.45, z: 0.45}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -47,7 +51,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3456524495442100839}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -77,3 +81,66 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!136 &1978937431931282037
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3456524495442100839}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.8
+  m_Height: 3
+  m_Direction: 1
+  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &380100692025838625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3456524495442100839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b34debf766667d4da228063db9f5494, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6134438180382222839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3456524495442100839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resourceID: -1
+  onServer: 1
+  serverID: 0
+  lastUpdate: 0
+  root: {fileID: 0}
+  children: []
+  serverLayer: Server
+  removeServerChildColliders: 0
+  interpolateOnClient: 1
+  removeChildColliders: 0
+  removeChildRigidbodies: 0
+  setChildCollidersTriggers: 0
+--- !u!114 &6897182292701799700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3456524495442100839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7795d5176ef06ef4385bbc06bc7b23d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  index: -1

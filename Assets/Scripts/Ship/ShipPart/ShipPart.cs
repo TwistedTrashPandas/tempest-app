@@ -9,6 +9,7 @@ namespace MastersOfTempest.ShipBL
 {
     public class ShipPart : NetworkBehaviour
     {
+        public event EventHandler ShipPartHit;
         public ShipPartArea interactionArea;
         public float cutOffDist = 25f;
         public float impulseScaling = 0.15f;
@@ -42,6 +43,10 @@ namespace MastersOfTempest.ShipBL
         // updates mesh depending on collision (usually called from damaging objects such as rocks)
         public void ResolveCollision(float destruc, ContactPoint[] contactPoints, Vector3 impulse)
         {
+            if ((status & ShipPartStatus.Fragile) == ShipPartStatus.Fragile)
+            {
+                destruc = 1.0f;
+            }
             AddDestruction(destruc);
             SendCollision(contactPoints, impulse, destruc);
         }
@@ -50,10 +55,11 @@ namespace MastersOfTempest.ShipBL
         {
             byte[] buffer = new byte[16 + contactPoints.Length * 12];
 
-            Buffer.BlockCopy(BitConverter.GetBytes(destruc), 0, buffer, 0, 4);
-            Buffer.BlockCopy(BitConverter.GetBytes(impulse.x), 0, buffer, 4, 4);
+            Buffer.BlockCopy(BitConverter.GetBytes(destruc), 0, buffer, 0, 4);  // 4 bytes destruc value
+            Buffer.BlockCopy(BitConverter.GetBytes(impulse.x), 0, buffer, 4, 4);// 12 bytes impulse value
             Buffer.BlockCopy(BitConverter.GetBytes(impulse.y), 0, buffer, 8, 4);
             Buffer.BlockCopy(BitConverter.GetBytes(impulse.z), 0, buffer, 12, 4);
+            // n * 12 bytes for the generated contactPoints
             for (int j = 0; j < contactPoints.Length; j++)
             {
                 Buffer.BlockCopy(BitConverter.GetBytes(contactPoints[j].point.x), 0, buffer, 16 + j * 12, 4);
@@ -95,7 +101,7 @@ namespace MastersOfTempest.ShipBL
             }
             targetMesh = currVerts;
             InterpolateCurrentMesh();
-            /*            
+            /*
             byte[] buffer = new byte[currVerts.Length * 12];
             for (int j = 0; j < currVerts.Length; j++)
             {
@@ -137,29 +143,36 @@ namespace MastersOfTempest.ShipBL
             }
             else
             {
+                // length of contact off set array
                 int l = Mathf.FloorToInt(data.Length / 12) - 1;
 
+                // first 4 bytes are the delta destruction value
+                AddDestruction(BitConverter.ToSingle(data, 0));
+
+                // next 12 bytes are the values for the impulse vector
                 Vector3 impulse = new Vector3(BitConverter.ToSingle(data, 4), BitConverter.ToSingle(data, 8), BitConverter.ToSingle(data, 12));
+
+                // other bytes are the contact point vectors
                 Vector3[] contactPoints = new Vector3[l];
                 for (int j = 0; j < l; j++)
                 {
                     contactPoints[j] = new Vector3(BitConverter.ToSingle(data, j * 12 + 16), BitConverter.ToSingle(data, j * 12 + 20), BitConverter.ToSingle(data, j * 12 + 24));
                 }
                 UpdateMesh(contactPoints, impulse);
+                ShipPartHit?.Invoke(this, new ShipPartHitEventArgs(BitConverter.ToSingle(data, 0)));
             }
         }
 
         // add or remove destruction value to ship parts
         public void AddDestruction(float destruc)
         {
-            if (status == ShipPartStatus.Fragile)
-                destruction = 1.0f;
-            else
-                destruction = Mathf.Clamp01(destruction + destruc);
-            
-            byte[] buffer = new byte[4];
-            Buffer.BlockCopy(BitConverter.GetBytes(destruc), 0, buffer, 0, 4);
-            SendToAllClients(buffer, Facepunch.Steamworks.Networking.SendType.Reliable);
+            destruction = Mathf.Clamp01(destruction + destruc);
+            if (destruc < 0f)
+            {
+                byte[] buffer = new byte[4];
+                Buffer.BlockCopy(BitConverter.GetBytes(destruction), 0, buffer, 0, 4);
+                SendToAllClients(buffer, Facepunch.Steamworks.Networking.SendType.Reliable);
+            }
         }
 
         // add or remove destruction value to ship parts

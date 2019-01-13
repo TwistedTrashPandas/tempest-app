@@ -1,4 +1,5 @@
 ﻿using System;
+using MastersOfTempest.Networking;
 using MastersOfTempest.PlayerControls.QTE;
 using MastersOfTempest.ShipBL;
 using TMPro;
@@ -21,6 +22,8 @@ namespace MastersOfTempest.PlayerControls
         private Camera firstPersonCamera;
         private InteractionsController interactionsController;
         private ApprenticeInputAnimations animations;
+
+        private TeleportArea lastTeleportArea = null;
 
         protected void Update()
         {
@@ -62,7 +65,7 @@ namespace MastersOfTempest.PlayerControls
 
             //Create a message UI element to show hints to player
             interactionsController = gameObject.AddComponent<InteractionsController>();
-            interactionsController.Setup(CameraDirectionController.FirstPersonCamera, float.MaxValue, InteractionCheck);
+            interactionsController.Setup(CameraDirectionController.FirstPersonCamera, float.MaxValue, InteractionCheck, PlayerRole.Apprentice);
             interactionsController.NewInteractable += OnNewInteractable;
             interactionsController.PlayerInteracted += OnPlayerInteracted;
             interactionsController.LostSight += OnLostSight;
@@ -95,40 +98,46 @@ namespace MastersOfTempest.PlayerControls
 
         private void OnNewInteractable(object sender, EventArgs args)
         {
-            Debug.Log(nameof(OnNewInteractable));
+            if (((InteractionEventArgs)args).InteractableObject is TeleportArea)
+            {
+                ((InteractionEventArgs)args).InteractableObject.GetComponent<MeshRenderer>().enabled = true;
+            }
         }
 
         private void OnPlayerInteracted(object sender, EventArgs args)
         {
-            Debug.Log(nameof(OnPlayerInteracted));
             TriggerActionEvent(new ActionMadeEventArgs(((InteractionEventArgs)args).InteractableObject.GetAction()));
         }
 
-        private void OnLostSight(object sender, EventArgs e)
+        private void OnLostSight(object sender, EventArgs args)
         {
-            Debug.Log(nameof(OnLostSight));
+            if (((InteractionEventArgs)args).InteractableObject is TeleportArea)
+            {
+                ((InteractionEventArgs)args).InteractableObject.GetComponent<MeshRenderer>().enabled = false;
+            }
         }
 
         public void Teleport (TeleportArea target)
         {
-            Debug.Log("TODO: Teleport to " + target.name);
+            bool goBack = lastTeleportArea != null && lastTeleportArea == target;
+
+            // It might make sense to disable player movement when you are currently at a crowsnest
+            target.gameObject.GetComponent<TeleportActionNetworked>().TeleportOnServer(GetComponent<ServerObject>().serverID, goBack);
+
+            if (goBack)
+            {
+                lastTeleportArea = null;
+            }
+            else
+            {
+                lastTeleportArea = target;
+            }
         }
 
         public void Repair (RepairArea target)
         {
-            // Find the ship network behaviour on the client
             // Send message to repair parts from the ShipPartManager
-            Ship[] ships = FindObjectsOfType<Ship>();
-
-            foreach (Ship ship in ships)
-            {
-                if (ship.gameObject.scene.Equals(Networking.GameClient.Instance.gameObject.scene))
-                {
-                    ship.RepairShipPartAreaOnServer(target.shipPartArea, 0.2f);
-                    break;
-                }
-            }
-
+            FindObjectOfType<Ship>().RepairShipPartAreaOnServer(target.shipPartArea, 0.2f);
             animations.Repair();
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 namespace MastersOfTempest.PlayerControls
@@ -28,7 +29,7 @@ namespace MastersOfTempest.PlayerControls
             set
             {
                 isActive = value;
-                if(value)
+                if (value)
                 {
                     Cursor.lockState = CursorLockMode.Locked;
                     Cursor.visible = false;
@@ -60,11 +61,71 @@ namespace MastersOfTempest.PlayerControls
                 yaw += speedH * Input.GetAxis("Mouse X");
                 pitch -= speedV * Input.GetAxis("Mouse Y");
                 pitch = Mathf.Clamp(pitch, PitchMin, PitchMax);
-                FirstPersonCamera.transform.localEulerAngles = new Vector3(pitch, yaw, 0.0f);
+                FirstPersonCamera.transform.localEulerAngles = new Vector3(pitch + pitchShake, yaw + yawShake, rollShake);
             }
-            if(Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.Escape))
             {
                 Active ^= true;
+            }
+        }
+
+        /// <summary>
+        /// Shake the camera with the set intensity
+        /// </summary>
+        /// <param name="intensity">How strong the camera should be shaken, in range (0, 1]</param>
+        public void ShakeCamera(float intensity)
+        {
+            StartCoroutine(ShakeCameraCoroutine(intensity));
+        }
+
+        private float pitchShake = 0f;
+        private float yawShake = 0f;
+        private float rollShake = 0f;
+        private IEnumerator ShakeCameraCoroutine(float intensity)
+        {
+            const float ShakeDuration = .5f;
+            const float ShakeDurationHalved = ShakeDuration / 2f;
+            const float MinAngle = 5f;
+            const float MaxAngle = 60f;
+            //Choose randomly positive or negative angle change and distort a bit the intensity value
+            float yawDisplacement = (UnityEngine.Random.value > .5f ? 1f : -1f)
+                                    * (MinAngle + (MaxAngle - MinAngle) * (Mathf.Clamp01(intensity - UnityEngine.Random.value / 10f)));
+            float pitchDisplacement = (UnityEngine.Random.value > .5f ? 1f : -1f)
+                                    * (MinAngle + (MaxAngle - MinAngle) * (Mathf.Clamp01(intensity - UnityEngine.Random.value / 10f)));
+            float rollDisplacement = (UnityEngine.Random.value > .5f ? 1f : -1f)
+                                    * (MinAngle + (MaxAngle - MinAngle) * (Mathf.Clamp01(intensity - UnityEngine.Random.value / 10f)));
+
+            float timeElapsed = 0f;
+
+            while (timeElapsed < ShakeDurationHalved)
+            {
+                yield return null;
+                float deltaTime = Time.deltaTime;
+                timeElapsed += deltaTime;
+                if(timeElapsed > ShakeDurationHalved)
+                {
+                    //We don't want to accumulate extra angle change over dropped frames
+                    deltaTime -= timeElapsed - ShakeDurationHalved;
+                }
+                pitchShake += deltaTime * (pitchDisplacement / ShakeDurationHalved);
+                rollShake += deltaTime * (rollDisplacement / ShakeDurationHalved);
+                yawShake += deltaTime * (yawDisplacement / ShakeDurationHalved);
+            }
+            //Now go back to the normal state
+            timeElapsed = 0f;
+            while (timeElapsed < ShakeDurationHalved)
+            {
+                yield return null;
+                float deltaTime = Time.deltaTime;
+                timeElapsed += deltaTime;
+                if(timeElapsed > ShakeDurationHalved)
+                {
+                    //We don't want to accumulate extra angle change over dropped frames
+                    deltaTime -= timeElapsed - ShakeDurationHalved;
+                }
+                pitchShake -= deltaTime * (pitchDisplacement / ShakeDurationHalved);
+                rollShake -= deltaTime * (rollDisplacement / ShakeDurationHalved);
+                yawShake -= deltaTime * (yawDisplacement / ShakeDurationHalved);
             }
         }
     }

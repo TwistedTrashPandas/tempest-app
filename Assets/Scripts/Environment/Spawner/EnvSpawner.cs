@@ -105,7 +105,7 @@ namespace MastersOfTempest.Environment.Interacting
                 toDestroy = envObjects[0];
                 toDestroy.EnableGravity();
                 envObjects.RemoveAt(0);
-                //Destroy(toDestroy.gameObject, 10f);
+                Destroy(toDestroy.gameObject, 20f);
                 //spawnRate = 2f; // set variable for this (TOOD)
             }
         }

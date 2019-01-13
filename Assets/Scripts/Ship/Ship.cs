@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using MastersOfTempest.Networking;
+using MastersOfTempest.PlayerControls;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,6 +10,7 @@ namespace MastersOfTempest.ShipBL
     [RequireComponent(typeof(ForceManilpulator))]
     public class Ship : NetworkBehaviour
     {
+        private const float freezingSlowDown = 0.5f;
         private Gamemaster context;
         private ForceManilpulator forceManipulator;
         private ShipPartManager shipPartManager;
@@ -33,6 +35,7 @@ namespace MastersOfTempest.ShipBL
             {
                 throw new InvalidOperationException($"{nameof(ShipPartManager)} is not specified!");
             }
+            shipPartManager.ActionRequest += ExecuteAction;
         }
 
         protected override void Start()
@@ -51,19 +54,23 @@ namespace MastersOfTempest.ShipBL
         protected override void OnServerReceivedMessageRaw(byte[] data, ulong steamID)
         {
             RepairShipPartAreaMessage message = ByteSerializer.FromBytes<RepairShipPartAreaMessage>(data);
+            RepairShipPartAreaOnServer(message.shipPartArea, message.repairAmount);
+        }
 
-            foreach (ShipPart shipPart in shipPartManager.interactionAreas[message.shipPartArea])
-            {
-                // Negative destruction equals repairing
-                shipPart.AddDestruction(-message.repairAmount);
-            }
+        public float GetFreezingSlowDown()
+        {
+            return freezingSlowDown;
         }
 
         public void RepairShipPartAreaOnServer (ShipPartArea shipPartArea, float repairAmount)
         {
             if (serverObject.onServer)
             {
-                Debug.LogError(nameof(RepairShipPartAreaOnServer) + " should not be called on the server!");
+                foreach (ShipPart shipPart in shipPartManager.interactionAreas[shipPartArea])
+                {
+                    // Negative destruction equals repairing
+                    shipPart.AddDestruction(-repairAmount);
+                }
             }
             else
             {
@@ -82,6 +89,12 @@ namespace MastersOfTempest.ShipBL
         public ShipStatus GetCurrenStatus()
         {
             return currentStatus;
+        }
+
+        private void ExecuteAction(object sender, EventArgs args)
+        {
+            var action = ((ActionMadeEventArgs)args).Action;
+            action.Execute(context);
         }
     }
 }

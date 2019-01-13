@@ -74,7 +74,7 @@ MonoBehaviour:
   maxRadiusT: 15
   minRadiusS: 25
   maxRadiusS: 2000
-  maxNumObjects: 100
+  maxNumObjects: 25
   vectorField: {fileID: 114404567317752372}
   damagingPrefabs:
   - {fileID: 1476894203371464, guid: e8c9d0a525a3e1b4fba9d4d419b35e72, type: 3}
@@ -133,9 +133,11 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114801461701559052}
   children: []
+  serverLayer: Server
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!114 &114404567317752372
 MonoBehaviour:
   m_ObjectHideFlags: 0

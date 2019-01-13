@@ -32,7 +32,9 @@ namespace MastersOfTempest.PlayerControls
                 default: throw new InvalidOperationException($"Unknown value {nameof(SteeringDirection)} of {direction}");
             }
             //TODO: duration for the force, or add as an impulse
-            ship.GetShipForceManipulator().AddForce(forceDirection*SteeringForceValue, .5f);
+            if ((ship.GetCurrenStatus().Condition & ShipBL.ShipCondition.Freezing) == ShipBL.ShipCondition.Freezing)
+                forceDirection *= ship.GetFreezingSlowDown();
+            ship.GetShipForceManipulator().AddForce(forceDirection * SteeringForceValue, .5f);
         }
     }
 }

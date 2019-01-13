@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 54334168285859978}
   - component: {fileID: 114263723997430558}
   - component: {fileID: 114334480994139150}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: Rock1
   m_TagString: Rock
   m_Icon: {fileID: 0}
@@ -73,7 +73,6 @@ MonoBehaviour:
   splitForce: 10
   status: 0
   envSpawner: {fileID: 0}
-  rockParts: []
 --- !u!114 &114334480994139150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -92,9 +91,12 @@ MonoBehaviour:
   lastUpdate: 0
   root: {fileID: 114334480994139150}
   children: []
+  serverLayer: ServerEnvironment
+  removeServerChildColliders: 0
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
+  setChildCollidersTriggers: 1
 --- !u!135 &8491807412834537929
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -180,9 +182,17 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Rock
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 58e9cc6418e03e24d8b7a8e0c39d5e75, type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     - target: {fileID: 100002, guid: 58e9cc6418e03e24d8b7a8e0c39d5e75, type: 3}
       propertyPath: m_TagString
       value: Rock
+      objectReference: {fileID: 0}
+    - target: {fileID: 100002, guid: 58e9cc6418e03e24d8b7a8e0c39d5e75, type: 3}
+      propertyPath: m_Layer
+      value: 14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 58e9cc6418e03e24d8b7a8e0c39d5e75, type: 3}

@@ -25,7 +25,7 @@ namespace MastersOfTempest.PlayerControls
                 return shipPhysics;
             }
         }
-        private const float speed = .6f;
+        private const float speed = .9f;
 
         [Serializable]
         private struct MoveMessage
@@ -114,7 +114,7 @@ namespace MastersOfTempest.PlayerControls
 
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {
-            Debug.Log($"Hit! {hit.collider.gameObject.name}");
+            //Debug.Log($"Hit! {hit.collider.gameObject.name}");
         }
     }
 }
