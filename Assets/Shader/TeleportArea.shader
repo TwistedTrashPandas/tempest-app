@@ -15,7 +15,6 @@
     {
         Tags { "RenderType"="Transparent" "Queue"="Transparent" }
         Blend SrcAlpha OneMinusSrcAlpha
-        ZWrite Off
         LOD 100
 
         Pass
