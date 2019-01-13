@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 
@@ -22,6 +23,7 @@ namespace MastersOfTempest
             }
             var main = ps.main;
             main.startColor = ParticlesColor;
+            // main.customSimulationSpace = FindObjectsOfType<ShipBL.Ship>().First(sh => sh.gameObject.scene == gameObject.scene).transform
         }
 
         private CoroutineCancellationToken currentToken;
@@ -38,6 +40,7 @@ namespace MastersOfTempest
         private IEnumerator ChannelCoroutine(Transform target, CoroutineCancellationToken cancellationToken)
         {
             Vector3 vecToTarget;
+            Vector3 transformedPoint;
             float distToTarget;
             int length;
             const float speed = 2f;
@@ -49,16 +52,22 @@ namespace MastersOfTempest
             while (!cancellationToken.CancellationRequested)
             {
                 length = ps.GetParticles(modifiedParticles);
-                vecToTarget = (target.position - transform.position).normalized * speed;
+                transformedPoint = transform.InverseTransformPoint(target.position);
+                vecToTarget = transformedPoint.normalized * speed;
+                // distToTarget = transformedPoint.sqrMagnitude;
                 distToTarget = (target.position - transform.position).sqrMagnitude;
                 for (var i = 0; i < length; i++)
                 {
                     // if (modifiedParticles[i].position == target.position)
-                    if ((modifiedParticles[i].position - transform.position).sqrMagnitude > distToTarget)
-                    {
-                        modifiedParticles[i].remainingLifetime = 0f;
-                        continue;
-                    }
+
+                    // if ((transform.TransformPoint(modifiedParticles[i].position) - transform.position).sqrMagnitude > distToTarget)
+                    // // if(Mathf.Abs(Vector3.Dot(modifiedParticles[i].position,transformedPoint)) > transformedPoint.magnitude)
+                    // // if ((modifiedParticles[i].position).sqrMagnitude > distToTarget)
+                    // {
+
+                    //     modifiedParticles[i].remainingLifetime = 0f;
+                    //     continue;
+                    // }
                     modifiedParticles[i].velocity = vecToTarget;
                 }
                 ps.SetParticles(modifiedParticles, length);
