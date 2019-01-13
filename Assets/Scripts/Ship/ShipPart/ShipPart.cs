@@ -42,6 +42,10 @@ namespace MastersOfTempest.ShipBL
         // updates mesh depending on collision (usually called from damaging objects such as rocks)
         public void ResolveCollision(float destruc, ContactPoint[] contactPoints, Vector3 impulse)
         {
+            if ((status & ShipPartStatus.Fragile) == ShipPartStatus.Fragile)
+            {
+                destruc = 1.0f;
+            }
             AddDestruction(destruc);
             SendCollision(contactPoints, impulse, destruc);
         }
@@ -139,6 +143,7 @@ namespace MastersOfTempest.ShipBL
             {
                 int l = Mathf.FloorToInt(data.Length / 12) - 1;
 
+                AddDestruction(BitConverter.ToSingle(data, 0));
                 Vector3 impulse = new Vector3(BitConverter.ToSingle(data, 4), BitConverter.ToSingle(data, 8), BitConverter.ToSingle(data, 12));
                 Vector3[] contactPoints = new Vector3[l];
                 for (int j = 0; j < l; j++)
@@ -152,14 +157,13 @@ namespace MastersOfTempest.ShipBL
         // add or remove destruction value to ship parts
         public void AddDestruction(float destruc)
         {
-            if (status == ShipPartStatus.Fragile && destruc > 0f)
-                destruction = 1.0f;
-            else
-                destruction = Mathf.Clamp01(destruction + destruc);
-            
-            byte[] buffer = new byte[4];
-            Buffer.BlockCopy(BitConverter.GetBytes(destruction), 0, buffer, 0, 4);
-            SendToAllClients(buffer, Facepunch.Steamworks.Networking.SendType.Reliable);
+            destruction = Mathf.Clamp01(destruction + destruc);
+            if (destruc < 0f)
+            {
+                byte[] buffer = new byte[4];
+                Buffer.BlockCopy(BitConverter.GetBytes(destruction), 0, buffer, 0, 4);
+                SendToAllClients(buffer, Facepunch.Steamworks.Networking.SendType.Reliable);
+            }
         }
 
         // add or remove destruction value to ship parts
