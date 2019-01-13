@@ -1,4 +1,5 @@
 ﻿using System;
+using MastersOfTempest.Networking;
 using MastersOfTempest.PlayerControls.QTE;
 using MastersOfTempest.ShipBL;
 using TMPro;
@@ -21,6 +22,8 @@ namespace MastersOfTempest.PlayerControls
         private Camera firstPersonCamera;
         private InteractionsController interactionsController;
         private ApprenticeInputAnimations animations;
+
+        private TeleportArea lastTeleportArea = null;
 
         protected void Update()
         {
@@ -116,24 +119,25 @@ namespace MastersOfTempest.PlayerControls
 
         public void Teleport (TeleportArea target)
         {
-            Debug.Log("TODO: Teleport to " + target.name);
+            bool goBack = lastTeleportArea != null && lastTeleportArea == target;
+
+            // It might make sense to disable player movement when you are currently at a crowsnest
+            target.gameObject.GetComponent<TeleportActionNetworked>().TeleportOnServer(GetComponent<ServerObject>().serverID, goBack);
+
+            if (goBack)
+            {
+                lastTeleportArea = null;
+            }
+            else
+            {
+                lastTeleportArea = target;
+            }
         }
 
         public void Repair (RepairArea target)
         {
-            // Find the ship network behaviour on the client
             // Send message to repair parts from the ShipPartManager
-            Ship[] ships = FindObjectsOfType<Ship>();
-
-            foreach (Ship ship in ships)
-            {
-                if (ship.gameObject.scene.Equals(Networking.GameClient.Instance.gameObject.scene))
-                {
-                    ship.RepairShipPartAreaOnServer(target.shipPartArea, 0.2f);
-                    break;
-                }
-            }
-
+            FindObjectOfType<Ship>().RepairShipPartAreaOnServer(target.shipPartArea, 0.2f);
             animations.Repair();
         }
     }

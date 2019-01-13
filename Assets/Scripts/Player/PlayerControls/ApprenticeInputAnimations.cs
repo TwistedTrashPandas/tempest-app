@@ -40,7 +40,7 @@ namespace MastersOfTempest.PlayerControls
         {
             if (!IsBusy())
             {
-                StartCoroutine(MeditateAnimation(1));
+                StartCoroutine(MeditateAnimation(0.9f));
             }
         }
 
@@ -102,7 +102,7 @@ namespace MastersOfTempest.PlayerControls
             isThrowing = true;
             rightHandAnimator.SetTrigger("Throw");
 
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.375f);
 
             Transform startParent = hammer.transform.parent;
             Vector3 startPosition = hammer.transform.localPosition;

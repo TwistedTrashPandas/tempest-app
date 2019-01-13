@@ -22,17 +22,18 @@ namespace MastersOfTempest.ShipBL
         // Update is called once per frame
         void FixedUpdate()
         {
-            //lastRot = transform.rotation;
-            //lastPos = transform.position;
-          //  this.gameObject.transform.Translate(ship.position - lastPos);
+            //this.gameObject.transform.rotation = ship.rotation;
+            //this.gameObject.transform.position = ship.position;
+        }
+        private void Update()
+        {
             this.gameObject.transform.rotation = ship.rotation;
             this.gameObject.transform.position = ship.position;
         }
         private void LateUpdate()
         {
-            //this.gameObject.transform.Translate(ship.position - lastPos);
-            this.gameObject.transform.rotation = ship.rotation;
-            this.gameObject.transform.position = ship.position;
+            //this.gameObject.transform.rotation = ship.rotation;
+            this.gameObject.transform.position = -ship.position;
         }
     }
 }
