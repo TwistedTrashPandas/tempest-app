@@ -9,6 +9,7 @@ namespace MastersOfTempest.ShipBL
     [RequireComponent(typeof(ForceManilpulator))]
     public class Ship : NetworkBehaviour
     {
+        private const float freezingSlowDown = 0.5f;
         private Gamemaster context;
         private ForceManilpulator forceManipulator;
         private ShipPartManager shipPartManager;
@@ -57,6 +58,11 @@ namespace MastersOfTempest.ShipBL
                 // Negative destruction equals repairing
                 shipPart.AddDestruction(-message.repairAmount);
             }
+        }
+
+        public float GetFreezingSlowDown()
+        {
+            return freezingSlowDown;
         }
 
         public void RepairShipPartAreaOnServer (ShipPartArea shipPartArea, float repairAmount)

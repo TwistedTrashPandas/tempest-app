@@ -61,6 +61,8 @@ namespace MastersOfTempest.Environment.Interacting
                     }
                     currentRockPart.GetComponent<Rigidbody>().AddForce(splitForce * new Vector3(UnityEngine.Random.Range(0.5f, 2f), UnityEngine.Random.Range(0.5f, 2f), UnityEngine.Random.Range(0.5f, 2f)));
                     envSpawner.AddEnvObject(currentRockPart.GetComponent<Damaging>());
+                    currentRockPart.GetComponent<Damaging>().health = 0.4f;
+                    currentRockPart.GetComponent<Damaging>().moveType = MoveType.Force;
                 }
                 Destroy(this.gameObject);
                 /*Rock AnimationCode Ends*/
