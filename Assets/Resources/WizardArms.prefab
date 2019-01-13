@@ -2113,6 +2113,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 682c780dc3431438898581eec2447ff9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SuckPoint: {fileID: 6965039462312923829}
 --- !u!1 &6020435584693596365
 GameObject:
   m_ObjectHideFlags: 0
