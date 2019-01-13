@@ -30,6 +30,8 @@ public class IntroCinematic : MonoBehaviour
     {
         yield return new WaitForSeconds(timeUntilLevelLoad);
 
+        LoadingScreen.Instantiate();
+
         // Load client scene
         SceneManager.LoadScene(clientSceneName);
 
