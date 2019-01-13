@@ -21,6 +21,7 @@ public class Hologram : MonoBehaviour
     {
         mainCamera = Camera.main;
         hologramCamera.enabled = false;
+        hologramCamera.depthTextureMode = DepthTextureMode.Depth;
         shipPartManager = GetComponentInParent<ShipPartManager>();
         if (shipPartManager == null)
             shipPartManager = FindObjectOfType<ShipPartManager>();

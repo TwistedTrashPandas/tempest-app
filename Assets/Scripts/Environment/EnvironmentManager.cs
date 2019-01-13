@@ -66,6 +66,7 @@ namespace MastersOfTempest.Environment
             DamageRockMessage message = ByteSerializer.FromBytes<DamageRockMessage>(data);
             ServerObject rock = GameServer.Instance.GetServerObject(message.rockServerID);
             rock.GetComponent<Damaging>().RemoveHealth(message.damage);
+            print(message.damage);
         }
 
         public void DamageRockOnServer (int rockServerID, float damage)

@@ -27,7 +27,6 @@ namespace MastersOfTempest.Environment.Interacting
 
         protected override void OnTriggerExit(Collider other)
         {
-            Debug.Log(other.gameObject.tag);
             if (other.gameObject.tag == "Ship")
             {
                 voiceChatZoneNetwork.SetVoiceChatZoneType((uint)VoiceChatZoneType.Normalized);

@@ -97,5 +97,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 583a2b6cd9d191e47989e0b0633d1988, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  index: -1
-  overallDestructionThreshold: 0
+  index: 2
+  overallDestructionThreshold: 0.9

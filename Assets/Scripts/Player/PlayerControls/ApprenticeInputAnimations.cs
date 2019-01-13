@@ -32,7 +32,7 @@ namespace MastersOfTempest.PlayerControls
         {
             if (!IsBusy())
             {
-                StartCoroutine(ThrowAnimation(firstPersonCamera, 5, 1.0f, 1000));
+                StartCoroutine(ThrowAnimation(firstPersonCamera, 50, 1.0f, 1000));
             }
         }
 

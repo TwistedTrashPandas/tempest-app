@@ -9,7 +9,7 @@ namespace MastersOfTempest
     {
         public delegate void LoseAnimation();
         public static event LoseAnimation OnLose;
-        public float overallDestructionThreshold;
+        public float overallDestructionThreshold = 0.9f;
         private ShipBL.ShipPartManager shipPartManager;
 
         protected override void StartServer()

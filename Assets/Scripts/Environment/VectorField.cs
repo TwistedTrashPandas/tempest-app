@@ -142,7 +142,7 @@ namespace MastersOfTempest.Environment
 
         private void RefineBorders()
         {
-            float y_vel = 1.0f * yVelScale, minScale = 0.65f, maxScale = 1.35f;
+            float y_vel = 1.0f * yVelScale, minScale = 0.85f, maxScale = 1.15f;
             int nx = v3_dimensions[0], ny = v3_dimensions[1], nz = v3_dimensions[2];
             v2_rotCenter = new Vector2((nx - 1f) / 2f, (nz - 1f) / 2f);
             for (int k = 0; k < ny; k+= 1)
@@ -161,8 +161,8 @@ namespace MastersOfTempest.Environment
                             v3s_vectors[i, k, j] = new Vector3(-diffZ / hypotenuse - (i - v2_rotCenter.x) / 160f, 0f, diffX / hypotenuse - (j - v2_rotCenter.y) / 160f).normalized * magn;
                             v3s_vectors[i, k, j].y = y_vel * velScale;
                         }
-                        float rnd1 = (UnityEngine.Random.Range(0f, 1f) < 0.1f) ? -1f : 1f;
-                        float rnd2 = (UnityEngine.Random.Range(0f, 1f) < 0.1f) ? -1f : 1f;
+                        float rnd1 = (UnityEngine.Random.Range(0f, 1f) < 0.002f) ? -1f : 1f;
+                        float rnd2 = (UnityEngine.Random.Range(0f, 1f) < 0.002f) ? -1f : 1f;
                         v3s_vectors[i, k, j] = Vector3.Scale(v3s_vectors[i, k, j], new Vector3(rnd1*UnityEngine.Random.Range(minScale, maxScale),
                             UnityEngine.Random.Range(minScale, maxScale), rnd2*UnityEngine.Random.Range(minScale, maxScale)));
                     }
