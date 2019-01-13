@@ -89,5 +89,10 @@ namespace MastersOfTempest.ShipBL
         {
             return currentStatus;
         }
+
+        public ShipPartManager GetShipPartManager()
+        {
+            return shipPartManager;
+        }
     }
 }

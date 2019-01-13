@@ -23,6 +23,7 @@ namespace MastersOfTempest.ShipBL
         private Vector3[] initialMesh;
         private Vector3[] targetMesh;
         private Material material;
+        private LoseCondition loseCondition;
 
         protected override void Start()
         {
@@ -32,6 +33,7 @@ namespace MastersOfTempest.ShipBL
             if (initialMesh == null)
                 throw new System.InvalidOperationException("Ship part can only be attached to objects with meshes");
             material = GetComponent<MeshRenderer>().material;
+            loseCondition = GameObject.Find("Gamemaster").GetComponent<LoseCondition>();
         }
 
         public float GetDestruction()
@@ -48,6 +50,9 @@ namespace MastersOfTempest.ShipBL
             }
             AddDestruction(destruc);
             SendCollision(contactPoints, impulse, destruc);
+
+            // lose condition checks if the overall destruction value is above the threshold (after collision)
+            loseCondition.CheckOverAllDestruction();
         }
 
         private void SendCollision(ContactPoint[] contactPoints, Vector3 impulse, float destruc)
