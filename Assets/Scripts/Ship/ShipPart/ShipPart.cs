@@ -12,9 +12,9 @@ namespace MastersOfTempest.ShipBL
     {
         public event EventHandler ShipPartHit;
         public ShipPartArea interactionArea;
-        public float cutOffDist = 25f;
-        public float impulseScaling = 0.15f;
-        public float maxDisplacementDist = 20f;
+        private const float cutOffDist = 0.75f;
+        private const float impulseScaling = 0.05f;
+        private const float maxDisplacementDist = 1.5f;
         /// <summary>
         /// destruction == 0:   ship part fully repaired
         ///             == 1:   ship part fully destroyed
