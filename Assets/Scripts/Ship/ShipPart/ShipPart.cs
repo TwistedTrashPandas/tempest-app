@@ -54,10 +54,11 @@ namespace MastersOfTempest.ShipBL
         {
             byte[] buffer = new byte[16 + contactPoints.Length * 12];
 
-            Buffer.BlockCopy(BitConverter.GetBytes(destruc), 0, buffer, 0, 4);
-            Buffer.BlockCopy(BitConverter.GetBytes(impulse.x), 0, buffer, 4, 4);
+            Buffer.BlockCopy(BitConverter.GetBytes(destruc), 0, buffer, 0, 4);  // 4 bytes destruc value
+            Buffer.BlockCopy(BitConverter.GetBytes(impulse.x), 0, buffer, 4, 4);// 12 bytes impulse value
             Buffer.BlockCopy(BitConverter.GetBytes(impulse.y), 0, buffer, 8, 4);
             Buffer.BlockCopy(BitConverter.GetBytes(impulse.z), 0, buffer, 12, 4);
+            // n * 12 bytes for the generated contactPoints
             for (int j = 0; j < contactPoints.Length; j++)
             {
                 Buffer.BlockCopy(BitConverter.GetBytes(contactPoints[j].point.x), 0, buffer, 16 + j * 12, 4);
@@ -141,10 +142,16 @@ namespace MastersOfTempest.ShipBL
             }
             else
             {
+                // length of contact off set array
                 int l = Mathf.FloorToInt(data.Length / 12) - 1;
 
+                // first 4 bytes are the delta destruction value
                 AddDestruction(BitConverter.ToSingle(data, 0));
+
+                // next 12 bytes are the values for the impulse vector
                 Vector3 impulse = new Vector3(BitConverter.ToSingle(data, 4), BitConverter.ToSingle(data, 8), BitConverter.ToSingle(data, 12));
+
+                // other bytes are the contact point vectors
                 Vector3[] contactPoints = new Vector3[l];
                 for (int j = 0; j < l; j++)
                 {
