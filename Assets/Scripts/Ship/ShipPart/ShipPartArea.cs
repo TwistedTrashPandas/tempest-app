@@ -4,8 +4,6 @@
     {
         Hull,
         Rear,
-        LeftBorder,
-        RightBorder,
-        Balloon,
+        Prow
     };
 }
