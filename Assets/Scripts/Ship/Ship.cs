@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using MastersOfTempest.Networking;
+using MastersOfTempest.PlayerControls;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -34,6 +35,7 @@ namespace MastersOfTempest.ShipBL
             {
                 throw new InvalidOperationException($"{nameof(ShipPartManager)} is not specified!");
             }
+            shipPartManager.ActionRequest += ExecuteAction;
         }
 
         protected override void Start()
@@ -87,6 +89,12 @@ namespace MastersOfTempest.ShipBL
         public ShipStatus GetCurrenStatus()
         {
             return currentStatus;
+        }
+
+        private void ExecuteAction(object sender, EventArgs args)
+        {
+            var action = ((ActionMadeEventArgs)args).Action;
+            action.Execute(context);
         }
     }
 }

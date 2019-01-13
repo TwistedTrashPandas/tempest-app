@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using MastersOfTempest.PlayerControls;
 using UnityEngine;
 
 namespace MastersOfTempest.ShipBL
 {
     public class ShipPartManager : MonoBehaviour
     {
+        public event EventHandler ActionRequest;
         public Dictionary<ShipPartArea, List<ShipPart>> interactionAreas { get; private set; }
 
         void Start()
@@ -26,6 +28,7 @@ namespace MastersOfTempest.ShipBL
                 for (int i = 0; i < shipparts.Length; i++)
                 {
                     interactionAreas[shipparts[i].interactionArea].Add(shipparts[i]); // Add(i);
+                    shipparts[i].ShipPartHit += OnShipPartHit;
                 }
             }
         }
@@ -63,7 +66,7 @@ namespace MastersOfTempest.ShipBL
             {
                 for (int i = 0; i < partList.Count; i++)
                 {
-                    partList[i].ChangeShaderDestructionValue();                    
+                    partList[i].ChangeShaderDestructionValue();
                 }
             }
         }
@@ -77,6 +80,14 @@ namespace MastersOfTempest.ShipBL
                     partList[i].ResetShaderDestructionValue();
                 }
             }
+        }
+
+        private void OnShipPartHit(object sender, EventArgs args)
+        {
+            var origin = (ShipPart) sender;
+            //var damage = origin.status == ShipPartStatus.Fragile ? 1f : ((ShipPartHitEventArgs)args).damageAmount;
+            //We can later use another action, e.g. ShipPart hit to also add the sound of the impact
+            ActionRequest?.Invoke(this, new ActionMadeEventArgs(new ShakeCameraAction(((ShipPartHitEventArgs)args).damageAmount, origin.transform.position)));
         }
     }
 }
