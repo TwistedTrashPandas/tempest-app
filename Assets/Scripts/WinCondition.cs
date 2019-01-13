@@ -10,7 +10,7 @@ namespace MastersOfTempest
         public delegate void WinAnimation(GameObject ship);
         public static event WinAnimation OnWin;
         
-        public float radiusCollider = 10f;
+        public float radiusCollider = 50f;
         private CapsuleCollider winCondition;
 
         protected override void StartServer()
@@ -42,21 +42,10 @@ namespace MastersOfTempest
             winCondition.height = vectorField.GetCellSize() * vectorField.GetDimensions().y * 1.75f;
             winCondition.direction = 1;
             winCondition.isTrigger = true;
-            winCondition.radius = 15f;
+            winCondition.radius = radiusCollider;
             if (serverObject.onServer)
             {
                 OnWinServer();
-            }
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            // WIN EVENT
-            if(other.tag == "Ship")
-            {
-                if (serverObject.onServer)
-                    OnWin(other.transform.parent.gameObject);
-                Debug.Log("Victory!");
             }
         }
     }
