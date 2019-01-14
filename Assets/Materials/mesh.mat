@@ -129,9 +129,9 @@ Material:
     - _WavesDensity: 0
     - _ZWrite: 1
     - _isBending: 0
-    - g_Attenuation: 2
+    - g_Attenuation: 3
     - g_DepthVisible: 96
-    - g_DistortionFactor: 70
+    - g_DistortionFactor: 75
     - g_FoamDepth: 0
     - g_Glossiness: 0.5
     - g_Metallic: 0
@@ -139,7 +139,7 @@ Material:
     - g_Reflection: 0.3
     - g_Refraction: 0
     - g_Repeat: 64
-    - g_Shininess: 24
+    - g_Shininess: 12
     - g_directionalLight: 0
     - g_fQuadSize: 8
     - g_fTimeMoveNoiseX: 0.9
