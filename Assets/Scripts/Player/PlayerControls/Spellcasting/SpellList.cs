@@ -7,14 +7,14 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
 {
     public static class SpellList
     {
-        public static List<Spell> Spells {get;} = new List<Spell> 
+        public static List<Spell> Spells {get;} = new List<Spell>
         {
             new AccelerateSpell(),
-            new ShieldSpell(),
+            //new ShieldSpell(),
             new SlowdownSpell(),
             new SteerLeftSpell(),
-            new SteerRightSpell(),
-            new SuperVisionSpell()
+            new SteerRightSpell()
+            // new SuperVisionSpell()
         };
     }
 }
