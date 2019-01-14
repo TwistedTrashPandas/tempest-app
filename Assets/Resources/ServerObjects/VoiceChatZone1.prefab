@@ -83,7 +83,7 @@ MonoBehaviour:
   speed: 0
   closestDistance: 0
   moveType: 4
-  zoneType: 0
+  zoneType: 4
 --- !u!114 &5987907786049271428
 MonoBehaviour:
   m_ObjectHideFlags: 0
