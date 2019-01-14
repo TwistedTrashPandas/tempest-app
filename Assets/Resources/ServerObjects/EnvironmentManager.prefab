@@ -103,8 +103,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed4f6f23c3809584abdce0e30c8823d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  water: 0
-  tornPS: 0
+  water: 1
+  tornPS: 1
   tornTex: 0
   cpuVF: 1
   waterPrefab: {fileID: 1380528100157064, guid: 461d256a65e0b4343b1957aad13b0f57,
