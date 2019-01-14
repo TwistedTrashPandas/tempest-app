@@ -81,6 +81,7 @@ namespace MastersOfTempest.Networking
         private void OnMessageLobbyStartGame(byte[] data, ulong steamID)
         {
             LoadingScreen.Instantiate();
+            HelpScreen.Instantiate();
 
             // Load client scene
             SceneManager.LoadScene(clientSceneName);
