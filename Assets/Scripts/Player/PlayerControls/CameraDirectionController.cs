@@ -86,7 +86,7 @@ namespace MastersOfTempest.PlayerControls
             const float ShakeDuration = .5f;
             const float ShakeDurationHalved = ShakeDuration / 2f;
             const float MinAngle = 5f;
-            const float MaxAngle = 60f;
+            const float MaxAngle = 45f;
             //Choose randomly positive or negative angle change and distort a bit the intensity value
             float yawDisplacement = (UnityEngine.Random.value > .5f ? 1f : -1f)
                                     * (MinAngle + (MaxAngle - MinAngle) * (Mathf.Clamp01(intensity - UnityEngine.Random.value / 10f)));

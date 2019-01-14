@@ -23,6 +23,7 @@ namespace MastersOfTempest
         {
             byte[] buffer = new byte[1];
             buffer[0] = 1;
+            GetComponent<Gamemaster>().GetEnvironmentManager().envSpawner.RemoveAllObjects();
             SendToAllClients(buffer, Facepunch.Steamworks.Networking.SendType.Reliable);
         }
 

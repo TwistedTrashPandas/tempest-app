@@ -62,19 +62,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b481b83ab7320c43aa7cabceab2dbc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnRate: 0.8
+  spawnRate: 2
   dampingFactorVel: 0.995
   dampingFactorForce: 0
-  maximumObjVelocity: 100
+  maximumObjVelocity: 55
   spawnProbD: 0.95
   spawnProbS: 0.025
   spawnProbZ: 0.025
-  rockRotSpeed: 0.2
+  rockRotSpeed: 0.5
   minRadiusT: 1
   maxRadiusT: 10
   minRadiusS: 25
   maxRadiusS: 2500
-  maxNumObjects: 100
+  maxNumObjects: 80
   vectorField: {fileID: 114404567317752372}
   damagingPrefabs:
   - {fileID: 1476894203371464, guid: e8c9d0a525a3e1b4fba9d4d419b35e72, type: 3}
@@ -103,8 +103,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed4f6f23c3809584abdce0e30c8823d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  water: 0
-  tornPS: 0
+  water: 1
+  tornPS: 1
   tornTex: 0
   cpuVF: 1
   waterPrefab: {fileID: 1380528100157064, guid: 461d256a65e0b4343b1957aad13b0f57,
