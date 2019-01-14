@@ -270,8 +270,8 @@ Rigidbody:
   m_GameObject: {fileID: 1377128144254112}
   serializedVersion: 2
   m_Mass: 25
-  m_Drag: 0
-  m_AngularDrag: 1
+  m_Drag: 1
+  m_AngularDrag: 5
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -289,9 +289,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2c3a733c5cfaa548b7411b6c2ab025c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  angularMomentumFactor: 0.2
-  velocityDamp: 0.995
-  pullStrength: 0.125
+  angularMomentumFactor: 0.5
+  velocityDamp: 1
+  pullStrength: 0.25
 --- !u!114 &3798610760229167962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12251,11 +12251,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4516789872046452}
     m_Modifications:
-    - target: {fileID: 2375193530674009788, guid: 0a0db5c238fdc6c46b36b677d7d74ed7,
-        type: 3}
-      propertyPath: m_Name
-      value: RepairArea Mid
-      objectReference: {fileID: 0}
     - target: {fileID: 4551967854468776841, guid: 0a0db5c238fdc6c46b36b677d7d74ed7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -12326,6 +12321,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 2375193530674009788, guid: 0a0db5c238fdc6c46b36b677d7d74ed7,
+        type: 3}
+      propertyPath: m_Name
+      value: RepairArea Mid
+      objectReference: {fileID: 0}
     - target: {fileID: 4868487837615059679, guid: 0a0db5c238fdc6c46b36b677d7d74ed7,
         type: 3}
       propertyPath: shipPartArea
@@ -12346,11 +12346,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4516789872046452}
     m_Modifications:
-    - target: {fileID: 2375193530674009788, guid: 0a0db5c238fdc6c46b36b677d7d74ed7,
-        type: 3}
-      propertyPath: m_Name
-      value: RepairArea Front
-      objectReference: {fileID: 0}
     - target: {fileID: 4551967854468776841, guid: 0a0db5c238fdc6c46b36b677d7d74ed7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -12405,6 +12400,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2375193530674009788, guid: 0a0db5c238fdc6c46b36b677d7d74ed7,
+        type: 3}
+      propertyPath: m_Name
+      value: RepairArea Front
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0a0db5c238fdc6c46b36b677d7d74ed7, type: 3}
@@ -12687,11 +12687,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4516789872046452}
     m_Modifications:
-    - target: {fileID: 2375193530674009788, guid: 0a0db5c238fdc6c46b36b677d7d74ed7,
-        type: 3}
-      propertyPath: m_Name
-      value: RepairArea Back
-      objectReference: {fileID: 0}
     - target: {fileID: 4551967854468776841, guid: 0a0db5c238fdc6c46b36b677d7d74ed7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -12761,6 +12756,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2375193530674009788, guid: 0a0db5c238fdc6c46b36b677d7d74ed7,
+        type: 3}
+      propertyPath: m_Name
+      value: RepairArea Back
       objectReference: {fileID: 0}
     - target: {fileID: 4868487837615059679, guid: 0a0db5c238fdc6c46b36b677d7d74ed7,
         type: 3}
