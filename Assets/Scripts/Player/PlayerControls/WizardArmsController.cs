@@ -22,6 +22,10 @@ namespace MastersOfTempest.PlayerControls
         * */
         public Transform SuckPoint;
         public Spellbook book;
+
+        public ParticleSystem HoldPS;
+        public ParticleSystem DissipatePS;
+        public ParticlesSucker FeedPS;
         private Animator anim;
         void Start()
         {
@@ -32,6 +36,18 @@ namespace MastersOfTempest.PlayerControls
             if (book == null)
             {
                 throw new InvalidOperationException($"{nameof(book)} is not specified!");
+            }
+            if (HoldPS == null)
+            {
+                throw new InvalidOperationException($"{nameof(HoldPS)} is not specified!");
+            }
+            if (DissipatePS == null)
+            {
+                throw new InvalidOperationException($"{nameof(DissipatePS)} is not specified!");
+            }
+            if (FeedPS == null)
+            {
+                throw new InvalidOperationException($"{nameof(FeedPS)} is not specified!");
             }
             anim = GetComponent<Animator>();
             if (anim == null)

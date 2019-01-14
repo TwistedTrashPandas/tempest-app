@@ -21,14 +21,13 @@ namespace MastersOfTempest
             {
                 throw new InvalidOperationException($"{nameof(ps)} is not specified!");
             }
-            var main = ps.main;
-            main.startColor = ParticlesColor;
-            // main.customSimulationSpace = FindObjectsOfType<ShipBL.Ship>().First(sh => sh.gameObject.scene == gameObject.scene).transform
         }
 
         private CoroutineCancellationToken currentToken;
         public void StartChannel(Transform target, CoroutineCancellationToken cancellationToken)
         {
+            var main = ps.main;
+            main.startColor = ParticlesColor;
             if (!currentToken?.CancellationRequested ?? false)
             {
                 throw new InvalidOperationException("Cannot start new channeling before ending previous!");
