@@ -121,6 +121,7 @@ namespace MastersOfTempest.Networking
             NetworkManager.Instance.SendToServer(message.ToBytes(), NetworkMessageType.NetworkBehaviour, sendType);
         }
 
+
         protected void SendToServer(string message, Facepunch.Steamworks.Networking.SendType sendType = Facepunch.Steamworks.Networking.SendType.Reliable)
         {
             SendToServer(System.Text.Encoding.UTF8.GetBytes(message), sendType);
@@ -200,6 +201,11 @@ namespace MastersOfTempest.Networking
         }
 
         protected virtual void OnClientReceivedMessage(string message, ulong steamID)
+        {
+            // To be overwritten by the subclass
+        }
+
+        protected virtual void OnTriggerEnter(Collider c)
         {
             // To be overwritten by the subclass
         }

@@ -22,7 +22,7 @@ namespace MastersOfTempest.Environment
         [Range(0.01f, 512f)]
         public float velScale;
 
-        [Range(-1.0f, 1.0f)]
+        [Range(-1.0f, 512.0f)]
         public float yVelScale;
 
         private Vector2 v2_rotCenter;

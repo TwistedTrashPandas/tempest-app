@@ -84,7 +84,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             particleVel = new Vector3[numberParticles];
             particleIdx = new int[numberParticles];
             float radius = 7500f;
-            float height = 1422f;
+            float height = 1322f;
             Vector3 center = vectorField.GetCenterWS();
             center.y = height;
             for (int i = 0; i < numberParticles; i++)
@@ -381,6 +381,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             winAnimation.SetFloats("g_f3CellSizes", cellsizes);
             particlesCS.SetFloats("g_f3MaxVel", maxVel);
             particlesCS.SetFloat("g_fDampVel", 0.0f);
+            particlesCS.SetInt("g_iNumCloudSkyParticles", 0);
             material.SetFloat("g_bSize", 1.0f);
             sortEach = 1;
             targetShip = true;

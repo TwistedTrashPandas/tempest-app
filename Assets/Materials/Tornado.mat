@@ -142,12 +142,12 @@ Material:
     - g_bSize: 0
     - g_fBillboardSize: 2.6
     - g_fDensity: 0.6
-    - g_fLightAttenuation: 1
+    - g_fLightAttenuation: 1.1
     - g_fMaxTransparency: 1
     - g_fMaxTransparencyDist: 1000
-    - g_fMinTransparency: 0.3
+    - g_fMinTransparency: 0.35
     - g_fSize: 64
-    - g_fSizeTop: 8
+    - g_fSizeTop: 12
     - g_fTimeDiff: 0.01
     - g_fTimeStepTex: 0.2
     - g_fTopHeight: 0

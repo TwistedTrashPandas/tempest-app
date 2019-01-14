@@ -287,6 +287,9 @@
 			//bool bIsValid = g_VisibleParticleFlags[uiParticleId/32] & (1 << (uiParticleId&31));
 			//if( !bIsValid )
 			//    return;
+			float3 viewDir = UNITY_MATRIX_IT_MV[2].xyz;
+			if (dot(p[0].vertex.xyz -_WorldSpaceCameraPos.xyz, viewDir) > 0.0f)
+				return;
 
 			g2f Outs[8];
 			// matrix mViewProj = ; // g_CameraAttribs.WorldViewProj;
@@ -340,7 +343,6 @@
 			}
 			if (p[0].vertex.y >= g_fTopHeight)
 				f3Size *= g_fSizeTop;
-
 			for (int iCorner = 0; iCorner < 8; ++iCorner)
 			{
 				float4 f4CurrCornerWorldPos;

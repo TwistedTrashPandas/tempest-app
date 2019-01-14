@@ -16,7 +16,7 @@ namespace MastersOfTempest
         protected override void StartServer()
         {
             base.StartServer();
-            //StartCoroutine(WinAfter10secs());
+            StartCoroutine(InitAfter5Seconds());
         }
         
         public void OnWinServer()
@@ -33,19 +33,24 @@ namespace MastersOfTempest
                 OnWin(gameObject.GetComponent<Gamemaster>().GetShip().gameObject);
         }
 
-        private IEnumerator WinAfter10secs()
+        protected override void OnTriggerEnter(Collider c)
         {
-            yield return new WaitForSeconds(10f);
-            VectorField vectorField = GetComponent<Gamemaster>().GetEnvironmentManager().vectorField;
-            winCondition = gameObject.AddComponent<CapsuleCollider>();
-            winCondition.center = vectorField.GetCenterWS();
-            winCondition.height = vectorField.GetCellSize() * vectorField.GetDimensions().y * 1.75f;
-            winCondition.direction = 1;
-            winCondition.isTrigger = true;
-            winCondition.radius = radiusCollider;
+            if (c.gameObject.tag == "Ship")
+                OnWinServer();
+        }
+
+        private IEnumerator InitAfter5Seconds()
+        {
+            yield return new WaitForSeconds(5f);
             if (serverObject.onServer)
             {
-                OnWinServer();
+                VectorField vectorField = GetComponent<Gamemaster>().GetEnvironmentManager().vectorField;
+                winCondition = gameObject.AddComponent<CapsuleCollider>();
+                winCondition.center = vectorField.GetCenterWS();
+                winCondition.height = vectorField.GetCellSize() * vectorField.GetDimensions().y * 2f;
+                winCondition.direction = 1;
+                winCondition.isTrigger = true;
+                winCondition.radius = radiusCollider;
             }
         }
     }

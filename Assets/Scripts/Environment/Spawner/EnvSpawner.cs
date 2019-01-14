@@ -4,6 +4,7 @@ using UnityEngine;
 using MastersOfTempest.Networking;
 using static MastersOfTempest.EnvironmentNetwork;
 using UnityEngine.SceneManagement;
+using MastersOfTempest.ShipBL;
 
 namespace MastersOfTempest.Environment.Interacting
 {
@@ -103,9 +104,10 @@ namespace MastersOfTempest.Environment.Interacting
             {
                 EnvObject toDestroy;
                 toDestroy = envObjects[0];
-                toDestroy.EnableGravity();
+                if(toDestroy is Damaging)
+                    toDestroy.EnableGravity();
                 envObjects.RemoveAt(0);
-                Destroy(toDestroy.gameObject, 20f);
+                Destroy(toDestroy.gameObject, 10f);
                 //spawnRate = 2f; // set variable for this (TOOD)
             }
         }
@@ -133,27 +135,29 @@ namespace MastersOfTempest.Environment.Interacting
 
         private IEnumerator SpawnObject()
         {
-            yield return new WaitForSeconds(spawnRate);
-            RemoveFirstEnvObject();
-
-            Vector3 centerPos = vectorField.GetCenterWS();
-            centerPos.y = 0f;
-            EnvObjectType type;
-            float randomType = Random.Range(0f, spawnProbSum);
-
-            // randomly select type of envObject
-            if (randomType < spawnProbD)
-                type = EnvObjectType.Damaging;
-            else
+            while (spawnRate > 0f)
             {
-                if (randomType < spawnProbS + spawnProbD)
-                    type = EnvObjectType.VoiceChatZone;
-                else
-                    type = EnvObjectType.DangerZone;
-            }
+                RemoveFirstEnvObject();
 
-            InstantiateNewObject(true, centerPos, Quaternion.identity, type, 0);
-            StartCoroutine(SpawnObject());
+                Vector3 centerPos = vectorField.GetCenterWS();
+                centerPos.y = 0f;
+                EnvObjectType type;
+                float randomType = Random.Range(0f, spawnProbSum);
+
+                // randomly select type of envObject
+                if (randomType < spawnProbD)
+                    type = EnvObjectType.Damaging;
+                else
+                {
+                    if (randomType < spawnProbS + spawnProbD)
+                        type = EnvObjectType.VoiceChatZone;
+                    else
+                        type = EnvObjectType.DangerZone;
+                }
+
+                InstantiateNewObject(true, centerPos, Quaternion.identity, type, 0);
+                yield return new WaitForSeconds(spawnRate);
+            }
         }
 
         /*
@@ -171,6 +175,16 @@ namespace MastersOfTempest.Environment.Interacting
         {
             envObjects[idx].SetVelocity(vectorField.GetVectorAtPos(envObjects[idx].transform.position));
         }*/
+        
+        public void RemoveAllObjects()
+        {
+            spawnRate = -1f;
+            maxNumObjects = 0;
+            for (int i = envObjects.Count; i >= 0; i--)
+            {
+                RemoveFirstEnvObject();
+            }
+        }
 
         private void DampVelocity(int idx)
         {
@@ -202,7 +216,7 @@ namespace MastersOfTempest.Environment.Interacting
                 switch (type)
                 {
                     case EnvObjectType.Damaging:
-                        float randomSize = Random.Range(1f, 2.0f);
+                        float randomSize = Random.Range(1f, 2.5f);
                         localScale = new Vector3(randomSize, randomSize, randomSize);
                         prefabNum = Mathf.FloorToInt(Random.Range(0f, damagingPrefabs.Length - Mathf.Epsilon));
                         position.y = Random.Range(0f, dims.y * cellSize);
@@ -210,7 +224,7 @@ namespace MastersOfTempest.Environment.Interacting
                         // hard coded so far larger rocks are slower but deal more damage
                         envObjects[envObjects.Count - 1].GetComponent<Damaging>().damage = 0.25f * randomSize;
                         envObjects[envObjects.Count - 1].GetComponent<Damaging>().envSpawner = this;
-                        envObjects[envObjects.Count - 1].GetComponent<Rigidbody>().AddTorque(new Vector3(Random.Range(-1f,1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f)) * rockRotSpeed);
+                        envObjects[envObjects.Count - 1].GetComponent<Rigidbody>().angularVelocity = (new Vector3(Random.Range(-1f,1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f)) * rockRotSpeed);
                         envObjects[envObjects.Count - 1].speed *= 1f / randomSize;
                         if (Random.Range(0, 10) == 0)
                         {
@@ -219,6 +233,7 @@ namespace MastersOfTempest.Environment.Interacting
                         }
                         else
                             envObjects[envObjects.Count - 1].moveType = MoveType.ForceDirect; // (MoveType) Random.Range(0,3);
+                        envObjects[envObjects.Count - 1].transform.localScale = localScale;
                         break;
                     case EnvObjectType.DangerZone:
                         initialPos = new Vector3(Random.Range(0, dims.x) * cellSizeH, Random.Range(dims.y * 0.1f, 0.8f * dims.y)* cellSize, Random.Range(0, dims.z)* cellSizeH) + new Vector3(0.5f,0.5f,0.5f);
@@ -237,7 +252,6 @@ namespace MastersOfTempest.Environment.Interacting
                 }
                 envObjects[envObjects.Count - 1].transform.parent = objectContainer.transform;
                 envObjects[envObjects.Count - 1].GetComponent<EnvObject>().listIndex = envObjects.Count - 1;
-                envObjects[envObjects.Count - 1].transform.localScale = localScale;
                 envObjects[envObjects.Count - 1].relativeTargetPos = GetRandomPointOnSphere(minRadiusT, maxRadiusT);
                 // prefabnumber only important for client to choose correct prefab for initialization
             }

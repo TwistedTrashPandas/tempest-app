@@ -63,15 +63,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnRate: 0.8
-  dampingFactorVel: 0.992
+  dampingFactorVel: 0.995
   dampingFactorForce: 0
-  maximumObjVelocity: 75
+  maximumObjVelocity: 100
   spawnProbD: 0.95
   spawnProbS: 0.025
   spawnProbZ: 0.025
-  rockRotSpeed: 2
+  rockRotSpeed: 0.2
   minRadiusT: 1
-  maxRadiusT: 8
+  maxRadiusT: 10
   minRadiusS: 25
   maxRadiusS: 2500
   maxNumObjects: 100
@@ -152,9 +152,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   f_cellSize: 4
-  f_cellSize_horizontal: 16
+  f_cellSize_horizontal: 10
   v3_dimensions: {x: 152, y: 312, z: 152}
   loadFromFile: 1
   vectorFieldFileNum: 999
-  velScale: 75
-  yVelScale: 1
+  velScale: 100
+  yVelScale: 2

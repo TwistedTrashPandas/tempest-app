@@ -30,18 +30,21 @@ namespace MastersOfTempest.Environment.Interacting
             }
         }
 
-        public void SetVoiceChatZoneType(uint enumerate)
+        public void SetVoiceChatZoneType(int enumerate)
         {
             byte[] data;
-            data = ByteSerializer.GetBytes<uint>(enumerate);
+            data = ByteSerializer.GetBytes<int>(enumerate);
             SendToAllClients(data, Facepunch.Steamworks.Networking.SendType.Reliable);
         }
 
         protected override void OnClientReceivedMessageRaw(byte[] data, ulong steamID)
         {
-            uint enumerate = ByteSerializer.FromBytes<uint>(data);
+            int enumerate = ByteSerializer.FromBytes<int>(data);
             for (int i = 0; i < allVoiceChats.Length; i++)
-                allVoiceChats[i].setAudioMixerGroup(audioMixerGroups[(VoiceChatZoneType) enumerate]);
+            {
+                if(!allVoiceChats[i].GetComponent<ServerObject>().onServer)
+                    allVoiceChats[i].setAudioMixerGroup(audioMixerGroups[(VoiceChatZoneType)enumerate]);
+            }
         }
     }
 }
