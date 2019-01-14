@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using MastersOfTempest.ShipBL;
 using UnityEngine;
+using MastersOfTempest.PlayerControls.Spellcasting;
 
 namespace MastersOfTempest.PlayerControls
 {
@@ -65,6 +66,10 @@ namespace MastersOfTempest.PlayerControls
 
             armsController.PulseRightHand();
             armsController.ReleaseSpell();
+            var charge = ((ChargingEventArgs)args).Charge;
+            var main = armsController.DissipatePS.main;
+            main.startColor = charge.CorrespondingColor();
+            armsController.DissipatePS.Play();
             if(chargeCancellationToken != null)
             {
                 chargeCancellationToken.CancellationRequested = true;
@@ -78,6 +83,10 @@ namespace MastersOfTempest.PlayerControls
 
             //TODO: some particles effect prob
             armsController.PulseRightHand();
+            var charge = ((ChargingEventArgs)args).Charge;
+            var main = armsController.HoldPS.main;
+            main.startColor = charge.CorrespondingColor();
+            armsController.HoldPS.Play();
             if(chargeCancellationToken != null)
             {
                 chargeCancellationToken.CancellationRequested = true;
@@ -90,12 +99,22 @@ namespace MastersOfTempest.PlayerControls
         {
             armsController.PulseRightHand();
             armsController.ReleaseSpell();
+            armsController.HoldPS.Stop();
+            var charge = ((ChargingEventArgs)args).Charge;
+            var main = armsController.FeedPS.ParticlesColor = charge.CorrespondingColor();
+            var token = new CoroutineCancellationToken();
+            StartCoroutine(token.TimedCancel(.2f));
+            armsController.FeedPS.StartChannel(WizardInput.GetCurrentInteractable().transform, token);
             Debug.Log("Animation for discharge hit showed");
         }
 
         private void OnDischargeMiss(object sender, EventArgs args)
         {
-
+            armsController.HoldPS.Stop();
+            var charge = ((ChargingEventArgs)args).Charge;
+            var main = armsController.DissipatePS.main;
+            main.startColor = charge.CorrespondingColor();
+            armsController.DissipatePS.Play();
             armsController.PulseRightHand();
             armsController.ReleaseSpell();
             Debug.Log("Animation for discharge miss showed");
