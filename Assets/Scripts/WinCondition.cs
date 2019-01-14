@@ -16,7 +16,7 @@ namespace MastersOfTempest
         protected override void StartServer()
         {
             base.StartServer();
-            //StartCoroutine(WinAfter10secs());
+            StartCoroutine(WinAfter10secs());
             VectorField vectorField = GetComponent<Gamemaster>().GetEnvironmentManager().vectorField;
             winCondition = gameObject.AddComponent<CapsuleCollider>();
             winCondition.center = vectorField.GetCenterWS();
@@ -52,6 +52,7 @@ namespace MastersOfTempest
             if (serverObject.onServer)
             {
                 OnWinServer();
+                gameObject.GetComponent<Gamemaster>().GetEnvironmentManager().envSpawner.RemoveAllObjects();
             }
         }
     }

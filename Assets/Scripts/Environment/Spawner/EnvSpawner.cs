@@ -4,6 +4,7 @@ using UnityEngine;
 using MastersOfTempest.Networking;
 using static MastersOfTempest.EnvironmentNetwork;
 using UnityEngine.SceneManagement;
+using MastersOfTempest.ShipBL;
 
 namespace MastersOfTempest.Environment.Interacting
 {
@@ -134,27 +135,29 @@ namespace MastersOfTempest.Environment.Interacting
 
         private IEnumerator SpawnObject()
         {
-            yield return new WaitForSeconds(spawnRate);
-            RemoveFirstEnvObject();
-
-            Vector3 centerPos = vectorField.GetCenterWS();
-            centerPos.y = 0f;
-            EnvObjectType type;
-            float randomType = Random.Range(0f, spawnProbSum);
-
-            // randomly select type of envObject
-            if (randomType < spawnProbD)
-                type = EnvObjectType.Damaging;
-            else
+            while (spawnRate > 0f)
             {
-                if (randomType < spawnProbS + spawnProbD)
-                    type = EnvObjectType.VoiceChatZone;
-                else
-                    type = EnvObjectType.DangerZone;
-            }
+                RemoveFirstEnvObject();
 
-            InstantiateNewObject(true, centerPos, Quaternion.identity, type, 0);
-            StartCoroutine(SpawnObject());
+                Vector3 centerPos = vectorField.GetCenterWS();
+                centerPos.y = 0f;
+                EnvObjectType type;
+                float randomType = Random.Range(0f, spawnProbSum);
+
+                // randomly select type of envObject
+                if (randomType < spawnProbD)
+                    type = EnvObjectType.Damaging;
+                else
+                {
+                    if (randomType < spawnProbS + spawnProbD)
+                        type = EnvObjectType.VoiceChatZone;
+                    else
+                        type = EnvObjectType.DangerZone;
+                }
+
+                InstantiateNewObject(true, centerPos, Quaternion.identity, type, 0);
+                yield return new WaitForSeconds(spawnRate);
+            }
         }
 
         /*
@@ -172,6 +175,16 @@ namespace MastersOfTempest.Environment.Interacting
         {
             envObjects[idx].SetVelocity(vectorField.GetVectorAtPos(envObjects[idx].transform.position));
         }*/
+        
+        public void RemoveAllObjects()
+        {
+            spawnRate = -1f;
+            maxNumObjects = 0;
+            for (int i = envObjects.Count; i >= 0; i--)
+            {
+                RemoveFirstEnvObject();
+            }
+        }
 
         private void DampVelocity(int idx)
         {
