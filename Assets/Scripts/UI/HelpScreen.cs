@@ -17,7 +17,7 @@ public class HelpScreen : MonoBehaviour
 
         hintText = hint.GetComponentInChildren<Text>();
 
-        StartCoroutine(ShowHint(3));
+        StartCoroutine(ShowHint(5));
     }
 
     void Update()
