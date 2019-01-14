@@ -32,6 +32,17 @@ namespace MastersOfTempest
             animator.SetTrigger("OpenOrClose");
         }
 
+        public void OpenOrClose(float delay)
+        {
+            StartCoroutine(WaitToOpen(delay));
+        }
+
+        private IEnumerator WaitToOpen(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            OpenOrClose();
+        }
+
         public void NextPage()
         {
             if (!inTransition && page < pageTextures.Length - 2)

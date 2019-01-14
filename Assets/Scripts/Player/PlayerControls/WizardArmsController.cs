@@ -21,13 +21,17 @@ namespace MastersOfTempest.PlayerControls
         *  trigger pulse : "trigger" works like a onetime bool. It will let the animation "Pulse" loop one time, bevor leaving it again
         * */
         public Transform SuckPoint;
+        public Spellbook book;
         private Animator anim;
-
         void Start()
         {
             if (SuckPoint == null)
             {
                 throw new InvalidOperationException($"{nameof(SuckPoint)} is not specified!");
+            }
+            if (book == null)
+            {
+                throw new InvalidOperationException($"{nameof(book)} is not specified!");
             }
             anim = GetComponent<Animator>();
             if (anim == null)
@@ -37,15 +41,40 @@ namespace MastersOfTempest.PlayerControls
             anim.Play("Armature|Idle");
         }
 
+        public void ToggleBook()
+        {
+            if(anim.GetBool("holdBook"))
+            {
+                HideBook();
+            }
+            else
+            {
+                TakeOutBook();
+            }
+        }
+
+        public void NextPage()
+        {
+            book.NextPage();
+        }
+        public void PrevPage()
+        {
+            book.PreviousPage();
+        }
+
         public void TakeOutBook()
         {
             anim.SetBool("holdBook", true);
             anim.CrossFade("Armature|GrabBook", 0.5f);
+            //If we wait a bit before showing the book opening animation, it looks cooler
+            const float DelayBeforeOpeningTheBook = 1.1f;
+            book.OpenOrClose(DelayBeforeOpeningTheBook);
         }
 
         public void HideBook()
         {
             anim.SetBool("holdBook", false);
+            book.OpenOrClose();
         }
 
         public void HoldSpell()

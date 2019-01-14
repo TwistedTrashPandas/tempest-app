@@ -27,6 +27,9 @@ namespace MastersOfTempest.PlayerControls
             WizardInput.ChargingCompleted += OnChargeCompleted;
             WizardInput.DischargeHit += OnDischargeHit;
             WizardInput.DischargeMiss += OnDischargeMiss;
+            WizardInput.ShowHideBook += OnShowHideBook;
+            WizardInput.NextPage += OnNextPage;
+            WizardInput.PreviousPage += OnPreviousPage;
         }
 
         private CoroutineCancellationToken chargeCancellationToken;
@@ -40,6 +43,21 @@ namespace MastersOfTempest.PlayerControls
                 ps.Particles.StartChannel(armsController.SuckPoint, chargeCancellationToken);
             }
             Debug.Log("Animation for charge starting showed");
+        }
+
+        private void OnShowHideBook(object sender, EventArgs args)
+        {
+            armsController.ToggleBook();
+        }
+
+        private void OnNextPage(object sender, EventArgs args)
+        {
+            armsController.NextPage();
+        }
+
+        private void OnPreviousPage(object sender, EventArgs args)
+        {
+            armsController.PrevPage();
         }
 
         private void OnChargeCancelled(object sender, EventArgs args)

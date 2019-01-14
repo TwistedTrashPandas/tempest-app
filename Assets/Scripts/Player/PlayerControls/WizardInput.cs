@@ -16,6 +16,10 @@ namespace MastersOfTempest.PlayerControls
         public event EventHandler DischargeHit;
         public event EventHandler DischargeMiss;
 
+        public event EventHandler ShowHideBook;
+        public event EventHandler NextPage;
+        public event EventHandler PreviousPage;
+
         private PlayerAction currentAction;
         private bool isActive = true;
 
@@ -32,6 +36,11 @@ namespace MastersOfTempest.PlayerControls
 
         private const int MouseToCharge = 0;
         private const float DischargeDistance = float.MaxValue;
+
+        private const KeyCode TakeOutBook = KeyCode.Q;
+        private const KeyCode NextPageBook = KeyCode.R;
+        private const KeyCode PreviousPageBook = KeyCode.E;
+        private bool bookOpen;
         private float chargingTime;
         private float timeToCharge = 2f;
         /*
@@ -95,12 +104,33 @@ namespace MastersOfTempest.PlayerControls
 
         private void Update()
         {
+            CheckBookInput();
             switch (currentState)
             {
                 case WizardState.Idle: break;
                 case WizardState.Charging: ChargingUpdate(); break;
                 case WizardState.Charged: ChargedUpdate(); break;
                 default: throw new InvalidOperationException($"Unexpected {nameof(WizardState)} value of {currentState}");
+            }
+        }
+
+        private void CheckBookInput()
+        {
+            if(Input.GetKeyDown(TakeOutBook))
+            {
+                bookOpen ^= true;
+                ShowHideBook?.Invoke(this, EventArgs.Empty);
+            }
+            else if(bookOpen)
+            {
+                if(Input.GetKeyDown(NextPageBook))
+                {
+                    NextPage?.Invoke(this, EventArgs.Empty);
+                }
+                else if(Input.GetKeyDown(PreviousPageBook))
+                {
+                    PreviousPage?.Invoke(this, EventArgs.Empty);
+                }
             }
         }
 
