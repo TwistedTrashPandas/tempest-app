@@ -98,4 +98,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 2
-  overallDestructionThreshold: 0.65
+  overallDestructionThreshold: 0.6
+  loseText: {fileID: 0}
