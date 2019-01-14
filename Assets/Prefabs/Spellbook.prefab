@@ -340,18 +340,18 @@ MonoBehaviour:
   frontPage: {fileID: 226428178}
   backPage: {fileID: 1558917871}
   pageTextures:
-  - {fileID: 2800000, guid: d6bd01df3cf734968a777178d6efccfc, type: 3}
-  - {fileID: 2800000, guid: 6f1f9334b85744e4886aabac8c804c95, type: 3}
-  - {fileID: 2800000, guid: d8d40d853d0e74933b9972345c9754b7, type: 3}
-  - {fileID: 2800000, guid: 3afe6b424fcfa4c7fbaf00c7d5ef3c2d, type: 3}
-  - {fileID: 2800000, guid: fd1a9d7901d2147bc835371635efc99e, type: 3}
-  - {fileID: 2800000, guid: 1f5c2345a905c40d0a98d50564f2a9cc, type: 3}
-  - {fileID: 2800000, guid: cef0ec47bcf734a69a528c106866270b, type: 3}
-  - {fileID: 2800000, guid: fdbadb09b2e34482f8fc2ed405a2af6f, type: 3}
-  - {fileID: 2800000, guid: 86b11822d068a494e88a23820f7785cb, type: 3}
-  - {fileID: 2800000, guid: 9ca5f4874aab04a0f86ae904722b111a, type: 3}
-  - {fileID: 2800000, guid: 3176d4ba9d8e0405aa75e7a300ce2f05, type: 3}
-  - {fileID: 2800000, guid: 276a782db4879435783089977703eec8, type: 3}
+  - {fileID: 2800000, guid: 2976a06c6ffdd504bb9154cd69caaa0e, type: 3}
+  - {fileID: 2800000, guid: 7ab140b86e246fd41b33f28490966664, type: 3}
+  - {fileID: 2800000, guid: 4ef32456819816c40a55cd1149062701, type: 3}
+  - {fileID: 2800000, guid: bd72baeb1aa34aa49bfa7cc071613431, type: 3}
+  - {fileID: 2800000, guid: 8af5f1df7dddd4d44898b32cb83ae01b, type: 3}
+  - {fileID: 2800000, guid: e44ce7acdd33bed4590fca572266b2fe, type: 3}
+  - {fileID: 2800000, guid: 9f7a05e5537703445b88404dd6660ce7, type: 3}
+  - {fileID: 2800000, guid: c6748ae8a657ee341925df96e454dc98, type: 3}
+  - {fileID: 2800000, guid: 26d0219ad71c12b489a9206b3fb92b90, type: 3}
+  - {fileID: 2800000, guid: 077a70148c929ba46aaaa6644a7f0e70, type: 3}
+  - {fileID: 2800000, guid: 489b65de81d0ac743a1f83ac8b16fe69, type: 3}
+  - {fileID: 2800000, guid: c825a5ee0231f0742b0827d73082d972, type: 3}
 --- !u!1 &879630219
 GameObject:
   m_ObjectHideFlags: 0
