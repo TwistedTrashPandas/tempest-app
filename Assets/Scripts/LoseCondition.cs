@@ -88,7 +88,7 @@ namespace MastersOfTempest
 
         private void OnApplicationQuit()
         {
-            postProcessVolume.profile.GetSetting<ColorGrading>().saturation.Override(0f);
+            //postProcessVolume.profile.GetSetting<ColorGrading>().saturation.Override(0f);
         }
     }
 }

@@ -16,14 +16,7 @@ namespace MastersOfTempest
         protected override void StartServer()
         {
             base.StartServer();
-            //StartCoroutine(WinAfter10secs());
-            VectorField vectorField = GetComponent<Gamemaster>().GetEnvironmentManager().vectorField;
-            winCondition = gameObject.AddComponent<CapsuleCollider>();
-            winCondition.center = vectorField.GetCenterWS();
-            winCondition.height = vectorField.GetCellSize() * vectorField.GetDimensions().y * 2f;
-            winCondition.direction = 1;
-            winCondition.isTrigger = true;
-            winCondition.radius = radiusCollider;
+            StartCoroutine(InitAfter5Seconds());
         }
         
         public void OnWinServer()
@@ -46,13 +39,18 @@ namespace MastersOfTempest
                 OnWinServer();
         }
 
-        private IEnumerator WinAfter10secs()
+        private IEnumerator InitAfter5Seconds()
         {
-            yield return new WaitForSeconds(10f);
+            yield return new WaitForSeconds(5f);
             if (serverObject.onServer)
             {
-                OnWinServer();
-                gameObject.GetComponent<Gamemaster>().GetEnvironmentManager().envSpawner.RemoveAllObjects();
+                VectorField vectorField = GetComponent<Gamemaster>().GetEnvironmentManager().vectorField;
+                winCondition = gameObject.AddComponent<CapsuleCollider>();
+                winCondition.center = vectorField.GetCenterWS();
+                winCondition.height = vectorField.GetCellSize() * vectorField.GetDimensions().y * 2f;
+                winCondition.direction = 1;
+                winCondition.isTrigger = true;
+                winCondition.radius = radiusCollider;
             }
         }
     }
