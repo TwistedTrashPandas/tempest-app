@@ -32,6 +32,7 @@ namespace MastersOfTempest.PlayerControls
         protected void Start()
         {
             style = new GUIStyle();
+            style.font = Resources.Load<Font>("Fonts/im-fell-english/IMFeENit29P");
             style.fontSize = 50;
             style.richText = true;
             style.alignment = TextAnchor.MiddleCenter;
