@@ -5,13 +5,13 @@ using UnityEngine;
 
 namespace MastersOfTempest.PlayerControls.Spellcasting
 {
-    public class AccelerateSpell : Spell
+    public class SteerUpSpell : Spell
     {
         public override Charge[] SpellSequence
         {
             get
             {
-                return new Charge[] {Charge.Wind, Charge.Wind, Charge.Fire, Charge.Fire};
+                return new Charge[] {Charge.Water, Charge.Fire, Charge.Fire, Charge.Wind};
             }
         }
 
@@ -19,13 +19,13 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
         {
             get
             {
-                return "Tailwind";
+                return "Go UP!";
             }
         }
 
         public override PlayerAction GetPlayerAction()
         {
-            return new SteerShip(SteerShip.SteeringDirection.Forward);
+            return new SteerShip(SteerShip.SteeringDirection.Up);
         }
     }
 }

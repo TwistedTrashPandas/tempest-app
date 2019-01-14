@@ -328,10 +328,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   recepticles:
-  - {fileID: 1083948808}
-  - {fileID: 1083948807}
   - {fileID: 1083948806}
   - {fileID: 1083948805}
+  - {fileID: 1083948808}
+  - {fileID: 1083948807}
 --- !u!4 &1081014776
 Transform:
   m_ObjectHideFlags: 0

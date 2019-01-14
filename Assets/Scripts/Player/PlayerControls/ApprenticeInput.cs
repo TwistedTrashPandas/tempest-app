@@ -26,6 +26,19 @@ namespace MastersOfTempest.PlayerControls
         private TeleportArea teleportArea = null;
         private bool teleported = false;
 
+        private GUIStyle style;
+        private string text = "";
+
+        protected void Start()
+        {
+            style = new GUIStyle();
+            style.fontSize = 50;
+            style.richText = true;
+            style.alignment = TextAnchor.MiddleCenter;
+            style.normal.textColor = Color.white;
+            style.normal.background = Texture2D.whiteTexture;
+        }
+
         protected void Update()
         {
             if (Input.GetKeyDown(KeyCode.Mouse1))
@@ -36,9 +49,18 @@ namespace MastersOfTempest.PlayerControls
             {
                 animations.Meditate();
             }
-            else if (teleported && Input.GetKeyDown(KeyCode.E))
+            else if (teleported)
             {
-                Teleport(teleportArea);
+                if (!(interactionsController.CurrentlyLookedAt is TeleportArea))
+                {
+                    text = "<b>E</b>\nTeleport Back";
+                }
+
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    Teleport(teleportArea);
+                    text = "";
+                }
             }
         }
 
@@ -103,9 +125,16 @@ namespace MastersOfTempest.PlayerControls
 
         private void OnNewInteractable(object sender, EventArgs args)
         {
-            if (((InteractionEventArgs)args).InteractableObject is TeleportArea)
+            InteractablePart interactablePart = ((InteractionEventArgs)args).InteractableObject;
+
+            if (interactablePart is TeleportArea)
             {
                 ((InteractionEventArgs)args).InteractableObject.GetComponent<MeshRenderer>().enabled = true;
+                text = "<b>E</b>\nTeleport";
+            }
+            else if (interactablePart is RepairArea)
+            {
+                text = "<b>Left Mouse</b>\nRepair";
             }
         }
 
@@ -120,6 +149,8 @@ namespace MastersOfTempest.PlayerControls
             {
                 ((InteractionEventArgs)args).InteractableObject.GetComponent<MeshRenderer>().enabled = false;
             }
+
+            text = "";
         }
 
         public void Teleport (TeleportArea target)
@@ -145,6 +176,19 @@ namespace MastersOfTempest.PlayerControls
             // Send message to repair parts from the ShipPartManager
             FindObjectOfType<Ship>().RepairShipPartAreaOnServer(target.shipPartArea, 0.2f);
             animations.Repair();
+        }
+
+        private void OnGUI()
+        {
+            if (text.Length > 0)
+            {
+                GUI.backgroundColor = new Color(0.1f, 0.1f, 0.1f);
+
+                GUIContent content = new GUIContent(text);
+                Vector2 size = style.CalcSize(content);
+
+                GUI.Label(new Rect((Screen.width / 2) - (size.x / 2), Screen.height - (size.y + 50) , size.x + 10, size.y + 10), content, style);
+            }
         }
     }
 }

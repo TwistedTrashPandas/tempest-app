@@ -11,7 +11,7 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
         {
             get
             {
-                return new Charge[] {Charge.Fire, Charge.Fire, Charge.Earth, Charge.Water};
+                return new Charge[] {Charge.Earth, Charge.Water, Charge.Earth, Charge.Wind};
             }
         }
 
