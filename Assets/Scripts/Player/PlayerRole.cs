@@ -67,7 +67,7 @@ namespace MastersOfTempest.PlayerControls {
             {
                 case PlayerRole.Wizard: return GameObject.FindGameObjectWithTag("WizardSpawn");
                 case PlayerRole.Apprentice: return GameObject.FindGameObjectWithTag("ApprenticeSpawn");
-                case PlayerRole.Spectator: return null;
+                case PlayerRole.Spectator: return GameObject.FindGameObjectWithTag("SpectatorSpawn");
                 default: throw new InvalidOperationException($"Unexpected {nameof(PlayerRole)} value of {role}");
             }
         }
