@@ -5,7 +5,7 @@ namespace MastersOfTempest.PlayerControls
 {
     public class SteerShip : PlayerAction
     {
-        const float SteeringForceValue = 5000f;
+        const float SteeringForceValue = 10000f;
         public enum SteeringDirection
         {
             Left,
@@ -27,8 +27,8 @@ namespace MastersOfTempest.PlayerControls
             var ship = context.GetShip();
             switch (direction)
             {
-                case SteeringDirection.Left: forceDirection = -ship.transform.right; break;
-                case SteeringDirection.Right: forceDirection = ship.transform.right; break;
+                case SteeringDirection.Left: forceDirection = ship.transform.right; break;
+                case SteeringDirection.Right: forceDirection = -ship.transform.right; break;
                 case SteeringDirection.Forward: forceDirection = ship.transform.forward; break;
                 case SteeringDirection.Backward: forceDirection = -ship.transform.forward; break;
                 case SteeringDirection.Up: forceDirection = ship.transform.up; break;
