@@ -99,4 +99,4 @@ Material:
     - _DistortSpeed: {r: 2.5, g: 0.2, b: 10, a: 0.05}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Tiling: {r: 800, g: 800, b: 8, a: 8}
-    - _TintColor: {r: 0.044455323, g: 0.3490566, b: 0.051930223, a: 1}
+    - _TintColor: {r: 0.018912425, g: 0.16037738, b: 0.022539722, a: 1}

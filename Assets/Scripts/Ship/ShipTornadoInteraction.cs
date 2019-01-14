@@ -38,7 +38,8 @@ namespace MastersOfTempest.ShipBL
             if (vectorField != null && rb != null)
             {
                 // apply force depending on position in vectorfield and adjust viewing direction accordingly
-                targetForce = vectorField.GetVectorAtPos(transform.position) + pullStrength * (vectorField.GetCenterWS() - transform.position);
+                targetForce = vectorField.GetVectorAtPos(transform.position);
+                targetForce = targetForce * (1.0f - pullStrength) + pullStrength * (vectorField.GetCenterWS() - transform.position).normalized * targetForce.magnitude;
                 targetForce.y = 0f;
                 targetView = rb.velocity.normalized;
                 targetView.y = 0f;

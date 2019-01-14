@@ -21,7 +21,7 @@ namespace MastersOfTempest.Environment.Interacting
         {
             if (other.gameObject.tag == "Ship")
             {
-                voiceChatZoneNetwork.SetVoiceChatZoneType((uint)zoneType);
+                voiceChatZoneNetwork.SetVoiceChatZoneType((int)zoneType);
             }
         }
 
@@ -29,7 +29,7 @@ namespace MastersOfTempest.Environment.Interacting
         {
             if (other.gameObject.tag == "Ship")
             {
-                voiceChatZoneNetwork.SetVoiceChatZoneType((uint)VoiceChatZoneType.Normalized);
+                voiceChatZoneNetwork.SetVoiceChatZoneType((int)VoiceChatZoneType.Normalized);
             }
         }
     }

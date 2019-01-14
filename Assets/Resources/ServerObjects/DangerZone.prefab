@@ -360,7 +360,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 6
+      scalar: 10
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -941,7 +941,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 250
+      scalar: 400
       minScalar: 10
       maxCurve:
         serializedVersion: 2

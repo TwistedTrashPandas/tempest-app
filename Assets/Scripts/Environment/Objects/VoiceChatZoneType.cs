@@ -5,8 +5,8 @@ namespace MastersOfTempest.Environment.Interacting
     {
         Distortion = 1,
         LowPitch = 2,
-        HighPitch = 4,
-        Echo = 8,
-        Normalized = 16
+        HighPitch = 3,
+        Echo = 4,
+        Normalized = 5
     };
 }

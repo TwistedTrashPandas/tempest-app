@@ -202,7 +202,7 @@ namespace MastersOfTempest.Environment.Interacting
                 switch (type)
                 {
                     case EnvObjectType.Damaging:
-                        float randomSize = Random.Range(1f, 2.0f);
+                        float randomSize = Random.Range(1f, 2.5f);
                         localScale = new Vector3(randomSize, randomSize, randomSize);
                         prefabNum = Mathf.FloorToInt(Random.Range(0f, damagingPrefabs.Length - Mathf.Epsilon));
                         position.y = Random.Range(0f, dims.y * cellSize);
@@ -210,7 +210,7 @@ namespace MastersOfTempest.Environment.Interacting
                         // hard coded so far larger rocks are slower but deal more damage
                         envObjects[envObjects.Count - 1].GetComponent<Damaging>().damage = 0.25f * randomSize;
                         envObjects[envObjects.Count - 1].GetComponent<Damaging>().envSpawner = this;
-                        envObjects[envObjects.Count - 1].GetComponent<Rigidbody>().AddTorque(new Vector3(Random.Range(-1f,1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f)) * rockRotSpeed);
+                        envObjects[envObjects.Count - 1].GetComponent<Rigidbody>().angularVelocity = (new Vector3(Random.Range(-1f,1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f)) * rockRotSpeed);
                         envObjects[envObjects.Count - 1].speed *= 1f / randomSize;
                         if (Random.Range(0, 10) == 0)
                         {
@@ -219,6 +219,7 @@ namespace MastersOfTempest.Environment.Interacting
                         }
                         else
                             envObjects[envObjects.Count - 1].moveType = MoveType.ForceDirect; // (MoveType) Random.Range(0,3);
+                        envObjects[envObjects.Count - 1].transform.localScale = localScale;
                         break;
                     case EnvObjectType.DangerZone:
                         initialPos = new Vector3(Random.Range(0, dims.x) * cellSizeH, Random.Range(dims.y * 0.1f, 0.8f * dims.y)* cellSize, Random.Range(0, dims.z)* cellSizeH) + new Vector3(0.5f,0.5f,0.5f);
@@ -237,7 +238,6 @@ namespace MastersOfTempest.Environment.Interacting
                 }
                 envObjects[envObjects.Count - 1].transform.parent = objectContainer.transform;
                 envObjects[envObjects.Count - 1].GetComponent<EnvObject>().listIndex = envObjects.Count - 1;
-                envObjects[envObjects.Count - 1].transform.localScale = localScale;
                 envObjects[envObjects.Count - 1].relativeTargetPos = GetRandomPointOnSphere(minRadiusT, maxRadiusT);
                 // prefabnumber only important for client to choose correct prefab for initialization
             }

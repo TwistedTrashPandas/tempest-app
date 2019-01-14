@@ -84,7 +84,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 1
-  radiusCollider: 10
+  radiusCollider: 60
 --- !u!114 &910838310309382196
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -98,4 +98,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 2
-  overallDestructionThreshold: 0.9
+  overallDestructionThreshold: 0.8
