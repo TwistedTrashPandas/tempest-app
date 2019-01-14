@@ -291,7 +291,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   angularMomentumFactor: 0.5
   velocityDamp: 1
-  pullStrength: 0.25
+  pullStrength: 0.15
 --- !u!114 &3798610760229167962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13111,11 +13111,16 @@ PrefabInstance:
     - target: {fileID: 20669329079659068, guid: 13b5913f603625242870c830094ccd32,
         type: 3}
       propertyPath: far clip plane
-      value: 40
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 20669329079659068, guid: 13b5913f603625242870c830094ccd32,
         type: 3}
       propertyPath: m_HDR
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 20669329079659068, guid: 13b5913f603625242870c830094ccd32,
+        type: 3}
+      propertyPath: m_AllowMSAA
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
