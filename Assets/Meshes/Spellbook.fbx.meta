@@ -1,0 +1,186 @@
+fileFormatVersion: 2
+guid: c310d6ead8c4f0b4fa80f5dac8a3c996
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: Back
+    100002: Front
+    100004: Left
+    100006: Left Cover
+    100008: Left Page
+    100010: Page
+    100012: Right
+    100014: Right Cover
+    100016: Right Page
+    100018: //RootNode
+    100020: Spine
+    400000: Back
+    400002: Front
+    400004: Left
+    400006: Left Cover
+    400008: Left Page
+    400010: Page
+    400012: Right
+    400014: Right Cover
+    400016: Right Page
+    400018: //RootNode
+    400020: Spine
+    2100000: No Name
+    2100002: Material
+    2300000: Left Cover
+    2300002: Right Cover
+    2300004: Spine
+    3300000: Left Cover
+    3300002: Right Cover
+    3300004: Spine
+    4300000: Spine
+    4300002: Right
+    4300004: Right Page
+    4300006: Right Cover
+    4300008: Left
+    4300010: Left Cover
+    4300012: Left Page
+    4300014: Front
+    4300016: Back
+    7400000: Next Page
+    7400002: Spine|Close Book
+    7400004: Spine|Left CoverAction
+    7400006: Spine|Next Page
+    7400008: Spine|Open/Close Book
+    7400010: Spine|Right CoverAction
+    7400012: Spine|Spellbook.001Action
+    7400014: Spine|SpellbookAction
+    7400016: Spine|SpineAction
+    7400018: Right|Close Book
+    7400020: Right|Left CoverAction
+    7400022: Right|Next Page
+    7400024: Right|Open/Close Book
+    7400026: Right|Right CoverAction
+    7400028: Right|Spellbook.001Action
+    7400030: Right|SpellbookAction
+    7400032: Right|SpineAction
+    7400034: Right Cover|Close Book
+    7400036: Right Cover|Left CoverAction
+    7400038: Right Cover|Next Page
+    7400040: Right Cover|Open/Close Book
+    7400042: Right Cover|Right CoverAction
+    7400044: Right Cover|Spellbook.001Action
+    7400046: Right Cover|SpellbookAction
+    7400048: Right Cover|SpineAction
+    7400050: Left|Close Book
+    7400052: Left|Left CoverAction
+    7400054: Left|Next Page
+    7400056: Left|Open/Close Book
+    7400058: Left|Right CoverAction
+    7400060: Left|Spellbook.001Action
+    7400062: Left|SpellbookAction
+    7400064: Left|SpineAction
+    7400066: Left Cover|Close Book
+    7400068: Left Cover|Left CoverAction
+    7400070: Left Cover|Next Page
+    7400072: Left Cover|Open/Close Book
+    7400074: Left Cover|Right CoverAction
+    7400076: Left Cover|Spellbook.001Action
+    7400078: Left Cover|SpellbookAction
+    7400080: Left Cover|SpineAction
+    7400082: Page|Close Book
+    7400084: Page|Left CoverAction
+    7400086: Page|Next Page
+    7400088: Page|Open/Close Book
+    7400090: Page|Right CoverAction
+    7400092: Page|Spellbook.001Action
+    7400094: Page|SpellbookAction
+    7400096: Page|SpineAction
+    9500000: //RootNode
+    13700000: Back
+    13700002: Front
+    13700004: Left
+    13700006: Left Page
+    13700008: Right
+    13700010: Right Page
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 0.01
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
