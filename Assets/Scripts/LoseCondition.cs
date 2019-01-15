@@ -41,9 +41,9 @@ namespace MastersOfTempest
             guiStyle.alignment = TextAnchor.MiddleCenter;
             guiStyle.fontSize = 10;
             guiStyle.font = loseFont;
-            
+
             guiStyle.normal.textColor = new Color(0.6f, 0f, 0f);
-            ClientLose();
+            //ClientLose();
         }
 
         private IEnumerator GetShipPartManager()
@@ -79,7 +79,7 @@ namespace MastersOfTempest
             {
                 ClientLose();
             }
-        }  
+        }
 
         private void ClientLose()
         {
@@ -96,13 +96,13 @@ namespace MastersOfTempest
         {
             if (toggleLossText)
             {
-                GUI.Label(new Rect(Screen.width / 2f - 100f, Screen.height / 2f - 100f, Screen.width / 10f, Screen.height/10f), guiContent, guiStyle);
+                GUI.Label(new Rect(Screen.width / 2f - 80f, Screen.height / 2f - 100f, Screen.width / 10f, Screen.height / 10f), guiContent, guiStyle);
 
                 GUIStyle buttonStyle = GUI.skin.GetStyle("Button");
                 buttonStyle.fontSize = 40;
                 buttonStyle.font = loseFont;
 
-                if (GUI.Button(new Rect(Screen.width * 0.75f, Screen.height * 0.8f , Screen.width/6f, Screen.height/18f), "Return to Lobby", buttonStyle))
+                if (GUI.Button(new Rect(Screen.width * 0.75f, Screen.height * 0.8f, Screen.width / 6f, Screen.height / 18f), "Return to Lobby", buttonStyle))
                 {
                     SceneManager.LoadScene("Lobby");
                 }
@@ -118,9 +118,9 @@ namespace MastersOfTempest
 
         private IEnumerator ScreenSaturation(ColorGrading colorGrading)
         {
-            while (colorGrading.saturation.GetValue<float>() > -100f)
+            while (colorGrading.saturation.GetValue<float>() > -100f || guiStyle.fontSize < 250)
             {
-                colorGrading.saturation.Override(colorGrading.saturation.GetValue<float>() - 1.5f);
+                colorGrading.saturation.Override(Mathf.Max(colorGrading.saturation.GetValue<float>() - 1.5f, -100f));
                 guiStyle.fontSize += 1;
                 yield return new WaitForEndOfFrame();
             }
@@ -140,14 +140,16 @@ namespace MastersOfTempest
         {
             if (shipPartManager != null)
             {
-                float [] shipDestruction = shipPartManager.CalculateOverallDestruction();
+                float[] shipDestruction = shipPartManager.CalculateOverallDestruction();
                 int destructedParts = 0;
-                for (int i = 0; i < shipDestruction.Length; i++) {
-                    if (shipDestruction[i] >= overallDestructionThreshold) {
-                        destructedParts++; 
+                for (int i = 0; i < shipDestruction.Length; i++)
+                {
+                    if (shipDestruction[i] >= overallDestructionThreshold)
+                    {
+                        destructedParts++;
                     }
                 }
-                if(destructedParts > 1)
+                if (destructedParts > 1)
                     OnLoseServer();
             }
             else
