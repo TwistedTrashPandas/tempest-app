@@ -9,8 +9,13 @@ namespace MastersOfTempest.PlayerControls
         public Animator leftHandAnimator;
         public Animator rightHandAnimator;
         public Transform meditate;
+        public AudioClip repairClip;
+        public AudioClip throwClip;
+        public AudioClip meditateClip;
+        public AudioClip teleportClip;
 
         private Hammer hammer;
+        private AudioSource audioSource;
         private bool isRepairing = false;
         private bool isThrowing = false;
         private bool isMeditating = false;
@@ -18,6 +23,7 @@ namespace MastersOfTempest.PlayerControls
         protected void Start()
         {
             hammer = GetComponentInChildren<Hammer>();
+            audioSource = GetComponent<AudioSource>();
         }
 
         public void Repair ()
@@ -32,7 +38,7 @@ namespace MastersOfTempest.PlayerControls
         {
             if (!IsBusy())
             {
-                StartCoroutine(ThrowAnimation(firstPersonCamera, 50, 1.0f, -1000));
+                StartCoroutine(ThrowAnimation(firstPersonCamera, 30, 1.0f, -1000));
             }
         }
 
@@ -42,6 +48,11 @@ namespace MastersOfTempest.PlayerControls
             {
                 StartCoroutine(MeditateAnimation(0.9f));
             }
+        }
+
+        public void Teleport ()
+        {
+            audioSource.PlayOneShot(teleportClip);
         }
 
         private bool IsBusy ()
@@ -55,6 +66,7 @@ namespace MastersOfTempest.PlayerControls
             rightHandAnimator.SetTrigger("Repair");
             yield return new WaitForSeconds(time / 2);
             hammer.charge = Mathf.Clamp01(hammer.charge - 0.2f);
+            audioSource.PlayOneShot(repairClip);
             yield return new WaitForSeconds(time / 2);
             isRepairing = false;
         }
@@ -64,6 +76,7 @@ namespace MastersOfTempest.PlayerControls
             isMeditating = true;
             leftHandAnimator.SetTrigger("Meditate");
             rightHandAnimator.SetTrigger("Meditate");
+            audioSource.PlayOneShot(meditateClip);
 
             float t = 0;
             float startCharge = hammer.charge;
@@ -107,6 +120,7 @@ namespace MastersOfTempest.PlayerControls
             Transform startParent = hammer.transform.parent;
             Vector3 startPosition = hammer.transform.localPosition;
             Vector3 startScale = hammer.transform.localScale;
+            Vector3 direction = firstPersonCamera.transform.forward;
             Quaternion startRotation = hammer.transform.localRotation;
 
             float t = 0;
@@ -115,9 +129,13 @@ namespace MastersOfTempest.PlayerControls
             hammer.transform.SetParent(firstPersonCamera.transform, true);
             Vector3 localScale = hammer.transform.lossyScale;
 
+            audioSource.Play();
+            audioSource.PlayOneShot(throwClip, 2);
+
             while (t < time)
             {
-                Vector3 endPosition = firstPersonCamera.transform.position + distance * firstPersonCamera.transform.forward;
+                direction = Vector3.Lerp(direction, firstPersonCamera.transform.forward, Time.deltaTime);
+                Vector3 endPosition = firstPersonCamera.transform.position + distance * direction;
 
                 hammer.transform.position = Vector3.Lerp(startParent.TransformPoint(startPosition), endPosition, t / time);
                 hammer.transform.RotateAround(hammer.center.position, hammer.transform.right, rotationSpeed * Time.deltaTime);
@@ -132,7 +150,8 @@ namespace MastersOfTempest.PlayerControls
 
             while (t < time)
             {
-                Vector3 endPosition = firstPersonCamera.transform.position + distance * firstPersonCamera.transform.forward;
+                direction = Vector3.Lerp(direction, firstPersonCamera.transform.forward, Time.deltaTime);
+                Vector3 endPosition = firstPersonCamera.transform.position + distance * direction;
 
                 hammer.transform.position = Vector3.Lerp(endPosition, startParent.TransformPoint(startPosition), t / time);
                 hammer.transform.localScale = startScale * (1.0f + (scaleFactor * (1.0f - (t / time))));
@@ -154,6 +173,7 @@ namespace MastersOfTempest.PlayerControls
             hammer.transform.localRotation = startRotation;
             hammer.transform.localScale = startScale;
             hammer.EnableCollider(false);
+            audioSource.Stop();
             isThrowing = false;
         }
     }
