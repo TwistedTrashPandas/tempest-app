@@ -97,8 +97,8 @@ MonoBehaviour:
   removeChildColliders: 0
   removeChildRigidbodies: 1
   setChildCollidersTriggers: 0
---- !u!135 &8491807412834537929
-SphereCollider:
+--- !u!64 &7056275331205017321
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -107,11 +107,12 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.031694133
-  m_Center: {x: 0.0011660857, y: -0.004158389, z: 0.016826566}
---- !u!65 &6731788798677079296
-BoxCollider:
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 4300002, guid: 58e9cc6418e03e24d8b7a8e0c39d5e75, type: 3}
+--- !u!64 &7027077782342722861
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -120,9 +121,10 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.080626935, y: 0.049017202, z: 0.033070203}
-  m_Center: {x: 0.000025166199, y: -0.0023676227, z: -0.0029436287}
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 4300000, guid: 58e9cc6418e03e24d8b7a8e0c39d5e75, type: 3}
 --- !u!1001 &4480058485567495118
 PrefabInstance:
   m_ObjectHideFlags: 0
