@@ -11,8 +11,9 @@ namespace MastersOfTempest
     {
         public delegate void WinAnimation(GameObject ship);
         public static event WinAnimation OnWin;
-        
+        public Font winFont;
         public float radiusCollider = 50f;
+
         private CapsuleCollider winCondition;
         private bool toggleWinText;
 
@@ -42,7 +43,8 @@ namespace MastersOfTempest
             if (toggleWinText)
             {
                 GUIStyle buttonStyle = GUI.skin.GetStyle("Button");
-                buttonStyle.fontSize = 40;
+                buttonStyle.fontSize = 60;
+                buttonStyle.font = winFont;
 
                 if (GUI.Button(new Rect(Screen.width * 0.75f, Screen.height * 0.8f, Screen.width / 6f, Screen.height / 18f), "Return to Lobby", buttonStyle))
                 {
