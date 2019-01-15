@@ -156,6 +156,7 @@ namespace MastersOfTempest.PlayerControls
 
         public void Teleport (TeleportArea target)
         {
+            animations.Teleport();
             bool goBack = teleported && !(interactionsController.CurrentlyLookedAt is TeleportArea);
 
             target.gameObject.GetComponent<TeleportActionNetworked>().TeleportOnServer(GetComponent<ServerObject>().serverID, goBack);
