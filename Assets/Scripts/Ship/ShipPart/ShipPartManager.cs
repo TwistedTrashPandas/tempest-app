@@ -31,6 +31,16 @@ namespace MastersOfTempest.ShipBL
                     interactionAreas[shipparts[i].interactionArea].Add(shipparts[i]); // Add(i);
                     shipparts[i].ShipPartHit += OnShipPartHit;
                     shipparts[i].crashSound = shipPartCrash;
+
+                    for (int j = i + 1; j < shipparts.Length + i; j++)
+                    {
+                        if(shipparts[j % shipparts.Length].interactionArea != shipparts[i].interactionArea)
+                        {
+                            continue;
+                        }
+                        shipparts[i].nextAreaPart = shipparts[j % shipparts.Length];
+                        break;
+                    }
                 }
             }
         }
