@@ -229,10 +229,10 @@ namespace MastersOfTempest.Environment.Interacting
                         Vector3 randOffset;
                         prefabNum = Mathf.FloorToInt(Random.Range(0f, damagingPrefabs.Length - Mathf.Epsilon));
                         envObjects.Add(GameObject.Instantiate(damagingPrefabs[prefabNum], position, orientation).GetComponent<EnvObject>());
-                        if (Random.Range(0, 4) != 0)
+                        if (Random.Range(0, 3) != 0)
                         {
                             randomSize = Random.Range(0.5f, 1.5f);
-                            envObjects[envObjects.Count - 1].moveType = (MoveType)Random.Range(2, 4);
+                            envObjects[envObjects.Count - 1].moveType = (MoveType)((Random.Range(2, 5) >= 3) ? 3 : 2 );
                             envObjects[envObjects.Count - 1].speed *= 0.15f;
                             randOffset = GetRandomPointOnSphere(minRadiusS, maxRadiusS);
                         }
@@ -244,7 +244,7 @@ namespace MastersOfTempest.Environment.Interacting
                             envObjects[envObjects.Count - 1].moveType = (MoveType)Random.Range(0, 3); // MoveType.ForceDirect; // 
                             if((int)envObjects[envObjects.Count - 1].moveType <= 1)
                                 envObjects[envObjects.Count - 1].GetComponent<Rigidbody>().constraints |= (RigidbodyConstraints.FreezePositionY);
-                            randOffset = GetRandomPointOnSphere(minRadiusS * 2f, maxRadiusS);
+                            randOffset = GetRandomPointOnSphere(minRadiusS * 2f, maxRadiusS * 0.9f);
                         }
 
                         // hard coded so far larger rocks are slower but deal more damage
