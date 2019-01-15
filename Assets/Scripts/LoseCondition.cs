@@ -26,6 +26,7 @@ namespace MastersOfTempest
         {
             base.StartServer();
             StartCoroutine(GetShipPartManager());
+            StartCoroutine(LostAfterSecs(5f));
         }
 
         protected override void StartClient()
@@ -52,12 +53,18 @@ namespace MastersOfTempest
             }
         }
 
+        private IEnumerator LostAfterSecs(float time_x)
+        {
+            yield return new WaitForSecondsRealtime(time_x);
+            OnLoseServer();
+        }
+
         public void OnLoseServer()
         {
             byte[] buffer = new byte[1];
             buffer[0] = 1;
             SendToAllClients(buffer, Facepunch.Steamworks.Networking.SendType.Reliable);
-            StartCoroutine(TimeScale());
+            //StartCoroutine(TimeScale());
             StartCoroutine(StartShipExplosion(1f));
         }
 
@@ -76,9 +83,9 @@ namespace MastersOfTempest
             print(postProcessVolume.gameObject.name);
             print(postProcessVolume.profile.GetSetting<ColorGrading>());
             StartCoroutine(ScreenSaturation(postProcessVolume.profile.GetSetting<ColorGrading>()));
-            StartCoroutine(TimeScale());
             toggleLossText = !toggleLossText;
             Physics.gravity = new Vector3(0f, -9.81f, 0f);
+            StartCoroutine(TimeScale());
             //OnLose();
         }
 
