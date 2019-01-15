@@ -22,6 +22,7 @@ namespace MastersOfTempest.ShipBL
         public float destruction;
         public ShipPartStatus status;
         public AudioClip crashSound;
+        public ShipPart nextAreaPart;
 
         private Vector3[] initialMesh;
         private Vector3[] targetMesh;
