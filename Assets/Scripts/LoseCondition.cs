@@ -65,7 +65,7 @@ namespace MastersOfTempest
             buffer[0] = 1;
             SendToAllClients(buffer, Facepunch.Steamworks.Networking.SendType.Reliable);
             //StartCoroutine(TimeScale());
-            StartCoroutine(StartShipExplosion(1f));
+            StartCoroutine(StartShipExplosion(GameClient.Instance.GetPing()));
         }
 
         protected override void OnClientReceivedMessageRaw(byte[] data, ulong steamID)
@@ -116,7 +116,7 @@ namespace MastersOfTempest
         {
             while (colorGrading.saturation.GetValue<float>() > -100f)
             {
-                colorGrading.saturation.Override(colorGrading.saturation.GetValue<float>() - 0.5f);
+                colorGrading.saturation.Override(colorGrading.saturation.GetValue<float>() - 1.5f);
                 guiStyle.fontSize += 1;
                 yield return new WaitForEndOfFrame();
             }
