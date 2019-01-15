@@ -32,7 +32,7 @@ namespace MastersOfTempest.PlayerControls
         {
             if (!IsBusy())
             {
-                StartCoroutine(ThrowAnimation(firstPersonCamera, 50, 1.0f, -1000));
+                StartCoroutine(ThrowAnimation(firstPersonCamera, 30, 1.0f, -1000));
             }
         }
 
@@ -107,6 +107,7 @@ namespace MastersOfTempest.PlayerControls
             Transform startParent = hammer.transform.parent;
             Vector3 startPosition = hammer.transform.localPosition;
             Vector3 startScale = hammer.transform.localScale;
+            Vector3 direction = firstPersonCamera.transform.forward;
             Quaternion startRotation = hammer.transform.localRotation;
 
             float t = 0;
@@ -117,7 +118,8 @@ namespace MastersOfTempest.PlayerControls
 
             while (t < time)
             {
-                Vector3 endPosition = firstPersonCamera.transform.position + distance * firstPersonCamera.transform.forward;
+                direction = Vector3.Lerp(direction, firstPersonCamera.transform.forward, Time.deltaTime);
+                Vector3 endPosition = firstPersonCamera.transform.position + distance * direction;
 
                 hammer.transform.position = Vector3.Lerp(startParent.TransformPoint(startPosition), endPosition, t / time);
                 hammer.transform.RotateAround(hammer.center.position, hammer.transform.right, rotationSpeed * Time.deltaTime);
@@ -132,7 +134,8 @@ namespace MastersOfTempest.PlayerControls
 
             while (t < time)
             {
-                Vector3 endPosition = firstPersonCamera.transform.position + distance * firstPersonCamera.transform.forward;
+                direction = Vector3.Lerp(direction, firstPersonCamera.transform.forward, Time.deltaTime);
+                Vector3 endPosition = firstPersonCamera.transform.position + distance * direction;
 
                 hammer.transform.position = Vector3.Lerp(endPosition, startParent.TransformPoint(startPosition), t / time);
                 hammer.transform.localScale = startScale * (1.0f + (scaleFactor * (1.0f - (t / time))));
