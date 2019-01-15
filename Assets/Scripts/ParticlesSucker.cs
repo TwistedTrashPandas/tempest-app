@@ -26,8 +26,6 @@ namespace MastersOfTempest
         private CoroutineCancellationToken currentToken;
         public void StartChannel(Transform target, CoroutineCancellationToken cancellationToken)
         {
-            var main = ps.main;
-            main.startColor = ParticlesColor;
             if (!currentToken?.CancellationRequested ?? false)
             {
                 throw new InvalidOperationException("Cannot start new channeling before ending previous!");
@@ -39,10 +37,12 @@ namespace MastersOfTempest
         private IEnumerator ChannelCoroutine(Transform target, CoroutineCancellationToken cancellationToken)
         {
             Vector3 vecToTarget;
-            Vector3 transformedPoint;
-            float distToTarget;
+
+            float distToTarget = (target.position - ps.transform.position).magnitude;
+            var main = ps.main;
+            main.startColor = ParticlesColor;
+            float speed = distToTarget / main.startLifetime.constant;
             int length;
-            const float speed = 2f;
             ps.Play();
             if (modifiedParticles == null)
             {
@@ -51,22 +51,10 @@ namespace MastersOfTempest
             while (!cancellationToken.CancellationRequested)
             {
                 length = ps.GetParticles(modifiedParticles);
-                transformedPoint = transform.InverseTransformPoint(target.position);
-                vecToTarget = transformedPoint.normalized * speed;
-                // distToTarget = transformedPoint.sqrMagnitude;
+                vecToTarget = transform.InverseTransformPoint(target.position).normalized * speed;
                 distToTarget = (target.position - transform.position).sqrMagnitude;
                 for (var i = 0; i < length; i++)
                 {
-                    // if (modifiedParticles[i].position == target.position)
-
-                    // if ((transform.TransformPoint(modifiedParticles[i].position) - transform.position).sqrMagnitude > distToTarget)
-                    // // if(Mathf.Abs(Vector3.Dot(modifiedParticles[i].position,transformedPoint)) > transformedPoint.magnitude)
-                    // // if ((modifiedParticles[i].position).sqrMagnitude > distToTarget)
-                    // {
-
-                    //     modifiedParticles[i].remainingLifetime = 0f;
-                    //     continue;
-                    // }
                     modifiedParticles[i].velocity = vecToTarget;
                 }
                 ps.SetParticles(modifiedParticles, length);
