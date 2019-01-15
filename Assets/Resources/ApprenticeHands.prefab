@@ -631,7 +631,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3461710607140799126}
   - component: {fileID: 1197513828801524794}
-  - component: {fileID: 531798532476473014}
   m_Layer: 0
   m_Name: Hand_rigged
   m_TagString: Untagged
@@ -723,20 +722,6 @@ SkinnedMeshRenderer:
     m_Center: {x: -0.9608265, y: -0.33396542, z: 0.40453595}
     m_Extent: {x: 2.0824265, y: 0.9404988, z: 0.9328919}
   m_DirtyAABB: 0
---- !u!114 &531798532476473014
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2708849939559144753}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ae0ce9bb9a7f48aabfbd558e1751e57, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlowColor: {r: 0, g: 0, b: 0, a: 0}
-  LerpFactor: 10
 --- !u!1 &2790871627029972862
 GameObject:
   m_ObjectHideFlags: 0
@@ -1460,7 +1445,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1111122527647670542}
   - component: {fileID: 1705137884986918527}
-  - component: {fileID: 3075309487057093705}
   m_Layer: 0
   m_Name: Hand_rigged.001
   m_TagString: Untagged
@@ -1551,20 +1535,6 @@ SkinnedMeshRenderer:
     m_Center: {x: -1.2111421, y: -0.116536826, z: -0.0069088936}
     m_Extent: {x: 2.3327425, y: 0.7617582, z: 0.31085825}
   m_DirtyAABB: 0
---- !u!114 &3075309487057093705
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3833211022974343663}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ae0ce9bb9a7f48aabfbd558e1751e57, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlowColor: {r: 0, g: 0, b: 0, a: 0}
-  LerpFactor: 10
 --- !u!1 &3933098111590250374
 GameObject:
   m_ObjectHideFlags: 0

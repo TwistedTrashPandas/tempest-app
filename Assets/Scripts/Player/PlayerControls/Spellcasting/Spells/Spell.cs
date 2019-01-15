@@ -9,6 +9,5 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
         public abstract PlayerAction GetPlayerAction();
         public abstract Charge[] SpellSequence { get; }
         public abstract string Name { get; }
-        public abstract Color SpellColor { get; }
     }
 }

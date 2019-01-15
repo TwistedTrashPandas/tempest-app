@@ -27,14 +27,5 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
         {
             return new ShieldShip();
         }
-
-        public override Color SpellColor
-        {
-            get
-            {
-                throw new NotImplementedException();
-                // return Color.white;
-            }
-        }
     }
 }

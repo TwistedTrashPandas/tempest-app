@@ -11,7 +11,7 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
         {
             get
             {
-                return new Charge[] { Charge.Water, Charge.Fire, Charge.Wind, Charge.Earth };
+                return new Charge[] {Charge.Water, Charge.Fire, Charge.Wind, Charge.Earth};
             }
         }
 
@@ -26,14 +26,6 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
         public override PlayerAction GetPlayerAction()
         {
             return new SteerShip(SteerShip.SteeringDirection.Right);
-        }
-
-        public override Color SpellColor
-        {
-            get
-            {
-                return new Color(166 / 255f, 255 / 255f, 77 / 255f);
-            }
         }
     }
 }
