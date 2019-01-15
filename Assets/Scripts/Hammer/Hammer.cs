@@ -55,6 +55,9 @@ public class Hammer : MonoBehaviour
                     break;
                 }
             }
+
+            // Disable collider to avoid multiple collisions
+            EnableCollider(false);
         }
     }
 }
