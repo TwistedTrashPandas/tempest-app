@@ -306,7 +306,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0760f31c2ddddc54fbfcd9c66a4fd440, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2603666197122428451
+--- !u!114 &8462145391374772499
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -762,54 +762,6 @@ Transform:
   m_Father: {fileID: 7860700992257329863}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1709373114855957274
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3190952451376269012}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 0
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 0
---- !u!114 &5943836522738236854
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3317232181085302804}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 0
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 0
 --- !u!1 &4435924182801838393
 GameObject:
   m_ObjectHideFlags: 0
@@ -1518,7 +1470,6 @@ GameObject:
   - component: {fileID: 7952002934638947433}
   - component: {fileID: 7952002934641847305}
   - component: {fileID: 7952002934640848457}
-  - component: {fileID: 3542079550479547320}
   m_Layer: 0
   m_Name: MastRing
   m_TagString: Ship
@@ -1585,30 +1536,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &3542079550479547320
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850057}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850059
 GameObject:
   m_ObjectHideFlags: 0
@@ -1620,7 +1547,6 @@ GameObject:
   - component: {fileID: 7952002934638947435}
   - component: {fileID: 7952002934641847307}
   - component: {fileID: 7952002934640848459}
-  - component: {fileID: 4042017104238558203}
   m_Layer: 0
   m_Name: Mastring
   m_TagString: Ship
@@ -1687,30 +1613,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &4042017104238558203
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850059}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850061
 GameObject:
   m_ObjectHideFlags: 0
@@ -1988,7 +1890,6 @@ GameObject:
   - component: {fileID: 7952002934638947441}
   - component: {fileID: 7952002934641847313}
   - component: {fileID: 7952002934640848465}
-  - component: {fileID: 1124934416170283653}
   m_Layer: 0
   m_Name: RailWailSection.004
   m_TagString: Ship
@@ -2055,30 +1956,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &1124934416170283653
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850065}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850067
 GameObject:
   m_ObjectHideFlags: 0
@@ -2090,7 +1967,6 @@ GameObject:
   - component: {fileID: 7952002934638947443}
   - component: {fileID: 7952002934641847315}
   - component: {fileID: 7952002934640848467}
-  - component: {fileID: 7365065748588723883}
   m_Layer: 0
   m_Name: RailWailSection.005
   m_TagString: Ship
@@ -2157,30 +2033,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &7365065748588723883
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850067}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850069
 GameObject:
   m_ObjectHideFlags: 0
@@ -2192,7 +2044,6 @@ GameObject:
   - component: {fileID: 7952002934638947445}
   - component: {fileID: 7952002934641847317}
   - component: {fileID: 7952002934640848469}
-  - component: {fileID: 2845788422267891662}
   m_Layer: 0
   m_Name: RailWailSection.006
   m_TagString: Ship
@@ -2259,30 +2110,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &2845788422267891662
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850069}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850071
 GameObject:
   m_ObjectHideFlags: 0
@@ -2294,7 +2121,6 @@ GameObject:
   - component: {fileID: 7952002934638947447}
   - component: {fileID: 7952002934641847319}
   - component: {fileID: 7952002934640848471}
-  - component: {fileID: 5083527855980416122}
   m_Layer: 0
   m_Name: RailWailSection.007
   m_TagString: Ship
@@ -2361,30 +2187,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &5083527855980416122
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850071}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850073
 GameObject:
   m_ObjectHideFlags: 0
@@ -2396,7 +2198,6 @@ GameObject:
   - component: {fileID: 7952002934638947449}
   - component: {fileID: 7952002934641847321}
   - component: {fileID: 7952002934640848473}
-  - component: {fileID: 6501892018461431234}
   m_Layer: 0
   m_Name: RailWailSection
   m_TagString: Ship
@@ -2463,30 +2264,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &6501892018461431234
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850073}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850075
 GameObject:
   m_ObjectHideFlags: 0
@@ -2498,7 +2275,6 @@ GameObject:
   - component: {fileID: 7952002934638947451}
   - component: {fileID: 7952002934641847323}
   - component: {fileID: 7952002934640848475}
-  - component: {fileID: 1290189421483908995}
   m_Layer: 0
   m_Name: RailWailSection.001
   m_TagString: Ship
@@ -2565,30 +2341,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &1290189421483908995
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850075}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850077
 GameObject:
   m_ObjectHideFlags: 0
@@ -2600,7 +2352,6 @@ GameObject:
   - component: {fileID: 7952002934638947453}
   - component: {fileID: 7952002934641847325}
   - component: {fileID: 7952002934640848477}
-  - component: {fileID: 8096042904125529772}
   m_Layer: 0
   m_Name: RailWailSection.002
   m_TagString: Ship
@@ -2667,30 +2418,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &8096042904125529772
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850077}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850079
 GameObject:
   m_ObjectHideFlags: 0
@@ -2702,7 +2429,6 @@ GameObject:
   - component: {fileID: 7952002934638947455}
   - component: {fileID: 7952002934641847327}
   - component: {fileID: 7952002934640848479}
-  - component: {fileID: 5049084586580001576}
   m_Layer: 0
   m_Name: RailWailSection.003
   m_TagString: Ship
@@ -2769,30 +2495,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &5049084586580001576
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850079}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850081
 GameObject:
   m_ObjectHideFlags: 0
@@ -2804,7 +2506,6 @@ GameObject:
   - component: {fileID: 7952002934638947329}
   - component: {fileID: 7952002934641847329}
   - component: {fileID: 7952002934640848481}
-  - component: {fileID: 6895866707597966089}
   m_Layer: 0
   m_Name: RailWailSection.012
   m_TagString: Ship
@@ -2871,30 +2572,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &6895866707597966089
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850081}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850083
 GameObject:
   m_ObjectHideFlags: 0
@@ -2906,7 +2583,6 @@ GameObject:
   - component: {fileID: 7952002934638947331}
   - component: {fileID: 7952002934641847331}
   - component: {fileID: 7952002934640848483}
-  - component: {fileID: 1847626334776711577}
   m_Layer: 0
   m_Name: RailWailSection.013
   m_TagString: Ship
@@ -2973,30 +2649,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &1847626334776711577
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850083}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850085
 GameObject:
   m_ObjectHideFlags: 0
@@ -3008,7 +2660,6 @@ GameObject:
   - component: {fileID: 7952002934638947333}
   - component: {fileID: 7952002934641847333}
   - component: {fileID: 7952002934640848485}
-  - component: {fileID: 369516238334866257}
   m_Layer: 0
   m_Name: RailWailSection.014
   m_TagString: Ship
@@ -3075,30 +2726,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &369516238334866257
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850085}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850087
 GameObject:
   m_ObjectHideFlags: 0
@@ -3110,7 +2737,6 @@ GameObject:
   - component: {fileID: 7952002934638947335}
   - component: {fileID: 7952002934641847335}
   - component: {fileID: 7952002934640848487}
-  - component: {fileID: 2711097076321225814}
   m_Layer: 0
   m_Name: RailWailSection.015
   m_TagString: Ship
@@ -3177,30 +2803,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &2711097076321225814
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850087}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850089
 GameObject:
   m_ObjectHideFlags: 0
@@ -3212,7 +2814,6 @@ GameObject:
   - component: {fileID: 7952002934638947337}
   - component: {fileID: 7952002934641847337}
   - component: {fileID: 7952002934640848489}
-  - component: {fileID: 7531420460535559616}
   m_Layer: 0
   m_Name: RailWailSection.008
   m_TagString: Ship
@@ -3279,30 +2880,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &7531420460535559616
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850089}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850091
 GameObject:
   m_ObjectHideFlags: 0
@@ -3314,7 +2891,6 @@ GameObject:
   - component: {fileID: 7952002934638947339}
   - component: {fileID: 7952002934641847339}
   - component: {fileID: 7952002934640848491}
-  - component: {fileID: 5796655597479520805}
   m_Layer: 0
   m_Name: RailWailSection.009
   m_TagString: Ship
@@ -3381,30 +2957,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &5796655597479520805
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850091}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850093
 GameObject:
   m_ObjectHideFlags: 0
@@ -3416,7 +2968,6 @@ GameObject:
   - component: {fileID: 7952002934638947341}
   - component: {fileID: 7952002934641847341}
   - component: {fileID: 7952002934640848493}
-  - component: {fileID: 187001049963500368}
   m_Layer: 0
   m_Name: RailWailSection.010
   m_TagString: Ship
@@ -3483,30 +3034,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &187001049963500368
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850093}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850095
 GameObject:
   m_ObjectHideFlags: 0
@@ -3518,7 +3045,6 @@ GameObject:
   - component: {fileID: 7952002934638947343}
   - component: {fileID: 7952002934641847343}
   - component: {fileID: 7952002934640848495}
-  - component: {fileID: 990817312536301127}
   m_Layer: 0
   m_Name: RailWailSection.011
   m_TagString: Ship
@@ -3585,30 +3111,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &990817312536301127
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850095}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850097
 GameObject:
   m_ObjectHideFlags: 0
@@ -3620,7 +3122,6 @@ GameObject:
   - component: {fileID: 7952002934638947345}
   - component: {fileID: 7952002934641847345}
   - component: {fileID: 7952002934640848497}
-  - component: {fileID: 8026118617555946276}
   m_Layer: 0
   m_Name: RailWailSection.020
   m_TagString: Ship
@@ -3687,30 +3188,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &8026118617555946276
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850097}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850099
 GameObject:
   m_ObjectHideFlags: 0
@@ -3722,7 +3199,6 @@ GameObject:
   - component: {fileID: 7952002934638947347}
   - component: {fileID: 7952002934641847347}
   - component: {fileID: 7952002934640848499}
-  - component: {fileID: 5316629996698991272}
   m_Layer: 0
   m_Name: RailWailSection.021
   m_TagString: Ship
@@ -3789,30 +3265,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &5316629996698991272
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850099}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850101
 GameObject:
   m_ObjectHideFlags: 0
@@ -3824,7 +3276,6 @@ GameObject:
   - component: {fileID: 7952002934638947349}
   - component: {fileID: 7952002934641847349}
   - component: {fileID: 7952002934640848501}
-  - component: {fileID: 5221577173183982983}
   m_Layer: 0
   m_Name: RailWailSection.022
   m_TagString: Ship
@@ -3891,30 +3342,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &5221577173183982983
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850101}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850103
 GameObject:
   m_ObjectHideFlags: 0
@@ -3926,7 +3353,6 @@ GameObject:
   - component: {fileID: 7952002934638947351}
   - component: {fileID: 7952002934641847351}
   - component: {fileID: 7952002934640848503}
-  - component: {fileID: 1450131028658878189}
   m_Layer: 0
   m_Name: RailWailSection.023
   m_TagString: Ship
@@ -3993,30 +3419,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &1450131028658878189
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850103}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850105
 GameObject:
   m_ObjectHideFlags: 0
@@ -4028,7 +3430,6 @@ GameObject:
   - component: {fileID: 7952002934638947353}
   - component: {fileID: 7952002934641847353}
   - component: {fileID: 7952002934640848505}
-  - component: {fileID: 5391333080749720687}
   m_Layer: 0
   m_Name: RailWailSection.016
   m_TagString: Ship
@@ -4095,30 +3496,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &5391333080749720687
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850105}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850107
 GameObject:
   m_ObjectHideFlags: 0
@@ -4130,7 +3507,6 @@ GameObject:
   - component: {fileID: 7952002934638947355}
   - component: {fileID: 7952002934641847355}
   - component: {fileID: 7952002934640848507}
-  - component: {fileID: 874114314978467640}
   m_Layer: 0
   m_Name: RailWailSection.017
   m_TagString: Ship
@@ -4197,30 +3573,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &874114314978467640
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850107}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850109
 GameObject:
   m_ObjectHideFlags: 0
@@ -4232,7 +3584,6 @@ GameObject:
   - component: {fileID: 7952002934638947357}
   - component: {fileID: 7952002934641847357}
   - component: {fileID: 7952002934640848509}
-  - component: {fileID: 5878075401614650638}
   m_Layer: 0
   m_Name: RailWailSection.018
   m_TagString: Ship
@@ -4299,30 +3650,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &5878075401614650638
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850109}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850111
 GameObject:
   m_ObjectHideFlags: 0
@@ -4334,7 +3661,6 @@ GameObject:
   - component: {fileID: 7952002934638947359}
   - component: {fileID: 7952002934641847359}
   - component: {fileID: 7952002934640848511}
-  - component: {fileID: 3731181802439283339}
   m_Layer: 0
   m_Name: RailWailSection.019
   m_TagString: Ship
@@ -4401,30 +3727,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &3731181802439283339
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850111}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850145
 GameObject:
   m_ObjectHideFlags: 0
@@ -4969,7 +4271,6 @@ GameObject:
   - component: {fileID: 7952002934638947401}
   - component: {fileID: 7952002934641847401}
   - component: {fileID: 7952002934640848553}
-  - component: {fileID: 2781891681172965752}
   m_Layer: 0
   m_Name: BackSail
   m_TagString: Ship
@@ -5036,30 +4337,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &2781891681172965752
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850153}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850155
 GameObject:
   m_ObjectHideFlags: 0
@@ -6436,7 +5713,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7952002934638850175}
   m_LocalRotation: {x: 0.000000014631131, y: 0.7071068, z: 0.7071068, w: -0.000000014631131}
-  m_LocalPosition: {x: 0.075, y: 2.7055156, z: 1.6396492}
+  m_LocalPosition: {x: -0.002746582, y: 2.7055156, z: 1.6396492}
   m_LocalScale: {x: 100.00027, y: 100.0005, z: 100.00047}
   m_Children: []
   m_Father: {fileID: 4516789872046452}
@@ -6951,7 +6228,6 @@ GameObject:
   - component: {fileID: 7952002934638947753}
   - component: {fileID: 7952002934641847625}
   - component: {fileID: 7952002934640848777}
-  - component: {fileID: 8604930799415221429}
   m_Layer: 0
   m_Name: StairsDown
   m_TagString: Ship
@@ -7018,30 +6294,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &8604930799415221429
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850377}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850379
 GameObject:
   m_ObjectHideFlags: 0
@@ -7053,7 +6305,6 @@ GameObject:
   - component: {fileID: 7952002934638947755}
   - component: {fileID: 7952002934641847627}
   - component: {fileID: 7952002934640848779}
-  - component: {fileID: 6497728036382749910}
   m_Layer: 0
   m_Name: StairsFrontLeft
   m_TagString: Ship
@@ -7120,30 +6371,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &6497728036382749910
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850379}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850381
 GameObject:
   m_ObjectHideFlags: 0
@@ -7155,7 +6382,6 @@ GameObject:
   - component: {fileID: 7952002934638947757}
   - component: {fileID: 7952002934641847629}
   - component: {fileID: 7952002934640848781}
-  - component: {fileID: 3108403301358544058}
   m_Layer: 0
   m_Name: StairsFrontRight
   m_TagString: Ship
@@ -7222,30 +6448,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &3108403301358544058
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850381}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850383
 GameObject:
   m_ObjectHideFlags: 0
@@ -7391,7 +6593,6 @@ GameObject:
   - component: {fileID: 7952002934638947809}
   - component: {fileID: 7952002934641847681}
   - component: {fileID: 7952002934640848833}
-  - component: {fileID: 7841777546538600918}
   m_Layer: 0
   m_Name: RailWailSection.060
   m_TagString: Ship
@@ -7458,30 +6659,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &7841777546538600918
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850433}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850435
 GameObject:
   m_ObjectHideFlags: 0
@@ -7493,7 +6670,6 @@ GameObject:
   - component: {fileID: 7952002934638947811}
   - component: {fileID: 7952002934641847683}
   - component: {fileID: 7952002934640848835}
-  - component: {fileID: 7531345230117248699}
   m_Layer: 0
   m_Name: RailWailSection.061
   m_TagString: Ship
@@ -7560,30 +6736,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &7531345230117248699
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850435}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850437
 GameObject:
   m_ObjectHideFlags: 0
@@ -7595,7 +6747,6 @@ GameObject:
   - component: {fileID: 7952002934638947813}
   - component: {fileID: 7952002934641847685}
   - component: {fileID: 7952002934640848837}
-  - component: {fileID: 8170228165025387321}
   m_Layer: 0
   m_Name: RailWailSection.062
   m_TagString: Ship
@@ -7662,30 +6813,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &8170228165025387321
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850437}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850439
 GameObject:
   m_ObjectHideFlags: 0
@@ -7697,7 +6824,6 @@ GameObject:
   - component: {fileID: 7952002934638947815}
   - component: {fileID: 7952002934641847687}
   - component: {fileID: 7952002934640848839}
-  - component: {fileID: 4494662563653873930}
   m_Layer: 0
   m_Name: Rope1
   m_TagString: Ship
@@ -7764,30 +6890,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &4494662563653873930
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850439}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850441
 GameObject:
   m_ObjectHideFlags: 0
@@ -7799,7 +6901,6 @@ GameObject:
   - component: {fileID: 7952002934638947817}
   - component: {fileID: 7952002934641847689}
   - component: {fileID: 7952002934640848841}
-  - component: {fileID: 5687198345414256725}
   m_Layer: 0
   m_Name: RailWailSection.056
   m_TagString: Ship
@@ -7866,30 +6967,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &5687198345414256725
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850441}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850443
 GameObject:
   m_ObjectHideFlags: 0
@@ -7901,7 +6978,6 @@ GameObject:
   - component: {fileID: 7952002934638947819}
   - component: {fileID: 7952002934641847691}
   - component: {fileID: 7952002934640848843}
-  - component: {fileID: 2275309676278950475}
   m_Layer: 0
   m_Name: RailWailSection.057
   m_TagString: Ship
@@ -7968,30 +7044,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &2275309676278950475
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850443}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850445
 GameObject:
   m_ObjectHideFlags: 0
@@ -8003,7 +7055,6 @@ GameObject:
   - component: {fileID: 7952002934638947821}
   - component: {fileID: 7952002934641847693}
   - component: {fileID: 7952002934640848845}
-  - component: {fileID: 6466688027927713949}
   m_Layer: 0
   m_Name: RailWailSection.058
   m_TagString: Ship
@@ -8070,30 +7121,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &6466688027927713949
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850445}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850447
 GameObject:
   m_ObjectHideFlags: 0
@@ -8105,7 +7132,6 @@ GameObject:
   - component: {fileID: 7952002934638947823}
   - component: {fileID: 7952002934641847695}
   - component: {fileID: 7952002934640848847}
-  - component: {fileID: 6541450970018467870}
   m_Layer: 0
   m_Name: RailWailSection.059
   m_TagString: Ship
@@ -8172,30 +7198,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &6541450970018467870
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850447}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850449
 GameObject:
   m_ObjectHideFlags: 0
@@ -8207,7 +7209,6 @@ GameObject:
   - component: {fileID: 7952002934638947825}
   - component: {fileID: 7952002934641847697}
   - component: {fileID: 7952002934640848849}
-  - component: {fileID: 1185611315090457976}
   m_Layer: 0
   m_Name: Rope6
   m_TagString: Ship
@@ -8274,30 +7275,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &1185611315090457976
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850449}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850451
 GameObject:
   m_ObjectHideFlags: 0
@@ -8309,7 +7286,6 @@ GameObject:
   - component: {fileID: 7952002934638947827}
   - component: {fileID: 7952002934641847699}
   - component: {fileID: 7952002934640848851}
-  - component: {fileID: 1249855526708957135}
   m_Layer: 0
   m_Name: Rope7
   m_TagString: Ship
@@ -8376,30 +7352,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &1249855526708957135
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850451}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850453
 GameObject:
   m_ObjectHideFlags: 0
@@ -8677,7 +7629,6 @@ GameObject:
   - component: {fileID: 7952002934638947833}
   - component: {fileID: 7952002934641847705}
   - component: {fileID: 7952002934640848857}
-  - component: {fileID: 2507351915146443442}
   m_Layer: 0
   m_Name: Rope2
   m_TagString: Ship
@@ -8744,30 +7695,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &2507351915146443442
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850457}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850459
 GameObject:
   m_ObjectHideFlags: 0
@@ -8779,7 +7706,6 @@ GameObject:
   - component: {fileID: 7952002934638947835}
   - component: {fileID: 7952002934641847707}
   - component: {fileID: 7952002934640848859}
-  - component: {fileID: 8832433712887162963}
   m_Layer: 0
   m_Name: Rope3
   m_TagString: Ship
@@ -8846,30 +7772,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &8832433712887162963
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850459}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850461
 GameObject:
   m_ObjectHideFlags: 0
@@ -8881,7 +7783,6 @@ GameObject:
   - component: {fileID: 7952002934638947837}
   - component: {fileID: 7952002934641847709}
   - component: {fileID: 7952002934640848861}
-  - component: {fileID: 2008238636250377413}
   m_Layer: 0
   m_Name: Rope4
   m_TagString: Ship
@@ -8948,30 +7849,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &2008238636250377413
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850461}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850463
 GameObject:
   m_ObjectHideFlags: 0
@@ -8983,7 +7860,6 @@ GameObject:
   - component: {fileID: 7952002934638947839}
   - component: {fileID: 7952002934641847711}
   - component: {fileID: 7952002934640848863}
-  - component: {fileID: 3807534767355311411}
   m_Layer: 0
   m_Name: Rope5
   m_TagString: Ship
@@ -9050,30 +7926,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &3807534767355311411
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850463}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850465
 GameObject:
   m_ObjectHideFlags: 0
@@ -9353,7 +8205,6 @@ GameObject:
   - component: {fileID: 7952002934638947717}
   - component: {fileID: 7952002934641847717}
   - component: {fileID: 7952002934640848869}
-  - component: {fileID: 6660882815180395113}
   m_Layer: 0
   m_Name: SailBindLeft1
   m_TagString: Ship
@@ -9420,30 +8271,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &6660882815180395113
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850469}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850471
 GameObject:
   m_ObjectHideFlags: 0
@@ -9455,7 +8282,6 @@ GameObject:
   - component: {fileID: 7952002934638947719}
   - component: {fileID: 7952002934641847719}
   - component: {fileID: 7952002934640848871}
-  - component: {fileID: 2628733485409338703}
   m_Layer: 0
   m_Name: SailBindLeft2
   m_TagString: Ship
@@ -9522,30 +8348,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &2628733485409338703
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850471}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850473
 GameObject:
   m_ObjectHideFlags: 0
@@ -10091,7 +8893,6 @@ GameObject:
   - component: {fileID: 7952002934638947729}
   - component: {fileID: 7952002934641847729}
   - component: {fileID: 7952002934640848881}
-  - component: {fileID: 906779915410130138}
   m_Layer: 0
   m_Name: SideSailLeftBig.001
   m_TagString: Ship
@@ -10158,30 +8959,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &906779915410130138
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850481}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850483
 GameObject:
   m_ObjectHideFlags: 0
@@ -10193,7 +8970,6 @@ GameObject:
   - component: {fileID: 7952002934638947731}
   - component: {fileID: 7952002934641847731}
   - component: {fileID: 7952002934640848883}
-  - component: {fileID: 4085918167690103431}
   m_Layer: 0
   m_Name: SideSailRightBig
   m_TagString: Ship
@@ -10260,30 +9036,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &4085918167690103431
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850483}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850485
 GameObject:
   m_ObjectHideFlags: 0
@@ -10295,7 +9047,6 @@ GameObject:
   - component: {fileID: 7952002934638947733}
   - component: {fileID: 7952002934641847733}
   - component: {fileID: 7952002934640848885}
-  - component: {fileID: 1132322385906576952}
   m_Layer: 0
   m_Name: SideSailRightBig.001
   m_TagString: Ship
@@ -10362,30 +9113,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &1132322385906576952
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850485}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850487
 GameObject:
   m_ObjectHideFlags: 0
@@ -10397,7 +9124,6 @@ GameObject:
   - component: {fileID: 7952002934638947735}
   - component: {fileID: 7952002934641847735}
   - component: {fileID: 7952002934640848887}
-  - component: {fileID: 7924988230369333270}
   m_Layer: 0
   m_Name: StairsBack
   m_TagString: Ship
@@ -10464,30 +9190,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &7924988230369333270
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850487}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850489
 GameObject:
   m_ObjectHideFlags: 0
@@ -10499,7 +9201,6 @@ GameObject:
   - component: {fileID: 7952002934638947737}
   - component: {fileID: 7952002934641847737}
   - component: {fileID: 7952002934640848889}
-  - component: {fileID: 4287260873564042128}
   m_Layer: 0
   m_Name: SailBindRight1
   m_TagString: Ship
@@ -10566,30 +9267,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &4287260873564042128
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850489}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850491
 GameObject:
   m_ObjectHideFlags: 0
@@ -10601,7 +9278,6 @@ GameObject:
   - component: {fileID: 7952002934638947739}
   - component: {fileID: 7952002934641847739}
   - component: {fileID: 7952002934640848891}
-  - component: {fileID: 5271477040412311015}
   m_Layer: 0
   m_Name: SailBindRight2
   m_TagString: Ship
@@ -10668,30 +9344,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &5271477040412311015
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850491}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850493
 GameObject:
   m_ObjectHideFlags: 0
@@ -10878,7 +9530,6 @@ GameObject:
   - component: {fileID: 7952002934638947743}
   - component: {fileID: 7952002934641847743}
   - component: {fileID: 7952002934640848895}
-  - component: {fileID: 7078450751600031843}
   m_Layer: 0
   m_Name: SideSailLeftBig
   m_TagString: Ship
@@ -10945,30 +9596,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &7078450751600031843
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850495}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850497
 GameObject:
   m_ObjectHideFlags: 0
@@ -10980,7 +9607,6 @@ GameObject:
   - component: {fileID: 7952002934638947361}
   - component: {fileID: 7952002934641847745}
   - component: {fileID: 7952002934640848385}
-  - component: {fileID: 7463368524654501571}
   m_Layer: 0
   m_Name: RailWailSection.028
   m_TagString: Ship
@@ -11047,30 +9673,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &7463368524654501571
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850497}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850499
 GameObject:
   m_ObjectHideFlags: 0
@@ -11082,7 +9684,6 @@ GameObject:
   - component: {fileID: 7952002934638947363}
   - component: {fileID: 7952002934641847747}
   - component: {fileID: 7952002934640848387}
-  - component: {fileID: 7203394399050461292}
   m_Layer: 0
   m_Name: RailWailSection.029
   m_TagString: Ship
@@ -11149,30 +9750,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &7203394399050461292
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850499}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850501
 GameObject:
   m_ObjectHideFlags: 0
@@ -11184,7 +9761,6 @@ GameObject:
   - component: {fileID: 7952002934638947365}
   - component: {fileID: 7952002934641847749}
   - component: {fileID: 7952002934640848389}
-  - component: {fileID: 1309670071077638077}
   m_Layer: 0
   m_Name: RailWailSection.030
   m_TagString: Ship
@@ -11251,30 +9827,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &1309670071077638077
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850501}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850503
 GameObject:
   m_ObjectHideFlags: 0
@@ -11286,7 +9838,6 @@ GameObject:
   - component: {fileID: 7952002934638947367}
   - component: {fileID: 7952002934641847751}
   - component: {fileID: 7952002934640848391}
-  - component: {fileID: 4678090538592997742}
   m_Layer: 0
   m_Name: RailWailSection.031
   m_TagString: Ship
@@ -11353,30 +9904,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &4678090538592997742
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850503}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850505
 GameObject:
   m_ObjectHideFlags: 0
@@ -11388,7 +9915,6 @@ GameObject:
   - component: {fileID: 7952002934638947369}
   - component: {fileID: 7952002934641847753}
   - component: {fileID: 7952002934640848393}
-  - component: {fileID: 3915118741013635032}
   m_Layer: 0
   m_Name: RailWailSection.024
   m_TagString: Ship
@@ -11455,30 +9981,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &3915118741013635032
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850505}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850507
 GameObject:
   m_ObjectHideFlags: 0
@@ -11490,7 +9992,6 @@ GameObject:
   - component: {fileID: 7952002934638947371}
   - component: {fileID: 7952002934641847755}
   - component: {fileID: 7952002934640848395}
-  - component: {fileID: 1788135554354473657}
   m_Layer: 0
   m_Name: RailWailSection.025
   m_TagString: Ship
@@ -11557,30 +10058,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &1788135554354473657
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850507}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850509
 GameObject:
   m_ObjectHideFlags: 0
@@ -11592,7 +10069,6 @@ GameObject:
   - component: {fileID: 7952002934638947373}
   - component: {fileID: 7952002934641847757}
   - component: {fileID: 7952002934640848397}
-  - component: {fileID: 1377023704142843687}
   m_Layer: 0
   m_Name: RailWailSection.026
   m_TagString: Ship
@@ -11659,30 +10135,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &1377023704142843687
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850509}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850511
 GameObject:
   m_ObjectHideFlags: 0
@@ -11694,7 +10146,6 @@ GameObject:
   - component: {fileID: 7952002934638947375}
   - component: {fileID: 7952002934641847759}
   - component: {fileID: 7952002934640848399}
-  - component: {fileID: 4695338355932747109}
   m_Layer: 0
   m_Name: RailWailSection.027
   m_TagString: Ship
@@ -11761,30 +10212,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &4695338355932747109
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850511}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850513
 GameObject:
   m_ObjectHideFlags: 0
@@ -11796,7 +10223,6 @@ GameObject:
   - component: {fileID: 7952002934638947377}
   - component: {fileID: 7952002934641847761}
   - component: {fileID: 7952002934640848401}
-  - component: {fileID: 2421746615806879354}
   m_Layer: 0
   m_Name: RailWailSection.036
   m_TagString: Ship
@@ -11863,30 +10289,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &2421746615806879354
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850513}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850515
 GameObject:
   m_ObjectHideFlags: 0
@@ -11898,7 +10300,6 @@ GameObject:
   - component: {fileID: 7952002934638947379}
   - component: {fileID: 7952002934641847763}
   - component: {fileID: 7952002934640848403}
-  - component: {fileID: 2702992585315601073}
   m_Layer: 0
   m_Name: RailWailSection.037
   m_TagString: Ship
@@ -11965,30 +10366,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &2702992585315601073
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850515}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850517
 GameObject:
   m_ObjectHideFlags: 0
@@ -12000,7 +10377,6 @@ GameObject:
   - component: {fileID: 7952002934638947381}
   - component: {fileID: 7952002934641847765}
   - component: {fileID: 7952002934640848405}
-  - component: {fileID: 1227667076565841758}
   m_Layer: 0
   m_Name: RailWailSection.038
   m_TagString: Ship
@@ -12067,30 +10443,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &1227667076565841758
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850517}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850519
 GameObject:
   m_ObjectHideFlags: 0
@@ -12102,7 +10454,6 @@ GameObject:
   - component: {fileID: 7952002934638947383}
   - component: {fileID: 7952002934641847767}
   - component: {fileID: 7952002934640848407}
-  - component: {fileID: 1422442146367296156}
   m_Layer: 0
   m_Name: RailWailSection.039
   m_TagString: Ship
@@ -12169,30 +10520,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &1422442146367296156
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850519}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850521
 GameObject:
   m_ObjectHideFlags: 0
@@ -12204,7 +10531,6 @@ GameObject:
   - component: {fileID: 7952002934638947385}
   - component: {fileID: 7952002934641847769}
   - component: {fileID: 7952002934640848409}
-  - component: {fileID: 6820067099760960618}
   m_Layer: 0
   m_Name: RailWailSection.032
   m_TagString: Ship
@@ -12271,30 +10597,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &6820067099760960618
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850521}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850523
 GameObject:
   m_ObjectHideFlags: 0
@@ -12306,7 +10608,6 @@ GameObject:
   - component: {fileID: 7952002934638947387}
   - component: {fileID: 7952002934641847771}
   - component: {fileID: 7952002934640848411}
-  - component: {fileID: 483180684156535580}
   m_Layer: 0
   m_Name: RailWailSection.033
   m_TagString: Ship
@@ -12373,30 +10674,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &483180684156535580
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850523}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850525
 GameObject:
   m_ObjectHideFlags: 0
@@ -12408,7 +10685,6 @@ GameObject:
   - component: {fileID: 7952002934638947389}
   - component: {fileID: 7952002934641847773}
   - component: {fileID: 7952002934640848413}
-  - component: {fileID: 4781372866238186140}
   m_Layer: 0
   m_Name: RailWailSection.034
   m_TagString: Ship
@@ -12475,30 +10751,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &4781372866238186140
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850525}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850527
 GameObject:
   m_ObjectHideFlags: 0
@@ -12510,7 +10762,6 @@ GameObject:
   - component: {fileID: 7952002934638947391}
   - component: {fileID: 7952002934641847775}
   - component: {fileID: 7952002934640848415}
-  - component: {fileID: 6635290651449606860}
   m_Layer: 0
   m_Name: RailWailSection.035
   m_TagString: Ship
@@ -12577,30 +10828,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &6635290651449606860
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850527}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850529
 GameObject:
   m_ObjectHideFlags: 0
@@ -12612,7 +10839,6 @@ GameObject:
   - component: {fileID: 7952002934638947777}
   - component: {fileID: 7952002934641847777}
   - component: {fileID: 7952002934640848417}
-  - component: {fileID: 8523080945930015330}
   m_Layer: 0
   m_Name: RailWailSection.044
   m_TagString: Ship
@@ -12679,30 +10905,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &8523080945930015330
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850529}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850531
 GameObject:
   m_ObjectHideFlags: 0
@@ -12714,7 +10916,6 @@ GameObject:
   - component: {fileID: 7952002934638947779}
   - component: {fileID: 7952002934641847779}
   - component: {fileID: 7952002934640848419}
-  - component: {fileID: 5154624759716983129}
   m_Layer: 0
   m_Name: RailWailSection.045
   m_TagString: Ship
@@ -12781,30 +10982,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &5154624759716983129
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850531}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850533
 GameObject:
   m_ObjectHideFlags: 0
@@ -12816,7 +10993,6 @@ GameObject:
   - component: {fileID: 7952002934638947781}
   - component: {fileID: 7952002934641847781}
   - component: {fileID: 7952002934640848421}
-  - component: {fileID: 3432953634484045488}
   m_Layer: 0
   m_Name: RailWailSection.046
   m_TagString: Ship
@@ -12883,30 +11059,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &3432953634484045488
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850533}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850535
 GameObject:
   m_ObjectHideFlags: 0
@@ -12918,7 +11070,6 @@ GameObject:
   - component: {fileID: 7952002934638947783}
   - component: {fileID: 7952002934641847783}
   - component: {fileID: 7952002934640848423}
-  - component: {fileID: 6447428184733317193}
   m_Layer: 0
   m_Name: RailWailSection.047
   m_TagString: Ship
@@ -12985,30 +11136,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &6447428184733317193
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850535}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850537
 GameObject:
   m_ObjectHideFlags: 0
@@ -13020,7 +11147,6 @@ GameObject:
   - component: {fileID: 7952002934638947785}
   - component: {fileID: 7952002934641847785}
   - component: {fileID: 7952002934640848425}
-  - component: {fileID: 2482932289860364820}
   m_Layer: 0
   m_Name: RailWailSection.040
   m_TagString: Ship
@@ -13087,30 +11213,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &2482932289860364820
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850537}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850539
 GameObject:
   m_ObjectHideFlags: 0
@@ -13122,7 +11224,6 @@ GameObject:
   - component: {fileID: 7952002934638947787}
   - component: {fileID: 7952002934641847787}
   - component: {fileID: 7952002934640848427}
-  - component: {fileID: 5550592552086425866}
   m_Layer: 0
   m_Name: RailWailSection.041
   m_TagString: Ship
@@ -13189,30 +11290,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &5550592552086425866
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850539}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850541
 GameObject:
   m_ObjectHideFlags: 0
@@ -13224,7 +11301,6 @@ GameObject:
   - component: {fileID: 7952002934638947789}
   - component: {fileID: 7952002934641847789}
   - component: {fileID: 7952002934640848429}
-  - component: {fileID: 1571999893359215598}
   m_Layer: 0
   m_Name: RailWailSection.042
   m_TagString: Ship
@@ -13291,30 +11367,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &1571999893359215598
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850541}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850543
 GameObject:
   m_ObjectHideFlags: 0
@@ -13326,7 +11378,6 @@ GameObject:
   - component: {fileID: 7952002934638947791}
   - component: {fileID: 7952002934641847791}
   - component: {fileID: 7952002934640848431}
-  - component: {fileID: 313460740187454869}
   m_Layer: 0
   m_Name: RailWailSection.043
   m_TagString: Ship
@@ -13393,30 +11444,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &313460740187454869
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850543}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850545
 GameObject:
   m_ObjectHideFlags: 0
@@ -13428,7 +11455,6 @@ GameObject:
   - component: {fileID: 7952002934638947793}
   - component: {fileID: 7952002934641847793}
   - component: {fileID: 7952002934640848433}
-  - component: {fileID: 6433414268256183313}
   m_Layer: 0
   m_Name: RailWailSection.052
   m_TagString: Ship
@@ -13495,30 +11521,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &6433414268256183313
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850545}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850547
 GameObject:
   m_ObjectHideFlags: 0
@@ -13530,7 +11532,6 @@ GameObject:
   - component: {fileID: 7952002934638947795}
   - component: {fileID: 7952002934641847795}
   - component: {fileID: 7952002934640848435}
-  - component: {fileID: 5120484093142133009}
   m_Layer: 0
   m_Name: RailWailSection.053
   m_TagString: Ship
@@ -13597,30 +11598,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &5120484093142133009
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850547}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850549
 GameObject:
   m_ObjectHideFlags: 0
@@ -13632,7 +11609,6 @@ GameObject:
   - component: {fileID: 7952002934638947797}
   - component: {fileID: 7952002934641847797}
   - component: {fileID: 7952002934640848437}
-  - component: {fileID: 2321064156130643446}
   m_Layer: 0
   m_Name: RailWailSection.054
   m_TagString: Ship
@@ -13699,30 +11675,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &2321064156130643446
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850549}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850551
 GameObject:
   m_ObjectHideFlags: 0
@@ -13734,7 +11686,6 @@ GameObject:
   - component: {fileID: 7952002934638947799}
   - component: {fileID: 7952002934641847799}
   - component: {fileID: 7952002934640848439}
-  - component: {fileID: 6075993158243989231}
   m_Layer: 0
   m_Name: RailWailSection.055
   m_TagString: Ship
@@ -13801,30 +11752,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &6075993158243989231
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850551}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850553
 GameObject:
   m_ObjectHideFlags: 0
@@ -13836,7 +11763,6 @@ GameObject:
   - component: {fileID: 7952002934638947801}
   - component: {fileID: 7952002934641847801}
   - component: {fileID: 7952002934640848441}
-  - component: {fileID: 2638648942007088222}
   m_Layer: 0
   m_Name: RailWailSection.048
   m_TagString: Ship
@@ -13903,30 +11829,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &2638648942007088222
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850553}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850555
 GameObject:
   m_ObjectHideFlags: 0
@@ -13938,7 +11840,6 @@ GameObject:
   - component: {fileID: 7952002934638947803}
   - component: {fileID: 7952002934641847803}
   - component: {fileID: 7952002934640848443}
-  - component: {fileID: 2038616727210176620}
   m_Layer: 0
   m_Name: RailWailSection.049
   m_TagString: Ship
@@ -14005,30 +11906,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &2038616727210176620
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850555}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850557
 GameObject:
   m_ObjectHideFlags: 0
@@ -14040,7 +11917,6 @@ GameObject:
   - component: {fileID: 7952002934638947805}
   - component: {fileID: 7952002934641847805}
   - component: {fileID: 7952002934640848445}
-  - component: {fileID: 1488961409216488524}
   m_Layer: 0
   m_Name: RailWailSection.050
   m_TagString: Ship
@@ -14107,30 +11983,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &1488961409216488524
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850557}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7952002934638850559
 GameObject:
   m_ObjectHideFlags: 0
@@ -14142,7 +11994,6 @@ GameObject:
   - component: {fileID: 7952002934638947807}
   - component: {fileID: 7952002934641847807}
   - component: {fileID: 7952002934640848447}
-  - component: {fileID: 29238473117383436}
   m_Layer: 0
   m_Name: RailWailSection.051
   m_TagString: Ship
@@ -14209,30 +12060,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &29238473117383436
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850559}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceID: -1
-  onServer: 1
-  serverID: 0
-  lastUpdate: 0
-  root: {fileID: 0}
-  children: []
-  serverLayer: Server
-  removeServerChildColliders: 0
-  interpolateOnClient: 1
-  removeChildColliders: 1
-  removeChildRigidbodies: 1
-  setChildCollidersTriggers: 1
 --- !u!1 &7958199075126202324
 GameObject:
   m_ObjectHideFlags: 0
@@ -14616,12 +12443,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0a0db5c238fdc6c46b36b677d7d74ed7, type: 3}
---- !u!1 &3190952451376269012 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2375193530674009788, guid: 0a0db5c238fdc6c46b36b677d7d74ed7,
-    type: 3}
-  m_PrefabInstance: {fileID: 918430547721621608}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3716944218762728417 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4551967854468776841, guid: 0a0db5c238fdc6c46b36b677d7d74ed7,
@@ -14697,12 +12518,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0a0db5c238fdc6c46b36b677d7d74ed7, type: 3}
---- !u!1 &3317232181085302804 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2375193530674009788, guid: 0a0db5c238fdc6c46b36b677d7d74ed7,
-    type: 3}
-  m_PrefabInstance: {fileID: 1080667069327091368}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3590664523405583649 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4551967854468776841, guid: 0a0db5c238fdc6c46b36b677d7d74ed7,
@@ -14838,44 +12653,51 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 124018664b00b466590393aea6ddb1b0, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f, type: 3}
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7809327154272317525, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
+--- !u!1 &1705823135407074011 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 528544289363331184, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
     type: 3}
   m_PrefabInstance: {fileID: 1223159550849639083}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2615673267394055396 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3798001079422479951, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
     type: 3}
   m_PrefabInstance: {fileID: 1223159550849639083}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1633979876698736829 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 456157876206381590, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
     type: 3}
   m_PrefabInstance: {fileID: 1223159550849639083}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7303331475228656071 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8476667756176728940, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
-
     type: 3}
   m_PrefabInstance: {fileID: 1223159550849639083}
   m_PrefabAsset: {fileID: 0}
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 456157876206381590, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
+--- !u!4 &8978423430486577918 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7809327154272317525, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
     type: 3}
   m_PrefabInstance: {fileID: 1223159550849639083}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &8424858032213719884 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7210987168480958951, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
     type: 3}
   m_PrefabInstance: {fileID: 1223159550849639083}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2689794252786131640
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 3687351597765463240}
     m_Modifications:
-    - target: {fileID: 4140699971291500462, guid: 93839aa4fdb6e934bb47c57d1f51c7e2, type: 3}
+    - target: {fileID: 4140699971291500462, guid: 93839aa4fdb6e934bb47c57d1f51c7e2,
+        type: 3}
       propertyPath: m_Name
       value: EnergySource_Fire
       objectReference: {fileID: 0}
@@ -14956,6 +12778,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 93839aa4fdb6e934bb47c57d1f51c7e2, type: 3}
+--- !u!4 &3287890178507215572 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 645421218217816172, guid: 93839aa4fdb6e934bb47c57d1f51c7e2,
     type: 3}
@@ -15056,12 +12879,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0a0db5c238fdc6c46b36b677d7d74ed7, type: 3}
---- !u!1 &1227422796648164501 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2375193530674009788, guid: 0a0db5c238fdc6c46b36b677d7d74ed7,
-    type: 3}
-  m_PrefabInstance: {fileID: 3602544803093379625}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1068788851496237472 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4551967854468776841, guid: 0a0db5c238fdc6c46b36b677d7d74ed7,
@@ -15152,12 +12969,6 @@ PrefabInstance:
       objectReference: {fileID: 4780902932478289479}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9c113e6f2e7878e468f6670bdffce61a, type: 3}
---- !u!4 &1665008061707130477 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3456524495442100836, guid: 9c113e6f2e7878e468f6670bdffce61a,
-    type: 3}
-  m_PrefabInstance: {fileID: 4099197831832949769}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7909061674382065150 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6134438180382222839, guid: 9c113e6f2e7878e468f6670bdffce61a,
@@ -15170,6 +12981,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &1665008061707130477 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3456524495442100836, guid: 9c113e6f2e7878e468f6670bdffce61a,
+    type: 3}
+  m_PrefabInstance: {fileID: 4099197831832949769}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4823033389974833315
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15614,15 +13431,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1299142fd5abc91449a9e1a51b8846fb, type: 3}
---- !u!1 &2787276063009563417 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8551061944994770446, guid: 1299142fd5abc91449a9e1a51b8846fb,
-    type: 3}
-  m_PrefabInstance: {fileID: 5766047090197417239}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8456561395426564345 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2692766165717669358, guid: 1299142fd5abc91449a9e1a51b8846fb,
+    type: 3}
+  m_PrefabInstance: {fileID: 5766047090197417239}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2787276063009563417 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8551061944994770446, guid: 1299142fd5abc91449a9e1a51b8846fb,
     type: 3}
   m_PrefabInstance: {fileID: 5766047090197417239}
   m_PrefabAsset: {fileID: 0}
@@ -15738,7 +13555,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
 --- !u!23 &259697909206425059 stripped
 MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 7822893930968173033, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
+  m_CorrespondingSourceObject: {fileID: 7736676486826264443, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
     type: 3}
   m_PrefabInstance: {fileID: 7549321162603141784}
   m_PrefabAsset: {fileID: 0}
@@ -15750,19 +13567,19 @@ Transform:
   m_PrefabAsset: {fileID: 0}
 --- !u!23 &7378238978391836323 stripped
 MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1053937812185816123, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
+    type: 3}
+  m_PrefabInstance: {fileID: 7549321162603141784}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &3241349988633611447 stripped
+MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 4917655079163893295, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
     type: 3}
   m_PrefabInstance: {fileID: 7549321162603141784}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &334636581438237389 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7809327154272317525, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
-    type: 3}
-  m_PrefabInstance: {fileID: 7549321162603141784}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &259697909206425059 stripped
+--- !u!23 &311895218043900785 stripped
 MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 7736676486826264443, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
+  m_CorrespondingSourceObject: {fileID: 7822893930968173033, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
     type: 3}
   m_PrefabInstance: {fileID: 7549321162603141784}
   m_PrefabAsset: {fileID: 0}
