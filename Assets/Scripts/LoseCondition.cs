@@ -39,7 +39,7 @@ namespace MastersOfTempest
             guiStyle.alignment = TextAnchor.MiddleCenter;
             guiStyle.fontSize = 20;
             guiStyle.normal.textColor = new Color(0.6f, 0f, 0f);
-            ClientLose();
+            //ClientLose();
         }
 
         private IEnumerator GetShipPartManager()

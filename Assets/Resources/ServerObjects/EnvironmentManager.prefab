@@ -65,7 +65,7 @@ MonoBehaviour:
   spawnRate: 2
   dampingFactorVel: 1
   dampingFactorForce: 0
-  maximumObjVelocity: 50
+  maximumObjVelocity: 48
   spawnProbD: 0.95
   spawnProbS: 0.025
   spawnProbZ: 0.025
@@ -73,7 +73,7 @@ MonoBehaviour:
   minRadiusT: 1
   maxRadiusT: 10
   minRadiusS: 60
-  maxRadiusS: 2500
+  maxRadiusS: 3000
   maxNumObjects: 150
   vectorField: {fileID: 114404567317752372}
   damagingPrefabs:
