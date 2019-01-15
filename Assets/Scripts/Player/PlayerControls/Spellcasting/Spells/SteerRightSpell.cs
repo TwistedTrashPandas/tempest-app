@@ -11,7 +11,7 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
         {
             get
             {
-                return new Charge[] {Charge.Water, Charge.Fire, Charge.Wind, Charge.Earth};
+                return new Charge[] { Charge.Water, Charge.Fire, Charge.Wind, Charge.Earth };
             }
         }
 
@@ -32,7 +32,7 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
         {
             get
             {
-                return Color.red;
+                return new Color(166 / 255f, 255 / 255f, 77 / 255f);
             }
         }
     }
