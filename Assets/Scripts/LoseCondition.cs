@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Rendering.PostProcessing;
 using MastersOfTempest.PlayerControls;
+using UnityEngine.SceneManagement;
 
 namespace MastersOfTempest
 {
@@ -38,6 +39,7 @@ namespace MastersOfTempest
             guiStyle.alignment = TextAnchor.MiddleCenter;
             guiStyle.fontSize = 20;
             guiStyle.normal.textColor = new Color(0.6f, 0f, 0f);
+            ClientLose();
         }
 
         private IEnumerator GetShipPartManager()
@@ -56,7 +58,7 @@ namespace MastersOfTempest
             buffer[0] = 1;
             SendToAllClients(buffer, Facepunch.Steamworks.Networking.SendType.Reliable);
             StartCoroutine(TimeScale());
-            StartCoroutine(StartShipExplosion(2f));
+            StartCoroutine(StartShipExplosion(1f));
         }
 
         protected override void OnClientReceivedMessageRaw(byte[] data, ulong steamID)
@@ -76,6 +78,7 @@ namespace MastersOfTempest
             StartCoroutine(ScreenSaturation(postProcessVolume.profile.GetSetting<ColorGrading>()));
             StartCoroutine(TimeScale());
             toggleLossText = !toggleLossText;
+            Physics.gravity = new Vector3(0f, -9.81f, 0f);
             //OnLose();
         }
 
@@ -83,7 +86,15 @@ namespace MastersOfTempest
         {
             if (toggleLossText)
             {
-                GUI.Label(new Rect(Screen.width / 2f - 20f, Screen.height / 2f - 100f, 100f, 100f), guiContent, guiStyle);
+                GUI.Label(new Rect(Screen.width / 2f - 100f, Screen.height / 2f - 100f, Screen.width / 10f, Screen.height/10f), guiContent, guiStyle);
+
+                GUIStyle buttonStyle = GUI.skin.GetStyle("Button");
+                buttonStyle.fontSize = 40;
+
+                if(GUI.Button(new Rect(Screen.width * 0.75f, Screen.height * 0.8f , Screen.width/6f, Screen.height/18f), "Return to Lobby", buttonStyle))
+                {
+                    SceneManager.LoadScene("Lobby");
+                }
             }
         }
 
