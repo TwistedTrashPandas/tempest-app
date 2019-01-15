@@ -8,6 +8,7 @@ namespace MastersOfTempest.ShipBL
 {
     public class ShipPartManager : MonoBehaviour
     {
+        public AudioClip shipPartCrash;
         public event EventHandler ActionRequest;
         public Dictionary<ShipPartArea, List<ShipPart>> interactionAreas { get; private set; }
 
@@ -29,6 +30,7 @@ namespace MastersOfTempest.ShipBL
                 {
                     interactionAreas[shipparts[i].interactionArea].Add(shipparts[i]); // Add(i);
                     shipparts[i].ShipPartHit += OnShipPartHit;
+                    shipparts[i].crashSound = shipPartCrash;
                 }
             }
         }

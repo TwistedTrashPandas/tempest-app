@@ -21,11 +21,13 @@ namespace MastersOfTempest.ShipBL
         /// </summary>
         public float destruction;
         public ShipPartStatus status;
+        public AudioClip crashSound;
 
         private Vector3[] initialMesh;
         private Vector3[] targetMesh;
         private Material material;
         private LoseCondition loseCondition;
+        private AudioSource audioSource;
 
         protected override void Start()
         {
@@ -35,7 +37,20 @@ namespace MastersOfTempest.ShipBL
             if (initialMesh == null)
                 throw new System.InvalidOperationException("Ship part can only be attached to objects with meshes");
             material = GetComponent<MeshRenderer>().material;
-            loseCondition = FindObjectsOfType<Gamemaster>().First(gm => gm.gameObject.scene == gameObject.scene).GetComponent<LoseCondition>(); 
+            loseCondition = FindObjectsOfType<Gamemaster>().First(gm => gm.gameObject.scene == gameObject.scene).GetComponent<LoseCondition>();
+        }
+
+        protected override void StartClient()
+        {
+            base.StartClient();
+            audioSource = GetComponent<AudioSource>();
+        }
+
+
+        protected override void StartServer()
+        {
+            base.StartClient();
+            Destroy(GetComponent<AudioSource>());
         }
 
         public float GetDestruction()
@@ -149,11 +164,16 @@ namespace MastersOfTempest.ShipBL
             }
             else
             {
+                float destruc = BitConverter.ToSingle(data, 0);
+
                 // length of contact off set array
                 int l = Mathf.FloorToInt(data.Length / 12) - 1;
 
                 // first 4 bytes are the delta destruction value
-                AddDestruction(BitConverter.ToSingle(data, 0));
+                AddDestruction(destruc);
+
+                // crash sound
+                audioSource.PlayOneShot(crashSound, Mathf.Clamp01(destruc) / 1.5f);
 
                 // next 12 bytes are the values for the impulse vector
                 Vector3 impulse = new Vector3(BitConverter.ToSingle(data, 4), BitConverter.ToSingle(data, 8), BitConverter.ToSingle(data, 12));
