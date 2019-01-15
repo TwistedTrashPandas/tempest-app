@@ -26,7 +26,7 @@ namespace MastersOfTempest
         {
             base.StartServer();
             StartCoroutine(GetShipPartManager());
-            StartCoroutine(LostAfterSecs(5f));
+            // StartCoroutine(LostAfterSecs(5f));
         }
 
         protected override void StartClient()
