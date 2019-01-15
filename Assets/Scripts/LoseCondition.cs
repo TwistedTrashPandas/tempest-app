@@ -99,7 +99,7 @@ namespace MastersOfTempest
                 GUI.Label(new Rect(Screen.width / 2f - 100f, Screen.height / 2f - 100f, Screen.width / 10f, Screen.height/10f), guiContent, guiStyle);
 
                 GUIStyle buttonStyle = GUI.skin.GetStyle("Button");
-                buttonStyle.fontSize = 60;
+                buttonStyle.fontSize = 40;
                 buttonStyle.font = loseFont;
 
                 if (GUI.Button(new Rect(Screen.width * 0.75f, Screen.height * 0.8f , Screen.width/6f, Screen.height/18f), "Return to Lobby", buttonStyle))
