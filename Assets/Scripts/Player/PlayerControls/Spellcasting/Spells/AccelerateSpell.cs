@@ -11,7 +11,14 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
         {
             get
             {
-                return new Charge[] {Charge.Wind, Charge.Wind, Charge.Fire, Charge.Fire};
+                return new Charge[] { Charge.Wind, Charge.Wind, Charge.Fire, Charge.Fire };
+            }
+        }
+        public override Color SpellColor
+        {
+            get
+            {
+                return new Color(77 / 255f, 255 / 255f, 255 / 255f);
             }
         }
 
