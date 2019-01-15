@@ -11,7 +11,7 @@ Material:
   m_Shader: {fileID: 4800000, guid: c1a65ba0fe9b6e64798fac2389be1d09, type: 3}
   m_ShaderKeywords: _EMISSION _METALLICGLOSSMAP _NORMALMAP
   m_LightmapFlags: 1
-  m_EnableInstancingVariants: 0
+  m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
@@ -76,4 +76,6 @@ Material:
     - _fMaxDistance: 10
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _ColorInterp1: {r: 1, g: 0, b: 0, a: 1}
+    - _ColorInterp2: {r: 1, g: 1, b: 0, a: 1}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}

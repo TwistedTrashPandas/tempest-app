@@ -27,5 +27,13 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
         {
             return new SteerShip(SteerShip.SteeringDirection.Up);
         }
+
+        public override Color SpellColor
+        {
+            get
+            {
+                return Color.red;
+            }
+        }
     }
 }
