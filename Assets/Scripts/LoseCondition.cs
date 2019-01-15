@@ -15,6 +15,7 @@ namespace MastersOfTempest
         public delegate void LoseAnimation();
         public static event LoseAnimation OnLose;
         public float overallDestructionThreshold = 0.9f;
+        public Font loseFont;
 
         private GUIContent guiContent;
         private GUIStyle guiStyle;
@@ -38,9 +39,11 @@ namespace MastersOfTempest
             guiStyle = new GUIStyle();
 
             guiStyle.alignment = TextAnchor.MiddleCenter;
-            guiStyle.fontSize = 20;
+            guiStyle.fontSize = 10;
+            guiStyle.font = loseFont;
+            
             guiStyle.normal.textColor = new Color(0.6f, 0f, 0f);
-            //ClientLose();
+            ClientLose();
         }
 
         private IEnumerator GetShipPartManager()

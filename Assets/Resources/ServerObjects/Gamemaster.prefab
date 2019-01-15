@@ -99,4 +99,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 2
   overallDestructionThreshold: 0.6
-  loseText: {fileID: 0}
+  loseFont: {fileID: 12800000, guid: 8ab0ce2e6f48833498113fbe6c368708, type: 3}
