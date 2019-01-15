@@ -62,7 +62,14 @@ Category {
 				o.uvMain.xy = TRANSFORM_TEX(v.texcoord, _MainTex);
 				o.uvDistort.xy = TRANSFORM_TEX(v.texcoord, _DistortTex1);
 				o.uvDistort.zw = TRANSFORM_TEX(v.texcoord, _DistortTex2);
-				UNITY_TRANSFER_FOG(o,o.vertex);
+				UNITY_TRANSFER_FOG(o,o.vertex); 
+
+				float dist = _WorldSpaceCameraPos.xyz - v.vertex.xyz;
+				dist = dot(dist, dist) + 1.0f;
+				o.color.a = saturate(2000.0f / dist);
+				if (o.color.a < 0.05f)
+					o.color.a = 0.0f;
+
 				return o;
 			}
 
@@ -78,7 +85,7 @@ Category {
 				half4 tex = tex2D(_MainTex, i.uvMain + (distort1.xy + distort2.xy) * _DistortSpeed.y + (distort3.xy + distort4.xy) * _DistortSpeed.w);
 				
 				half4 col = 2.0f * i.color * _TintColor * tex;
-				
+
 				UNITY_APPLY_FOG(i.fogCoord, col);
 				return col;
 			}
