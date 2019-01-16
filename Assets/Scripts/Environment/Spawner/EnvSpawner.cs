@@ -241,10 +241,11 @@ namespace MastersOfTempest.Environment.Interacting
                             randomSize = Random.Range(20f, 30f);
                             localScale *= 5f;
                             envObjects[envObjects.Count - 1].speed *= 0.02f;
+                            envObjects[envObjects.Count - 1].GetComponent<Damaging>().health = randomSize;
                             envObjects[envObjects.Count - 1].moveType = (MoveType)Random.Range(0, 3); // MoveType.ForceDirect; // 
                             if((int)envObjects[envObjects.Count - 1].moveType <= 1)
                                 envObjects[envObjects.Count - 1].GetComponent<Rigidbody>().constraints |= (RigidbodyConstraints.FreezePositionY);
-                            randOffset = GetRandomPointOnSphere(minRadiusS * 2f, maxRadiusS * 0.9f);
+                            randOffset = GetRandomPointOnSphere(minRadiusS * 1f, maxRadiusS * 0.9f);
                         }
 
                         // hard coded so far larger rocks are slower but deal more damage

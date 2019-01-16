@@ -12,7 +12,7 @@ namespace MastersOfTempest.ShipBL
     {
         public event EventHandler ShipPartHit;
         public ShipPartArea interactionArea;
-        private const float cutOffDist = 0.95f;
+        private const float cutOffDist = 10.0f;
         private const float impulseScaling = 0.04f;
         private const float maxDisplacementDist = 1.25f;
         /// <summary>
@@ -76,6 +76,10 @@ namespace MastersOfTempest.ShipBL
 
                 // lose condition checks if the overall destruction value is above the threshold (after collision)
                 loseCondition.CheckOverAllDestruction();
+
+                // transfer damage to next ship part
+                if (destruc > 1.05f)
+                    nextAreaPart.ResolveCollision(destruc - 1.0f, contactPoints, impulse);
             }
         }
 
