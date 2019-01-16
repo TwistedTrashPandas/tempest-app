@@ -10,7 +10,7 @@ namespace MastersOfTempest.ShipBL
     [RequireComponent(typeof(ForceManilpulator))]
     public class Ship : NetworkBehaviour
     {
-        private const float freezingSlowDown = 0.5f;
+        private const float freezingSlowDown = 0.3f;
         private Gamemaster context;
         private ForceManilpulator forceManipulator;
         private ShipPartManager shipPartManager;
