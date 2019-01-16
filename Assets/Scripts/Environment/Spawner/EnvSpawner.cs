@@ -246,7 +246,7 @@ namespace MastersOfTempest.Environment.Interacting
                             envObjects[envObjects.Count - 1].moveType = (MoveType)Random.Range(0, 3); // MoveType.ForceDirect; // 
                             if((int)envObjects[envObjects.Count - 1].moveType <= 1)
                                 envObjects[envObjects.Count - 1].GetComponent<Rigidbody>().constraints |= (RigidbodyConstraints.FreezePositionY);
-                            randOffset = GetRandomPointOnSphere(minRadiusS * 1.5f, maxRadiusS * 0.9f);
+                            randOffset = GetRandomPointOnSphere(minRadiusS * 1.5f, maxRadiusS * 1.0f);
                             envObjects[envObjects.Count - 1].GetComponent<Damaging>().damage = 0.5f * randomSize;
                             envObjects[envObjects.Count - 1].SetMass(randomSize);
                         }
@@ -259,7 +259,7 @@ namespace MastersOfTempest.Environment.Interacting
                         position.y = Random.Range(dims.y * cellSize * 0.1f, dims.y * cellSize * 0.9f);
                         envObjects[envObjects.Count - 1].transform.position = position;
                         envObjects[envObjects.Count - 1].transform.localScale = localScale;
-                        envObjects[envObjects.Count - 1].GetComponent<Rigidbody>().angularVelocity = (new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f)) * rockRotSpeed);
+                        envObjects[envObjects.Count - 1].GetComponent<Rigidbody>().angularVelocity = (new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f)) * rockRotSpeed) / randomSize;
                         break;
                     case EnvObjectType.DangerZone:
                         initialPos = new Vector3(Random.Range(0, dims.x) * cellSizeH, Random.Range(dims.y * 0.1f, 0.8f * dims.y) * cellSize, Random.Range(0, dims.z) * cellSizeH) + new Vector3(0.5f, 0.5f, 0.5f);
