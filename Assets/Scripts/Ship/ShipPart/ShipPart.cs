@@ -12,20 +12,23 @@ namespace MastersOfTempest.ShipBL
     {
         public event EventHandler ShipPartHit;
         public ShipPartArea interactionArea;
-        private const float cutOffDist = 0.75f;
-        private const float impulseScaling = 0.05f;
-        private const float maxDisplacementDist = 1.5f;
+        private const float cutOffDist = 0.95f;
+        private const float impulseScaling = 0.04f;
+        private const float maxDisplacementDist = 1.25f;
         /// <summary>
         /// destruction == 0:   ship part fully repaired
         ///             == 1:   ship part fully destroyed
         /// </summary>
         public float destruction;
         public ShipPartStatus status;
+        public AudioClip crashSound;
+        public ShipPart nextAreaPart;
 
         private Vector3[] initialMesh;
         private Vector3[] targetMesh;
         private Material material;
         private LoseCondition loseCondition;
+        private AudioSource audioSource;
 
         protected override void Start()
         {
@@ -35,7 +38,20 @@ namespace MastersOfTempest.ShipBL
             if (initialMesh == null)
                 throw new System.InvalidOperationException("Ship part can only be attached to objects with meshes");
             material = GetComponent<MeshRenderer>().material;
-            loseCondition = FindObjectsOfType<Gamemaster>().First(gm => gm.gameObject.scene == gameObject.scene).GetComponent<LoseCondition>(); 
+            loseCondition = FindObjectsOfType<Gamemaster>().First(gm => gm.gameObject.scene == gameObject.scene).GetComponent<LoseCondition>();
+        }
+
+        protected override void StartClient()
+        {
+            base.StartClient();
+            audioSource = GetComponent<AudioSource>();
+        }
+
+
+        protected override void StartServer()
+        {
+            base.StartClient();
+            Destroy(GetComponent<AudioSource>());
         }
 
         public float GetDestruction()
@@ -46,15 +62,21 @@ namespace MastersOfTempest.ShipBL
         // updates mesh depending on collision (usually called from damaging objects such as rocks)
         public void ResolveCollision(float destruc, ContactPoint[] contactPoints, Vector3 impulse)
         {
-            if ((status & ShipPartStatus.Fragile) == ShipPartStatus.Fragile)
+            // transfer damage to next shippart
+            if (Mathf.Approximately(destruction, 1.0f) && destruc > 0.05f)
+                nextAreaPart.ResolveCollision(destruc / 2f, contactPoints, impulse);
+            else
             {
-                destruc = 1.0f;
-            }
-            AddDestruction(destruc);
-            SendCollision(contactPoints, impulse, destruc);
+                if ((status & ShipPartStatus.Fragile) == ShipPartStatus.Fragile)
+                {
+                    destruc = 1.0f;
+                }
+                AddDestruction(destruc);
+                SendCollision(contactPoints, impulse, destruc);
 
-            // lose condition checks if the overall destruction value is above the threshold (after collision)
-            loseCondition.CheckOverAllDestruction();
+                // lose condition checks if the overall destruction value is above the threshold (after collision)
+                loseCondition.CheckOverAllDestruction();
+            }
         }
 
         private void SendCollision(ContactPoint[] contactPoints, Vector3 impulse, float destruc)
@@ -149,11 +171,16 @@ namespace MastersOfTempest.ShipBL
             }
             else
             {
+                float destruc = BitConverter.ToSingle(data, 0);
+
                 // length of contact off set array
                 int l = Mathf.FloorToInt(data.Length / 12) - 1;
 
                 // first 4 bytes are the delta destruction value
-                AddDestruction(BitConverter.ToSingle(data, 0));
+                AddDestruction(destruc);
+
+                // crash sound
+                audioSource.PlayOneShot(crashSound, Mathf.Clamp01(destruc) / 1.5f);
 
                 // next 12 bytes are the values for the impulse vector
                 Vector3 impulse = new Vector3(BitConverter.ToSingle(data, 4), BitConverter.ToSingle(data, 8), BitConverter.ToSingle(data, 12));

@@ -10,7 +10,7 @@ namespace MastersOfTempest.ShipBL
     [RequireComponent(typeof(ForceManilpulator))]
     public class Ship : NetworkBehaviour
     {
-        private const float freezingSlowDown = 0.5f;
+        private const float freezingSlowDown = 0.3f;
         private Gamemaster context;
         private ForceManilpulator forceManipulator;
         private ShipPartManager shipPartManager;
@@ -62,7 +62,7 @@ namespace MastersOfTempest.ShipBL
             return freezingSlowDown;
         }
 
-        public void RepairShipPartAreaOnServer (ShipPartArea shipPartArea, float repairAmount)
+        public void RepairShipPartAreaOnServer(ShipPartArea shipPartArea, float repairAmount)
         {
             if (serverObject.onServer)
             {
@@ -100,6 +100,29 @@ namespace MastersOfTempest.ShipBL
         {
             var action = ((ActionMadeEventArgs)args).Action;
             action.Execute(context);
+        }
+
+        public void DestroyShip()
+        {
+            Transform[] children = GetComponentsInChildren<Transform>();
+            for (int i = 0; i < children.Length; i++)
+            {
+                if (children[i].GetComponent<ServerObject>() != null)
+                {
+                    children[i].parent = null;
+                    children[i].gameObject.layer = LayerMask.NameToLayer("Server");
+                    children[i].gameObject.AddComponent<Rigidbody>();
+                    children[i].gameObject.GetComponent<Rigidbody>().useGravity = false;
+                    // children[i].gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value) * 0.1f);
+                    children[i].gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+
+                    if (children[i].GetComponent<Collider>() == null)
+                    {
+                        children[i].gameObject.AddComponent<MeshCollider>();
+                        children[i].gameObject.GetComponent<MeshCollider>().convex = true;
+                    }
+                }
+            }
         }
     }
 }

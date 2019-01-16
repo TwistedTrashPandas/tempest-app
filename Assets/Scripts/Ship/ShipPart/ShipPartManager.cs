@@ -8,6 +8,7 @@ namespace MastersOfTempest.ShipBL
 {
     public class ShipPartManager : MonoBehaviour
     {
+        public AudioClip shipPartCrash;
         public event EventHandler ActionRequest;
         public Dictionary<ShipPartArea, List<ShipPart>> interactionAreas { get; private set; }
 
@@ -29,6 +30,17 @@ namespace MastersOfTempest.ShipBL
                 {
                     interactionAreas[shipparts[i].interactionArea].Add(shipparts[i]); // Add(i);
                     shipparts[i].ShipPartHit += OnShipPartHit;
+                    shipparts[i].crashSound = shipPartCrash;
+
+                    for (int j = i + 1; j < shipparts.Length + i; j++)
+                    {
+                        if(shipparts[j % shipparts.Length].interactionArea != shipparts[i].interactionArea)
+                        {
+                            continue;
+                        }
+                        shipparts[i].nextAreaPart = shipparts[j % shipparts.Length];
+                        break;
+                    }
                 }
             }
         }
@@ -45,19 +57,27 @@ namespace MastersOfTempest.ShipBL
         }
 
         // calculates average of the destruction of the ship (health = 1 - destruction)
-        public float CalculateOverallDestruction()
+        public float[] CalculateOverallDestruction()
         {
             float result = 0.0f;
             int num = 0;
+            float[] out_arr = new float[interactionAreas.Values.Count];
+            int j = 0;
             foreach (List<ShipPart> partList in interactionAreas.Values)
             {
-                num += partList.Count;
+                result = 0f;
+                num = partList.Count;
                 for (int i = 0; i < partList.Count; i++)
                 {
                     result += partList[i].GetDestruction();
                 }
+                if (num != 0)
+                    out_arr[j] = result / num;
+                else
+                    out_arr[0] = 0f;
+                j++;
             }
-            return result / num;
+            return out_arr;
         }
 
         public void ChangeShaderDestructionValue()
@@ -84,7 +104,7 @@ namespace MastersOfTempest.ShipBL
 
         private void OnShipPartHit(object sender, EventArgs args)
         {
-            var origin = (ShipPart) sender;
+            var origin = (ShipPart)sender;
             //var damage = origin.status == ShipPartStatus.Fragile ? 1f : ((ShipPartHitEventArgs)args).damageAmount;
             //We can later use another action, e.g. ShipPart hit to also add the sound of the impact
             ActionRequest?.Invoke(this, new ActionMadeEventArgs(new ShakeCameraAction(((ShipPartHitEventArgs)args).damageAmount, origin.transform.position)));

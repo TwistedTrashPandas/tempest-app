@@ -84,6 +84,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 1
+  winFont: {fileID: 12800000, guid: 8ab0ce2e6f48833498113fbe6c368708, type: 3}
   radiusCollider: 60
 --- !u!114 &910838310309382196
 MonoBehaviour:
@@ -99,3 +100,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 2
   overallDestructionThreshold: 0.65
+  loseFont: {fileID: 12800000, guid: 8ab0ce2e6f48833498113fbe6c368708, type: 3}
