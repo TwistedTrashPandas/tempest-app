@@ -233,8 +233,9 @@ namespace MastersOfTempest.Environment.Interacting
                         {
                             randomSize = Random.Range(0.5f, 1.5f);
                             envObjects[envObjects.Count - 1].moveType = (MoveType)((Random.Range(2, 5) >= 3) ? 3 : 2 );
-                            envObjects[envObjects.Count - 1].speed *= 0.15f;
+                            envObjects[envObjects.Count - 1].speed *= 0.16f;
                             randOffset = GetRandomPointOnSphere(minRadiusS, maxRadiusS);
+                            envObjects[envObjects.Count - 1].GetComponent<Damaging>().damage = 0.3f * randomSize;
                         }
                         else
                         {
@@ -245,11 +246,11 @@ namespace MastersOfTempest.Environment.Interacting
                             envObjects[envObjects.Count - 1].moveType = (MoveType)Random.Range(0, 3); // MoveType.ForceDirect; // 
                             if((int)envObjects[envObjects.Count - 1].moveType <= 1)
                                 envObjects[envObjects.Count - 1].GetComponent<Rigidbody>().constraints |= (RigidbodyConstraints.FreezePositionY);
-                            randOffset = GetRandomPointOnSphere(minRadiusS * 1f, maxRadiusS * 0.9f);
+                            randOffset = GetRandomPointOnSphere(minRadiusS * 1.5f, maxRadiusS * 0.9f);
+                            envObjects[envObjects.Count - 1].GetComponent<Damaging>().damage = 0.5f * randomSize;
                         }
 
                         // hard coded so far larger rocks are slower but deal more damage
-                        envObjects[envObjects.Count - 1].GetComponent<Damaging>().damage = 0.2f * randomSize;
                         envObjects[envObjects.Count - 1].GetComponent<Damaging>().envSpawner = this;
 
                         localScale = new Vector3(randomSize, randomSize, randomSize);
