@@ -71,7 +71,7 @@ MonoBehaviour:
   spawnProbZ: 0.025
   rockRotSpeed: 1.5
   minRadiusT: 2
-  maxRadiusT: 7
+  maxRadiusT: 4
   minRadiusS: 60
   maxRadiusS: 3000
   maxNumObjects: 150

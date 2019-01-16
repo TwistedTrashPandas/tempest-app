@@ -83,12 +83,13 @@ namespace MastersOfTempest
 
         private void ClientLose()
         {
-            print(postProcessVolume.gameObject.name);
-            print(postProcessVolume.profile.GetSetting<ColorGrading>());
-            StartCoroutine(ScreenSaturation(postProcessVolume.profile.GetSetting<ColorGrading>()));
-            toggleLossText = !toggleLossText;
-            Physics.gravity = new Vector3(0f, -9.81f, 0f);
-            StartCoroutine(TimeScale());
+            if (!toggleLossText)
+            {
+                toggleLossText = true;
+                StartCoroutine(ScreenSaturation(postProcessVolume.profile.GetSetting<ColorGrading>()));
+                Physics.gravity = new Vector3(0f, -9.81f, 0f);
+                StartCoroutine(TimeScale());
+            }
             //OnLose();
         }
 

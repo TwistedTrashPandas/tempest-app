@@ -70,6 +70,11 @@ namespace MastersOfTempest.Environment.Interacting
             }
         }
 
+        public void SetMass(float mass)
+        {
+            rigidbody.mass = mass;
+        }
+
         public void ClampVelocity(float maxVel)
         {
             if (rigidbody.velocity.magnitude > maxVel)
@@ -94,7 +99,7 @@ namespace MastersOfTempest.Environment.Interacting
         public void AddForce(Vector3 force, Vector3 pos)
         {
             //rigidbody.AddForceAtPosition(force, transform.position);
-            rigidbody.AddForce(force);
+            rigidbody.AddForce(force * rigidbody.mass);
         }
 
         public void DampVelocity(float damping_factor)
@@ -104,7 +109,7 @@ namespace MastersOfTempest.Environment.Interacting
 
         public void DampForce(float damping_factor)
         {
-            rigidbody.AddForce(-damping_factor * rigidbody.velocity);
+            rigidbody.AddForce(-damping_factor * rigidbody.velocity * rigidbody.mass);
         }
 
         public void EnableGravity()

@@ -11,6 +11,7 @@ namespace MastersOfTempest
     {
         public delegate void WinAnimation(GameObject ship);
         public static event WinAnimation OnWin;
+
         public Font winFont;
         public float radiusCollider = 50f;
 
@@ -58,10 +59,13 @@ namespace MastersOfTempest
             base.OnClientReceivedMessageRaw(data, steamID);
             if (data[0] > 0)
             {
-                toggleWinText = !toggleWinText;
-                OnWin(gameObject.GetComponent<Gamemaster>().GetShip().gameObject);
+                if (!toggleWinText)
+                {
+                    toggleWinText = true;
+                    OnWin(gameObject.GetComponent<Gamemaster>().GetShip().gameObject);
+                }
             }
-            }
+        }
 
         protected override void OnTriggerEnter(Collider c)
         {
