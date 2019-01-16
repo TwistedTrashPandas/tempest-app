@@ -65,8 +65,8 @@ MonoBehaviour:
   listIndex: 0
   relativeTargetPos: {x: 0, y: 0, z: 0}
   type: 0
-  speed: 55
-  closestDistance: 5
+  speed: 50
+  closestDistance: 15
   moveType: 2
   damage: 1
   health: 1

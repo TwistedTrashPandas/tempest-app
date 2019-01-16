@@ -232,10 +232,10 @@ namespace MastersOfTempest.Environment.Interacting
                         if (Random.Range(0, 3) != 0)
                         {
                             randomSize = Random.Range(0.5f, 1.5f);
-                            envObjects[envObjects.Count - 1].moveType = (MoveType)((Random.Range(2, 5) >= 3) ? 3 : 2 );
-                            envObjects[envObjects.Count - 1].speed *= 0.16f;
+                            envObjects[envObjects.Count - 1].moveType = (MoveType)((Random.Range(2, 4) >= 3) ? 3 : 2 );
+                            envObjects[envObjects.Count - 1].speed *= 0.14f;
                             randOffset = GetRandomPointOnSphere(minRadiusS, maxRadiusS);
-                            envObjects[envObjects.Count - 1].GetComponent<Damaging>().damage = 0.3f * randomSize;
+                            envObjects[envObjects.Count - 1].GetComponent<Damaging>().damage = 0.15f * randomSize;
                         }
                         else
                         {
