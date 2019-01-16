@@ -49,7 +49,7 @@ namespace MastersOfTempest
 
                 if (GUI.Button(new Rect(Screen.width * 0.75f, Screen.height * 0.8f, Screen.width / 6f, Screen.height / 18f), "Return to Lobby", buttonStyle))
                 {
-                    SceneManager.LoadScene("Lobby");
+                    SceneManager.LoadScene(0);
                 }
             }
         }
