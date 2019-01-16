@@ -5,7 +5,7 @@ namespace MastersOfTempest.PlayerControls
 {
     public class SteerShip : PlayerAction
     {
-        const float SteeringForceValue = 20000f;
+        const float SteeringForceValue = 500f;
         public enum SteeringDirection
         {
             Left,
@@ -38,6 +38,7 @@ namespace MastersOfTempest.PlayerControls
             //TODO: duration for the force, or add as an impulse
             if ((ship.GetCurrenStatus().Condition & ShipBL.ShipCondition.Freezing) == ShipBL.ShipCondition.Freezing)
                 forceDirection *= ship.GetFreezingSlowDown();
+
             ship.GetShipForceManipulator().AddForce(forceDirection * SteeringForceValue, .5f);
         }
     }

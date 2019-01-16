@@ -57,10 +57,6 @@ namespace MastersOfTempest.ShipBL
             if (serverObject.onServer)
             {
                 rigidbody.AddForce(force);
-                if (!Mathf.Approximately(duration, 0f))
-                {
-                    StartCoroutine(RemoveForce(force, duration));
-                }
             }
             //we send force to be applied from the client
             else
