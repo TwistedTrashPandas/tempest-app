@@ -124,7 +124,7 @@ namespace MastersOfTempest.PlayerControls
             Quaternion startRotation = hammer.transform.localRotation;
 
             float t = 0;
-            float scaleFactor = distance / 2;
+            float scaleFactor = distance / 4;
             hammer.EnableCollider(true);
             hammer.transform.SetParent(firstPersonCamera.transform, true);
             Vector3 localScale = hammer.transform.lossyScale;
