@@ -271,10 +271,22 @@ Shader "Custom/StandardWithDestructionVal"
 			#pragma multi_compile_fwdbase
 			#pragma multi_compile_fog
 
-			#pragma vertex vertBase
-			#pragma fragment fragBase
+			#pragma vertex vert
+			#pragma fragment frag
 			#include "UnityStandardCoreForward.cginc"
+			float _fDestruction;
+			float _fMaxDistance;
+			half4 _ColorInterp1;
+			half4 _ColorInterp2;
 
+			VertexOutputForwardBase vert(in VertexInput v) {
+				return vertForwardBase(v);
+			}
+
+			// Colors hard coded
+			half4 frag(VertexOutputForwardBase i) : SV_TARGET{
+				return lerp(lerp(fragForwardBaseInternal(i), _ColorInterp2, min(_fDestruction * 2.0f,1.0f)), _ColorInterp1, min(max(0.0f, _fDestruction - 0.5f)*4.0f,1.0f));
+			}
 			ENDCG
 		}
 			// ------------------------------------------------------------------
