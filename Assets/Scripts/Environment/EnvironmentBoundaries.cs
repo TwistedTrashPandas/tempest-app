@@ -12,7 +12,7 @@ namespace MastersOfTempest.Environment
         private const float checkRate = 1f / 16f;
 
         // setting world boundaries
-        private const float damagePerSecond = 0.04f;
+        private const float damagePerSecond = 0.08f;
         private const float maxHeight = 1250f;
         private const float maxRadius = 3500f;
 
