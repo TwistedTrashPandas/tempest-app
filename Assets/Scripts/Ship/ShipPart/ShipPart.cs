@@ -54,6 +54,12 @@ namespace MastersOfTempest.ShipBL
             Destroy(GetComponent<AudioSource>());
         }
 
+        protected override void UpdateServer()
+        {
+            base.UpdateServer();
+
+        }
+
         public float GetDestruction()
         {
             return destruction;
