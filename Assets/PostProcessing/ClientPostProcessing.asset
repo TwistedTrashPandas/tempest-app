@@ -68,16 +68,16 @@ MonoBehaviour:
     value: 1.5
   threshold:
     overrideState: 1
-    value: 1
+    value: 1.5
   softKnee:
     overrideState: 0
     value: 1
   clamp:
-    overrideState: 0
-    value: 65472
+    overrideState: 1
+    value: 10
   diffusion:
     overrideState: 1
-    value: 8
+    value: 4
   anamorphicRatio:
     overrideState: 0
     value: 1
@@ -115,21 +115,21 @@ MonoBehaviour:
     value: 0
   color:
     overrideState: 1
-    value: {r: 0, g: 0, b: 0, a: 1}
+    value: {r: 1, g: 0, b: 0, a: 1}
   center:
     overrideState: 1
     value: {x: 0.5, y: 0.5}
   intensity:
     overrideState: 1
-    value: 0.333
+    value: 0
   smoothness:
     overrideState: 1
-    value: 0.2
+    value: 0.5
   roundness:
     overrideState: 1
     value: 1
   rounded:
-    overrideState: 1
+    overrideState: 0
     value: 0
   mask:
     overrideState: 0
@@ -1503,13 +1503,13 @@ MonoBehaviour:
     overrideState: 1
     value: 1
   mode:
-    overrideState: 0
+    overrideState: 1
     value: 1
   intensity:
-    overrideState: 0
-    value: 0
+    overrideState: 1
+    value: 1
   color:
-    overrideState: 0
+    overrideState: 1
     value: {r: 0, g: 0, b: 0, a: 1}
   ambientOnly:
     overrideState: 0
@@ -1524,8 +1524,8 @@ MonoBehaviour:
     overrideState: 0
     value: -12
   thicknessModifier:
-    overrideState: 0
-    value: 1
+    overrideState: 1
+    value: 2
   directLightingStrength:
     overrideState: 0
     value: 0

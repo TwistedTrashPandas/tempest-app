@@ -75,7 +75,7 @@ namespace MastersOfTempest.Environment.VisualEffects
         void Start()
         {
             material = GetComponent<MeshRenderer>().material;
-            float height = 1275f;
+            float height = 1315f;
             float radius = 7500f;
             switch (QualitySettings.GetQualityLevel())
             {

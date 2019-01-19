@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 4360182273533052}
   - component: {fileID: 114416851725316804}
   - component: {fileID: 114013144028399348}
+  - component: {fileID: 3083953185124836273}
   - component: {fileID: 9166808241863759962}
   - component: {fileID: 910838310309382196}
-  - component: {fileID: 3083953185124836273}
   m_Layer: 10
   m_Name: Gamemaster
   m_TagString: Untagged
@@ -72,6 +72,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 0
+--- !u!114 &3083953185124836273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1461727536662182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c3fe40bc1e153647ad2fda5acbe7024, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  index: 1
 --- !u!114 &9166808241863759962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e123f767bda44044afe8231e64a34c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  index: 1
+  index: 2
   winFont: {fileID: 12800000, guid: 8ab0ce2e6f48833498113fbe6c368708, type: 3}
   radiusCollider: 75
 --- !u!114 &910838310309382196
@@ -99,19 +112,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 583a2b6cd9d191e47989e0b0633d1988, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  index: 2
+  index: 3
   overallDestructionThreshold: 0.75
   loseFont: {fileID: 12800000, guid: 8ab0ce2e6f48833498113fbe6c368708, type: 3}
---- !u!114 &3083953185124836273
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1461727536662182}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c3fe40bc1e153647ad2fda5acbe7024, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  index: -1

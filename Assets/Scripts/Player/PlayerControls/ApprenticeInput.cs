@@ -102,7 +102,7 @@ namespace MastersOfTempest.PlayerControls
             Instantiate(Resources.Load<GameObject>("ApprenticeHands"), firstPersonCamera.transform, false);
 
             // Make sure that the hands are visible
-            firstPersonCamera.nearClipPlane = 0.01f;
+            firstPersonCamera.nearClipPlane = 0.1f;
 
             animations = GetComponentInChildren<ApprenticeInputAnimations>();
 

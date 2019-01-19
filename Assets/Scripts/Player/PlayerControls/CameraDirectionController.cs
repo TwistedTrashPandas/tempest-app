@@ -20,8 +20,8 @@ namespace MastersOfTempest.PlayerControls
         private const float PitchMin = -60f;
 
         // camera movement parameters
-        private const float maxMovementDistance = 2f;
-        private const float durationFraction = 4f; // duration / durationFraction == camera movement after spell cast
+        private const float maxMovementDistance = 0.05f;
+        private const float durationFraction = 3f; // duration / durationFraction == camera movement after spell cast
 
         private bool isActive = true;
         public bool Active
@@ -145,11 +145,12 @@ namespace MastersOfTempest.PlayerControls
 
         private IEnumerator MoveCameraCoroutine(Vector3 direction, float intensity)
         {
-            Transform cameraTransform = FirstPersonCamera.transform;
-            const float MoveDuration = 1.0f;
+            const float MoveDuration = 1.25f;
             const float MoveDurationFraction = MoveDuration / durationFraction;
+            Transform cameraTransform = FirstPersonCamera.transform;
             Vector3 localPosBefore = cameraTransform.localPosition;
-            Vector3 localTargetPos = cameraTransform.InverseTransformPoint(cameraTransform.position + direction * intensity);
+            Vector3 localTargetPos = localPosBefore + direction * Mathf.Min(intensity, maxMovementDistance);
+
             float timeElapsed = 0f;
 
             while (timeElapsed < MoveDurationFraction)
@@ -158,6 +159,7 @@ namespace MastersOfTempest.PlayerControls
                 float deltaTime = Time.unscaledDeltaTime;
                 timeElapsed += deltaTime;
                 cameraTransform.transform.localPosition = Vector3.Slerp(localPosBefore, localTargetPos, timeElapsed / MoveDurationFraction);
+               // localTargetPos = cameraTransform.InverseTransformDirection(direction * Mathf.Min(intensity, maxMovementDistance));
             }
             timeElapsed = MoveDurationFraction;
             while (timeElapsed < MoveDuration)
@@ -165,7 +167,8 @@ namespace MastersOfTempest.PlayerControls
                 yield return null;
                 float deltaTime = Time.unscaledDeltaTime;
                 timeElapsed += deltaTime;
-                cameraTransform.transform.localPosition = Vector3.Slerp(localTargetPos, localPosBefore, (timeElapsed - MoveDurationFraction) / MoveDuration);
+                cameraTransform.transform.localPosition = Vector3.Slerp(localTargetPos, localPosBefore, (timeElapsed - MoveDurationFraction) / (MoveDuration - MoveDurationFraction));
+               // localTargetPos = cameraTransform.InverseTransformDirection(direction * Mathf.Min(intensity, maxMovementDistance));
             }
             cameraTransform.transform.localPosition = localPosBefore;
         }

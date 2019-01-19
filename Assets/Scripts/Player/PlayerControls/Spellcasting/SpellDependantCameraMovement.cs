@@ -56,14 +56,15 @@ namespace MastersOfTempest.PlayerControls
                 throw new InvalidOperationException($"{nameof(spellcastingController)} is not specified!");
             }
             spellcastingController.SpellCasted += OnSpellCasted;
-
             gamemaster = GameObject.Find("Gamemaster").GetComponent<Gamemaster>();
             ship = gamemaster.GetShip();
+            lastSpellCast = "";
         }
 
         protected override void StartClient()
         {
             gamemaster = FindObjectsOfType<Gamemaster>().First(gm => gm.gameObject.scene == gameObject.scene);
+            lastSpellCast = "";
         }
 
         private void MoveCamera(Vector3 direction, float intensity)

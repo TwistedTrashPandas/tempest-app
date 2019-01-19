@@ -11,7 +11,7 @@ Material:
   m_Shader: {fileID: 4800000, guid: f33ffe59326727548a24da678a30c703, type: 3}
   m_ShaderKeywords: _ALPHAPREMULTIPLY_ON
   m_LightmapFlags: 0
-  m_EnableInstancingVariants: 1
+  m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: 2992
   stringTagMap: {}
@@ -144,8 +144,8 @@ Material:
     - g_fDensity: 0.6
     - g_fLightAttenuation: 1.1
     - g_fMaxTransparency: 0.95
-    - g_fMaxTransparencyDist: 1000
-    - g_fMinTransparency: 0.45
+    - g_fMaxTransparencyDist: 1250
+    - g_fMinTransparency: 0.5
     - g_fSize: 64
     - g_fSizeTop: 12
     - g_fTimeDiff: 0.01
