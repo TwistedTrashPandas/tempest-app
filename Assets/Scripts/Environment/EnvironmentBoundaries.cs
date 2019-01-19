@@ -80,7 +80,6 @@ namespace MastersOfTempest.Environment
                 if (!Mathf.Approximately(lastValToSend, valToSend))
                 {
                     SendToAllClients(ByteSerializer.GetBytes(valToSend), Facepunch.Steamworks.Networking.SendType.Reliable);
-                    print("send vignette");
                     lastValToSend = valToSend;
                 }
             }
@@ -90,7 +89,6 @@ namespace MastersOfTempest.Environment
         protected override void OnClientReceivedMessageRaw(byte[] data, ulong steamID)
         {
             base.OnClientReceivedMessageRaw(data, steamID);
-            print("recv vignette");
             float distanceDifference = ByteSerializer.FromBytes<float>(data);
             postProcessVignette.intensity.Override(Mathf.Min(distanceDifference / maxDistance, maxIntensity));
         }
