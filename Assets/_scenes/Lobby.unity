@@ -3188,8 +3188,8 @@ MonoBehaviour:
   readyButton: {fileID: 1092243025}
   selectWizardButton: {fileID: 1667338505}
   selectApprenticeButton: {fileID: 176802352}
-  serverSceneName: MergedServer
-  clientSceneName: MergedClient
+  serverSceneName: IntroCinematicServer
+  clientSceneName: IntroCinematicClient
 --- !u!1 &1819350274
 GameObject:
   m_ObjectHideFlags: 0

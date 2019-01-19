@@ -1,0 +1,202 @@
+fileFormatVersion: 2
+guid: fd9d204b4618cb7478e2641dd4250f43
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: AlterStone
+    100004: Bottom
+    100006: Crystal1
+    100008: Crystal2
+    100010: Crystal3
+    100012: Crystal4
+    100014: IronRIng
+    100016: IronRing
+    100018: MiddleStone
+    100020: Plane
+    100022: WoodMiddle.001
+    400000: //RootNode
+    400002: AlterStone
+    400004: Bottom
+    400006: Crystal1
+    400008: Crystal2
+    400010: Crystal3
+    400012: Crystal4
+    400014: IronRIng
+    400016: IronRing
+    400018: MiddleStone
+    400020: Plane
+    400022: WoodMiddle.001
+    2100000: Arrow
+    2100002: CrystalMiddle
+    2100004: Iron
+    2100006: Wood
+    2100008: AltarStone
+    2100010: Crystal4
+    2100012: Crystal3
+    2100014: Crystal2
+    2100016: Crystal1
+    2300000: AlterStone
+    2300002: Bottom
+    2300004: Crystal1
+    2300006: Crystal2
+    2300008: Crystal3
+    2300010: Crystal4
+    2300012: IronRIng
+    2300014: IronRing
+    2300016: MiddleStone
+    2300018: Plane
+    2300020: WoodMiddle.001
+    3300000: AlterStone
+    3300002: Bottom
+    3300004: Crystal1
+    3300006: Crystal2
+    3300008: Crystal3
+    3300010: Crystal4
+    3300012: IronRIng
+    3300014: IronRing
+    3300016: MiddleStone
+    3300018: Plane
+    3300020: WoodMiddle.001
+    4300000: Plane
+    4300002: MiddleStone
+    4300004: IronRIng
+    4300006: IronRing
+    4300008: Bottom
+    4300010: WoodMiddle.001
+    4300012: AlterStone
+    4300014: Crystal4
+    4300016: Crystal3
+    4300018: Crystal2
+    4300020: Crystal1
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: AltarStone
+    second: {fileID: 2100000, guid: a2aafe6d2a837084594d865970d8dd5e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Arrow
+    second: {fileID: 2100000, guid: f9a847cb5cdc89d4785683b4bd94ca37, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Crystal1
+    second: {fileID: 2100000, guid: e002739ebfdb71d49bb6b3b843ca5ba5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Crystal2
+    second: {fileID: 2100000, guid: b61c5b18f2669ff418c5ffe02e198d1e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Crystal3
+    second: {fileID: 2100000, guid: 3ffe1cf0c30731f4686e25cdbe3cee81, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Crystal4
+    second: {fileID: 2100000, guid: 2c16bc5cdd5ccac4bb2a2135d0e106be, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: CrystalMiddle
+    second: {fileID: 2100000, guid: 1f46467505e87834dadb924a8f536393, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Iron
+    second: {fileID: 2100000, guid: ff99761d040c2cb4abe83bab1fc14862, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wood
+    second: {fileID: 2100000, guid: 22b4f003da2588a4e9987802186d7db2, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
