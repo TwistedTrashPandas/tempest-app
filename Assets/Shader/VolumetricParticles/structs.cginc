@@ -15,24 +15,6 @@ struct SLightAttribs
 	float2 f2Dummy;
 };
 
-struct SCameraAttribs
-{
-	float4 f4CameraPos;            ///< Camera world position
-	float fNearPlaneZ;
-	float fFarPlaneZ; // fNearPlaneZ < fFarPlaneZ
-	float2 f2Dummy;
-
-	float3 f3ViewDir;
-	float fDummy;
-
-	float4 f4ViewFrustumPlanes[6];
-
-	matrix WorldViewProj;
-	matrix mView;
-	matrix mProj;
-	matrix mViewProjInv;
-};
-
 struct SParticleAttribs
 {
 	float3 f3Pos;
