@@ -19,6 +19,10 @@ namespace MastersOfTempest.PlayerControls
         private const float PitchMax = 70f;
         private const float PitchMin = -60f;
 
+        // camera movement parameters
+        private const float maxMovementDistance = 2f;
+        private const float durationFraction = 4f; // duration / durationFraction == camera movement after spell cast
+
         private bool isActive = true;
         public bool Active
         {
@@ -102,7 +106,7 @@ namespace MastersOfTempest.PlayerControls
                 yield return null;
                 float deltaTime = Time.deltaTime;
                 timeElapsed += deltaTime;
-                if(timeElapsed > ShakeDurationHalved)
+                if (timeElapsed > ShakeDurationHalved)
                 {
                     //We don't want to accumulate extra angle change over dropped frames
                     deltaTime -= timeElapsed - ShakeDurationHalved;
@@ -118,7 +122,7 @@ namespace MastersOfTempest.PlayerControls
                 yield return null;
                 float deltaTime = Time.deltaTime;
                 timeElapsed += deltaTime;
-                if(timeElapsed > ShakeDurationHalved)
+                if (timeElapsed > ShakeDurationHalved)
                 {
                     //We don't want to accumulate extra angle change over dropped frames
                     deltaTime -= timeElapsed - ShakeDurationHalved;
@@ -127,6 +131,43 @@ namespace MastersOfTempest.PlayerControls
                 rollShake -= deltaTime * (rollDisplacement / ShakeDurationHalved);
                 yawShake -= deltaTime * (yawDisplacement / ShakeDurationHalved);
             }
+        }
+
+        /// <summary>
+        /// Move the camera with the set intensity
+        /// </summary>
+        /// <param name="direction">Direction the camera is moving, normalized</param>
+        /// <param name="intensity">Intensity of the camera movement</param>
+        public void MoveCamera(Vector3 direction, float intensity)
+        {
+            StartCoroutine(MoveCameraCoroutine(direction, intensity));
+        }
+
+        private IEnumerator MoveCameraCoroutine(Vector3 direction, float intensity)
+        {
+            Transform cameraTransform = FirstPersonCamera.transform;
+            const float MoveDuration = 1.0f;
+            const float MoveDurationFraction = MoveDuration / durationFraction;
+            Vector3 localPosBefore = cameraTransform.localPosition;
+            Vector3 localTargetPos = cameraTransform.InverseTransformPoint(cameraTransform.position + direction * intensity);
+            float timeElapsed = 0f;
+
+            while (timeElapsed < MoveDurationFraction)
+            {
+                yield return null;
+                float deltaTime = Time.unscaledDeltaTime;
+                timeElapsed += deltaTime;
+                cameraTransform.transform.localPosition = Vector3.Slerp(localPosBefore, localTargetPos, timeElapsed / MoveDurationFraction);
+            }
+            timeElapsed = MoveDurationFraction;
+            while (timeElapsed < MoveDuration)
+            {
+                yield return null;
+                float deltaTime = Time.unscaledDeltaTime;
+                timeElapsed += deltaTime;
+                cameraTransform.transform.localPosition = Vector3.Slerp(localTargetPos, localPosBefore, (timeElapsed - MoveDurationFraction) / MoveDuration);
+            }
+            cameraTransform.transform.localPosition = localPosBefore;
         }
     }
 }

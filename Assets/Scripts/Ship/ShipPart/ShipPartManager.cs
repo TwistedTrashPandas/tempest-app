@@ -106,7 +106,7 @@ namespace MastersOfTempest.ShipBL
         {
             var origin = (ShipPart)sender;
             //var damage = origin.status == ShipPartStatus.Fragile ? 1f : ((ShipPartHitEventArgs)args).damageAmount;
-            //We can later use another action, e.g. ShipPart hit to also add the sound of the impact
+            // We can later use another action, e.g. ShipPart hit to also add the sound of the impact
             ActionRequest?.Invoke(this, new ActionMadeEventArgs(new ShakeCameraAction(((ShipPartHitEventArgs)args).damageAmount, origin.transform.position)));
         }
     }
