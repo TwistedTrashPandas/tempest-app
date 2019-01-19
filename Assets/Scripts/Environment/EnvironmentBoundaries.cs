@@ -67,13 +67,16 @@ namespace MastersOfTempest.Environment
                         curr.AddDestruction(damagePerSecond * Time.fixedDeltaTime);
                         valToSend = curr.transform.position.y - maxHeight;
                     }
-                    else if ((dist = Vector3.Distance(worldCenter, curr.transform.position)) > maxRadius)
+                    if ((dist = Vector3.Distance(worldCenter, curr.transform.position)) > maxRadius)
                     {
                         curr.AddDestruction(damagePerSecond * Time.fixedDeltaTime);
                         valToSend = dist - maxRadius;
                     }
-                    else if (curr.transform.position.y < minHeight)
-                        curr.SetDestruction(1.0f);
+                    if (curr.transform.position.y < minHeight)
+                    {
+                        Debug.Log("set destr water");
+                        curr.AddDestruction(1.0f);
+                    }
                 }
 
                 // send damage update to players for visual feedback

@@ -77,11 +77,9 @@ namespace MastersOfTempest.ShipBL
                 {
                     destruc = 1.0f;
                 }
-                AddDestruction(destruc);
-                SendCollision(contactPoints, impulse, destruc);
 
-                // lose condition checks if the overall destruction value is above the threshold (after collision)
-                loseCondition.CheckOverAllDestruction();
+                SendCollision(contactPoints, impulse, destruc);
+                AddDestruction(destruc);
 
                 // transfer damage to next ship part
                 if (destruc > 1.05f)
@@ -167,7 +165,11 @@ namespace MastersOfTempest.ShipBL
                 int l = Mathf.FloorToInt(data.Length / 12) - 1;
 
                 // first 4 bytes are the delta destruction value
-                AddDestruction(destruc);
+                if (serverObject.onServer)
+                    AddDestruction(destruc);
+                //else
+                //    SetDestruction(destruc);
+
 
                 // crash sound, played locally at ship part
                 audioSource.PlayOneShot(crashSound, Mathf.Clamp01(destruc) / 1.5f);
@@ -190,12 +192,15 @@ namespace MastersOfTempest.ShipBL
         public void AddDestruction(float destruc)
         {
             destruction = Mathf.Clamp01(destruction + destruc);
-            if (destruc < 0f)
-            {
-                byte[] buffer = new byte[4];
-                Buffer.BlockCopy(BitConverter.GetBytes(destruction), 0, buffer, 0, 4);
-                SendToAllClients(buffer, Facepunch.Steamworks.Networking.SendType.Reliable);
-            }
+
+            // lose condition checks if the overall destruction value is above the threshold (after collision)
+            if (destruc > 0f)
+                loseCondition.CheckOverAllDestruction();
+
+            // sends updated destruction value separately
+            byte[] buffer = new byte[4];
+            Buffer.BlockCopy(BitConverter.GetBytes(destruction), 0, buffer, 0, 4);
+            SendToAllClients(buffer, Facepunch.Steamworks.Networking.SendType.Reliable);
         }
 
         // add or remove destruction value to ship parts
