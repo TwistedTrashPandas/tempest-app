@@ -139,6 +139,7 @@ namespace MastersOfTempest.Environment.Interacting
 
         private IEnumerator SpawnObject()
         {
+            yield return new WaitForSeconds(spawnRate * 2);
             int firstSpawns = 20;
             while (spawnRate > 0f)
             {
