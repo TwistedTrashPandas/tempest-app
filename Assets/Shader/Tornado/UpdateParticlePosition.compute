@@ -63,12 +63,14 @@ void UpdateParticles(uint3 id : SV_DispatchThreadID)
 		velocity.y = max(-g_f3MaxVel.y, min(g_f3MaxVel.y, velocity.y));
 
 		float2 tempVel = float2(velocity.x, velocity.z);
-		if (position.y < 800.0f && length(tempVel) > g_f3MaxVel.x) {
-			tempVel = normalize(tempVel) * g_f3MaxVel.x;
+		float l = length(tempVel);
+		if (position.y < 800.0f ) {
+			if(l > g_f3MaxVel.x)
+				tempVel = normalize(tempVel) * g_f3MaxVel.x;
 		}
 		else {
 			float g_f3MaxNew = g_f3MaxVel.x * ((position.y - 800.0f) / 300.0f + 1.0f);
-			if(length(tempVel) > g_f3MaxNew)
+			if(l > g_f3MaxNew)
 				tempVel = normalize(tempVel) * g_f3MaxNew;
 		}
 		velocity.xz = tempVel.xy;

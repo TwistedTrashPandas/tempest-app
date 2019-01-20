@@ -44,7 +44,7 @@ namespace MastersOfTempest.Environment.Interacting
         public MoveType moveType;
         public GameObject objectContainerPrefab;
 
-        // TODO use currServerTime for synchronization 
+        private const float spawnDistToShip = 50f;
 
         private float spawnProbSum;
         private bool onServer;
@@ -227,8 +227,9 @@ namespace MastersOfTempest.Environment.Interacting
                     case EnvObjectType.Damaging:
                         float randomSize;
                         Vector3 randOffset;
+                        Quaternion randOrientation = Quaternion.Euler(Random.Range(0f,180f), Random.Range(0f, 180f), Random.Range(0f, 180f));
                         prefabNum = Mathf.FloorToInt(Random.Range(0f, damagingPrefabs.Length - Mathf.Epsilon));
-                        envObjects.Add(GameObject.Instantiate(damagingPrefabs[prefabNum], position, orientation).GetComponent<EnvObject>());
+                        envObjects.Add(GameObject.Instantiate(damagingPrefabs[prefabNum], position, randOrientation).GetComponent<EnvObject>());
                         if (Random.Range(0, 3) != 0)
                         {
                             randomSize = Random.Range(0.5f, 1.5f);
@@ -257,9 +258,12 @@ namespace MastersOfTempest.Environment.Interacting
                         localScale = new Vector3(randomSize, randomSize, randomSize);
                         position += randOffset;
                         position.y = Random.Range(dims.y * cellSize * 0.05f, dims.y * cellSize * 0.85f);
+                        if (Vector3.Distance(position, gamemaster.GetShip().transform.position) < spawnDistToShip)
+                            position += envObjects[envObjects.Count - 1].transform.forward * spawnDistToShip;
                         envObjects[envObjects.Count - 1].transform.position = position;
                         envObjects[envObjects.Count - 1].transform.localScale = localScale;
                         envObjects[envObjects.Count - 1].GetComponent<Rigidbody>().angularVelocity = (new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f)) * rockRotSpeed) / randomSize;
+                            
                         break;
                     case EnvObjectType.DangerZone:
                         initialPos = new Vector3(Random.Range(0, dims.x) * cellSizeH, Random.Range(dims.y * 0.1f, 0.8f * dims.y) * cellSize, Random.Range(0, dims.z) * cellSizeH) + new Vector3(0.5f, 0.5f, 0.5f);
