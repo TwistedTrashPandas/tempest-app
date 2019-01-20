@@ -57,14 +57,19 @@ void UpdateParticles(uint3 id : SV_DispatchThreadID)
 			if (dist < 10.0f)
 				particleVisibilityRW[id.x] = 0;
 		}
-
+		//if(position.y < 1000.0f)
 		velocity *= g_fDampVel;
 		velocity += vectorFieldIn[min(idx.x * dims + idx.y * g_i3Dimensions[2] + idx.z, dims*g_i3Dimensions[0])] * g_fTimestep;
 		velocity.y = max(-g_f3MaxVel.y, min(g_f3MaxVel.y, velocity.y));
 
 		float2 tempVel = float2(velocity.x, velocity.z);
-		if (length(tempVel) > g_f3MaxVel.x) {
+		if (position.y < 800.0f && length(tempVel) > g_f3MaxVel.x) {
 			tempVel = normalize(tempVel) * g_f3MaxVel.x;
+		}
+		else {
+			float g_f3MaxNew = g_f3MaxVel.x * ((position.y - 800.0f) / 300.0f + 1.0f);
+			if(length(tempVel) > g_f3MaxNew)
+				tempVel = normalize(tempVel) * g_f3MaxNew;
 		}
 		velocity.xz = tempVel.xy;
 
@@ -72,8 +77,8 @@ void UpdateParticles(uint3 id : SV_DispatchThreadID)
 
 		if (distance(position.xz, g_f3Center.xz) > g_fMaxDist || position.y > g_i3Dimensions[1] * g_f3CellSizes.y) {
 			//particlePosRW[id.x].xz = (particlePosRW[id.x].xz - g_f3Center.xz) * ((id.x + 1) % 2) / 1.5f + g_f3Center.xz;
-			float2 dir = normalize(position.xz - g_f3Center.xz) * g_i3Dimensions[0]  * g_f3CellSizes.x;
-			position.xz = (dir) * ((id.x) % 5) / 6.0f + g_f3Center.xz; // (dir) * min((id.x) % 2, 1) / 2.2f +
+			float2 dir = normalize(position.xz - g_f3Center.xz) * g_i3Dimensions[0] * g_f3CellSizes.x;
+			position.xz = (dir) * ((id.x) % 5) / 6.5f + g_f3Center.xz; // (dir) * min((id.x) % 2, 1) / 2.2f +
 			position.y -= g_f3Center.y * 2.1f;
 			velocity *= g_f3RandPos;// float3(0.0f, 0.0f, 0.0f);
 		}

@@ -100,7 +100,8 @@ namespace MastersOfTempest
                 float up = 60f * Screen.height / Screen.height;
                 float right = 60f * Screen.width / Screen.width;
                 GUI.Label(new Rect(Screen.width / 2f - right, Screen.height / 2f - up, Screen.width / 10f, Screen.height / 10f), guiContent, guiStyle);
-
+                
+                /*
                 GUIStyle buttonStyle = GUI.skin.GetStyle("Button");
                 buttonStyle.fontSize = (int)(40 * Screen.width / 1920f);
                 buttonStyle.font = loseFont;
@@ -108,7 +109,7 @@ namespace MastersOfTempest
                 if (GUI.Button(new Rect(Screen.width * 0.75f, Screen.height * 0.8f, Screen.width / 6f, Screen.height / 18f), "Return to Lobby", buttonStyle))
                 {
                     SceneManager.LoadScene(0);
-                }
+                }*/
             }
         }
 

@@ -57,9 +57,9 @@ MonoBehaviour:
   dampVel: 0.998
   numCloudSkyParticles: 10
   maxVel:
-  - 100
-  - 100
-  - 300
+  - 150
+  - 150
+  - 400
 --- !u!33 &33802898687387734
 MeshFilter:
   m_ObjectHideFlags: 0
