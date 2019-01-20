@@ -256,7 +256,7 @@ namespace MastersOfTempest.Environment.Interacting
 
                         localScale = new Vector3(randomSize, randomSize, randomSize);
                         position += randOffset;
-                        position.y = Random.Range(dims.y * cellSize * 0.1f, dims.y * cellSize * 0.9f);
+                        position.y = Random.Range(dims.y * cellSize * 0.05f, dims.y * cellSize * 0.85f);
                         envObjects[envObjects.Count - 1].transform.position = position;
                         envObjects[envObjects.Count - 1].transform.localScale = localScale;
                         envObjects[envObjects.Count - 1].GetComponent<Rigidbody>().angularVelocity = (new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f)) * rockRotSpeed) / randomSize;

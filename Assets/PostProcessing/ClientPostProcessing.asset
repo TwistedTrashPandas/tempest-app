@@ -68,16 +68,16 @@ MonoBehaviour:
     value: 1.5
   threshold:
     overrideState: 1
-    value: 1.5
+    value: 1
   softKnee:
     overrideState: 0
     value: 1
   clamp:
     overrideState: 1
-    value: 10
+    value: 1000
   diffusion:
     overrideState: 1
-    value: 4
+    value: 5
   anamorphicRatio:
     overrideState: 0
     value: 1
@@ -227,7 +227,7 @@ MonoBehaviour:
     overrideState: 0
     value: 1
   temperature:
-    overrideState: 0
+    overrideState: 1
     value: -2
   tint:
     overrideState: 0
@@ -1507,7 +1507,7 @@ MonoBehaviour:
     value: 1
   intensity:
     overrideState: 1
-    value: 1
+    value: 1.5
   color:
     overrideState: 1
     value: {r: 0, g: 0, b: 0, a: 1}

@@ -35,12 +35,19 @@ namespace MastersOfTempest.Environment
         protected override void StartServer()
         {
             base.StartServer();
+            lastValToSend = -1f;
+            StartCoroutine(GetCenterVF());
+        }
+
+        private IEnumerator GetCenterVF()
+        {
+            yield return new WaitForSeconds(Time.deltaTime*2f);
             Gamemaster master = GameObject.Find("Gamemaster").GetComponent<Gamemaster>();
-            worldCenter = master.GetEnvironmentManager().vectorField.GetCenterWS();
+            VectorField vf = master.GetEnvironmentManager().vectorField;
+            worldCenter = vf.GetCenterWS();
             shipParts = master.GetShip().GetComponentsInChildren<ShipPart>();
             if (shipParts == null)
                 throw new System.InvalidOperationException("Ship parts not found.");
-            lastValToSend = -1f;
             StartCoroutine(CheckForBoundaries());
         }
 
