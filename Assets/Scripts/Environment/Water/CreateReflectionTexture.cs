@@ -7,7 +7,7 @@ public class CreateReflectionTexture : MonoBehaviour
     /// <summary>
     /// Texture size of the reflection
     /// </summary>       
-    public int textureSize = 512;
+    public int textureSize = 256;
     /// <summary>
     /// Layermask to ignore certain layers
     /// </summary>       
@@ -65,7 +65,7 @@ public class CreateReflectionTexture : MonoBehaviour
         // Set custom culling matrix from the current camera
         reflectionCamera.cullingMatrix = cam.projectionMatrix * cam.worldToCameraMatrix;
 
-        reflectionCamera.cullingMask = ~(1 << 4) & reflectLayers.value; // never render water layer
+        reflectionCamera.cullingMask = ~(1 << 4) & Camera.main.cullingMask; // never render water layer
         reflectionCamera.targetTexture = reflectionTex;
         bool oldCulling = GL.invertCulling;
         GL.invertCulling = !oldCulling;
@@ -113,7 +113,7 @@ public class CreateReflectionTexture : MonoBehaviour
         // update other values to match current camera.
         // even if we are supplying custom camera&projection matrices,
         // some of values are used elsewhere (e.g. skybox uses far plane)
-        dest.farClipPlane = src.farClipPlane;
+        dest.farClipPlane = src.farClipPlane/2f;
         dest.nearClipPlane = src.nearClipPlane;
         dest.orthographic = src.orthographic;
         dest.fieldOfView = src.fieldOfView;

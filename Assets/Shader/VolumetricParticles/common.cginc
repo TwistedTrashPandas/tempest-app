@@ -1,39 +1,6 @@
-Texture2D<float>  g_tex2DDepthBuffer            : register(t0);
-Texture2D<float>  g_tex2DCamSpaceZ              : register(t0);
-Texture2D<float4> g_tex2DSliceEndPoints         : register(t4);
-Texture2D<float2> g_tex2DCoordinates            : register(t1);
-Texture2D<float>  g_tex2DEpipolarCamSpaceZ      : register(t2);
-Texture2D<uint2>  g_tex2DInterpolationSource    : register(t6);
-Texture2DArray<float> g_tex2DLightSpaceDepthMap : register(t3);
-Texture2D<float4> g_tex2DSliceUVDirAndOrigin    : register(t6);
-Texture2D<float3> g_tex2DInitialInsctrIrradiance: register(t5);
-Texture2D<float4> g_tex2DColorBuffer            : register(t1);
-Texture2D<float3> g_tex2DScatteredColor         : register(t3);
-Texture2D<float2> g_tex2DOccludedNetDensityToAtmTop : register(t5);
-Texture2D<float3> g_tex2DEpipolarExtinction     : register(t6);
-Texture3D<float3> g_tex3DSingleSctrLUT          : register(t7);
-Texture3D<float3> g_tex3DHighOrderSctrLUT       : register(t8);
-Texture3D<float3> g_tex3DMultipleSctrLUT        : register(t9);
-Texture2D<float3> g_tex2DSphereRandomSampling   : register(t1);
-Texture3D<float3> g_tex3DPreviousSctrOrder      : register(t0);
-Texture3D<float3> g_tex3DPointwiseSctrRadiance  : register(t0);
-Texture2D<float>  g_tex2DAverageLuminance       : register(t10);
-Texture2D<float>  g_tex2DLowResLuminance        : register(t0);
-Texture2D<float>  g_tex2DScrSpaceCloudTransparency : register(t11);
-Texture2D<float2> g_tex2DScrSpaceCloudMinMaxDist   : register(t12);
-Texture2D<float4> g_tex2DScrSpaceCloudColor        : register(t13);
-Texture2DArray<float> g_tex2DLiSpaceCloudTransparency : register(t14);
-Texture2D<float> g_tex2DLiSpCldDensityEpipolarScan  : register(t15);
-Texture2D<float> g_tex2DEpipolarCloudTransparency : register(t16);
-
 SamplerState My_Linear_ClampU_RepeatV_RepeatW_Sampler : register(s0);
 SamplerState MyLinearRepeatSampler : register(s1);
 SamplerState MyLinearClampSampler : register(s2);
-
-static SAirScatteringAttribs g_MediaParams;
-static SLightAttribs g_LightAttribs;
-
-
 
 #   define OPTICAL_DEPTH_LUT_DIM float4(32,64,32,64) // test: float4(64,32,64,32) //
 #   define VOL_SCATTERING_IN_PARTICLE_LUT_DIM float4(32,64,32,8)

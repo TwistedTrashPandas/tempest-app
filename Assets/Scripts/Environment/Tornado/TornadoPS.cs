@@ -74,17 +74,69 @@ namespace MastersOfTempest.Environment.VisualEffects
 
         void Start()
         {
+            material = GetComponent<MeshRenderer>().material;
+            float height = 1315f;
+            float radius = 7500f;
+            switch (QualitySettings.GetQualityLevel())
+            {
+                case 0:
+                    particelNumExp = 10;
+                    numCloudSkyParticles = 8;
+                    material.SetFloat("g_fSize", 96);
+                    material.SetFloat("g_fSizeTop", 6);
+                    radius = 5000f;
+                    break;
+                case 1:
+                    particelNumExp = 10;
+                    numCloudSkyParticles = 8;
+                    material.SetFloat("g_fSize", 96);
+                    material.SetFloat("g_fSizeTop", 8);
+                    radius = 5000f;
+                    break;
+                case 2:
+                    particelNumExp = 11;
+                    numCloudSkyParticles = 9;
+                    material.SetFloat("g_fSize", 96);
+                    material.SetFloat("g_fSizeTop", 8);
+                    radius = 6000f;
+                    break;
+                case 3:
+                    particelNumExp = 12;
+                    numCloudSkyParticles = 9;
+                    material.SetFloat("g_fSize", 64);
+                    material.SetFloat("g_fSizeTop", 12);
+                    radius = 6000f;
+                    break;
+                case 4:
+                    particelNumExp = 13;
+                    numCloudSkyParticles = 10;
+                    material.SetFloat("g_fSize", 64);
+                    material.SetFloat("g_fSizeTop", 12);
+                    break;
+                case 5:
+                    particelNumExp = 14;
+                    numCloudSkyParticles = 10;
+                    material.SetFloat("g_fSize", 48);
+                    material.SetFloat("g_fSizeTop", 16);
+                    break;
+                default:
+                    particelNumExp = 13;
+                    numCloudSkyParticles = 10;
+                    material.SetFloat("g_fSize", 64);
+                    material.SetFloat("g_fSizeTop", 12);
+                    break;
+            }
+
             if (maxVel == null || maxVel.Length != 3)
                 throw new System.InvalidOperationException("initialize max Vel with 3 elements!");
 
             numberParticles = (uint)Mathf.Pow(2, particelNumExp);
+
             targetShip = false;
             counter = 0;
             particlePos = new Vector3[numberParticles];
             particleVel = new Vector3[numberParticles];
             particleIdx = new int[numberParticles];
-            float radius = 7500f;
-            float height = 1322f;
             Vector3 center = vectorField.GetCenterWS();
             center.y = height;
             for (int i = 0; i < numberParticles; i++)
@@ -105,7 +157,6 @@ namespace MastersOfTempest.Environment.VisualEffects
                 }
                 particleIdx[i] = i;
             }
-            material = GetComponent<MeshRenderer>().material;
             initBuffers();
             Load3DTextures();
             CreateMesh();

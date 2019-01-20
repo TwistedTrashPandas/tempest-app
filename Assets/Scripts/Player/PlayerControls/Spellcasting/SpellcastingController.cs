@@ -72,7 +72,7 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
                     {
                         fittingSpell.GetPlayerAction().Execute(context);
                         SpellCasted?.Invoke(this, new SpellCastedEventArgs(fittingSpell));
-                        Debug.Log($"Spell {fittingSpell.Name} called");
+                        // Debug.Log($"Spell {fittingSpell.Name} called");
                     }
                 }
                 yield return new WaitForSeconds(1f / SpellCheckFrequency);

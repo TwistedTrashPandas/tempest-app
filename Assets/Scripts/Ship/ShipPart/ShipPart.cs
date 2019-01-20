@@ -12,9 +12,9 @@ namespace MastersOfTempest.ShipBL
     {
         public event EventHandler ShipPartHit;
         public ShipPartArea interactionArea;
-        private const float cutOffDist = 5.0f;
-        private const float impulseScaling = 0.02f;
-        private const float maxDisplacementDist = 0.3f;
+        private const float cutOffDist = 3.0f;
+        private const float impulseScaling = 0.03f;
+        private const float maxDisplacementDist = 0.4f;
         /// <summary>
         /// destruction == 0:   ship part fully repaired
         ///             == 1:   ship part fully destroyed
@@ -54,6 +54,12 @@ namespace MastersOfTempest.ShipBL
             Destroy(GetComponent<AudioSource>());
         }
 
+        protected override void UpdateServer()
+        {
+            base.UpdateServer();
+
+        }
+
         public float GetDestruction()
         {
             return destruction;
@@ -71,11 +77,9 @@ namespace MastersOfTempest.ShipBL
                 {
                     destruc = 1.0f;
                 }
-                AddDestruction(destruc);
-                SendCollision(contactPoints, impulse, destruc);
 
-                // lose condition checks if the overall destruction value is above the threshold (after collision)
-                loseCondition.CheckOverAllDestruction();
+                SendCollision(contactPoints, impulse, destruc);
+                AddDestruction(destruc);
 
                 // transfer damage to next ship part
                 if (destruc > 1.05f)
@@ -115,11 +119,11 @@ namespace MastersOfTempest.ShipBL
                     float distSquared = Vector3.Distance(worldPos, currContact);
                     if (cutOffDist > distSquared)
                     {
-                        Vector3 dir = (worldPos - currContact).normalized;
-                        if (Vector3.Dot(dir, impulse.normalized) > 0)
+                        Vector3 dir = impulse;// (worldPos - currContact).normalized;
+                        /*if (Vector3.Dot(dir, impulse.normalized) > 0)
                             dir *= impulse.magnitude;
                         else
-                            dir = impulse;
+                            dir = impulse;*/
                         distSquared *= distSquared;
                         worldPos += dir / (distSquared + 1f) / contactPoints.Length * impulseScaling;
 
@@ -133,17 +137,6 @@ namespace MastersOfTempest.ShipBL
             }
             targetMesh = currVerts;
             InterpolateCurrentMesh();
-            /*
-            byte[] buffer = new byte[currVerts.Length * 12];
-            for (int j = 0; j < currVerts.Length; j++)
-            {
-                Buffer.BlockCopy(BitConverter.GetBytes(currVerts[j].x), 0, buffer, j * 12, 4);
-                Buffer.BlockCopy(BitConverter.GetBytes(currVerts[j].y), 0, buffer, 4 + j * 12, 4);
-                Buffer.BlockCopy(BitConverter.GetBytes(currVerts[j].z), 0, buffer, 8 + j * 12, 4);
-            }
-            GetComponent<MeshFilter>().mesh.vertices = currVerts;
-            targetMesh = currVerts;
-            SendToAllClients(buffer, Facepunch.Steamworks.Networking.SendType.Reliable);*/
         }
 
         protected override void OnServerReceivedMessageRaw(byte[] data, ulong steamID)
@@ -160,15 +153,6 @@ namespace MastersOfTempest.ShipBL
 
         private void HandleDataReceive(byte[] data)
         {
-            /*
-            Vector3[] vertices = GetComponent<MeshFilter>().mesh.vertices;
-            // Buffer.BlockCopy(data, 0, vertices, 0, data.Length);
-            for (int j = 0; j < vertices.Length; j++)
-            {
-                vertices[j] = new Vector3(BitConverter.ToSingle(data, j * 12), BitConverter.ToSingle(data, j * 12 + 4), BitConverter.ToSingle(data, j * 12 + 8));
-            }
-            GetComponent<MeshFilter>().mesh.vertices = vertices;
-            targetMesh = vertices;*/
             if (data.Length == 4)
             {
                 SetDestruction(BitConverter.ToSingle(data, 0));
@@ -181,9 +165,13 @@ namespace MastersOfTempest.ShipBL
                 int l = Mathf.FloorToInt(data.Length / 12) - 1;
 
                 // first 4 bytes are the delta destruction value
-                AddDestruction(destruc);
+                if (serverObject.onServer)
+                    AddDestruction(destruc);
+                //else
+                //    SetDestruction(destruc);
 
-                // crash sound
+
+                // crash sound, played locally at ship part
                 audioSource.PlayOneShot(crashSound, Mathf.Clamp01(destruc) / 1.5f);
 
                 // next 12 bytes are the values for the impulse vector
@@ -204,12 +192,15 @@ namespace MastersOfTempest.ShipBL
         public void AddDestruction(float destruc)
         {
             destruction = Mathf.Clamp01(destruction + destruc);
-            if (destruc < 0f)
-            {
-                byte[] buffer = new byte[4];
-                Buffer.BlockCopy(BitConverter.GetBytes(destruction), 0, buffer, 0, 4);
-                SendToAllClients(buffer, Facepunch.Steamworks.Networking.SendType.Reliable);
-            }
+
+            // lose condition checks if the overall destruction value is above the threshold (after collision)
+            if (destruc > 0f)
+                loseCondition.CheckOverAllDestruction();
+
+            // sends updated destruction value separately
+            byte[] buffer = new byte[4];
+            Buffer.BlockCopy(BitConverter.GetBytes(destruction), 0, buffer, 0, 4);
+            SendToAllClients(buffer, Facepunch.Steamworks.Networking.SendType.Reliable);
         }
 
         // add or remove destruction value to ship parts
@@ -226,18 +217,6 @@ namespace MastersOfTempest.ShipBL
             for (int i = 0; i < vert.Length; i++)
                 vert[i] = Vector3.Lerp(initialMesh[i], targetMesh[i], destruction);
             GetComponent<MeshFilter>().mesh.vertices = vert;
-
-            /*
-            byte[] buffer = new byte[vert.Length * 12];
-            for (int j = 0; j < vert.Length; j++)
-            {
-                Buffer.BlockCopy(BitConverter.GetBytes(vert[j].x), 0, buffer, j * 12, 4);
-                Buffer.BlockCopy(BitConverter.GetBytes(vert[j].y), 0, buffer, 4 + j * 12, 4);
-                Buffer.BlockCopy(BitConverter.GetBytes(vert[j].z), 0, buffer, 8 + j * 12, 4);
-            }
-            GetComponent<MeshFilter>().mesh.vertices = vert;
-            targetMesh = vert;
-            SendToAllClients(buffer, Facepunch.Steamworks.Networking.SendType.Reliable);*/
         }
 
         public void ChangeShaderDestructionValue()

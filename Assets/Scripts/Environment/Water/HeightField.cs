@@ -158,6 +158,66 @@ namespace MastersOfTempest.Environment.VisualEffects
 
         public void Initialize(Vector3 midPosition)
         {
+            switch (QualitySettings.GetQualityLevel())
+            {
+                case 0:
+                    waterMode = WaterMode.Minimal;
+                    widthHF = 128;
+                    depthHF = 128;
+                    widthMesh = 32;
+                    depthMesh = 32;
+                    quadSize = 400;
+                    break;
+                case 1:
+                    waterMode = WaterMode.Minimal;
+                    widthHF = 128;
+                    depthHF = 128;
+                    widthMesh = 32;
+                    depthMesh = 32;
+                    quadSize = 400;
+                    break;
+                case 2:
+                    waterMode = WaterMode.Minimal;
+                    widthHF = 256;
+                    depthHF = 256;
+                    widthMesh = 64;
+                    depthMesh = 64;
+                    quadSize = 200;
+                    break;
+                case 3:
+                    waterMode = WaterMode.Reflection;
+                    widthHF = 512;
+                    depthHF = 512;
+                    widthMesh = 64;
+                    depthMesh = 64;
+                    quadSize = 200;
+                    break;
+                case 4:
+                    waterMode = WaterMode.Reflection;
+                    widthHF = 512;
+                    depthHF = 512;
+                    widthMesh = 128;
+                    depthMesh = 128;
+                    quadSize = 100;
+                    break;
+                case 5:
+                    waterMode = WaterMode.Reflection;
+                    widthHF = 1024;
+                    depthHF = 1024;
+                    widthMesh = 128;
+                    depthMesh = 128;
+                    quadSize = 100;
+                    break;
+                default:
+                    waterMode = WaterMode.Reflection;
+                    widthHF = 1024;
+                    depthHF = 1024;
+                    widthMesh = 128;
+                    depthMesh = 128;
+                    quadSize = 100;
+                    break;
+            }
+
             inOutCounter = 0;
             currentCollision = 1;
             //transform.position = midPosition - new Vector3(widthMesh * quadSize / 2f, midPosition.y, depthMesh * quadSize / 2f);
@@ -226,7 +286,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             UpdateTransformMatrix();
             updateVertices();
         }
-
+        
         public void OnCollisionStay(Collision collision)
         {
             if (waterMode == WaterMode.ReflAndObstcl || waterMode == WaterMode.Obstacles)
@@ -583,7 +643,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             heightFieldCS.Dispatch(kernelNormals, Mathf.CeilToInt(widthMesh * detailScaleFactor / 16f), Mathf.CeilToInt(depthMesh * detailScaleFactor / 16f), 1);
         }
 
-        void CreateMeshWithSubmeshes()
+        private void CreateMeshWithSubmeshes()
         {
             Vector3[] subMeshVertices;
             Vector3[] offsets;
