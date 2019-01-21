@@ -77,10 +77,10 @@ Category {
 				o.texcoord = TRANSFORM_TEX(v.texcoord,_MainTex);
 				UNITY_TRANSFER_FOG(o,o.vertex);
 
-				float dist = _WorldSpaceCameraPos.xyz - v.vertex.xyz;
-				dist = dot(dist, dist) + 1.0f;
-				o.color.a = saturate(1100.0f / dist);
-				if (o.color.a < 0.06f)
+				float3 dir = _WorldSpaceCameraPos.xyz - mul(unity_ObjectToWorld, v.vertex).xyz;
+				float dist = dot(dir, dir) + 1.0f;
+				o.color.a = saturate(100000.0f / dist);
+				if (o.color.a < 0.01f)
 					o.color.a = 0.0f;
 
 				return o;

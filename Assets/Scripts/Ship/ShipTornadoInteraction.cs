@@ -16,6 +16,7 @@ namespace MastersOfTempest.ShipBL
         private Rigidbody rb;
         private Vector3 targetView;
         private Vector3 targetForce;
+        private Vector3 velDampVector;
         // Start is called before the first frame update
         void Start()
         {
@@ -28,6 +29,7 @@ namespace MastersOfTempest.ShipBL
                 if (vectorField == null)
                     throw new System.InvalidOperationException("EnvironmentManager has to be in the same scene as the ship.");
                 targetView = transform.forward;
+                velDampVector = new Vector3(velocityDamp, 0.9f, velocityDamp);
             }
             else
                 this.enabled = false;
@@ -42,10 +44,18 @@ namespace MastersOfTempest.ShipBL
                 targetForce.y = 0f;
                 targetForce = targetForce * (1.0f - pullStrength) + pullStrength * (new Vector3(vectorField.GetCenterWS().x - transform.position.x, 0f, vectorField.GetCenterWS().z - transform.position.z)).normalized * targetForce.magnitude;
                 targetView = rb.velocity.normalized;
-                targetView.y = 0f;
+                targetView.y /= 4f;
                 rb.AddForce(targetForce);
                 transform.LookAt(Vector3.Lerp(transform.forward, targetView, Time.fixedDeltaTime * angularMomentumFactor) + transform.position);
-                rb.velocity *= velocityDamp;
+
+                targetView.y = 0f;
+                Vector3 currForward = transform.forward;
+                currForward.y = 0f;
+                float angle = Mathf.Min(Vector3.SignedAngle(targetView, currForward, Vector3.up), 30f);
+
+                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, angle), Time.deltaTime * 15f);
+
+                rb.velocity.Scale(velDampVector);
             }
         }
     }

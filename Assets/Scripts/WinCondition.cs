@@ -41,6 +41,7 @@ namespace MastersOfTempest
 
         private void OnGUI()
         {
+            /*
             if (toggleWinText)
             {
                 GUIStyle buttonStyle = GUI.skin.GetStyle("Button");
@@ -51,7 +52,7 @@ namespace MastersOfTempest
                 {
                     SceneManager.LoadScene(0);
                 }
-            }
+            }*/
         }
 
         protected override void OnClientReceivedMessageRaw(byte[] data, ulong steamID)

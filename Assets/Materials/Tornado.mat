@@ -143,9 +143,10 @@ Material:
     - g_fBillboardSize: 2.6
     - g_fDensity: 0.6
     - g_fLightAttenuation: 1.1
+    - g_fMaxHeight: 0
     - g_fMaxTransparency: 0.95
-    - g_fMaxTransparencyDist: 1000
-    - g_fMinTransparency: 0.5
+    - g_fMaxTransparencyDist: 500
+    - g_fMinTransparency: 0.6
     - g_fSize: 64
     - g_fSizeTop: 12
     - g_fTimeDiff: 0.01

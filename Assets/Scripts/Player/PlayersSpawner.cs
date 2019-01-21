@@ -27,20 +27,35 @@ namespace MastersOfTempest.PlayerControls
             Scene previouslyActiveScene = SceneManager.GetActiveScene();
             SceneManager.SetActiveScene(gameObject.scene);
 
-            foreach(var playerId in players)
+            foreach (var playerId in players)
             {
-                var role = (PlayerRole) int.Parse(Client.Instance.Lobby.GetMemberData(playerId, PlayerRoleExtensions.LobbyDataKey));
+                var role = (PlayerRole)int.Parse(Client.Instance.Lobby.GetMemberData(playerId, PlayerRoleExtensions.LobbyDataKey));
 
                 var playerInstance = Instantiate(PlayerPrefab);
                 playerInstance.PlayerId = playerId;
                 var spawnPoint = role.GetSpawnPoint();
-                if(spawnPoint != null)
+                if (spawnPoint != null)
                 {
                     playerInstance.transform.position = spawnPoint.transform.position;
                     StartCoroutine(SetParent(playerInstance.transform, spawnPoint.transform));
                     //playerInstance.transform.SetParent(spawnPoint.transform, true);
                 }
 
+                Transform[] children = playerInstance.transform.GetComponentsInChildren<Transform>();
+                print(children.Length);
+                switch (role)
+                {
+                    case PlayerRole.Apprentice:
+                        Destroy(children[1].gameObject);
+                        break;
+                    case PlayerRole.Wizard:
+                        Destroy(children[2].gameObject);
+                        break;
+                    case PlayerRole.Spectator:
+                        Destroy(children[1].gameObject);
+                        Destroy(children[2].gameObject);
+                        break;
+                }
                 Debug.Log($"Spawned for player# {playerId}");
             }
             //Set client scene back as active as it's the default behaviour

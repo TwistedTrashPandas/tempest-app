@@ -59,7 +59,7 @@ namespace MastersOfTempest.Environment.VisualEffects
                     if (tornadoPS == null)
                         throw new System.InvalidOperationException("TornadoPS.cs has to be attached to the tornado prefab");
                     tornadoPS.vectorField = vectorField;
-                    tornadoPS.gameObject.layer = 0;
+                    tornadoPS.gameObject.layer = 9;
                 }
 
                 if (tornTex)
@@ -72,7 +72,7 @@ namespace MastersOfTempest.Environment.VisualEffects
                         throw new System.InvalidOperationException("SetTornadoTexture.cs has to be attached to the tornadoTex prefab");
                     tornadoTex.vectorField = vectorField;
                     tornadoTex.camPos = Camera.main.transform;
-                    tornadoTex.gameObject.layer = 0;
+                    tornadoTex.gameObject.layer = 9;
                 }
             }
         }

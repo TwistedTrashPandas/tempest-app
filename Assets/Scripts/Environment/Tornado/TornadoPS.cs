@@ -82,8 +82,8 @@ namespace MastersOfTempest.Environment.VisualEffects
                 case 0:
                     particelNumExp = 10;
                     numCloudSkyParticles = 8;
-                    material.SetFloat("g_fSize", 96);
-                    material.SetFloat("g_fSizeTop", 6);
+                    material.SetFloat("g_fSize", 64);
+                    material.SetFloat("g_fSizeTop", 8);
                     radius = 5000f;
                     break;
                 case 1:

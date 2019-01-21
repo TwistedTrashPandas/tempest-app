@@ -5,7 +5,7 @@ namespace MastersOfTempest.PlayerControls
 {
     public class SteerShip : PlayerAction
     {
-        const float SteeringForceValue = 1000f;
+        const float SteeringForceValue = 1500f;
         public enum SteeringDirection
         {
             Left,
@@ -25,10 +25,12 @@ namespace MastersOfTempest.PlayerControls
         {
             Vector3 forceDirection;
             var ship = context.GetShip();
+            Quaternion rotBefore = ship.transform.rotation;
+            ship.transform.rotation = Quaternion.Euler(0f, rotBefore.eulerAngles.y, 0f);
             switch (direction)
             {
-                case SteeringDirection.Left: forceDirection = ship.transform.right; break;
-                case SteeringDirection.Right: forceDirection = -ship.transform.right; break;
+                case SteeringDirection.Left: forceDirection = -ship.transform.right; break;
+                case SteeringDirection.Right: forceDirection = ship.transform.right; break;
                 case SteeringDirection.Forward: forceDirection = ship.transform.forward; break;
                 case SteeringDirection.Backward: forceDirection = -ship.transform.forward; break;
                 case SteeringDirection.Up: forceDirection = ship.transform.up; break;
@@ -39,6 +41,8 @@ namespace MastersOfTempest.PlayerControls
             //TODO: duration for the force, or add as an impulse
             if ((ship.GetCurrenStatus().Condition & ShipBL.ShipCondition.Freezing) == ShipBL.ShipCondition.Freezing)
                 forceDirection *= ship.GetFreezingSlowDown();
+
+            ship.transform.rotation = rotBefore;
 
             ship.GetShipForceManipulator().AddForce(forceDirection * SteeringForceValue, .5f);
         }

@@ -14,6 +14,7 @@
 		g_fMaxTransparencyDist("MaxTransparencyDist", Range(0.001,10000.0)) = 100.0
 		g_bSize("FlexibleSize", Range(0.0,1.0)) = 0.0
 		g_fTopHeight("TopHeight", Range(0.0,10000.0)) = 0.0
+		g_fMaxHeight("MaxHeight", Range(0.0,10000.0)) = 0.0
 	}
 		SubShader{
 
@@ -32,7 +33,6 @@
 		float4 g_vCenter;
 		float g_fHeightInterp;
 		float g_fSizeTop;
-		float g_fMaxHeight;
 		float g_fBillboardSize;
 		float g_fTimeDiff;
 		float g_fTimeStepTex;
@@ -46,6 +46,7 @@
 		// Minimal cloud transparancy not flushed to zero
 		static const float g_fTransparencyThreshold = 0.01;
 
+		static const float g_fMaxHeight = 1150;
 		// Fraction of the particle cut off distance which serves as
 		// a transition region from particles to flat clouds
 		static const float g_fParticleToFlatMorphRatio = 0.2;
@@ -252,14 +253,17 @@
 				float fAmbientSSSStrength = (1 - fNoise)*0.5;//0.3;
 				f3Ambient.rgb *= lerp(1, fSubSrfScattering, fAmbientSSSStrength);
 				f4Color.rgb = (f3Ambient.rgb + (fSingleScattering + fMultipleScattering) * ParticleLighting.f4SunLight.rgb) * PI;
-				if (ParticleAttrs.f3Pos.y <= g_fTopHeight)
-					f4Color.rgb *= g_Color.rgb;
 			}
 			else
 				f4Color.rgb = 1.0f;
 
 			if (!shadowCollector) {
 				f4Color.a = fTransparency;
+				float fTransparencyOnHeight = 1.0f - saturate((ParticleAttrs.f3Pos.y - g_fMaxHeight) / 100.0f);
+				if (ParticleAttrs.f3Pos.y <= g_fTopHeight) {
+					f4Color.rgb *= g_Color.rgb;
+					f4Color.a *= fTransparencyOnHeight;
+				}
 			}
 			else {
 				f4Color.rgb = 0.0f;
@@ -511,7 +515,7 @@
 			);
 			float fTransparencyOnDistance = fRayLength / g_fMaxTransparencyDist;
 			fTransparencyOnDistance = clamp(fTransparencyOnDistance, g_fMinTransparency, g_fMaxTransparency);
-			f4Color.a *= fTransparencyOnDistance;
+			f4Color.a *= fTransparencyOnDistance ;
 			//UNITY_APPLY_FOG(In.fogCoord, f4Color);
 			return f4Color;
 		}
