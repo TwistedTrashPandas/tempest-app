@@ -68,13 +68,13 @@ namespace MastersOfTempest.Networking
                 else
                 {
                     client.Dispose();
-                    DialogBox.Show("Something went wrong with the initialization of steam! The client is not valid.", false, false, null, null);
+                    DialogBox.Show("Make sure that you are online and Steam is running.\nDo you want to exit the game?", true, true, Application.Quit, null);
                     return;
                 }
             }
             else
             {
-                DialogBox.Show("Make sure that you are online and Steam is running.\nDo you want to exit the game?", true, true, Application.Quit, null);
+                DialogBox.Show("Client initialization for Steam failed!\nThe client is null.", false, false, null, null);
                 return;
             }
 
@@ -104,12 +104,17 @@ namespace MastersOfTempest.Networking
 
         void Update()
         {
-            if (client != null && client.IsValid)
+            if (IsInitialized())
             {
                 UnityEngine.Profiling.Profiler.BeginSample("Steam Update");
                 client.Update();
                 UnityEngine.Profiling.Profiler.EndSample();
             }
+        }
+
+        public bool IsInitialized ()
+        {
+            return client != null && client.IsValid;
         }
 
         void DebugClientMessageEvent(byte[] data, ulong steamID)
@@ -209,7 +214,7 @@ namespace MastersOfTempest.Networking
 
         void OnDestroy()
         {
-            if (client != null)
+            if (IsInitialized())
             {
                 client.Networking.OnIncomingConnection -= OnIncomingConnection;
                 client.Networking.OnConnectionFailed -= OnConnectionFailed;

@@ -12,7 +12,10 @@ namespace MastersOfTempest.Networking
 
         void Start()
         {
-            Client.Instance.Lobby.OnChatMessageRecieved += OnChatMessageReceived;
+            if (Client.Instance != null)
+            {
+                Client.Instance.Lobby.OnChatMessageRecieved += OnChatMessageReceived;
+            }
         }
 
         private void OnChatMessageReceived(ulong steamID, byte[] data, int dataLength)
