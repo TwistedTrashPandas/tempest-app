@@ -48,10 +48,6 @@ namespace MastersOfTempest.Networking
                 CreateDefaultLobby();
                 StartCoroutine(RefreshFriendAvatars());
             }
-            else
-            {
-                Debug.LogError("Client instance is null!");
-            }
         }
 
         // Called when someone joins/leaves the lobby
