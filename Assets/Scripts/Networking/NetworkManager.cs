@@ -23,14 +23,11 @@ namespace MastersOfTempest.Networking
         public Dictionary<NetworkMessageType, System.Action<byte[], ulong>> clientMessageEvents;
         public Dictionary<NetworkMessageType, System.Action<byte[], ulong>> serverMessageEvents;
 
-        private Client client;
+        private Client client = null;
         private int serverMessagesOffset = 0;
 
         void Awake()
         {
-            // Make sure that the plugins are found in both editor and build
-            System.Environment.SetEnvironmentVariable("PATH", Application.dataPath + "/Plugins/", System.EnvironmentVariableTarget.Process);
-
             if (Instance == null)
             {
                 Instance = this;
@@ -38,9 +35,13 @@ namespace MastersOfTempest.Networking
             }
             else
             {
-                Debug.LogError(nameof(NetworkManager) + " cannot have multiple instances!");
-                Destroy(gameObject);
+                DestroyImmediate(gameObject);
+                Debug.LogWarning(nameof(NetworkManager) + " cannot have multiple instances! Duplicate destroyed.");
+                return;
             }
+
+            // Make sure that the plugins are found in both editor and build
+            System.Environment.SetEnvironmentVariable("PATH", Application.dataPath + "/Plugins/", System.EnvironmentVariableTarget.Process);
 
             // Configurate facepunch steamworks sdk
             Config.ForUnity(Application.platform.ToString());
@@ -52,20 +53,29 @@ namespace MastersOfTempest.Networking
             }
             catch (System.Exception e)
             {
-                Debug.LogWarning("Couldn't write steam_appid.txt: " + e.Message);
+                Debug.LogError("Couldn't write steam_appid.txt: " + e.Message);
             }
 
             // Create the client
             client = new Client(appId);
 
-            if (client.IsValid)
+            if (client != null)
             {
-                Debug.Log("Steam Initialized: " + client.Username + " / " + client.SteamId);
+                if (client.IsValid)
+                {
+                    Debug.Log("Steam Initialized: " + client.Username + " / " + client.SteamId);
+                }
+                else
+                {
+                    client.Dispose();
+                    DialogBox.Show("Something went wrong with the initialization of steam! The client is not valid.", false, false, null, null);
+                    return;
+                }
             }
             else
             {
-                client = null;
                 DialogBox.Show("Make sure that you are online and Steam is running.\nDo you want to exit the game?", true, true, Application.Quit, null);
+                return;
             }
 
             // Create all the actions for incoming network messages
@@ -94,7 +104,7 @@ namespace MastersOfTempest.Networking
 
         void Update()
         {
-            if (client != null)
+            if (client != null && client.IsValid)
             {
                 UnityEngine.Profiling.Profiler.BeginSample("Steam Update");
                 client.Update();
@@ -153,7 +163,7 @@ namespace MastersOfTempest.Networking
 
         private void SendToClient(ulong steamID, byte[] data, int channel, Facepunch.Steamworks.Networking.SendType sendType)
         {
-            if (client != null)
+            if (client != null && client.IsValid)
             {
                 // Send the message to the client on the channel of this message type
                 if (!client.Networking.SendP2PPacket(steamID, data, data.Length, sendType, channel))
@@ -174,7 +184,7 @@ namespace MastersOfTempest.Networking
 
         public void SendToAllClients(byte[] data, NetworkMessageType networkMessageType, Facepunch.Steamworks.Networking.SendType sendType)
         {
-            if (client != null)
+            if (client != null && client.IsValid)
             {
                 ulong[] lobbyMemberIDs = client.Lobby.GetMemberIDs();
 
