@@ -5,7 +5,7 @@ namespace MastersOfTempest.PlayerControls
 {
     public class SteerShip : PlayerAction
     {
-        const float SteeringForceValue = 1000f;
+        const float SteeringForceValue = 1500f;
         public enum SteeringDirection
         {
             Left,

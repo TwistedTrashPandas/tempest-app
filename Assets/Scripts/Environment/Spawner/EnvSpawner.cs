@@ -241,15 +241,14 @@ namespace MastersOfTempest.Environment.Interacting
                         }
                         else
                         {
-                            randomSize = Random.Range(20f, 30f);
-                            localScale *= 5f;
-                            envObjects[envObjects.Count - 1].speed *= 0.02f;
+                            randomSize = Random.Range(15f, 25f);
+                            envObjects[envObjects.Count - 1].speed *= 0.01f;
                             envObjects[envObjects.Count - 1].GetComponent<Damaging>().health = randomSize;
-                            envObjects[envObjects.Count - 1].moveType = (MoveType)Random.Range(0, 3); // MoveType.ForceDirect; // 
+                            envObjects[envObjects.Count - 1].moveType = (MoveType)Random.Range(1, 3); // MoveType.ForceDirect; // 
                             if((int)envObjects[envObjects.Count - 1].moveType <= 1)
                                 envObjects[envObjects.Count - 1].GetComponent<Rigidbody>().constraints |= (RigidbodyConstraints.FreezePositionY);
                             randOffset = GetRandomPointOnSphere(minRadiusS * 1.5f, maxRadiusS * 1.0f);
-                            envObjects[envObjects.Count - 1].GetComponent<Damaging>().damage = 0.5f * randomSize;
+                            envObjects[envObjects.Count - 1].GetComponent<Damaging>().damage = 0.35f * randomSize;
                             envObjects[envObjects.Count - 1].SetMass(randomSize);
                         }
 

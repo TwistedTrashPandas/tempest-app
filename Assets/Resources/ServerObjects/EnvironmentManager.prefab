@@ -65,15 +65,15 @@ MonoBehaviour:
   spawnRate: 2
   dampingFactorVel: 1
   dampingFactorForce: 0
-  maximumObjVelocity: 42
+  maximumObjVelocity: 35
   spawnProbD: 0.95
   spawnProbS: 0.025
   spawnProbZ: 0.025
   rockRotSpeed: 2
   minRadiusT: 4
   maxRadiusT: 8
-  minRadiusS: 60
-  maxRadiusS: 2500
+  minRadiusS: 100
+  maxRadiusS: 3000
   maxNumObjects: 120
   vectorField: {fileID: 114404567317752372}
   damagingPrefabs:
