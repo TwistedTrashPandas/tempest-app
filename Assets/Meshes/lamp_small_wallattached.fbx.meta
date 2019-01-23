@@ -1,0 +1,204 @@
+fileFormatVersion: 2
+guid: 5d83d6df720e6cb42b3deeab320b74c9
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: Candle
+    100002: CandleGlas
+    100004: Handle
+    100006: Hood
+    100008: //RootNode
+    100010: LampLid
+    100012: Loop
+    100014: Screw1
+    100016: Screw2
+    100018: Window1
+    100020: Window2
+    100022: Window3
+    100024: Window4
+    400000: Candle
+    400002: CandleGlas
+    400004: Handle
+    400006: Hood
+    400008: //RootNode
+    400010: LampLid
+    400012: Loop
+    400014: Screw1
+    400016: Screw2
+    400018: Window1
+    400020: Window2
+    400022: Window3
+    400024: Window4
+    2100000: Iron_Body
+    2100002: GlasCandle
+    2100004: Candle
+    2100006: IronHandle
+    2100008: Glas
+    2100010: Iron_Loop
+    2100012: Iron_Hood
+    2100014: Iron_Lid
+    2300000: Candle
+    2300002: CandleGlas
+    2300004: Handle
+    2300006: Hood
+    2300008: //RootNode
+    2300010: LampLid
+    2300012: Loop
+    2300014: Screw1
+    2300016: Screw2
+    2300018: Window1
+    2300020: Window2
+    2300022: Window3
+    2300024: Window4
+    3300000: Candle
+    3300002: CandleGlas
+    3300004: Handle
+    3300006: Hood
+    3300008: //RootNode
+    3300010: LampLid
+    3300012: Loop
+    3300014: Screw1
+    3300016: Screw2
+    3300018: Window1
+    3300020: Window2
+    3300022: Window3
+    3300024: Window4
+    4300000: LampBody
+    4300002: CandleGlas
+    4300004: Candle
+    4300006: Handle
+    4300008: Screw2
+    4300010: Screw1
+    4300012: Window4
+    4300014: Window3
+    4300016: Window2
+    4300018: Window1
+    4300020: Loop
+    4300022: Hood
+    4300024: LampLid
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Candle
+    second: {fileID: 2100000, guid: d2de1cd569a20e34b9db2e35aee5cca2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Glas
+    second: {fileID: 2100000, guid: d4c98ec8bbad5c044a5783ad6b56e44f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: GlasCandle
+    second: {fileID: 2100000, guid: 4c72eba066d8b21488f352cab21f6299, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: IronHandle
+    second: {fileID: 2100000, guid: e7e5ed9df2c360541b973e75ff790e12, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Iron_Body
+    second: {fileID: 2100000, guid: d025d0b83e0d7134e973e68885fe8c22, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Iron_Hood
+    second: {fileID: 2100000, guid: 3e52726c95d811247934778c783812eb, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Iron_Lid
+    second: {fileID: 2100000, guid: 0ba6b07d82d497d409ba16fa8f2919f8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Iron_Loop
+    second: {fileID: 2100000, guid: f953310bb74b9254f933f4d388e01d54, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
