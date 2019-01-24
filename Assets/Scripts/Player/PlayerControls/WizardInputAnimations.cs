@@ -67,9 +67,12 @@ namespace MastersOfTempest.PlayerControls
             armsController.PulseRightHand();
             armsController.ReleaseSpell();
             var charge = ((ChargingEventArgs)args).Charge;
-            var main = armsController.DissipatePS.main;
-            main.startColor = charge.CorrespondingColor();
-            armsController.DissipatePS.Play();
+            for (int i = 0; i < armsController.DissipatePS.Length; i++)
+            {
+                var main = armsController.DissipatePS[i].main;
+                main.startColor = charge.CorrespondingColor();
+                armsController.DissipatePS[i].Play();
+            }
             if(chargeCancellationToken != null)
             {
                 chargeCancellationToken.CancellationRequested = true;
@@ -84,14 +87,17 @@ namespace MastersOfTempest.PlayerControls
             //TODO: some particles effect prob
             armsController.PulseRightHand();
             var charge = ((ChargingEventArgs)args).Charge;
-            var main = armsController.HoldPS.main;
-            main.startColor = charge.CorrespondingColor();
-            armsController.HoldPS.Play();
-            if(chargeCancellationToken != null)
+            for (int i = 0; i < armsController.HoldPS.Length; i++)
             {
-                chargeCancellationToken.CancellationRequested = true;
-                chargeCancellationToken = null;
+                var main = armsController.HoldPS[i].main;
+                main.startColor = charge.CorrespondingColor();
+                armsController.HoldPS[i].Play();
             }
+            if (chargeCancellationToken != null)
+                {
+                    chargeCancellationToken.CancellationRequested = true;
+                    chargeCancellationToken = null;
+                }
             Debug.Log("Animation for charge completion showed");
         }
 
@@ -99,22 +105,33 @@ namespace MastersOfTempest.PlayerControls
         {
             armsController.PulseRightHand();
             armsController.ReleaseSpell();
-            armsController.HoldPS.Stop();
+            for (int i = 0; i < armsController.HoldPS.Length; i++)
+            {
+                armsController.HoldPS[i].Stop();
+            }
             var charge = ((ChargingEventArgs)args).Charge;
             var main = armsController.FeedPS.ParticlesColor = charge.CorrespondingColor();
             var token = new CoroutineCancellationToken();
-            StartCoroutine(token.TimedCancel(.2f));
+            armsController.FeedPS.GetComponent<ParticleSystem>().startLifetime = 0.25f;
+            StartCoroutine(token.TimedCancel(.25f));
+            print(WizardInput.GetCurrentInteractable().transform);
             armsController.FeedPS.StartChannel(WizardInput.GetCurrentInteractable().transform, token);
             Debug.Log("Animation for discharge hit showed");
         }
 
         private void OnDischargeMiss(object sender, EventArgs args)
         {
-            armsController.HoldPS.Stop();
+            for (int i = 0; i < armsController.HoldPS.Length; i++)
+            {
+                armsController.HoldPS[i].Stop();
+            }
             var charge = ((ChargingEventArgs)args).Charge;
-            var main = armsController.DissipatePS.main;
-            main.startColor = charge.CorrespondingColor();
-            armsController.DissipatePS.Play();
+            for (int i = 0; i < armsController.DissipatePS.Length; i++)
+            {
+                var main = armsController.DissipatePS[i].main;
+                main.startColor = charge.CorrespondingColor();
+                armsController.DissipatePS[i].Play();
+            }
             armsController.PulseRightHand();
             armsController.ReleaseSpell();
             Debug.Log("Animation for discharge miss showed");
