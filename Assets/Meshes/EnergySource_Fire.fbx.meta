@@ -6,21 +6,35 @@ ModelImporter:
     100000: Crystal1
     100002: Crystalholder
     100004: //RootNode
+    100006: IronParts
+    100008: Woodparts
     400000: Crystal1
     400002: Crystalholder
     400004: //RootNode
+    400006: IronParts
+    400008: Woodparts
     2100000: AltarStone
     2100002: MEtal
     2100004: Crystal1
+    2100006: IronParts
+    2100008: Woodparts
+    2100010: Goldmetal
     2300000: Crystal1
     2300002: Crystalholder
     2300004: //RootNode
+    2300006: IronParts
+    2300008: Woodparts
     3300000: Crystal1
     3300002: Crystalholder
     3300004: //RootNode
+    3300006: IronParts
+    3300008: Woodparts
     4300000: AlterStone
     4300002: Crystalholder
     4300004: Crystal1
+    4300006: UpperStone
+    4300008: IronParts
+    4300010: Woodparts
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -35,8 +49,23 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Goldmetal
+    second: {fileID: 2100000, guid: 1c813dc1aaef6794a90e8bf880352f97, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: IronParts
+    second: {fileID: 2100000, guid: 3b6402181a778334ca3792d8f557c07f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: MEtal
     second: {fileID: 2100000, guid: b73baf6c229f15142988b3683902eeea, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Woodparts
+    second: {fileID: 2100000, guid: 2d8f519e5d745684caefc7cdc8e80104, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

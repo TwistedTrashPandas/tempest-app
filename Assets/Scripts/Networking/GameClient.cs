@@ -154,29 +154,37 @@ namespace MastersOfTempest.Networking
                 }
             }
 
-            ServerObject serverObject = objectsFromServer[messageServerObject.instanceID];
-
-            if (serverObject.lastUpdate <= messageServerObject.time)
+            if (objectsFromServer.ContainsKey(messageServerObject.instanceID))
             {
-                // Update values only if the UDP packet values are newer
-                serverObject.name = "[" + messageServerObject.instanceID + "]\t" + messageServerObject.name;
-                serverObject.lastUpdate = messageServerObject.time;
+                ServerObject serverObject = objectsFromServer[messageServerObject.instanceID];
 
-                // Update the transform
-                serverObject.UpdateTransformFromMessageServerObject(messageServerObject);
-
-                // Update parent if possible
-                if (messageServerObject.hasParent)
+                if (serverObject.lastUpdate <= messageServerObject.time)
                 {
-                    if (objectsFromServer.ContainsKey(messageServerObject.parentInstanceID))
+                    // Update values only if the UDP packet values are newer
+                    serverObject.name = "[" + messageServerObject.instanceID + "]\t" + messageServerObject.name;
+                    serverObject.lastUpdate = messageServerObject.time;
+
+                    // Update the transform
+                    serverObject.UpdateTransformFromMessageServerObject(messageServerObject);
+
+                    // Update parent if possible
+                    if (messageServerObject.hasParent)
                     {
-                        serverObject.transform.SetParent(objectsFromServer[messageServerObject.parentInstanceID].transform, false);
+                        if (objectsFromServer.ContainsKey(messageServerObject.parentInstanceID))
+                        {
+                            serverObject.transform.SetParent(objectsFromServer[messageServerObject.parentInstanceID].transform, false);
+                        }
+                    }
+                    else
+                    {
+                        serverObject.transform.SetParent(null);
                     }
                 }
-                else
-                {
-                    serverObject.transform.SetParent(null);
-                }
+            }
+            else
+            {
+                // This can e.g. happen when loading a different scene and some messages from the previous scene arrive
+                Debug.LogWarning(nameof(GameClient) + " does not have a " + nameof(ServerObject) + " with the instance id " + messageServerObject.instanceID + "!");
             }
         }
 
