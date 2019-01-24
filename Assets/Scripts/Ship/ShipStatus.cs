@@ -34,7 +34,7 @@ namespace MastersOfTempest.ShipBL
 
         public void RemoveCondition(ShipCondition condition)
         {
-            if(condition.HasFlag(ShipCondition.Freezing))
+            if(condition.HasFlag(ShipCondition.Freezing) && Condition.HasFlag(ShipCondition.Freezing))
             {
                 ActionRequest?.Invoke(this, new ActionMadeEventArgs(new SlowdownPlayersAction(1f / freezeSlowdown)));
             }
