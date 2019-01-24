@@ -1,5 +1,6 @@
 ﻿using MastersOfTempest.Networking;
 using MastersOfTempest.ShipBL;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,7 +21,7 @@ namespace MastersOfTempest.Environment.Interacting
                     {
                         Ship ship = other.transform.parent.gameObject.GetComponent<Ship>();
                         if (ship != null)
-                            ship.GetCurrenStatus().Condition |= ShipCondition.Freezing;
+                            ship.GetCurrenStatus().AddCondition(ShipCondition.Freezing);
                     }
                     break;
                 case DangerZoneType.Fragile:
@@ -31,15 +32,14 @@ namespace MastersOfTempest.Environment.Interacting
                             part.status |= ShipPartStatus.Fragile;
                         Ship ship = other.transform.parent.gameObject.GetComponent<Ship>();
                         if (ship != null)
-                            ship.GetCurrenStatus().Condition |= ShipCondition.Fragile;
+                            ship.GetCurrenStatus().AddCondition(ShipCondition.Fragile);
                     }
                     else if (other.GetComponentInParent<Damaging>() != null)
                     {
                         other.GetComponentInParent<Damaging>().status |= DamagingStatus.Fragile;
                     }
                     break;
-                default:
-                    break;
+                default: throw new InvalidOperationException($"Unexpected {nameof(DangerZoneType)} value of {zoneType}!");
             }
         }
 
@@ -53,7 +53,7 @@ namespace MastersOfTempest.Environment.Interacting
                     {
                         Ship ship = other.transform.parent.gameObject.GetComponent<Ship>();
                         if (ship != null)
-                            ship.GetCurrenStatus().Condition &= ~ShipCondition.Freezing;
+                            ship.GetCurrenStatus().RemoveCondition(ShipCondition.Freezing);
                     }
                     break;
                 case DangerZoneType.Fragile:
@@ -64,15 +64,14 @@ namespace MastersOfTempest.Environment.Interacting
                             part.status &= ~ShipPartStatus.Fragile;
                         Ship ship = other.transform.parent.gameObject.GetComponent<Ship>();
                         if (ship != null)
-                            ship.GetCurrenStatus().Condition &= ~ShipCondition.Fragile;
+                            ship.GetCurrenStatus().RemoveCondition(ShipCondition.Fragile);
                     }
                     else if (other.GetComponentInParent<Damaging>() != null)
                     {
                         other.GetComponentInParent<Damaging>().status &= ~DamagingStatus.Fragile;
                     }
                     break;
-                default:
-                    break;
+                default: throw new InvalidOperationException($"Unexpected {nameof(DangerZoneType)} value of {zoneType}!");
             }
         }
     }

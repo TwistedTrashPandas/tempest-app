@@ -47,6 +47,11 @@ namespace MastersOfTempest
             return currentPlayer;
         }
 
+        public List<Player> GetPlayers()
+        {
+            return players;
+        }
+
         public void SetCurrentPlayer(Player player)
         {
             currentPlayer = player;

@@ -48,7 +48,7 @@ namespace MastersOfTempest.ShipBL
             }
             context.Register(this);
             currentStatus = new ShipStatus();
-            currentStatus.Condition = ShipCondition.None;
+            currentStatus.ActionRequest += ExecuteAction;
         }
 
         protected override void OnServerReceivedMessageRaw(byte[] data, ulong steamID)
