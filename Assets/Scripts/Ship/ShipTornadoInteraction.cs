@@ -52,7 +52,9 @@ namespace MastersOfTempest.ShipBL
                 Vector3 currForward = transform.forward;
                 currForward.y = 0f;
                 float angle = Mathf.Min(Vector3.SignedAngle(targetView, currForward, Vector3.up), 30f);
-
+                float maxAngleChange = Mathf.Abs(transform.rotation.z) + 1.0f;
+                if (Mathf.Abs(angle) > maxAngleChange)
+                    angle = maxAngleChange * Mathf.Sign(transform.rotation.z);
                 transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, angle), Time.deltaTime * 15f);
 
                 rb.velocity.Scale(velDampVector);
