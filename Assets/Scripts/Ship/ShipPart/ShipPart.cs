@@ -77,7 +77,7 @@ namespace MastersOfTempest.ShipBL
                 {
                     destruc = 1.0f;
                 }
-
+                ShipPartHit?.Invoke(this, new ShipPartHitEventArgs(destruc));
                 SendCollision(contactPoints, impulse, destruc);
                 AddDestruction(destruc);
 
@@ -184,7 +184,6 @@ namespace MastersOfTempest.ShipBL
                     contactPoints[j] = new Vector3(BitConverter.ToSingle(data, j * 12 + 16), BitConverter.ToSingle(data, j * 12 + 20), BitConverter.ToSingle(data, j * 12 + 24));
                 }
                 UpdateMesh(contactPoints, impulse);
-                ShipPartHit?.Invoke(this, new ShipPartHitEventArgs(BitConverter.ToSingle(data, 0)));
             }
         }
 
