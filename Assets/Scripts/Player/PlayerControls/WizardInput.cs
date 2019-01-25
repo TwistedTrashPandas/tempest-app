@@ -187,7 +187,7 @@ namespace MastersOfTempest.PlayerControls
         public override void Bootstrap()
         {
             interactionsController = gameObject.AddComponent<InteractionsController>();
-            interactionsController.Setup(CameraDirectionController.FirstPersonCamera, float.MaxValue, UserInteracts, PlayerRole.Wizard);
+            interactionsController.Setup(float.MaxValue, UserInteracts, PlayerRole.Wizard);
             interactionsController.PlayerInteracted += OnUserInteraction;
             interactionsController.LostSight += OnUserLostSight;
 
@@ -196,7 +196,7 @@ namespace MastersOfTempest.PlayerControls
 
             var animations = gameObject.AddComponent<WizardInputAnimations>();
             animations.WizardInput = this;
-            animations.FirstPersonCamera = CameraDirectionController.FirstPersonCamera;
+            animations.FirstPersonCamera = Camera.main;
         }
 
         private bool UserInteracts()

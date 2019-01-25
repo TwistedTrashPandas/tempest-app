@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using MastersOfTempest.Networking;
 using UnityEngine;
 
 namespace MastersOfTempest.PlayerControls
@@ -7,11 +8,27 @@ namespace MastersOfTempest.PlayerControls
     /// <summary>
     /// Controller that makes the camera to follow mouse/joystick movement
     /// </summary>
-    public class CameraDirectionController : MonoBehaviour
+    public class CameraDirectionController : NetworkBehaviour
     {
+        private struct LookAroundInputMessage
+        {
+            public float vertical;
+            public float horizontal;
+            public int messageNumber;
+            public LookAroundInputMessage(float vertical, float horizontal, int messageNumber)
+            {
+                this.vertical = vertical;
+                this.horizontal = horizontal;
+                this.messageNumber = messageNumber;
+            }
+        }
+
+
         public Camera FirstPersonCamera { get; private set; }
         public float speedH = 2.0f;
         public float speedV = 2.0f;
+
+        private int messageNumber;
 
         private float yaw = 0.0f;
         private float pitch = 0.0f;
@@ -46,7 +63,57 @@ namespace MastersOfTempest.PlayerControls
             }
         }
 
-        private void Awake()
+        // private void Awake()
+        // {
+        //     FirstPersonCamera = Camera.main;
+        //     if (FirstPersonCamera == null)
+        //     {
+        //         throw new InvalidOperationException($"{nameof(FirstPersonCamera)} is not specified!");
+        //     }
+        //     //Set parent to the camera so that it moves with the player
+        //     FirstPersonCamera.transform.SetParent(this.transform, false);
+        //     Active = true;
+        // }
+
+        protected override void UpdateServer()
+        {
+            if (Active)
+            {
+                transform.localEulerAngles = new Vector3(pitch + pitchShake, yaw + yawShake, rollShake);
+            }
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                Active ^= true;
+            }
+        }
+
+        protected override void UpdateClient()
+        {
+            if(isActive)
+            {
+                var message = new LookAroundInputMessage(Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), ++messageNumber);
+                SendToServer(ByteSerializer.GetBytes(message), Facepunch.Steamworks.Networking.SendType.Unreliable);
+
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    Active ^= true;
+                }
+            }
+        }
+
+        protected override void OnServerReceivedMessageRaw(byte[] data, ulong steamID)
+        {
+            var message = ByteSerializer.FromBytes<LookAroundInputMessage>(data);
+            if(message.messageNumber > this.messageNumber)
+            {
+                this.messageNumber = message.messageNumber;
+                yaw += speedH * message.horizontal;
+                pitch -= speedV * message.vertical;
+                pitch = Mathf.Clamp(pitch, PitchMin, PitchMax);
+            }
+        }
+
+        protected override void StartClient()
         {
             FirstPersonCamera = Camera.main;
             if (FirstPersonCamera == null)
@@ -57,7 +124,7 @@ namespace MastersOfTempest.PlayerControls
             FirstPersonCamera.transform.SetParent(this.transform, false);
 
             // set visible player mockups depending on role -> e.g. wizard can't see his own mockup
-            PlayerRole role = (PlayerRole) PlayerPrefs.GetInt(PlayerRoleExtensions.ActiveRoleKey);
+            PlayerRole role = (PlayerRole)PlayerPrefs.GetInt(PlayerRoleExtensions.ActiveRoleKey);
             switch (role)
             {
                 case PlayerRole.Wizard:
@@ -74,20 +141,8 @@ namespace MastersOfTempest.PlayerControls
             Active = true;
         }
 
-        void Update()
-        {
-            if (Active)
-            {
-                yaw += speedH * Input.GetAxis("Mouse X");
-                pitch -= speedV * Input.GetAxis("Mouse Y");
-                pitch = Mathf.Clamp(pitch, PitchMin, PitchMax);
-                FirstPersonCamera.transform.localEulerAngles = new Vector3(pitch + pitchShake, yaw + yawShake, rollShake);
-            }
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                Active ^= true;
-            }
-        }
+
+        //TODO: shake/move camera should be executed server side?
 
         /// <summary>
         /// Shake the camera with the set intensity

@@ -25,7 +25,7 @@ namespace MastersOfTempest.PlayerControls
                 return shipPhysics;
             }
         }
-        private const float speed = .9f;
+        private float speed = .9f;
 
         [Serializable]
         private struct MoveMessage
@@ -87,6 +87,24 @@ namespace MastersOfTempest.PlayerControls
             Character.SimpleMove(lastMoveDirection);
             Character.transform.SetParent(parent);
         }
+
+        /// <summary>
+        /// Changes the speed of the character by multiplying the current speed value.
+        /// Works only on the server
+        /// </summary>
+        /// <param name="multiplier"></param>
+        public void ChangeSpeed(float multiplier)
+        {
+            if(serverObject.onServer)
+            {
+                speed *= multiplier;
+            }
+            else
+            {
+                //We don't want to give this power to the clients
+            }
+        }
+
 
         public void MoveCharacter(float horizontal, float vertical, Vector3 cameraFoward, Vector3 cameraRight)
         {
