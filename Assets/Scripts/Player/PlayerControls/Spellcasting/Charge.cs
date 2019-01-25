@@ -33,10 +33,10 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
         {
             switch(Charge)
             {
-                case Charge.Wind: return new Color(0.3843138f, 0.6509804f, 0.5529412f);
-                case Charge.Fire: return new Color(0.5803922f, 0f, 0f);
-                case Charge.Water: return new Color(0.1176471f, 0.2627451f, 0.5490196f);
-                case Charge.Earth: return new Color(0.5607843f, 0.4156863f, 0.08235294f);
+                case Charge.Wind: return new Color(0.1243138f, 0.7509804f, 0.1529412f);
+                case Charge.Fire: return new Color(0.6703922f, 0.12f, 0.12f);
+                case Charge.Water: return new Color(0.1176471f, 0.127451f, 0.790196f);
+                case Charge.Earth: return new Color(0.5607843f, 0.5156863f, 0.08235294f);
                 case Charge.None: return Color.white;
                 default: throw new InvalidOperationException($"Unexpected {nameof(Charge)} value of {Charge}");
             }

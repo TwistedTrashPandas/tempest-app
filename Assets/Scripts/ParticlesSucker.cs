@@ -39,24 +39,33 @@ namespace MastersOfTempest
             Vector3 vecToTarget;
 
             float distToTarget = (target.position - ps.transform.position).magnitude;
+
             var main = ps.main;
             main.startColor = ParticlesColor;
             float speed = distToTarget / main.startLifetime.constant;
             int length;
+            bool atleastOnePart = false;
             ps.Play();
             if (modifiedParticles == null)
             {
                 modifiedParticles = new ParticleSystem.Particle[1000];
             }
-            while (!cancellationToken.CancellationRequested)
+            while (!cancellationToken.CancellationRequested || atleastOnePart)
             {
+                atleastOnePart = false;
                 length = ps.GetParticles(modifiedParticles);
-                vecToTarget = transform.InverseTransformPoint(target.position).normalized * speed;
-                distToTarget = (target.position - transform.position).sqrMagnitude;
+                distToTarget = (target.position - ps.transform.position).magnitude;
+                speed = distToTarget / main.startLifetime.constant;
+                vecToTarget = ps.transform.InverseTransformPoint(target.position).normalized * speed;
+
                 for (var i = 0; i < length; i++)
                 {
                     modifiedParticles[i].velocity = vecToTarget;
+                    if (modifiedParticles[i].remainingLifetime > 0f)
+                        atleastOnePart = true;
                 }
+                if(cancellationToken.CancellationRequested)
+                    ps.Stop();
                 ps.SetParticles(modifiedParticles, length);
                 yield return null;
             }

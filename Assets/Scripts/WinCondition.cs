@@ -18,6 +18,8 @@ namespace MastersOfTempest
         private CapsuleCollider winCondition;
         private bool toggleWinText;
 
+        private GUIContent guiContent;
+        private GUIStyle guiStyle;
 
         protected override void StartServer()
         {
@@ -29,6 +31,14 @@ namespace MastersOfTempest
         {
             base.StartServer();
             toggleWinText = false;
+            guiContent = new GUIContent("YOU WON");
+            guiStyle = new GUIStyle();
+
+            guiStyle.alignment = TextAnchor.MiddleCenter;
+            guiStyle.fontSize = 10;
+            guiStyle.font = winFont;
+
+            guiStyle.normal.textColor = new Color(0.0f, 0.6f, 0f);
         }
 
         public void OnWinServer()
@@ -41,18 +51,22 @@ namespace MastersOfTempest
 
         private void OnGUI()
         {
-            /*
             if (toggleWinText)
             {
+                float up = 60f * Screen.height / Screen.height;
+                float right = 60f * Screen.width / Screen.width;
+                GUI.Label(new Rect(Screen.width / 2f - right, Screen.height / 2f - up, Screen.width / 10f, Screen.height / 10f), guiContent, guiStyle);
+
+                /*
                 GUIStyle buttonStyle = GUI.skin.GetStyle("Button");
-                buttonStyle.fontSize = 40;
-                buttonStyle.font = winFont;
+                buttonStyle.fontSize = (int)(40 * Screen.width / 1920f);
+                buttonStyle.font = loseFont;
 
                 if (GUI.Button(new Rect(Screen.width * 0.75f, Screen.height * 0.8f, Screen.width / 6f, Screen.height / 18f), "Return to Lobby", buttonStyle))
                 {
                     SceneManager.LoadScene(0);
-                }
-            }*/
+                }*/
+            }
         }
 
         protected override void OnClientReceivedMessageRaw(byte[] data, ulong steamID)
