@@ -28,6 +28,7 @@ namespace MastersOfTempest.Networking
         public bool removeServerChildColliders = false;
 
         [Header("Client Parameters")]
+        public string clientLayer = "Client";
         public bool interpolateOnClient = true;
         public bool removeChildColliders = true;
         public bool removeChildRigidbodies = true;
@@ -70,7 +71,7 @@ namespace MastersOfTempest.Networking
             }
             else
             {
-                SetLayerOfThisGameObjectAndAllChildren("Client");
+                SetLayerOfThisGameObjectAndAllChildren(clientLayer);
 
                 // Remove collider / rigidbody on the client because it is not needed most of the time
                 RemoveCollidersAndRigidbodies();
