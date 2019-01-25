@@ -38,7 +38,7 @@ namespace MastersOfTempest
             guiStyle.fontSize = 10;
             guiStyle.font = winFont;
 
-            guiStyle.normal.textColor = new Color(0.0f, 0.6f, 0f);
+            guiStyle.normal.textColor = new Color(0.36f, 0.34f, 0f);
         }
 
         public void OnWinServer()
@@ -78,6 +78,7 @@ namespace MastersOfTempest
                 {
                     toggleWinText = true;
                     OnWin(gameObject.GetComponent<Gamemaster>().GetShip().gameObject);
+                    StartCoroutine(IncreaseFontSize());
                 }
             }
         }
@@ -88,6 +89,14 @@ namespace MastersOfTempest
                 OnWinServer();
         }
 
+        private IEnumerator IncreaseFontSize()
+        {
+            while (guiStyle.fontSize < 250)
+            {
+                guiStyle.fontSize += 1;
+                yield return new WaitForEndOfFrame();
+            }
+        }
         private IEnumerator InitAfter5Seconds()
         {
             yield return new WaitForSeconds(5f);
