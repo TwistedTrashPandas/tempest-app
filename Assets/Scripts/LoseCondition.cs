@@ -87,7 +87,6 @@ namespace MastersOfTempest
             {
                 toggleLossText = true;
                 StartCoroutine(ScreenSaturation(postProcessVolume.profile.GetSetting<ColorGrading>()));
-                Physics.gravity = new Vector3(0f, -9.81f, 0f);
                 StartCoroutine(TimeScale());
             }
             //OnLose();
@@ -100,7 +99,7 @@ namespace MastersOfTempest
                 float up = 60f * Screen.height / Screen.height;
                 float right = 60f * Screen.width / Screen.width;
                 GUI.Label(new Rect(Screen.width / 2f - right, Screen.height / 2f - up, Screen.width / 10f, Screen.height / 10f), guiContent, guiStyle);
-                
+
                 /*
                 GUIStyle buttonStyle = GUI.skin.GetStyle("Button");
                 buttonStyle.fontSize = (int)(40 * Screen.width / 1920f);
@@ -132,12 +131,17 @@ namespace MastersOfTempest
 
         private IEnumerator TimeScale()
         {
+            float prevTimeScale = Time.timeScale;
+            Vector3 gravBefore = Physics.gravity;
+            Physics.gravity = new Vector3(0f, -9.81f, 0f);
             while (Time.timeScale > 0.01f)
             {
                 Time.timeScale = Mathf.Lerp(Time.timeScale, 0.01f, Time.unscaledDeltaTime);
 
                 yield return new WaitForEndOfFrame();
             }
+            Physics.gravity = gravBefore;
+            Time.timeScale = prevTimeScale;
         }
 
         public void CheckOverAllDestruction()
