@@ -35,9 +35,9 @@ namespace MastersOfTempest.PlayerControls
 
         public InteractablePart CurrentlyLookedAt { get; private set; }
 
-        public void Setup(Camera cameraToShootFrom, float maxInteractionDistance, Func<bool> interactionCheck, PlayerRole role)
+        public void Setup(float maxInteractionDistance, Func<bool> interactionCheck, PlayerRole role)
         {
-            FirstPersonCamera = cameraToShootFrom;
+            FirstPersonCamera = Camera.main;
             MaxInteractionDistance = maxInteractionDistance;
             PlayerInteractionCheck = interactionCheck;
             CurrentAccessLevel = role.GetAccessLevel();

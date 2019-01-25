@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 6510203241594308682}
   - component: {fileID: 4109839992066285179}
   - component: {fileID: 6738663281023418005}
+  - component: {fileID: 6699385874470556378}
   m_Layer: 14
   m_Name: DangerZone 2
   m_TagString: Untagged
@@ -105,7 +106,7 @@ MonoBehaviour:
   serverLayer: ServerEnvironment
   removeServerChildColliders: 0
   interpolateOnClient: 1
-  removeChildColliders: 1
+  removeChildColliders: 0
   removeChildRigidbodies: 1
   setChildCollidersTriggers: 1
 --- !u!198 &4109839992066285179
@@ -4774,3 +4775,20 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!114 &6699385874470556378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6612684141440016296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sharedProfile: {fileID: 11400000, guid: 3a631df05270c478da72e706cab78029, type: 2}
+  isGlobal: 0
+  blendDistance: 10
+  weight: 1
+  priority: 1
