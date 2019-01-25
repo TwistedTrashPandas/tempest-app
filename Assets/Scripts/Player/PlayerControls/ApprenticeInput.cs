@@ -99,10 +99,10 @@ namespace MastersOfTempest.PlayerControls
             interactionsController.LostSight += OnLostSight;
 
             // Spawn and attach hands
-            Instantiate(Resources.Load<GameObject>("ApprenticeHands"), firstPersonCamera.transform, false);
+            var hands = Instantiate(Resources.Load<GameObject>("ApprenticeHands"), firstPersonCamera.transform, false);
 
-            animations = GetComponentInChildren<ApprenticeInputAnimations>();
-
+            animations = hands.GetComponentInChildren<ApprenticeInputAnimations>();
+            
             var highlighter = gameObject.AddComponent<InteractionsHighlighter>();
             highlighter.InteractionsController = interactionsController;
         }
