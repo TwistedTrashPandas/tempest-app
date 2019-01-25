@@ -89,20 +89,17 @@ namespace MastersOfTempest.PlayerControls
         public override void Bootstrap()
         {
             //Set up camera that is used to determine interactable objects
-            firstPersonCamera = CameraDirectionController.FirstPersonCamera;
+            firstPersonCamera = Camera.main;
 
             //Create a message UI element to show hints to player
             interactionsController = gameObject.AddComponent<InteractionsController>();
-            interactionsController.Setup(CameraDirectionController.FirstPersonCamera, float.MaxValue, InteractionCheck, PlayerRole.Apprentice);
+            interactionsController.Setup(float.MaxValue, InteractionCheck, PlayerRole.Apprentice);
             interactionsController.NewInteractable += OnNewInteractable;
             interactionsController.PlayerInteracted += OnPlayerInteracted;
             interactionsController.LostSight += OnLostSight;
 
             // Spawn and attach hands
             Instantiate(Resources.Load<GameObject>("ApprenticeHands"), firstPersonCamera.transform, false);
-
-            // Make sure that the hands are visible
-            firstPersonCamera.nearClipPlane = 0.01f;
 
             animations = GetComponentInChildren<ApprenticeInputAnimations>();
 

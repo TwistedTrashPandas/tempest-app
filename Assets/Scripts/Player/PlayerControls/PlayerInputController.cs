@@ -10,11 +10,11 @@ namespace MastersOfTempest.PlayerControls
 
         public event EventHandler ActionMade;
 
-        protected virtual void Awake() 
+        protected virtual void Awake()
         {
-            CameraDirectionController = gameObject.AddComponent<CameraDirectionController>();
+            CameraDirectionController = GetComponent<CameraDirectionController>();
             MovementController = gameObject.AddComponent<MovementController>();
-            MovementController.DirectionCamera = CameraDirectionController.FirstPersonCamera;
+            MovementController.DirectionCamera = Camera.main;
         }
 
         public abstract void Interrupt();
@@ -24,7 +24,7 @@ namespace MastersOfTempest.PlayerControls
         public abstract void Resume();
 
         public abstract void Bootstrap();
-        
+
         protected void TriggerActionEvent(ActionMadeEventArgs args)
         {
             ActionMade?.Invoke(this, args);
