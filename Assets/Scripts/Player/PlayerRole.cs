@@ -15,7 +15,7 @@ namespace MastersOfTempest.PlayerControls {
     public static class PlayerRoleExtensions
     {
         public const string LobbyDataKey = "Role";
-        const string ActiveRoleKey = "ActivePlayerRole";
+        public const string ActiveRoleKey = "ActivePlayerRole";
 
         public static string GetUserFriendlyName(this PlayerRole role)
         {

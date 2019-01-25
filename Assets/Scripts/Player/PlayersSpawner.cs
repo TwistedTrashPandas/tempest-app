@@ -14,6 +14,8 @@ namespace MastersOfTempest.PlayerControls
     public class PlayersSpawner : MonoBehaviour
     {
         public Player PlayerPrefab;
+        public GameObject apprenticePrefab;
+        public GameObject wizardPrefab;
         private void Start()
         {
             if (PlayerPrefab == null)
@@ -41,19 +43,15 @@ namespace MastersOfTempest.PlayerControls
                     //playerInstance.transform.SetParent(spawnPoint.transform, true);
                 }
 
-                Transform[] children = playerInstance.transform.GetComponentsInChildren<Transform>();
-                print(children.Length);
                 switch (role)
                 {
                     case PlayerRole.Apprentice:
-                        Destroy(children[1].gameObject);
+                        GameObject.Instantiate(apprenticePrefab, playerInstance.transform.position + new Vector3(0f, -0.14f, 0f), Quaternion.Euler(-90, 0, 0), playerInstance.transform);
                         break;
                     case PlayerRole.Wizard:
-                        Destroy(children[2].gameObject);
+                        GameObject.Instantiate(wizardPrefab, playerInstance.transform.position + new Vector3(0f, -0.14f, 0f), Quaternion.Euler(-90, 0, 0), playerInstance.transform);
                         break;
                     case PlayerRole.Spectator:
-                        Destroy(children[1].gameObject);
-                        Destroy(children[2].gameObject);
                         break;
                 }
                 Debug.Log($"Spawned for player# {playerId}");
@@ -64,6 +62,7 @@ namespace MastersOfTempest.PlayerControls
             //We don't need it anymore after its job is done
             Destroy(this.gameObject, 10f);
         }
+
         private IEnumerator SetParent(Transform child, Transform parent)
         {
             yield return new WaitForFixedUpdate();

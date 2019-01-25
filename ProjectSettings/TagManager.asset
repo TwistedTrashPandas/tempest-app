@@ -27,8 +27,8 @@ TagManager:
   - ServerPlayer
   - ServerEnvironment
   - ServerShipEnvironment
-  - 
-  - 
+  - ClientWizard
+  - ClientApprentice
   - 
   - 
   - 

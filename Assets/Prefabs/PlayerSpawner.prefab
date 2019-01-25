@@ -45,3 +45,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerPrefab: {fileID: 114469589131901454, guid: bd5eb3b50ae494d4c90ffe060ce31a12,
     type: 3}
+  apprenticePrefab: {fileID: 6168820404792381214, guid: 73c8bbd79023e2541b4b4c50a347291b,
+    type: 3}
+  wizardPrefab: {fileID: 4290491095381796169, guid: 968b76d85338f6a4a89df7f7ecd2ffc8,
+    type: 3}

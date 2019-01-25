@@ -93,11 +93,10 @@ namespace MastersOfTempest.PlayerControls
             {
                 var message = new LookAroundInputMessage(Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), ++messageNumber);
                 SendToServer(ByteSerializer.GetBytes(message), Facepunch.Steamworks.Networking.SendType.Unreliable);
-
-                if (Input.GetKeyDown(KeyCode.Escape))
-                {
-                    Active ^= true;
-                }
+            }
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                Active ^= true;
             }
         }
 
@@ -122,6 +121,22 @@ namespace MastersOfTempest.PlayerControls
             }
             //Set parent to the camera so that it moves with the player
             FirstPersonCamera.transform.SetParent(this.transform, false);
+
+            // set visible player mockups depending on role -> e.g. wizard can't see his own mockup
+            PlayerRole role = (PlayerRole)PlayerPrefs.GetInt(PlayerRoleExtensions.ActiveRoleKey);
+            switch (role)
+            {
+                case PlayerRole.Wizard:
+                    FirstPersonCamera.cullingMask |= LayerMask.NameToLayer("ClientApprentice");
+                    break;
+                case PlayerRole.Apprentice:
+                    FirstPersonCamera.cullingMask |= LayerMask.NameToLayer("ClientWizard");
+                    break;
+                case PlayerRole.Spectator:
+                    FirstPersonCamera.cullingMask |= LayerMask.NameToLayer("ClientWizard");
+                    FirstPersonCamera.cullingMask |= LayerMask.NameToLayer("ClientApprentice");
+                    break;
+            }
             Active = true;
         }
 
