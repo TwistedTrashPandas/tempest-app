@@ -93,11 +93,10 @@ namespace MastersOfTempest.PlayerControls
             {
                 var message = new LookAroundInputMessage(Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), ++messageNumber);
                 SendToServer(ByteSerializer.GetBytes(message), Facepunch.Steamworks.Networking.SendType.Unreliable);
-
-                if (Input.GetKeyDown(KeyCode.Escape))
-                {
-                    Active ^= true;
-                }
+            }
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                Active ^= true;
             }
         }
 
