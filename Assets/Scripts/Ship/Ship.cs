@@ -66,11 +66,19 @@ namespace MastersOfTempest.ShipBL
         {
             if (serverObject.onServer)
             {
+                float maxDestruct = -1f;
+                ShipPart toRepair = new ShipPart();
                 foreach (ShipPart shipPart in shipPartManager.interactionAreas[shipPartArea])
                 {
                     // Negative destruction equals repairing
-                    shipPart.AddDestruction(-repairAmount);
+                    if (shipPart.GetDestruction() > maxDestruct)
+                    {
+                        maxDestruct = shipPart.GetDestruction();
+                        toRepair = shipPart;
+                    }
+                    //shipPart.AddDestruction(-repairAmount);
                 }
+                toRepair.AddDestruction(-repairAmount);
             }
             else
             {

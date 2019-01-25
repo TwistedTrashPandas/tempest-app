@@ -23,8 +23,8 @@ namespace MastersOfTempest.PlayerControls
         public Transform SuckPoint;
         public Spellbook book;
 
-        public ParticleSystem HoldPS;
-        public ParticleSystem DissipatePS;
+        public ParticleSystem [] HoldPS;
+        public ParticleSystem [] DissipatePS;
         public ParticlesSucker FeedPS;
         private Animator anim;
         void Start()
