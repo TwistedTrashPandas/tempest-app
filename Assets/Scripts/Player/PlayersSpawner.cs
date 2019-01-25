@@ -46,10 +46,10 @@ namespace MastersOfTempest.PlayerControls
                 switch (role)
                 {
                     case PlayerRole.Apprentice:
-                        GameObject.Instantiate(apprenticePrefab, playerInstance.transform.position, Quaternion.Euler(-90, 0, 0), playerInstance.transform);
+                        GameObject.Instantiate(apprenticePrefab, playerInstance.transform.position + new Vector3(0f, -0.14f, 0f), Quaternion.Euler(-90, 0, 0), playerInstance.transform);
                         break;
                     case PlayerRole.Wizard:
-                        GameObject.Instantiate(wizardPrefab, playerInstance.transform.position, Quaternion.Euler(-90, 0, 0), playerInstance.transform);
+                        GameObject.Instantiate(wizardPrefab, playerInstance.transform.position + new Vector3(0f, -0.14f, 0f), Quaternion.Euler(-90, 0, 0), playerInstance.transform);
                         break;
                     case PlayerRole.Spectator:
                         break;
