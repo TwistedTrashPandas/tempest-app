@@ -45,6 +45,7 @@ namespace MastersOfTempest.ShipBL
         {
             base.StartClient();
             audioSource = GetComponent<AudioSource>();
+            audioSource.volume = 0.5f;
         }
 
 
