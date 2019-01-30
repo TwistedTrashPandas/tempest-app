@@ -13,6 +13,7 @@ namespace MastersOfTempest.Environment.Interacting
         public float splitForce;
         public DamagingStatus status;
         public EnvSpawner envSpawner;
+        public GameObject onDestroyPrefab;
 
         protected override void OnCollisionEnter(Collision collision)
         {
@@ -69,6 +70,12 @@ namespace MastersOfTempest.Environment.Interacting
                 Destroy(this.gameObject);
                 /*Rock AnimationCode Ends*/
             }
+        }
+
+        private void OnDestroy()
+        {
+            var go = GameObject.Instantiate(onDestroyPrefab, this.transform, false);
+            Destroy(go, 10f);
         }
     }
 }

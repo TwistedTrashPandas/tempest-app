@@ -13,8 +13,8 @@ namespace MastersOfTempest.ShipBL
         public event EventHandler ShipPartHit;
         public ShipPartArea interactionArea;
         private const float cutOffDist = 3.0f;
-        private const float impulseScaling = 0.03f;
-        private const float maxDisplacementDist = 0.4f;
+        private const float impulseScaling = 0.06f;
+        private const float maxDisplacementDist = 0.3f;
         /// <summary>
         /// destruction == 0:   ship part fully repaired
         ///             == 1:   ship part fully destroyed
@@ -45,6 +45,7 @@ namespace MastersOfTempest.ShipBL
         {
             base.StartClient();
             audioSource = GetComponent<AudioSource>();
+            audioSource.volume = 0.5f;
         }
 
 
@@ -119,11 +120,11 @@ namespace MastersOfTempest.ShipBL
                     float distSquared = Vector3.Distance(worldPos, currContact);
                     if (cutOffDist > distSquared)
                     {
-                        Vector3 dir = impulse;// (worldPos - currContact).normalized;
-                        /*if (Vector3.Dot(dir, impulse.normalized) > 0)
+                        Vector3 dir = (worldPos - currContact).normalized; // impulse; // 
+                        if (Vector3.Dot(dir, impulse.normalized) > 0)
                             dir *= impulse.magnitude;
                         else
-                            dir = impulse;*/
+                            dir = impulse;
                         distSquared *= distSquared;
                         worldPos += dir / (distSquared + 1f) / contactPoints.Length * impulseScaling;
 
