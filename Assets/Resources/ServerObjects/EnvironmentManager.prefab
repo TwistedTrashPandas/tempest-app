@@ -135,6 +135,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -151,8 +152,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c00f619167f3b444e86ec3225496e04e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  f_cellSize: 4
-  f_cellSize_horizontal: 10
+  f_cellSize: 16
+  f_cellSize_horizontal: 24
   v3_dimensions: {x: 152, y: 312, z: 152}
   loadFromFile: 1
   vectorFieldFileNum: 999

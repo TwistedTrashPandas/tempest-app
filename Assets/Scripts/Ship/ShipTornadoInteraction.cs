@@ -8,8 +8,11 @@ namespace MastersOfTempest.ShipBL
 {
     public class ShipTornadoInteraction : MonoBehaviour
     {
+        public bool linearMovement;
+
         public float angularMomentumFactor = 1f;
-        public float velocityDamp = 1f;
+        public float velocityDamp_xz = 0.99f;
+        public float velocityDamp_y = 0.9f;
         public float pullStrength = 1f;
 
         private VectorField vectorField;
@@ -29,7 +32,7 @@ namespace MastersOfTempest.ShipBL
                 if (vectorField == null)
                     throw new System.InvalidOperationException("EnvironmentManager has to be in the same scene as the ship.");
                 targetView = transform.forward;
-                velDampVector = new Vector3(velocityDamp, 0.9f, velocityDamp);
+                velDampVector = new Vector3(velocityDamp_xz, velocityDamp_y, velocityDamp_xz);
             }
             else
                 this.enabled = false;
@@ -37,7 +40,7 @@ namespace MastersOfTempest.ShipBL
 
         private void FixedUpdate()
         {
-            if (vectorField != null && rb != null)
+            if (!linearMovement && vectorField != null && rb != null)
             {
                 // apply force depending on position in vectorfield and adjust viewing direction accordingly
                 targetForce = vectorField.GetVectorAtPos(transform.position);
@@ -56,9 +59,13 @@ namespace MastersOfTempest.ShipBL
                 if (Mathf.Abs(angle) > maxAngleChange)
                     angle = maxAngleChange * Mathf.Sign(transform.rotation.z);
                 transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, angle), Time.deltaTime * 15f);
-
-                rb.velocity.Scale(velDampVector);
             }
+            else
+            {
+                rb.AddForce(transform.forward * pullStrength);
+            }
+
+            rb.velocity.Scale(velDampVector);
         }
     }
 }

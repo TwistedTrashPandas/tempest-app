@@ -74,6 +74,24 @@ namespace MastersOfTempest.Environment.VisualEffects
 
         void Start()
         {
+            if (maxVel == null || maxVel.Length != 3)
+                throw new System.InvalidOperationException("initialize max Vel with 3 elements!");
+
+            InitTornado();
+            initBuffers();
+            Load3DTextures();
+            CreateMesh();
+            camPos = Camera.main.transform;
+            // TODO: seperate script
+            Camera.main.cullingMatrix = Matrix4x4.Ortho(-99999, 99999, -99999, 99999, 2f, 99999) *
+                                Matrix4x4.Translate(Vector3.forward * -99999 / 2f) *
+                                Camera.main.worldToCameraMatrix;
+
+            //ComputeAttenuationProperties();
+        }
+
+        private void InitTornado()
+        {
             material = GetComponent<MeshRenderer>().material;
             float height = 1315f;
             float radius = 7500f;
@@ -127,9 +145,6 @@ namespace MastersOfTempest.Environment.VisualEffects
                     break;
             }
 
-            if (maxVel == null || maxVel.Length != 3)
-                throw new System.InvalidOperationException("initialize max Vel with 3 elements!");
-
             numberParticles = (uint)Mathf.Pow(2, particelNumExp);
 
             targetShip = false;
@@ -157,16 +172,6 @@ namespace MastersOfTempest.Environment.VisualEffects
                 }
                 particleIdx[i] = i;
             }
-            initBuffers();
-            Load3DTextures();
-            CreateMesh();
-            camPos = Camera.main.transform;
-            // TODO: seperate script
-            Camera.main.cullingMatrix = Matrix4x4.Ortho(-99999, 99999, -99999, 99999, 2f, 99999) *
-                                Matrix4x4.Translate(Vector3.forward * -99999 / 2f) *
-                                Camera.main.worldToCameraMatrix;
-
-            //ComputeAttenuationProperties();
         }
 
         private void initBuffers()
