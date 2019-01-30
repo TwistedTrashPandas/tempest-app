@@ -37,9 +37,9 @@ namespace MastersOfTempest.PlayerControls
         private const int MouseToCharge = 0;
         private const float DischargeDistance = float.MaxValue;
 
-        private const KeyCode TakeOutBook = KeyCode.Q;
-        private const KeyCode NextPageBook = KeyCode.R;
-        private const KeyCode PreviousPageBook = KeyCode.E;
+        private const KeyCode TakeOutBook = KeyCode.F;
+        private const KeyCode NextPageBook = KeyCode.E;
+        private const KeyCode PreviousPageBook = KeyCode.Q;
         private bool bookOpen;
         private float chargingTime;
         private float timeToCharge = 2f;

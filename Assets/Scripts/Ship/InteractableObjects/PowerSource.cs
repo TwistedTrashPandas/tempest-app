@@ -24,7 +24,7 @@ namespace MastersOfTempest.ShipBL
             }
         }
 
-        private const float ChargeTime = 1f;
+        private const float ChargeTime = .5f;
 
         public override Access GetAccess()
         {
