@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using MastersOfTempest.PlayerControls.QTE;
 using MastersOfTempest.PlayerControls.Spellcasting;
 using MastersOfTempest.ShipBL;
@@ -40,6 +41,8 @@ namespace MastersOfTempest.PlayerControls
         private const KeyCode TakeOutBook = KeyCode.F;
         private const KeyCode NextPageBook = KeyCode.E;
         private const KeyCode PreviousPageBook = KeyCode.Q;
+        private Dictionary<KeyCode, int> KeysToIndexMapping = new Dictionary<KeyCode, int>() { { KeyCode.Alpha1, 1 }, { KeyCode.Alpha2, 2 }, { KeyCode.Alpha3, 3 }, { KeyCode.Alpha4, 4 } };
+        private List<PowerRecepticle> powerRecepticles;
         private bool bookOpen;
         private float chargingTime;
         private float timeToCharge = 2f;
@@ -57,6 +60,16 @@ namespace MastersOfTempest.PlayerControls
 
             Also we need a spells controller that will check the player's input and send commands to the ship
          */
+        protected void Start()
+        {
+            const int ExpectedPowerRecepticlesCount = 4;
+            powerRecepticles = FindObjectsOfType<PowerRecepticle>().Where(pr => pr.gameObject.scene == this.gameObject.scene).ToList();
+            if (powerRecepticles.Count != ExpectedPowerRecepticlesCount)
+            {
+                throw new InvalidOperationException($"Unexpected amount of power recepticles! Expected {ExpectedPowerRecepticlesCount}, found: {powerRecepticles.Count}");
+            }
+        }
+
 
         public void StartCharging(Charge chargeType, float time)
         {
@@ -116,18 +129,18 @@ namespace MastersOfTempest.PlayerControls
 
         private void CheckBookInput()
         {
-            if(Input.GetKeyDown(TakeOutBook))
+            if (Input.GetKeyDown(TakeOutBook))
             {
                 bookOpen ^= true;
                 ShowHideBook?.Invoke(this, EventArgs.Empty);
             }
-            else if(bookOpen)
+            else if (bookOpen)
             {
-                if(Input.GetKeyDown(NextPageBook))
+                if (Input.GetKeyDown(NextPageBook))
                 {
                     NextPage?.Invoke(this, EventArgs.Empty);
                 }
-                else if(Input.GetKeyDown(PreviousPageBook))
+                else if (Input.GetKeyDown(PreviousPageBook))
                 {
                     PreviousPage?.Invoke(this, EventArgs.Empty);
                 }
@@ -158,11 +171,18 @@ namespace MastersOfTempest.PlayerControls
             {
                 Discharge();
             }
+            else if (KeysToIndexMapping.Keys.Any(key => Input.GetKeyDown(key)))
+            {
+                var recepticle = powerRecepticles.First(pr => pr.Index == KeysToIndexMapping[KeysToIndexMapping.Keys.First(key => Input.GetKeyDown(key))]);
+                recepticle.RequestCharge(currentChargeType);
+                currentState = WizardState.Idle;
+                DischargeHit?.Invoke(this, new ChargingEventArgs(currentChargeType));
+            }
         }
 
         private void OnUserLostSight(object sender, EventArgs args)
         {
-            if(currentState == WizardState.Charging)
+            if (currentState == WizardState.Charging)
             {
                 currentState = WizardState.Idle;
                 ChargingCancelled?.Invoke(this, new ChargingEventArgs(currentChargeType));
@@ -206,7 +226,7 @@ namespace MastersOfTempest.PlayerControls
 
         private void OnUserInteraction(object sender, EventArgs args)
         {
-            TriggerActionEvent(new ActionMadeEventArgs(((InteractionEventArgs) args).InteractableObject.GetAction()));
+            TriggerActionEvent(new ActionMadeEventArgs(((InteractionEventArgs)args).InteractableObject.GetAction()));
         }
 
         public InteractablePart GetCurrentInteractable()

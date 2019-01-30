@@ -14,6 +14,10 @@ namespace MastersOfTempest.ShipBL
         //TODO: when charge changed we need to stop the energy drawing of a wizard if any
         public Charge CurrentCharge { get; private set; }
         public MeshRenderer mat;
+        /// <summary>
+        /// The index used by the wizard input for "auto-aim"
+        /// </summary>
+        public int Index;
         private PowerRecepticleController controller;
         private GlowObject glowObj;
 

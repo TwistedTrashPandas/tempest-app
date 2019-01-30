@@ -509,6 +509,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mat: {fileID: 2232679630759258951}
+  Index: 3
 --- !u!1 &1703520733529123533
 GameObject:
   m_ObjectHideFlags: 0
@@ -630,6 +631,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mat: {fileID: 675209611066927622}
+  Index: 4
 --- !u!114 &7129108060289410855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -890,6 +892,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mat: {fileID: 4509464798326251574}
+  Index: 2
 --- !u!114 &3873248007249166599
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1417,6 +1420,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mat: {fileID: 9045514846941706799}
+  Index: 1
 --- !u!114 &7531272057939758884
 MonoBehaviour:
   m_ObjectHideFlags: 0
