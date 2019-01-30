@@ -327,6 +327,7 @@ MonoBehaviour:
   - {fileID: 394533449578786364}
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
@@ -491,6 +492,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
@@ -559,6 +561,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -596,6 +599,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
@@ -804,6 +808,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
@@ -841,6 +846,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
@@ -905,6 +911,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -943,6 +950,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
@@ -967,6 +975,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
@@ -1052,6 +1061,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -1076,6 +1086,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -1415,6 +1426,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
@@ -1734,6 +1746,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -1993,6 +2006,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -2253,6 +2267,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -2513,6 +2528,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -2770,6 +2786,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -2872,6 +2889,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -2977,6 +2995,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -3236,6 +3255,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -3492,6 +3512,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -3594,6 +3615,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -3696,6 +3718,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -3798,6 +3821,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -3900,6 +3924,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -4002,6 +4027,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -4104,6 +4130,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -4206,6 +4233,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -4308,6 +4336,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -4410,6 +4439,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -4512,6 +4542,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -4614,6 +4645,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -4716,6 +4748,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -4818,6 +4851,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -4920,6 +4954,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -5022,6 +5057,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -5124,6 +5160,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -5226,6 +5263,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -5328,6 +5366,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -5430,6 +5469,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -5532,6 +5572,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -5634,6 +5675,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -5736,6 +5778,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -5838,6 +5881,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -5943,6 +5987,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -6202,6 +6247,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -6461,6 +6507,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -6721,6 +6768,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -6977,6 +7025,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -7082,6 +7131,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -7341,6 +7391,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -7601,6 +7652,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -7874,6 +7926,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -8135,6 +8188,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
@@ -8394,6 +8448,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -8653,6 +8708,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -8912,6 +8968,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -9172,6 +9229,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -9554,6 +9612,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -9813,6 +9872,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -10086,6 +10146,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -10332,6 +10393,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -10591,6 +10653,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -10847,6 +10910,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -10949,6 +11013,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -11051,6 +11116,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -11156,6 +11222,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -11413,6 +11480,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -11515,6 +11583,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -11617,6 +11686,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -11719,6 +11789,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -11821,6 +11892,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -11923,6 +11995,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -12025,6 +12098,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -12127,6 +12201,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -12229,6 +12304,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -12331,6 +12407,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -12436,6 +12513,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -12695,6 +12773,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -12951,6 +13030,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -13053,6 +13133,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -13155,6 +13236,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -13257,6 +13339,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -13362,6 +13445,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -13622,6 +13706,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -13879,6 +13964,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -13981,6 +14067,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -14086,6 +14173,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -14345,6 +14433,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -14604,6 +14693,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -14864,6 +14954,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -15121,6 +15212,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -15223,6 +15315,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -15325,6 +15418,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -15427,6 +15521,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -15529,6 +15624,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -15631,6 +15727,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -15739,6 +15836,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerShipEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -16034,6 +16132,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -16136,6 +16235,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -16238,6 +16338,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -16340,6 +16441,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -16442,6 +16544,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -16544,6 +16647,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -16646,6 +16750,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -16748,6 +16853,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -16850,6 +16956,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -16952,6 +17059,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -17054,6 +17162,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -17156,6 +17265,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -17258,6 +17368,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -17360,6 +17471,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -17462,6 +17574,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -17564,6 +17677,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -17666,6 +17780,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -17768,6 +17883,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -17870,6 +17986,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -17972,6 +18089,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -18074,6 +18192,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -18176,6 +18295,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -18278,6 +18398,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -18380,6 +18501,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -18482,6 +18604,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -18584,6 +18707,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -18686,6 +18810,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -18788,6 +18913,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -18890,6 +19016,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -18992,6 +19119,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -19094,6 +19222,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -19196,6 +19325,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -19298,6 +19428,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -19353,6 +19484,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -19549,6 +19681,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
@@ -19611,6 +19744,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 1
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
@@ -19779,6 +19913,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -19803,6 +19938,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
@@ -19916,33 +20052,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 099fcd2ab5fce7d4e8e05c9c39a50278, type: 3}
---- !u!4 &8477473011324368780 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8166313657518404812, guid: 099fcd2ab5fce7d4e8e05c9c39a50278,
-    type: 3}
-  m_PrefabInstance: {fileID: 356518607573549888}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &9045514846941706799 stripped
+--- !u!23 &8315037160093256173 stripped
 MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 8753454077754898799, guid: 099fcd2ab5fce7d4e8e05c9c39a50278,
-    type: 3}
-  m_PrefabInstance: {fileID: 356518607573549888}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &675209611066927622 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 985241964380154182, guid: 099fcd2ab5fce7d4e8e05c9c39a50278,
-    type: 3}
-  m_PrefabInstance: {fileID: 356518607573549888}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &2232679630759258951 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 1877589292014561287, guid: 099fcd2ab5fce7d4e8e05c9c39a50278,
-    type: 3}
-  m_PrefabInstance: {fileID: 356518607573549888}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &4509464798326251574 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 4208136248853816182, guid: 099fcd2ab5fce7d4e8e05c9c39a50278,
+  m_CorrespondingSourceObject: {fileID: 8617191438506330797, guid: 099fcd2ab5fce7d4e8e05c9c39a50278,
     type: 3}
   m_PrefabInstance: {fileID: 356518607573549888}
   m_PrefabAsset: {fileID: 0}
@@ -19952,9 +20064,33 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 356518607573549888}
   m_PrefabAsset: {fileID: 0}
---- !u!23 &8315037160093256173 stripped
+--- !u!23 &4509464798326251574 stripped
 MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 8617191438506330797, guid: 099fcd2ab5fce7d4e8e05c9c39a50278,
+  m_CorrespondingSourceObject: {fileID: 4208136248853816182, guid: 099fcd2ab5fce7d4e8e05c9c39a50278,
+    type: 3}
+  m_PrefabInstance: {fileID: 356518607573549888}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &2232679630759258951 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1877589292014561287, guid: 099fcd2ab5fce7d4e8e05c9c39a50278,
+    type: 3}
+  m_PrefabInstance: {fileID: 356518607573549888}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &675209611066927622 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 985241964380154182, guid: 099fcd2ab5fce7d4e8e05c9c39a50278,
+    type: 3}
+  m_PrefabInstance: {fileID: 356518607573549888}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &9045514846941706799 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 8753454077754898799, guid: 099fcd2ab5fce7d4e8e05c9c39a50278,
+    type: 3}
+  m_PrefabInstance: {fileID: 356518607573549888}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8477473011324368780 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8166313657518404812, guid: 099fcd2ab5fce7d4e8e05c9c39a50278,
     type: 3}
   m_PrefabInstance: {fileID: 356518607573549888}
   m_PrefabAsset: {fileID: 0}
@@ -20053,15 +20189,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fc2f4f6b9e15b3549b314eda165ba7e9, type: 3}
---- !u!1 &2719939164065889725 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3378103972421456557, guid: fc2f4f6b9e15b3549b314eda165ba7e9,
-    type: 3}
-  m_PrefabInstance: {fileID: 819169047082282768}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6711495774774704472 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6231363615240132168, guid: fc2f4f6b9e15b3549b314eda165ba7e9,
+    type: 3}
+  m_PrefabInstance: {fileID: 819169047082282768}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2719939164065889725 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3378103972421456557, guid: fc2f4f6b9e15b3549b314eda165ba7e9,
     type: 3}
   m_PrefabInstance: {fileID: 819169047082282768}
   m_PrefabAsset: {fileID: 0}
@@ -20364,15 +20500,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f, type: 3}
---- !u!4 &8978423430486577918 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7809327154272317525, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
-    type: 3}
-  m_PrefabInstance: {fileID: 1223159550849639083}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &7303331475228656071 stripped
+--- !u!1 &2615673267394055396 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 8476667756176728940, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
+  m_CorrespondingSourceObject: {fileID: 3798001079422479951, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
     type: 3}
   m_PrefabInstance: {fileID: 1223159550849639083}
   m_PrefabAsset: {fileID: 0}
@@ -20382,15 +20512,21 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1223159550849639083}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2615673267394055396 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3798001079422479951, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
-    type: 3}
-  m_PrefabInstance: {fileID: 1223159550849639083}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2633635408843810079 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3779932216239474612, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
+    type: 3}
+  m_PrefabInstance: {fileID: 1223159550849639083}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7303331475228656071 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8476667756176728940, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
+    type: 3}
+  m_PrefabInstance: {fileID: 1223159550849639083}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8978423430486577918 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7809327154272317525, guid: 0ccb0e50ba9908945bc1aafcbfd2a91f,
     type: 3}
   m_PrefabInstance: {fileID: 1223159550849639083}
   m_PrefabAsset: {fileID: 0}
@@ -20685,6 +20821,21 @@ PrefabInstance:
       propertyPath: index
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1978937431931282037, guid: 9c113e6f2e7878e468f6670bdffce61a,
+        type: 3}
+      propertyPath: m_Center.x
+      value: -0.059958566
+      objectReference: {fileID: 0}
+    - target: {fileID: 1978937431931282037, guid: 9c113e6f2e7878e468f6670bdffce61a,
+        type: 3}
+      propertyPath: m_Center.z
+      value: -0.00000013245477
+      objectReference: {fileID: 0}
+    - target: {fileID: 1978937431931282037, guid: 9c113e6f2e7878e468f6670bdffce61a,
+        type: 3}
+      propertyPath: m_Radius
+      value: 1.3297805
+      objectReference: {fileID: 0}
     - target: {fileID: 380100692025838625, guid: 9c113e6f2e7878e468f6670bdffce61a,
         type: 3}
       propertyPath: returnTransform
@@ -20692,12 +20843,6 @@ PrefabInstance:
       objectReference: {fileID: 4780902932478289479}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9c113e6f2e7878e468f6670bdffce61a, type: 3}
---- !u!4 &1665008061707130477 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3456524495442100836, guid: 9c113e6f2e7878e468f6670bdffce61a,
-    type: 3}
-  m_PrefabInstance: {fileID: 4099197831832949769}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7909061674382065150 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6134438180382222839, guid: 9c113e6f2e7878e468f6670bdffce61a,
@@ -20710,6 +20855,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &1665008061707130477 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3456524495442100836, guid: 9c113e6f2e7878e468f6670bdffce61a,
+    type: 3}
+  m_PrefabInstance: {fileID: 4099197831832949769}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4823033389974833315
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20792,6 +20943,26 @@ PrefabInstance:
       propertyPath: index
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1978937431931282037, guid: 9c113e6f2e7878e468f6670bdffce61a,
+        type: 3}
+      propertyPath: m_Radius
+      value: 1.6207672
+      objectReference: {fileID: 0}
+    - target: {fileID: 1978937431931282037, guid: 9c113e6f2e7878e468f6670bdffce61a,
+        type: 3}
+      propertyPath: m_Center.x
+      value: 0.031689405
+      objectReference: {fileID: 0}
+    - target: {fileID: 1978937431931282037, guid: 9c113e6f2e7878e468f6670bdffce61a,
+        type: 3}
+      propertyPath: m_Center.z
+      value: 0.013249451
+      objectReference: {fileID: 0}
+    - target: {fileID: 1978937431931282037, guid: 9c113e6f2e7878e468f6670bdffce61a,
+        type: 3}
+      propertyPath: m_Height
+      value: 3.2415347
+      objectReference: {fileID: 0}
     - target: {fileID: 380100692025838625, guid: 9c113e6f2e7878e468f6670bdffce61a,
         type: 3}
       propertyPath: returnTransform
@@ -20799,12 +20970,6 @@ PrefabInstance:
       objectReference: {fileID: 5280583557661022589}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9c113e6f2e7878e468f6670bdffce61a, type: 3}
---- !u!4 &7860700992257329863 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3456524495442100836, guid: 9c113e6f2e7878e468f6670bdffce61a,
-    type: 3}
-  m_PrefabInstance: {fileID: 4823033389974833315}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1715656320751427924 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6134438180382222839, guid: 9c113e6f2e7878e468f6670bdffce61a,
@@ -20817,6 +20982,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fd2958143d860148b789f75a4c42a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &7860700992257329863 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3456524495442100836, guid: 9c113e6f2e7878e468f6670bdffce61a,
+    type: 3}
+  m_PrefabInstance: {fileID: 4823033389974833315}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5337840860367509315
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21154,15 +21325,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1299142fd5abc91449a9e1a51b8846fb, type: 3}
---- !u!1 &2787276063009563417 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8551061944994770446, guid: 1299142fd5abc91449a9e1a51b8846fb,
-    type: 3}
-  m_PrefabInstance: {fileID: 5766047090197417239}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8456561395426564345 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2692766165717669358, guid: 1299142fd5abc91449a9e1a51b8846fb,
+    type: 3}
+  m_PrefabInstance: {fileID: 5766047090197417239}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2787276063009563417 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8551061944994770446, guid: 1299142fd5abc91449a9e1a51b8846fb,
     type: 3}
   m_PrefabInstance: {fileID: 5766047090197417239}
   m_PrefabAsset: {fileID: 0}
