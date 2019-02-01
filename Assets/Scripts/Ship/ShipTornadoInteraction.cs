@@ -14,12 +14,15 @@ namespace MastersOfTempest.ShipBL
         public float velocityDamp_xz = 0.99f;
         public float velocityDamp_y = 0.9f;
         public float pullStrength = 1f;
+        public float maximumVelocity;
+        public float constantForce;
 
         private VectorField vectorField;
         private Rigidbody rb;
         private Vector3 targetView;
-        private Vector3 targetForce;
+        private Vector3 shipTargetForce;
         private Vector3 velDampVector;
+        private Vector3 tornCenter;
         // Start is called before the first frame update
         void Start()
         {
@@ -33,6 +36,8 @@ namespace MastersOfTempest.ShipBL
                     throw new System.InvalidOperationException("EnvironmentManager has to be in the same scene as the ship.");
                 targetView = transform.forward;
                 velDampVector = new Vector3(velocityDamp_xz, velocityDamp_y, velocityDamp_xz);
+                tornCenter = vectorField.GetCenterWS();
+                shipTargetForce = new Vector3();
             }
             else
                 this.enabled = false;
@@ -40,32 +45,46 @@ namespace MastersOfTempest.ShipBL
 
         private void FixedUpdate()
         {
-            if (!linearMovement && vectorField != null && rb != null)
+            if (vectorField != null && rb != null)
             {
-                // apply force depending on position in vectorfield and adjust viewing direction accordingly
-                targetForce = vectorField.GetVectorAtPos(transform.position);
-                targetForce.y = 0f;
-                targetForce = targetForce * (1.0f - pullStrength) + pullStrength * (new Vector3(vectorField.GetCenterWS().x - transform.position.x, 0f, vectorField.GetCenterWS().z - transform.position.z)).normalized * targetForce.magnitude;
-                targetView = rb.velocity.normalized;
-                targetView.y /= 4f;
-                rb.AddForce(targetForce);
-                transform.LookAt(Vector3.Lerp(transform.forward, targetView, Time.fixedDeltaTime * angularMomentumFactor) + transform.position);
+                if (!linearMovement)
+                {
+                    // apply force depending on position in vectorfield and adjust viewing direction accordingly
+                    shipTargetForce = vectorField.GetVectorAtPos(transform.position);
+                    shipTargetForce.y = 0f;
+                    shipTargetForce = shipTargetForce * (1.0f - pullStrength) + pullStrength * new Vector3(tornCenter.x - transform.position.x, 0f, tornCenter.z - transform.position.z).normalized * shipTargetForce.magnitude;
+                }
+                else
+                {
+                    rb.AddForce(transform.forward * constantForce);
+                }
 
-                targetView.y = 0f;
-                Vector3 currForward = transform.forward;
-                currForward.y = 0f;
-
-                float angle = Vector3.SignedAngle(targetView, currForward, Vector3.up) / 1.5f;
-
-                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, angle), Time.fixedDeltaTime * 10f);
-
+                rb.velocity.Scale(velDampVector);
             }
-            else
+        }
+
+        private void Update()
+        {
+
+            if (vectorField != null && rb != null)
             {
-                rb.AddForce(transform.forward * pullStrength);
-            }
+                if (!linearMovement)
+                {
+                    // adjusting orientation of the ship depending on movement
+                    targetView = rb.velocity.normalized;
+                    targetView.y /= 4f;
+                    rb.AddForce(shipTargetForce);
+                    transform.LookAt(Vector3.Lerp(transform.forward, targetView, Time.fixedDeltaTime * angularMomentumFactor) + transform.position);
 
-            rb.velocity.Scale(velDampVector);
+                    targetView.y = 0f;
+                    Vector3 currForward = transform.forward;
+                    currForward.y = 0f;
+
+                    float angle = Vector3.SignedAngle(targetView, currForward, Vector3.up) / 1.5f;
+
+                    transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, angle), Time.fixedDeltaTime * 10f);
+                }
+            }
         }
     }
 }

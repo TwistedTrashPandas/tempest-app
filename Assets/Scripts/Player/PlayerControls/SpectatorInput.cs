@@ -50,7 +50,7 @@ namespace MastersOfTempest.PlayerControls
 
         public override void Bootstrap()
         {
-            FirstPersonCamera = CameraDirectionController.FirstPersonCamera;
+            FirstPersonCamera = Camera.main;
             if (FirstPersonCamera == null)
             {
                 throw new InvalidOperationException($"{nameof(FirstPersonCamera)} is not specified!");

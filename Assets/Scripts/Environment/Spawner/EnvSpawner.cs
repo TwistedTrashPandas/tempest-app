@@ -11,6 +11,8 @@ namespace MastersOfTempest.Environment.Interacting
     public class EnvSpawner : MonoBehaviour
     {
         // spawn parameters 
+        public bool spawning = true;
+
         public float spawnRate;
         [Range(0f, 2f)]
         public float dampingFactorVel;
@@ -33,6 +35,8 @@ namespace MastersOfTempest.Environment.Interacting
         public float minRadiusS;
         public float maxRadiusS;
 
+        public int numRings = -1;
+        public uint startObjects = 20;
         public uint maxNumObjects;
         public VectorField vectorField;
         // all envObjects treated the same
@@ -141,8 +145,8 @@ namespace MastersOfTempest.Environment.Interacting
         private IEnumerator SpawnObject()
         {
             yield return new WaitForSeconds(spawnRate * 2);
-            int firstSpawns = 100;
-            while (spawnRate > 0f)
+            int firstSpawns = (int)startObjects;
+            while (((spawnRate > 0f && startObjects != maxNumObjects) || (envObjects.Count < maxNumObjects)) && !spawning)
             {
                 RemoveFirstEnvObject();
 
@@ -193,6 +197,7 @@ namespace MastersOfTempest.Environment.Interacting
         {
             spawnRate = -1f;
             maxNumObjects = 0;
+            spawning = false;
             for (int i = envObjects.Count; i >= 0; i--)
             {
                 RemoveFirstEnvObject();

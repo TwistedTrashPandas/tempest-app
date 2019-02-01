@@ -93,7 +93,7 @@ namespace MastersOfTempest.Environment.VisualEffects
         private void InitTornado()
         {
             material = GetComponent<MeshRenderer>().material;
-            float height = 1315f;
+            float height = 1315f * 2f;
             float radius = 7500f;
             switch (QualitySettings.GetQualityLevel())
             {
@@ -144,7 +144,7 @@ namespace MastersOfTempest.Environment.VisualEffects
                     material.SetFloat("g_fSizeTop", 12);
                     break;
             }
-
+            radius *= 1.2f;
             numberParticles = (uint)Mathf.Pow(2, particelNumExp);
 
             targetShip = false;
