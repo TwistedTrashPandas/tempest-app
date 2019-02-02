@@ -6,17 +6,22 @@ using UnityEngine.SceneManagement;
 
 public class Startscreen : MonoBehaviour
 {
-    public Button startB, quitB;
+    public Button startB, quitB, tutorialB;
     void Start()
     {
         startB.onClick.AddListener(StartGame);
         quitB.onClick.AddListener(EndGame);
-       
+        tutorialB.onClick.AddListener(StartTutorial);
     }
 
    private void StartGame()
     {
         SceneManager.LoadScene("Lobby", LoadSceneMode.Single);
+    }
+
+    private void StartTutorial()
+    {
+        Debug.Log("Tutorial started");
     }
 
     private void EndGame()
