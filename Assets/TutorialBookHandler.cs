@@ -20,15 +20,20 @@ namespace MastersOfTempest
 
         void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
+        if(Input.anyKey)
         {
-                if(helpImage)
+                if (helpImage)
                 {
                     helpImage = false;
                     Helpimage.SetActive(false);
                 }
+        }
 
-            spellbook.OpenOrClose();
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+             
+
+                spellbook.OpenOrClose();
         }
 
         if (Input.GetKeyDown(KeyCode.E))
