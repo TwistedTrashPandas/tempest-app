@@ -21,7 +21,7 @@ public class Startscreen : MonoBehaviour
 
     private void StartTutorial()
     {
-        Debug.Log("Tutorial started");
+   //     SceneManager.LoadScene("TutorialScene", LoadSceneMode.Single);
     }
 
     private void EndGame()
