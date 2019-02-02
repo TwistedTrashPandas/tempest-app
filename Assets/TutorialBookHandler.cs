@@ -8,8 +8,9 @@ namespace MastersOfTempest
 {
  
         public Spellbook spellbook;
-        public GameObject book;
+        public GameObject Helpimage;
 
+        private bool helpImage = true;
 
         void Start()
         {
@@ -20,6 +21,12 @@ namespace MastersOfTempest
     {
         if (Input.GetKeyDown(KeyCode.F))
         {
+                if(helpImage)
+                {
+                    helpImage = false;
+                    Helpimage.SetActive(false);
+                }
+
             spellbook.OpenOrClose();
         }
 

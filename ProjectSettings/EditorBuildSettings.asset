@@ -29,4 +29,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_scenes/IntroCinematicServer.unity
     guid: e438d229beb0b954d9166c0de44dad32
+  - enabled: 1
+    path: Assets/_scenes/TutorialScene.unity
+    guid: e8b2069f036ae57428100ff70c1a1618
   m_configObjects: {}
