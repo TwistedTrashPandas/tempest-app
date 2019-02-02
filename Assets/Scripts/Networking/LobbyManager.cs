@@ -77,12 +77,7 @@ namespace MastersOfTempest.Networking
         private void OnMessageLobbyStartGame(byte[] data, ulong steamID)
         {
             LoadingScreen.Instantiate();
-
-            // Only create help screen if it doesn't exist already
-            if (FindObjectOfType<HelpScreen>() == null)
-            {
-                HelpScreen.Instantiate();
-            }
+            HelpScreen.Instantiate();
 
             // Load client scene
             SceneManager.LoadScene(clientSceneName);
