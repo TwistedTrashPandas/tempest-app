@@ -438,7 +438,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             dims[1] = temp.y;
             dims[2] = temp.z;
             particlesCS.SetInt("g_bEndAnimation", 1);
-            winAnimation.SetFloat("g_fVelocityScale", 10000.0f);
+            winAnimation.SetFloat("g_fVelocityScale", 45000.0f);
             winAnimation.SetFloats("g_i3Dimensions", dims);
             winAnimation.SetFloats("g_f3CellSizes", cellsizes);
             particlesCS.SetFloats("g_f3MaxVel", maxVel);
