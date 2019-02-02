@@ -12,9 +12,9 @@ namespace MastersOfTempest.ShipBL
     {
         public event EventHandler ShipPartHit;
         public ShipPartArea interactionArea;
-        private const float cutOffDist = 3.0f;
-        private const float impulseScaling = 0.06f;
-        private const float maxDisplacementDist = 0.3f;
+        private const float cutOffDist = 10.0f;
+        private const float impulseScaling = 1.5f;
+        private const float maxDisplacementDist = 0.8f;
         /// <summary>
         /// destruction == 0:   ship part fully repaired
         ///             == 1:   ship part fully destroyed
@@ -71,7 +71,7 @@ namespace MastersOfTempest.ShipBL
         {
             // transfer damage to next shippart
             if (Mathf.Approximately(destruction, 1.0f) && destruc > 0.05f)
-                nextAreaPart.ResolveCollision(destruc / 2f, contactPoints, impulse);
+                nextAreaPart.ResolveCollision(destruc / 2f, contactPoints, impulse / 2f);
             else
             {
                 if ((status & ShipPartStatus.Fragile) == ShipPartStatus.Fragile)
@@ -84,7 +84,7 @@ namespace MastersOfTempest.ShipBL
 
                 // transfer damage to next ship part
                 if (destruc > 1.05f)
-                    nextAreaPart.ResolveCollision(destruc - 1.0f, contactPoints, impulse);
+                    nextAreaPart.ResolveCollision(destruc - 1.0f, contactPoints, impulse / 2f);
             }
         }
 
@@ -121,16 +121,12 @@ namespace MastersOfTempest.ShipBL
                     if (cutOffDist > distSquared)
                     {
                         Vector3 dir = (worldPos - currContact).normalized; // impulse; // 
-                        if (Vector3.Dot(dir, impulse.normalized) > 0)
-                            dir *= impulse.magnitude;
-                        else
-                            dir = impulse;
+                        dir *= Mathf.Min(impulse.magnitude, 1000.0f);
                         distSquared *= distSquared;
                         worldPos += dir / (distSquared + 1f) / contactPoints.Length * impulseScaling;
-
                         Vector3 initialPos = transform.TransformPoint(initialMesh[j]);
                         dir = initialPos - worldPos;
-                        if (dir.magnitude > maxDisplacementDist)
+                        if (dir.sqrMagnitude > maxDisplacementDist * maxDisplacementDist)
                             worldPos = initialPos + dir.normalized * maxDisplacementDist;
                     }
                     currVerts[j] = transform.InverseTransformPoint(worldPos);

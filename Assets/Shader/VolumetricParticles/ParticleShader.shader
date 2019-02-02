@@ -298,7 +298,7 @@
 			float dotProduct = dot(normalize(p[0].vertex.xyz - _WorldSpaceCameraPos.xyz), viewDir);
 
 			// culling 
-			if (dotProduct > 0.0 || dotProduct > -0.45)
+			if (dotProduct > 0.0 || dotProduct > -0.35)
 				return;
 
 			g2f Outs[8];

@@ -143,7 +143,7 @@ namespace MastersOfTempest.Environment.Interacting
                 if (startObjects == maxNumObjects) 
                     radius = Mathf.Min(Mathf.Min(Mathf.Floor(Mathf.Pow(envObjects.Count, 2.0f) / numRings), numRings) * stepSize, Vector3.Distance(shipPos, centerWS)) + minRadius;
                 else
-                    radius = Random.Range(0, numRings) * Mathf.Min(stepSize, Vector3.Distance(shipPos, centerWS)) + minRadius;
+                    radius = Mathf.Min(Random.Range(2, numRings + 2) * stepSize, Vector3.Distance(shipPos, centerWS)) + minRadius;
             }
             sinBeta *= radius;
             return new Vector3(Mathf.Cos(alpha) * sinBeta, Mathf.Cos(beta) * radius, Mathf.Sin(alpha) * sinBeta);
@@ -260,11 +260,11 @@ namespace MastersOfTempest.Environment.Interacting
                         var currEnvObject = currGO.GetComponent<EnvObject>();
                         envObjects.Add(currEnvObject);
                         Damaging dmg = currGO.GetComponent<Damaging>();
-                        if (Random.Range(0, 3) == 0)
+                        if (Random.Range(0, 8) == 0)
                         {
                             randomSize = Random.Range(0.5f, 1.5f);
                             currEnvObject.moveType = (MoveType.Direct); //((Random.Range(2, 4) >= 3) ? 3 : 2);
-                            currEnvObject.speed *= 0.55f;
+                            currEnvObject.speed *= 0.45f;
                             randOffset = GetRandomPointOnSphere(minRadiusS, maxRadiusS, numRings > 0);
                             dmg.damage = 0.1f * randomSize;
                         }
@@ -287,7 +287,7 @@ namespace MastersOfTempest.Environment.Interacting
                         localScale = new Vector3(randomSize, randomSize, randomSize);
                         position += randOffset;
 
-                        position.y = Mathf.Clamp(gamemaster.GetShip().transform.position.y + RandomGaussian.NextGaussian(0, 1f, -1f, 1f) * dims.y * cellSize * 0.25f, dims.y * cellSize * 0.05f, dims.y * cellSize * 0.85f);
+                        position.y = Mathf.Clamp(gamemaster.GetShip().transform.position.y + RandomGaussian.NextGaussian(0, 0.6f, -1f, 1f) * dims.y * cellSize * 0.25f, dims.y * cellSize * 0.05f, dims.y * cellSize * 0.85f);
 
                         if (Vector3.Distance(position, gamemaster.GetShip().transform.position) < spawnDistToShip)
                             position += currEnvObject.transform.forward * spawnDistToShip;
