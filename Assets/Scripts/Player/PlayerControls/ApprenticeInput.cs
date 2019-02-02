@@ -184,6 +184,7 @@ namespace MastersOfTempest.PlayerControls
                 GUI.backgroundColor = new Color(0.1f, 0.1f, 0.1f);
 
                 GUIContent content = new GUIContent(text);
+                style.fontSize = Screen.width / 25;
                 Vector2 size = style.CalcSize(content);
 
                 GUI.Label(new Rect((Screen.width / 2) - (size.x / 2), Screen.height - (size.y + 50) , size.x + 10, size.y + 10), content, style);
