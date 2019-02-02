@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace MastersOfTempest
 {
@@ -39,7 +40,14 @@ namespace MastersOfTempest
         {
             spellbook.PreviousPage();
         }
-    }
+
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+                SceneManager.LoadScene("StartScene", LoadSceneMode.Single);
+        }
+
+        }
     }
 
 }
