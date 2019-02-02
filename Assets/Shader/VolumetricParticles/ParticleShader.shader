@@ -67,18 +67,14 @@
 		{
 			float4 vertex : SV_POSITION;
 			uint id : VertexID;
-		};
-
-		struct PS_Input
-		{
-			float4 f4Pos : SV_Position;
-			nointerpolation uint uiParticleID : PARTICLE_ID;
+			uint id2 : TEXCOORD0;
 		};
 
 		struct g2f
 		{
 			float4 pos : SV_POSITION;
-			uint id : VertexID;
+			nointerpolation uint id : VertexID;
+			nointerpolation uint id2 : TEXCOORD2;
 			float4 projPos: TEXCOORD1;
 			float4 uv: TEXCOORD0;
 			//LIGHTING_COORDS(2, 3)
@@ -218,7 +214,7 @@
 
 			float3 f3NoiseSamplingPos = f3FirstMatterPointWS;
 			float fNoisePeriod = 3412;
-			float fNoise = (g_tex3DNoise.Sample(MyLinearRepeatSampler, f3NoiseSamplingPos / (fNoisePeriod)) * 2 + g_tex3DNoise.Sample(MyLinearRepeatSampler, f3NoiseSamplingPos / (fNoisePeriod / 3))) / 3;
+			float fNoise = 0.0; // (g_tex3DNoise.Sample(MyLinearRepeatSampler, f3NoiseSamplingPos / (fNoisePeriod)) * 2 + g_tex3DNoise.Sample(MyLinearRepeatSampler, f3NoiseSamplingPos / (fNoisePeriod / 3))) / 3;
 			//	(g_tex3DNoise.SampleLevel(MyLinearRepeatSampler, f3NoiseSamplingPos / (fNoisePeriod), 0) * 2 + g_tex3DNoise.SampleLevel(MyLinearRepeatSampler, f3NoiseSamplingPos / (fNoisePeriod / 3), 0)) / 3;
 
 			float fNoNoiseY = -0.7;
@@ -290,7 +286,8 @@
 		void geom(point v2g p[1], inout TriangleStream<g2f> Out)
 		{
 			uint uiParticleId = p[0].id;
-			if (particleVisibilityRW[g_iIndices[uiParticleId]] == 0)
+			uint realIdx = p[0].id2;
+			if (particleVisibilityRW[realIdx] == 0)
 				return;
 			// Only visible particles are sent for rendering, so there is no need to
 			// test visibility here
@@ -301,7 +298,7 @@
 			float dotProduct = dot(normalize(p[0].vertex.xyz - _WorldSpaceCameraPos.xyz), viewDir);
 
 			// culling 
-			if (dotProduct > 0.0 || dotProduct > -0.55)
+			if (dotProduct > 0.0 || dotProduct > -0.45)
 				return;
 
 			g2f Outs[8];
@@ -356,6 +353,10 @@
 			}
 			if (p[0].vertex.y >= g_fTopHeight)
 				f3Size *= g_fSizeTop;
+
+			if (distance(_WorldSpaceCameraPos.xyz, p[0].vertex.xyz) < f3Size.x / 1.5)
+				return;
+
 			for (int iCorner = 0; iCorner < 8; ++iCorner)
 			{
 				float4 f4CurrCornerWorldPos;
@@ -366,6 +367,7 @@
 				float4 f4CurrCornerPosPS = UnityObjectToClipPos(f4CurrCornerWorldPos); //UnityObjectToClipPos(f4CurrCornerWorldPos);//
 
 				Outs[iCorner].id = uiParticleId;
+				Outs[iCorner].id2 = p[0].id2;
 				Outs[iCorner].pos = f4CurrCornerPosPS;
 				Outs[iCorner].projPos.xyz = UnityObjectToViewPos(f4CurrCornerWorldPos);
 				Outs[iCorner].projPos.w = 1.0f;
@@ -416,7 +418,8 @@
 		v2g vert(appdata v)
 		{
 			v2g o;
-			o.vertex = float4(g_vVertices[g_iIndices[v.id]], 1.0f);
+			o.id2 = g_iIndices[v.id];
+			o.vertex = float4(g_vVertices[o.id2], 1.0f);
 			o.id = v.id;
 			return o;
 		}
@@ -427,8 +430,8 @@
 			float4 f4Color;
 			SParticleAttribs ParticleAttrs;
 			ParticleAttrs.fDensity = g_fDensity;
-			ParticleAttrs.f3Pos = g_vVertices[g_iIndices[In.id]];
-			ParticleAttrs.fRndAzimuthBias = g_vRndAzimuth[g_iIndices[In.id]];
+			ParticleAttrs.f3Pos = g_vVertices[In.id2];
+			ParticleAttrs.fRndAzimuthBias = g_vRndAzimuth[In.id2];
 
 			SCloudParticleLighting ParticleLighting;
 
@@ -466,22 +469,7 @@
 			//float fDepth = 1.0f - (In.projPos.z);// 1.0f - Linear01Depth(tex2D(_CameraDepthTexture, uv));
 			float4 f4ReconstructedPosWS = mul(UNITY_MATRIX_I_V, float4(In.projPos.xyz, 1.0));
 			float3 f3WorldPos = f4ReconstructedPosWS.xyz / f4ReconstructedPosWS.w;
-			//return float4(fDepth, fDepth, fDepth, 1.0f);
-			/*
-			float2 f2PosPS = UVToProj(In.vertex.xy / f2ScreenDim);
 
-			float2 uv = i.projPos.xy / i.projPos.w;
-			float4 SamplePositionMap(float2 uvCoord) {
-				// H is the viewport position at this pixel in the range -1 to 1.
-				float4 H = float4((uvCoord.x) * 2 - 1, (uvCoord.y) * 2 - 1, depth, 1.0);
-				float4 D = mul(_ViewProjectInverse, H);
-				return D / D.w;
-			}
-			float fDepth = In.projPos.z;
-			float4 f4ReconstructedPosWS = mul(UNITY_MATRIX_I_V, float4(In.projPos.xy, fDepth, 1.0f)); // mul(mul(, unity_CameraInvProjection), UNITY_MATRIX_IT_MV); // mul(float4(f2PosPS.xy, fDepth, 1.0), g_CameraAttribs.mViewProjInv);
-			float3 f3WorldPos = f4ReconstructedPosWS.xyz / f4ReconstructedPosWS.w;*/
-			// Compute view ray
-			//f3WorldPos.y = f3CameraPos.y;
 			f3ViewRay = f3WorldPos - f3CameraPos;
 			float fRayLength = length(f3ViewRay);
 			f3ViewRay /= fRayLength;
@@ -490,12 +478,11 @@
 			float fDistanceToEntryPoint, fDistanceToExitPoint;
 			float3 f3EntryPointUSSpace, f3ViewRayUSSpace, f3LightDirUSSpace;
 			IntersectRayWithParticle(ParticleAttrs,  f3CameraPos, f3ViewRay, In.id,
-									f2RayIsecs, f3EntryPointUSSpace, f3ViewRayUSSpace,f3LightDirUSSpace,fDistanceToEntryPoint, fDistanceToExitPoint);
+									f2RayIsecs, f3EntryPointUSSpace, f3ViewRayUSSpace,f3LightDirUSSpace, fDistanceToEntryPoint, fDistanceToExitPoint);
 
-			if (f2RayIsecs.y < 0)
+			if (f2RayIsecs.y < 0 || fRayLength < fDistanceToExitPoint)
 				discard;
-			if (fRayLength < fDistanceToEntryPoint)
-				discard; // return float4(1.0f, 1.0f, 1.0f, 1.0f);
+
 			//return float4(f3ViewRayUSSpace, 1.0f);
 			//return float4(normalize(f3ViewRay * 0.5f + 0.5f), 1.0f);
 			fDistanceToExitPoint = min(fDistanceToExitPoint, fRayLength);
@@ -730,7 +717,7 @@
 		}
 		ENDCG
 		}*/
-		
+	/*
 	Pass{
 		ZWrite On Cull Front
 		//Blend SrcAlpha OneMinusSrcAlpha
@@ -821,7 +808,7 @@
 			return f4Color;
 		}
 			ENDCG
-		}
+		}*/
 		}
 		Fallback "Transparent/Cutout/VertexLit"
 }

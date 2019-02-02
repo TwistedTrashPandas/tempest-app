@@ -18,6 +18,16 @@ float g_fMaxDist;
 uint g_iNumCloudSkyParticles;
 int g_bEndAnimation;
 
+static const uint4x4 g_u4x4Matrix = { 0, 1, 2, 2,
+						3, 3, 3, 3,
+						4, 4, 4, 4,
+						4, 4, 4, 4};
+
+uint ComputePosition(uint id, uint maxIdx) {
+	uint outID = id % maxIdx;
+	return g_u4x4Matrix[outID % 4, (uint) floor(outID / 4)];
+}
+
 [numthreads(256, 1, 1)]
 void UpdateParticles(uint3 id : SV_DispatchThreadID)
 {
@@ -77,12 +87,13 @@ void UpdateParticles(uint3 id : SV_DispatchThreadID)
 
 		position += velocity * g_fTimestep;
 
-		if (distance(position.xz, g_f3Center.xz) > g_fMaxDist || position.y > g_i3Dimensions[1] * g_f3CellSizes.y) {
+		if (position.y > g_i3Dimensions[1] * g_f3CellSizes.y) {
 			//particlePosRW[id.x].xz = (particlePosRW[id.x].xz - g_f3Center.xz) * ((id.x + 1) % 2) / 1.5f + g_f3Center.xz;
 			float2 dir = normalize(position.xz - g_f3Center.xz) * g_i3Dimensions[0] * g_f3CellSizes.x;
-			position.xz = (dir) * ((id.x) % 5) / 6.5f + g_f3Center.xz; // (dir) * min((id.x) % 2, 1) / 2.2f +
+			position.xz = (dir) * ((float) ComputePosition(id.x, 15)) / 6.5f + g_f3Center.xz; // (dir) * min((id.x) % 2, 1) / 2.2f +
 			position.y -= g_f3Center.y * 2.05f;
 			velocity *= g_f3RandPos;// float3(0.0f, 0.0f, 0.0f);
+			velocity.y = 0.0;
 		}
 		particlePosRW[id.x] = position;
 		particleVelRW[id.x] = velocity;

@@ -74,12 +74,6 @@ namespace MastersOfTempest.Environment.Interacting
             }
             gamemaster = gm;
             spawnProbSum = spawnProbD + spawnProbS + spawnProbZ;
-            float avg = 0f;
-            for (int i = 0; i < 100000f; i++)
-            {
-                avg += RandomGaussian.NextGaussian(0f, 1f);
-            }
-            Debug.Log(avg /= 100000f);
         }
 
         private void FixedUpdate()
@@ -270,7 +264,7 @@ namespace MastersOfTempest.Environment.Interacting
                         {
                             randomSize = Random.Range(0.5f, 1.5f);
                             currEnvObject.moveType = (MoveType.Direct); //((Random.Range(2, 4) >= 3) ? 3 : 2);
-                            currEnvObject.speed *= 0.4f;
+                            currEnvObject.speed *= 0.55f;
                             randOffset = GetRandomPointOnSphere(minRadiusS, maxRadiusS, numRings > 0);
                             dmg.damage = 0.1f * randomSize;
                         }

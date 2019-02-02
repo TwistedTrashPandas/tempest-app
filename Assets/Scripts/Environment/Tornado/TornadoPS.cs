@@ -101,47 +101,49 @@ namespace MastersOfTempest.Environment.VisualEffects
             {
                 case 0:
                     particelNumExp = 10;
-                    numCloudSkyParticles = 8;
+                    numCloudSkyParticles = 7;
                     size = 64;
-                    sizeTop = 8;
+                    sizeTop = 10;
                     radius = 5000f;
                     break;
                 case 1:
-                    particelNumExp = 10;
+                    particelNumExp = 11;
                     numCloudSkyParticles = 8;
                     size = 96;
                     sizeTop = 8;
                     radius = 5000f;
                     break;
                 case 2:
-                    particelNumExp = 11;
-                    numCloudSkyParticles = 9;
-                    size = 64;
+                    particelNumExp = 12;
+                    numCloudSkyParticles = 8;
+                    size = 96;
                     sizeTop = 8;
                     radius = 6000f;
                     break;
                 case 3:
-                    particelNumExp = 12;
+                    particelNumExp = 13;
                     numCloudSkyParticles = 9;
                     size = 64;
                     sizeTop = 12;
                     radius = 6000f;
                     break;
                 case 4:
-                    particelNumExp = 13;
-                    numCloudSkyParticles = 10;
+                    particelNumExp = 14;
+                    numCloudSkyParticles = 9;
                     size = 64;
                     sizeTop = 12;
+                    radius = 6000f;
                     break;
                 case 5:
-                    particelNumExp = 14;
-                    numCloudSkyParticles = 10;
+                    particelNumExp = 15;
+                    numCloudSkyParticles = 9;
                     size = 48;
                     sizeTop = 12;
+                    radius = 6000f;
                     break;
                 default:
                     particelNumExp = 13;
-                    numCloudSkyParticles = 10;
+                    numCloudSkyParticles = 9;
                     size = 64;
                     sizeTop = 8;
                     break;

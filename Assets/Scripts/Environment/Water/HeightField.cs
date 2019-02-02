@@ -218,6 +218,7 @@ namespace MastersOfTempest.Environment.VisualEffects
                     break;
             }
 
+            waterMode = WaterMode.Minimal;
             inOutCounter = 0;
             currentCollision = 1;
             //transform.position = midPosition - new Vector3(widthMesh * quadSize / 2f, midPosition.y, depthMesh * quadSize / 2f);

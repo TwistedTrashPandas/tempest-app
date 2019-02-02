@@ -367,7 +367,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 25
   m_Drag: 1
-  m_AngularDrag: 5
+  m_AngularDrag: 3.5
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -385,13 +385,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2c3a733c5cfaa548b7411b6c2ab025c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  linearMovement: 0
+  linearMovement: 1
   angularMomentumFactor: 0.25
   velocityDamp_xz: 0.995
   velocityDamp_y: 0.9
   pullStrength: 0.15
   maximumVelocity: 0
-  constantForce: 0
+  constantForce: 300
 --- !u!114 &3798610760229167962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19993,31 +19993,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.000992155
       objectReference: {fileID: 0}
-    - target: {fileID: 1565844378816844662, guid: 099fcd2ab5fce7d4e8e05c9c39a50278,
-        type: 3}
-      propertyPath: m_Name
-      value: Crystal3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4329525979495250249, guid: 099fcd2ab5fce7d4e8e05c9c39a50278,
-        type: 3}
-      propertyPath: m_Name
-      value: Crystal1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6312591845093019335, guid: 099fcd2ab5fce7d4e8e05c9c39a50278,
-        type: 3}
-      propertyPath: m_Name
-      value: Crystal4
-      objectReference: {fileID: 0}
-    - target: {fileID: 9047157500336431530, guid: 099fcd2ab5fce7d4e8e05c9c39a50278,
-        type: 3}
-      propertyPath: m_Name
-      value: Crystal2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1613992842569039539, guid: 099fcd2ab5fce7d4e8e05c9c39a50278,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 099fcd2ab5fce7d4e8e05c9c39a50278, type: 3}
 --- !u!4 &8477473011324368780 stripped
@@ -20779,6 +20754,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1978937431931282037, guid: 9c113e6f2e7878e468f6670bdffce61a,
         type: 3}
+      propertyPath: m_Radius
+      value: 1.3297805
+      objectReference: {fileID: 0}
+    - target: {fileID: 1978937431931282037, guid: 9c113e6f2e7878e468f6670bdffce61a,
+        type: 3}
       propertyPath: m_Center.x
       value: -0.059958566
       objectReference: {fileID: 0}
@@ -20786,11 +20766,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Center.z
       value: -0.00000013245477
-      objectReference: {fileID: 0}
-    - target: {fileID: 1978937431931282037, guid: 9c113e6f2e7878e468f6670bdffce61a,
-        type: 3}
-      propertyPath: m_Radius
-      value: 1.3297805
       objectReference: {fileID: 0}
     - target: {fileID: 380100692025838625, guid: 9c113e6f2e7878e468f6670bdffce61a,
         type: 3}
@@ -20906,6 +20881,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1978937431931282037, guid: 9c113e6f2e7878e468f6670bdffce61a,
         type: 3}
+      propertyPath: m_Height
+      value: 3.2415347
+      objectReference: {fileID: 0}
+    - target: {fileID: 1978937431931282037, guid: 9c113e6f2e7878e468f6670bdffce61a,
+        type: 3}
       propertyPath: m_Center.x
       value: 0.031689405
       objectReference: {fileID: 0}
@@ -20913,11 +20893,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Center.z
       value: 0.013249451
-      objectReference: {fileID: 0}
-    - target: {fileID: 1978937431931282037, guid: 9c113e6f2e7878e468f6670bdffce61a,
-        type: 3}
-      propertyPath: m_Height
-      value: 3.2415347
       objectReference: {fileID: 0}
     - target: {fileID: 380100692025838625, guid: 9c113e6f2e7878e468f6670bdffce61a,
         type: 3}
@@ -21030,24 +21005,14 @@ PrefabInstance:
       objectReference: {fileID: 911306908625069362}
     - target: {fileID: 114311071302063320, guid: 13b5913f603625242870c830094ccd32,
         type: 3}
-      propertyPath: shipPartManager
-      value: 
-      objectReference: {fileID: 3798610760229167962}
-    - target: {fileID: 114311071302063320, guid: 13b5913f603625242870c830094ccd32,
-        type: 3}
       propertyPath: distance
       value: 20
       objectReference: {fileID: 0}
-    - target: {fileID: 20669329079659068, guid: 13b5913f603625242870c830094ccd32,
+    - target: {fileID: 114311071302063320, guid: 13b5913f603625242870c830094ccd32,
         type: 3}
-      propertyPath: m_RenderingPath
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 20669329079659068, guid: 13b5913f603625242870c830094ccd32,
-        type: 3}
-      propertyPath: m_CullingMask.m_Bits
-      value: 2822
-      objectReference: {fileID: 0}
+      propertyPath: shipPartManager
+      value: 
+      objectReference: {fileID: 3798610760229167962}
     - target: {fileID: 20669329079659068, guid: 13b5913f603625242870c830094ccd32,
         type: 3}
       propertyPath: m_ClearFlags
@@ -21075,8 +21040,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 20669329079659068, guid: 13b5913f603625242870c830094ccd32,
         type: 3}
-      propertyPath: m_HDR
-      value: 0
+      propertyPath: m_CullingMask.m_Bits
+      value: 2822
       objectReference: {fileID: 0}
     - target: {fileID: 20669329079659068, guid: 13b5913f603625242870c830094ccd32,
         type: 3}
