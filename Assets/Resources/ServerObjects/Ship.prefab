@@ -9258,7 +9258,7 @@ MonoBehaviour:
   root: {fileID: 114449933113175548}
   children: []
   serverLayer: ServerShipEnvironment
-  removeServerChildColliders: 0
+  removeServerChildColliders: 1
   clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 0
