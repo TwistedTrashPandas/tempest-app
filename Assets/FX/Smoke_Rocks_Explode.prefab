@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5675785256453333007}
   - component: {fileID: 5675785256453333001}
   - component: {fileID: 5675785256453333006}
-  m_Layer: 14
+  m_Layer: 9
   m_Name: Smoke_Rocks_Explode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25,9 +25,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5675785256453333004}
-  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0.39, y: 0.63, z: 2.74}
-  m_LocalScale: {x: 50, y: 50.000046, z: 50.00005}
+  m_LocalScale: {x: 1.05, y: 1.05, z: 1.05}
   m_Children:
   - {fileID: 5675785258349081813}
   m_Father: {fileID: 0}
@@ -106,7 +106,7 @@ ParticleSystem:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  moveWithTransform: 0
+  moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
   randomSeed: 0
@@ -2128,7 +2128,7 @@ ParticleSystem:
         m_RotationOrder: 4
     inWorldSpace: 0
   InheritVelocityModule:
-    enabled: 0
+    enabled: 1
     m_Mode: 0
     m_Curve:
       serializedVersion: 2
@@ -2348,7 +2348,7 @@ ParticleSystem:
     randomizePerFrame: 0
   ExternalForcesModule:
     enabled: 0
-    multiplier: 1
+    multiplier: 0.08
     influenceFilter: 0
     influenceMask:
       serializedVersion: 2
@@ -4768,7 +4768,7 @@ GameObject:
   - component: {fileID: 5675785257587767646}
   - component: {fileID: 5675785257587767647}
   - component: {fileID: 5675785257587767644}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Little Stones
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4784,7 +4784,7 @@ Transform:
   m_GameObject: {fileID: 5675785257587767645}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0.25000006}
-  m_LocalScale: {x: 0.02, y: 0.01999999, z: 0.01999999}
+  m_LocalScale: {x: 0.02, y: 0.02, z: 0.02}
   m_Children: []
   m_Father: {fileID: 5675785258349081813}
   m_RootOrder: 1
@@ -4862,9 +4862,9 @@ ParticleSystem:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  moveWithTransform: 0
+  moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
-  scalingMode: 1
+  scalingMode: 0
   randomSeed: 0
   InitialModule:
     serializedVersion: 3
@@ -4925,7 +4925,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 60
+      scalar: 200
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -5363,7 +5363,7 @@ ParticleSystem:
     gravityModifier:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.05
+      scalar: 0.0002
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -6884,12 +6884,12 @@ ParticleSystem:
         m_RotationOrder: 4
     inWorldSpace: 0
   InheritVelocityModule:
-    enabled: 1
+    enabled: 0
     m_Mode: 0
     m_Curve:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.5
+      scalar: 1
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -7104,7 +7104,7 @@ ParticleSystem:
     randomizePerFrame: 0
   ExternalForcesModule:
     enabled: 0
-    multiplier: 1
+    multiplier: 0.08
     influenceFilter: 0
     influenceMask:
       serializedVersion: 2
@@ -9524,7 +9524,7 @@ GameObject:
   - component: {fileID: 5675785257603363723}
   - component: {fileID: 5675785257603363721}
   - component: {fileID: 5675785257603363720}
-  m_Layer: 14
+  m_Layer: 9
   m_Name: FallingSmoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9540,7 +9540,7 @@ Transform:
   m_GameObject: {fileID: 5675785257603363726}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 5675785258349081813}
   m_RootOrder: 0
@@ -9618,9 +9618,9 @@ ParticleSystem:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  moveWithTransform: 0
+  moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
-  scalingMode: 1
+  scalingMode: 0
   randomSeed: 0
   InitialModule:
     serializedVersion: 3
@@ -10119,7 +10119,7 @@ ParticleSystem:
     gravityModifier:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.1
+      scalar: 0.0001
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -11645,7 +11645,7 @@ ParticleSystem:
     m_Curve:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0
+      scalar: 1
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -11860,7 +11860,7 @@ ParticleSystem:
     randomizePerFrame: 0
   ExternalForcesModule:
     enabled: 0
-    multiplier: 1
+    multiplier: 0.08
     influenceFilter: 0
     influenceMask:
       serializedVersion: 2
@@ -14280,7 +14280,7 @@ GameObject:
   - component: {fileID: 5675785258349081813}
   - component: {fileID: 5675785258349081815}
   - component: {fileID: 5675785258349081812}
-  m_Layer: 14
+  m_Layer: 9
   m_Name: Crumble
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14296,7 +14296,7 @@ Transform:
   m_GameObject: {fileID: 5675785258349081818}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.08, y: 0.08, z: 0.08}
   m_Children:
   - {fileID: 5675785257603363723}
   - {fileID: 5675785257587767646}
@@ -14376,9 +14376,9 @@ ParticleSystem:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  moveWithTransform: 0
+  moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
-  scalingMode: 1
+  scalingMode: 0
   randomSeed: 0
   InitialModule:
     serializedVersion: 3
@@ -14439,7 +14439,7 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 8
+      scalar: 25
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -14877,7 +14877,7 @@ ParticleSystem:
     gravityModifier:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.1
+      scalar: 0.001
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -16346,7 +16346,7 @@ ParticleSystem:
     speedModifier:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 5
+      scalar: 1
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -16398,12 +16398,12 @@ ParticleSystem:
         m_RotationOrder: 4
     inWorldSpace: 0
   InheritVelocityModule:
-    enabled: 1
+    enabled: 0
     m_Mode: 0
     m_Curve:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 3
+      scalar: 1
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -16454,7 +16454,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
   ForceModule:
-    enabled: 1
+    enabled: 0
     x:
       serializedVersion: 2
       minMaxState: 0
@@ -16618,7 +16618,7 @@ ParticleSystem:
     randomizePerFrame: 0
   ExternalForcesModule:
     enabled: 0
-    multiplier: 1
+    multiplier: 0.08
     influenceFilter: 0
     influenceMask:
       serializedVersion: 2
@@ -18034,7 +18034,7 @@ ParticleSystem:
     - serializedVersion: 3
       emitter: {fileID: 5675785257603363721}
       type: 2
-      properties: 4
+      properties: 6
       emitProbability: 1
     - serializedVersion: 3
       emitter: {fileID: 5675785257587767647}

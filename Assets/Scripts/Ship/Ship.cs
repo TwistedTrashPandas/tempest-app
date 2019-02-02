@@ -16,6 +16,7 @@ namespace MastersOfTempest.ShipBL
         private ShipPartManager shipPartManager;
         private ShipTornadoInteraction shipTornInteraction;
         private ShipStatus currentStatus;
+        private Quaternion lastRotation;
 
         private struct RepairShipPartAreaMessage
         {
@@ -48,6 +49,7 @@ namespace MastersOfTempest.ShipBL
             }
             context.Register(this);
             currentStatus = new ShipStatus();
+            lastRotation = Quaternion.identity;
             currentStatus.ActionRequest += ExecuteAction;
         }
 
@@ -108,6 +110,16 @@ namespace MastersOfTempest.ShipBL
         {
             var action = ((ActionMadeEventArgs)args).Action;
             action.Execute(context);
+        }
+
+        public void StoreRotation()
+        {
+            lastRotation = transform.rotation;
+        }
+
+        public Quaternion GetLastRotation()
+        {
+            return lastRotation;
         }
 
         public void DestroyShip()

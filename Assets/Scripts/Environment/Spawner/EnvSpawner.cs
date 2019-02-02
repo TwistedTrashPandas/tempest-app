@@ -74,11 +74,16 @@ namespace MastersOfTempest.Environment.Interacting
             }
             gamemaster = gm;
             spawnProbSum = spawnProbD + spawnProbS + spawnProbZ;
+            float avg = 0f;
+            for (int i = 0; i < 100000f; i++)
+            {
+                avg += RandomGaussian.NextGaussian(0f, 1f);
+            }
+            Debug.Log(avg /= 100000f);
         }
 
         private void FixedUpdate()
         {
-            // TODO: multiple implementations for behaviour
             // update all objects' velocity or add force by looking up value in vector grid if the spawner is on the server
             if (onServer)
             {
@@ -93,10 +98,11 @@ namespace MastersOfTempest.Environment.Interacting
                     else
                     {
                         envObjects[i].MoveNext(targetPos, vectorField.GetVectorAtPos(envObjects[i].transform.position));
-                        if (!Mathf.Approximately(dampingFactorForce, 0f))
+                        // DISABLED DAMPING FOR NOW
+                        /*if (!Mathf.Approximately(dampingFactorForce, 0f))
                             DampForce(i);
                         if (!Mathf.Approximately(dampingFactorVel, 1f))
-                            DampVelocity(i);
+                            DampVelocity(i);*/
                         ClampVelocity(i);
                     }
                 }
@@ -113,11 +119,11 @@ namespace MastersOfTempest.Environment.Interacting
                 if (toDestroy is Damaging)
                 {
                     toDestroy.EnableGravity();
+                    toDestroy.GetComponent<Damaging>().health = -1f;
                     Destroy(toDestroy.gameObject, 10f);
                 }
                 else
                     Destroy(toDestroy.gameObject, 0f);
-                //spawnRate = 2f; // set variable for this (TOOD)
             }
         }
 
@@ -127,14 +133,31 @@ namespace MastersOfTempest.Environment.Interacting
             envObjects.Add(envObject);
         }
 
-        private Vector3 GetRandomPointOnSphere(float minRadius, float maxRadius)
+        private Vector3 GetRandomPointOnSphere(float minRadius, float maxRadius, bool position = false)
         {
             float alpha = Random.Range(0f, 2f * Mathf.PI);
             float beta = Mathf.Acos(Random.Range(-1f, 1f));
             float sinBeta = Mathf.Sin(beta);
             float radius = maxRadius - Mathf.Pow(Random.Range(0f, 1f), 1f / 3f) * (maxRadius - minRadius);
+            if (position && numRings > 0)
+            {
+                float stepSize = maxRadius / numRings;
+                Vector3 centerWS = vectorField.GetCenterWS();
+                Vector3 shipPos = gamemaster.GetShip().transform.position;
+                centerWS.y = 0f;
+                shipPos.y = 0f;
+                if (startObjects == maxNumObjects) 
+                    radius = Mathf.Min(Mathf.Min(Mathf.Floor(Mathf.Pow(envObjects.Count, 2.0f) / numRings), numRings) * stepSize, Vector3.Distance(shipPos, centerWS)) + minRadius;
+                else
+                    radius = Random.Range(0, numRings) * Mathf.Min(stepSize, Vector3.Distance(shipPos, centerWS)) + minRadius;
+            }
             sinBeta *= radius;
             return new Vector3(Mathf.Cos(alpha) * sinBeta, Mathf.Cos(beta) * radius, Mathf.Sin(alpha) * sinBeta);
+        }
+
+        public Vector3 GetShipPos()
+        {
+            return gamemaster.GetShip().transform.position;
         }
 
         public void StartSpawning()
@@ -146,7 +169,7 @@ namespace MastersOfTempest.Environment.Interacting
         {
             yield return new WaitForSeconds(spawnRate * 2);
             int firstSpawns = (int)startObjects;
-            while (((spawnRate > 0f && startObjects != maxNumObjects) || (envObjects.Count < maxNumObjects)) && !spawning)
+            while (((spawnRate > 0f && startObjects != maxNumObjects) || (envObjects.Count < maxNumObjects)) && spawning)
             {
                 RemoveFirstEnvObject();
 
@@ -239,52 +262,58 @@ namespace MastersOfTempest.Environment.Interacting
                         Vector3 randOffset;
                         Quaternion randOrientation = Quaternion.Euler(Random.Range(0f, 180f), Random.Range(0f, 180f), Random.Range(0f, 180f));
                         prefabNum = Mathf.FloorToInt(Random.Range(0f, damagingPrefabs.Length - Mathf.Epsilon));
-                        envObjects.Add(GameObject.Instantiate(damagingPrefabs[prefabNum], position, randOrientation).GetComponent<EnvObject>());
-                        if (Random.Range(0, 3) != 0)
+                        var currGO = GameObject.Instantiate(damagingPrefabs[prefabNum], position, randOrientation);
+                        var currEnvObject = currGO.GetComponent<EnvObject>();
+                        envObjects.Add(currEnvObject);
+                        Damaging dmg = currGO.GetComponent<Damaging>();
+                        if (Random.Range(0, 3) == 0)
                         {
                             randomSize = Random.Range(0.5f, 1.5f);
-                            envObjects[envObjects.Count - 1].moveType = (MoveType)((Random.Range(2, 4) >= 3) ? 3 : 2);
-                            envObjects[envObjects.Count - 1].speed *= 0.20f;
-                            randOffset = GetRandomPointOnSphere(minRadiusS, maxRadiusS);
-                            envObjects[envObjects.Count - 1].GetComponent<Damaging>().damage = 0.15f * randomSize;
+                            currEnvObject.moveType = (MoveType.Direct); //((Random.Range(2, 4) >= 3) ? 3 : 2);
+                            currEnvObject.speed *= 0.4f;
+                            randOffset = GetRandomPointOnSphere(minRadiusS, maxRadiusS, numRings > 0);
+                            dmg.damage = 0.1f * randomSize;
                         }
                         else
                         {
                             randomSize = Random.Range(15f, 25f);
-                            envObjects[envObjects.Count - 1].speed *= 0.01f;
-                            envObjects[envObjects.Count - 1].GetComponent<Damaging>().health = randomSize;
-                            envObjects[envObjects.Count - 1].moveType = (MoveType)((Random.Range(0, 3) <= 1) ? 0 : 2); // MoveType.ForceDirect; // 
-                            if ((int)envObjects[envObjects.Count - 1].moveType <= 1)
-                                envObjects[envObjects.Count - 1].GetComponent<Rigidbody>().constraints |= (RigidbodyConstraints.FreezePositionY);
-                            randOffset = GetRandomPointOnSphere(minRadiusS * 1.5f, maxRadiusS * 1.1f);
-                            envObjects[envObjects.Count - 1].GetComponent<Damaging>().damage = 0.35f * randomSize;
-                            envObjects[envObjects.Count - 1].SetMass(randomSize);
+                            currEnvObject.speed *= 0.01f;
+                            dmg.health = randomSize;
+                            currEnvObject.moveType = (MoveType)((Random.Range(0, 3) <= 1) ? 0 : 2); // MoveType.ForceDirect; // 
+                            if ((int)currEnvObject.moveType <= 1)
+                                currEnvObject.GetComponent<Rigidbody>().constraints |= (RigidbodyConstraints.FreezePositionY);
+                            randOffset = GetRandomPointOnSphere(minRadiusS * 1.5f, maxRadiusS * 1.1f, numRings > 0);
+                            dmg.damage = 0.35f * randomSize;
+                            currEnvObject.SetMass(randomSize);
                         }
 
                         // hard coded so far larger rocks are slower but deal more damage
-                        envObjects[envObjects.Count - 1].GetComponent<Damaging>().envSpawner = this;
+                        currEnvObject.GetComponent<Damaging>().envSpawner = this;
 
                         localScale = new Vector3(randomSize, randomSize, randomSize);
                         position += randOffset;
-                        position.y = Random.Range(dims.y * cellSize * 0.1f, dims.y * cellSize * 0.85f);
+
+                        position.y = Mathf.Clamp(gamemaster.GetShip().transform.position.y + RandomGaussian.NextGaussian(0, 1f, -1f, 1f) * dims.y * cellSize * 0.25f, dims.y * cellSize * 0.05f, dims.y * cellSize * 0.85f);
 
                         if (Vector3.Distance(position, gamemaster.GetShip().transform.position) < spawnDistToShip)
-                            position += envObjects[envObjects.Count - 1].transform.forward * spawnDistToShip;
+                            position += currEnvObject.transform.forward * spawnDistToShip;
 
-                        envObjects[envObjects.Count - 1].transform.position = position;
-                        envObjects[envObjects.Count - 1].transform.localScale = localScale;
-                        envObjects[envObjects.Count - 1].GetComponent<Rigidbody>().angularVelocity = (new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f)) * rockRotSpeed) / randomSize;
+                        currEnvObject.transform.position = position;
+                        currEnvObject.transform.localScale = localScale;
+                        currEnvObject.GetComponent<Rigidbody>().angularVelocity = (new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f)) * rockRotSpeed) / randomSize;
 
                         break;
                     case EnvObjectType.DangerZone:
-                        initialPos = new Vector3(Random.Range(0, dims.x) * cellSizeH, Random.Range(dims.y * 0.1f, 0.8f * dims.y) * cellSize, Random.Range(0, dims.z) * cellSizeH) + new Vector3(0.5f, 0.5f, 0.5f);
+                        initialPos = new Vector3(Random.Range(0, dims.x) * cellSizeH, 0f, Random.Range(0, dims.z) * cellSizeH) + new Vector3(0.5f, 0.5f, 0.5f);
+                        initialPos.y = Mathf.Clamp(gamemaster.GetShip().transform.position.y + RandomGaussian.NextGaussian(0, 1f, -1f, 1f) * dims.y * cellSize * 0.3f, dims.y * cellSize * 0.05f, dims.y * cellSize * 0.85f);
                         prefabNum = Mathf.FloorToInt(Random.Range(0f, dangerzonesPrefabs.Length - Mathf.Epsilon));
                         envObjects.Add(GameObject.Instantiate(dangerzonesPrefabs[prefabNum], initialPos, orientation).GetComponent<EnvObject>());
                         Destroy(envObjects[envObjects.Count - 1].GetComponent<ParticleSystem>());
                         envObjects[envObjects.Count - 1].moveType = MoveType.Static;
                         break;
                     case EnvObjectType.VoiceChatZone:
-                        initialPos = new Vector3(Random.Range(0, dims.x) * cellSizeH, Random.Range(dims.y * 0.1f, 0.8f * dims.y) * cellSize, Random.Range(0, dims.z) * cellSizeH) + new Vector3(0.5f, 0.5f, 0.5f);
+                        initialPos = new Vector3(Random.Range(0, dims.x) * cellSizeH, 0f, Random.Range(0, dims.z) * cellSizeH) + new Vector3(0.5f, 0.5f, 0.5f);
+                        initialPos.y = Mathf.Clamp(gamemaster.GetShip().transform.position.y + RandomGaussian.NextGaussian(0, 1f, -1f, 1f) * dims.y * cellSize * 0.3f, dims.y * cellSize * 0.05f, dims.y * cellSize * 0.85f);
                         prefabNum = Mathf.FloorToInt(Random.Range(0f, voiceChatZonesPrefabs.Length - Mathf.Epsilon));
                         envObjects.Add(GameObject.Instantiate(voiceChatZonesPrefabs[prefabNum], initialPos, orientation).GetComponent<EnvObject>());
                         envObjects[envObjects.Count - 1].moveType = MoveType.Static;

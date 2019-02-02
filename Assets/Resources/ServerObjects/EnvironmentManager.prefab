@@ -62,19 +62,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b481b83ab7320c43aa7cabceab2dbc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawning: 1
   spawnRate: 2
   dampingFactorVel: 1
   dampingFactorForce: 0
-  maximumObjVelocity: 55
-  maxLargeObjVelocity: 25
-  spawnProbD: 0.9
-  spawnProbS: 0.05
-  spawnProbZ: 0.05
+  maximumObjVelocity: 35
+  maxLargeObjVelocity: 15
+  spawnProbD: 0.92
+  spawnProbS: 0.04
+  spawnProbZ: 0.04
   rockRotSpeed: 3
-  minRadiusT: 4
-  maxRadiusT: 8
-  minRadiusS: 100
-  maxRadiusS: 3000
+  minRadiusT: 5
+  maxRadiusT: 10
+  minRadiusS: 120
+  maxRadiusS: 1200
+  numRings: 10
+  startObjects: 100
   maxNumObjects: 120
   vectorField: {fileID: 114404567317752372}
   damagingPrefabs:
@@ -154,7 +157,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   f_cellSize: 8
-  f_cellSize_horizontal: 12
+  f_cellSize_horizontal: 16
   v3_dimensions: {x: 152, y: 312, z: 152}
   loadFromFile: 1
   vectorFieldFileNum: 999

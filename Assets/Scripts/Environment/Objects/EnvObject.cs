@@ -21,6 +21,7 @@ namespace MastersOfTempest.Environment.Interacting
             rigidbody = GetComponent<Rigidbody>();
             if (rigidbody == null)
                 throw new System.InvalidOperationException("EnvObject cannot operate without Rigidbody on the same object.");
+            closestDistance *= closestDistance;
         }
 
         public void MoveNext(Vector3 targetPos, Vector3 vectorVal)
@@ -52,7 +53,7 @@ namespace MastersOfTempest.Environment.Interacting
         {
             if (!pastShip)
             {
-                if (Vector3.Distance(transform.position, targetPos) > closestDistance)
+                if (Vector3.SqrMagnitude(transform.position - targetPos) > closestDistance)
                 {
                     AddForce((targetPos + relativeTargetPos - transform.position).normalized * speed, Vector3.zero);
                 }

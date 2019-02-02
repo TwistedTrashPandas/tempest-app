@@ -15,18 +15,30 @@ namespace MastersOfTempest.PlayerControls
             Up,
             Down
         }
+
         private SteeringDirection direction;
-        public SteerShip(SteeringDirection direction)
+        private bool newSpellCast;
+
+        public SteerShip(SteeringDirection direction, bool newSpellCast)
         {
             this.direction = direction;
+            this.newSpellCast = newSpellCast;
         }
 
         public override void Execute(Gamemaster context)
         {
             Vector3 forceDirection;
+
             var ship = context.GetShip();
+
             Quaternion rotBefore = ship.transform.rotation;
-            ship.transform.rotation = Quaternion.Euler(0f, rotBefore.eulerAngles.y, 0f);
+
+            if (this.newSpellCast)
+                ship.StoreRotation();
+            else
+                ship.transform.rotation = ship.GetLastRotation();
+            //ship.transform.rotation = originalRotation; // Quaternion.Euler(0f, rotBefore.eulerAngles.y, 0f);
+
             switch (direction)
             {
                 case SteeringDirection.Left: forceDirection = -ship.transform.right; break;

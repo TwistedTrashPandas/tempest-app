@@ -15,6 +15,7 @@
 		g_bSize("FlexibleSize", Range(0.0,1.0)) = 0.0
 		g_fTopHeight("TopHeight", Range(0.0,10000.0)) = 0.0
 		g_fMaxHeight("MaxHeight", Range(0.0,10000.0)) = 0.0
+		g_fMinHeight("MinHeight", Range(0.0,10000.0)) = 0.0
 	}
 		SubShader{
 
@@ -47,6 +48,7 @@
 		static const float g_fTransparencyThreshold = 0.01;
 
 		static const float g_fMaxHeight = 1150;
+		static const float g_fMinHeight = 100;
 		// Fraction of the particle cut off distance which serves as
 		// a transition region from particles to flat clouds
 		static const float g_fParticleToFlatMorphRatio = 0.2;
@@ -247,6 +249,10 @@
 				fMultipleScattering *= (1 + fMultipleScatteringSSSStrength * fSubSrfScattering);
 				float3 f3Ambient = ParticleLighting.f4AmbientLight.rgb;
 
+				if (ParticleAttrs.f3Pos.y <= g_fTopHeight) {
+					ParticleLighting.f4LightAttenuation.xy *= 2.0;
+				}
+
 				fSingleScattering *= ParticleLighting.f4LightAttenuation.x;
 				fMultipleScattering *= ParticleLighting.f4LightAttenuation.y * (0.5 + 1.0*fNoise);
 
@@ -259,9 +265,9 @@
 
 			if (!shadowCollector) {
 				f4Color.a = fTransparency;
-				float fTransparencyOnHeight = 1.0f - saturate((ParticleAttrs.f3Pos.y - g_fMaxHeight) / 100.0f);
+				float fTransparencyOnHeight = 1.0f - saturate((ParticleAttrs.f3Pos.y - g_fMaxHeight) / 700.0f) - saturate((g_fMinHeight - ParticleAttrs.f3Pos.y) / g_fMinHeight);
+				f4Color.rgb *= g_Color.rgb;
 				if (ParticleAttrs.f3Pos.y <= g_fTopHeight) {
-					f4Color.rgb *= g_Color.rgb;
 					f4Color.a *= fTransparencyOnHeight;
 				}
 			}
@@ -292,7 +298,10 @@
 			//if( !bIsValid )
 			//    return;
 			float3 viewDir = UNITY_MATRIX_IT_MV[2].xyz;
-			if (dot(p[0].vertex.xyz -_WorldSpaceCameraPos.xyz, viewDir) > 0.0f)
+			float dotProduct = dot(normalize(p[0].vertex.xyz - _WorldSpaceCameraPos.xyz), viewDir);
+
+			// culling 
+			if (dotProduct > 0.0 || dotProduct > -0.55)
 				return;
 
 			g2f Outs[8];

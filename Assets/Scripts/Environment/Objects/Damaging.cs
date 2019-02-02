@@ -24,6 +24,7 @@ namespace MastersOfTempest.Environment.Interacting
                 ShipPart part = collision.collider.gameObject.GetComponent<ShipPart>();
                 if (part != null)
                     part.ResolveCollision(damage, collision.contacts, collision.impulse);
+                health = -1f;
                 Explode(false);
             }
             else if (collision.gameObject.layer == LayerMask.NameToLayer("Water"))
@@ -37,10 +38,10 @@ namespace MastersOfTempest.Environment.Interacting
                 Explode(false);
             else
                 health -= h;
-            if (health < 0.0f)
+            if (health <= 0.0f)
                 Explode(false);
-            else if (health < 0.25f)
-                Explode(true);
+            //else if (health < 0.25f)
+            //    Explode(true);
         }
 
         public void Explode(bool split)
@@ -74,8 +75,17 @@ namespace MastersOfTempest.Environment.Interacting
 
         private void OnDestroy()
         {
-            var go = GameObject.Instantiate(onDestroyPrefab, this.transform, false);
-            Destroy(go, 10f);
+            if (health > 0f)
+            {
+                if (Vector3.SqrMagnitude(Camera.main.transform.position - transform.position) < 100000f)
+                {
+                    var go = GameObject.Instantiate(onDestroyPrefab, this.transform.position, Quaternion.identity);
+                    go.transform.localScale = 1.0f * transform.lossyScale;
+                    go.transform.position = this.transform.position;
+                    go.layer = LayerMask.NameToLayer("Client");
+                    Destroy(go, 10f);
+                }
+            }
         }
     }
 }

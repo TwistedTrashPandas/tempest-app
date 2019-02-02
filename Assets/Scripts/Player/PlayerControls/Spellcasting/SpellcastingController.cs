@@ -18,11 +18,13 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
         /// </summary>
         public event EventHandler SpellCasted;
 
-        private const float SpellCheckFrequency = 5f;
+        private const float SpellCheckFrequency = 2.5f;
 
         private bool isActive;
 
         public List<PowerRecepticleController> recepticles = new List<PowerRecepticleController>();
+
+        private Spell lastSpell;
 
         private Gamemaster context;
 
@@ -41,6 +43,7 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
             {
                 if (r == null) throw new InvalidOperationException($"Null element in {nameof(recepticles)} collection");
             }
+            lastSpell = null;
             StartCoroutine(CheckSpell());
         }
 
@@ -51,6 +54,7 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
                 if (recepticles.All(recepticle => recepticle.CurrentCharge != Charge.None))
                 {
                     Spell fittingSpell = null;
+
                     foreach (var spell in SpellList.Spells)
                     {
                         bool fail = false;
@@ -66,14 +70,25 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
                         {
                             fittingSpell = spell;
                             break;
-                        }
+                        }                        
                     }
                     if (fittingSpell != null)
                     {
+                        fittingSpell.newSpellCast = true;
+
+                        if (lastSpell == null)
+                            lastSpell = fittingSpell;
+                        else
+                        {
+                            if (fittingSpell.GetType() == lastSpell.GetType())
+                                fittingSpell.newSpellCast = false;
+                        }
+
                         fittingSpell.GetPlayerAction().Execute(context);
                         SpellCasted?.Invoke(this, new SpellCastedEventArgs(fittingSpell));
                         // Debug.Log($"Spell {fittingSpell.Name} called");
                     }
+                    lastSpell = fittingSpell;
                 }
                 yield return new WaitForSeconds(1f / SpellCheckFrequency);
             }

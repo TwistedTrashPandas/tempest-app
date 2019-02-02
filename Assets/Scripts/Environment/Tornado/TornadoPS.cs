@@ -95,56 +95,60 @@ namespace MastersOfTempest.Environment.VisualEffects
             material = GetComponent<MeshRenderer>().material;
             float height = 1315f * 2f;
             float radius = 7500f;
+            float size = 64;
+            float sizeTop = 8;
             switch (QualitySettings.GetQualityLevel())
             {
                 case 0:
                     particelNumExp = 10;
                     numCloudSkyParticles = 8;
-                    material.SetFloat("g_fSize", 64);
-                    material.SetFloat("g_fSizeTop", 8);
+                    size = 64;
+                    sizeTop = 8;
                     radius = 5000f;
                     break;
                 case 1:
                     particelNumExp = 10;
                     numCloudSkyParticles = 8;
-                    material.SetFloat("g_fSize", 96);
-                    material.SetFloat("g_fSizeTop", 8);
+                    size = 96;
+                    sizeTop = 8;
                     radius = 5000f;
                     break;
                 case 2:
                     particelNumExp = 11;
                     numCloudSkyParticles = 9;
-                    material.SetFloat("g_fSize", 96);
-                    material.SetFloat("g_fSizeTop", 8);
+                    size = 64;
+                    sizeTop = 8;
                     radius = 6000f;
                     break;
                 case 3:
                     particelNumExp = 12;
                     numCloudSkyParticles = 9;
-                    material.SetFloat("g_fSize", 64);
-                    material.SetFloat("g_fSizeTop", 12);
+                    size = 64;
+                    sizeTop = 12;
                     radius = 6000f;
                     break;
                 case 4:
                     particelNumExp = 13;
                     numCloudSkyParticles = 10;
-                    material.SetFloat("g_fSize", 64);
-                    material.SetFloat("g_fSizeTop", 12);
+                    size = 64;
+                    sizeTop = 12;
                     break;
                 case 5:
                     particelNumExp = 14;
                     numCloudSkyParticles = 10;
-                    material.SetFloat("g_fSize", 48);
-                    material.SetFloat("g_fSizeTop", 16);
+                    size = 48;
+                    sizeTop = 12;
                     break;
                 default:
                     particelNumExp = 13;
                     numCloudSkyParticles = 10;
-                    material.SetFloat("g_fSize", 64);
-                    material.SetFloat("g_fSizeTop", 12);
+                    size = 64;
+                    sizeTop = 8;
                     break;
             }
-            radius *= 1.2f;
+            material.SetFloat("g_fSizeTop", sizeTop * 1.6f);
+            material.SetFloat("g_fSize", size * 1.6f);
+            radius *= 1.6f;
             numberParticles = (uint)Mathf.Pow(2, particelNumExp);
 
             targetShip = false;
@@ -223,7 +227,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             dims[0] = temp.x;
             dims[1] = temp.y;
             dims[2] = temp.z;
-            float[] cellsizes = {vectorField.GetHorizontalCellSize(), vectorField.GetCellSize(),vectorField.GetHorizontalCellSize() };
+            float[] cellsizes = {vectorField.GetHorizontalCellSize(), vectorField.GetCellSize(), vectorField.GetHorizontalCellSize() };
             maxDist = temp.x * vectorField.GetHorizontalCellSize() * 3.5f;
             float[] center = new float[3];
             center[0] = (temp.x - 1) * 0.5f * cellsizes[0];
@@ -432,7 +436,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             dims[1] = temp.y;
             dims[2] = temp.z;
             particlesCS.SetInt("g_bEndAnimation", 1);
-            winAnimation.SetFloat("g_fVelocityScale", 6000.0f);
+            winAnimation.SetFloat("g_fVelocityScale", 10000.0f);
             winAnimation.SetFloats("g_i3Dimensions", dims);
             winAnimation.SetFloats("g_f3CellSizes", cellsizes);
             particlesCS.SetFloats("g_f3MaxVel", maxVel);

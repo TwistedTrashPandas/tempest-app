@@ -146,6 +146,7 @@ Material:
     - g_fMaxHeight: 0
     - g_fMaxTransparency: 0.95
     - g_fMaxTransparencyDist: 500
+    - g_fMinHeight: 300
     - g_fMinTransparency: 0.6
     - g_fSize: 64
     - g_fSizeTop: 12
@@ -160,6 +161,6 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
     - _TintColor: {r: 1, g: 0.07585368, b: 0, a: 0.5}
-    - g_Color: {r: 0.8301887, g: 0.8301887, b: 0.8301887, a: 1}
+    - g_Color: {r: 0.627451, g: 0.5882353, b: 0.5882353, a: 1}
     - g_DepthColor: {r: 1, g: 1, b: 1, a: 1}
     - g_SpecColor: {r: 1, g: 1, b: 1, a: 1}

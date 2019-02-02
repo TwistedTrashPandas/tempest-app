@@ -68,7 +68,7 @@ namespace MastersOfTempest.ShipBL
 
             if (vectorField != null && rb != null)
             {
-                if (!linearMovement)
+                if (!linearMovement || true)
                 {
                     // adjusting orientation of the ship depending on movement
                     targetView = rb.velocity.normalized;
@@ -80,9 +80,9 @@ namespace MastersOfTempest.ShipBL
                     Vector3 currForward = transform.forward;
                     currForward.y = 0f;
 
-                    float angle = Vector3.SignedAngle(targetView, currForward, Vector3.up) / 1.5f;
+                    float angle = Vector3.SignedAngle(targetView, currForward, Vector3.up) / 2.5f;
 
-                    transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, angle), Time.fixedDeltaTime * 10f);
+                    transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, angle), Time.fixedDeltaTime * 8f);
                 }
             }
         }

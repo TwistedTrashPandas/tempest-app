@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: SkyBox
   m_Shader: {fileID: 4800000, guid: 5e444cd13928b274babcaedb447ba3ef, type: 3}
-  m_ShaderKeywords: 
+  m_ShaderKeywords: _FOGBOTTOM_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -65,16 +65,16 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _Exposure: 1
-    - _FogBottom: 0
-    - _FogEnd: 0.2
+    - _FogBottom: 1
+    - _FogEnd: 0.8
     - _FogIntens: 1
-    - _FogStart: 0
+    - _FogStart: 0.2
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _Metallic: 0
-    - _MieIntens: 0
-    - _MieSize: 0.8
+    - _MieIntens: 0.2
+    - _MieSize: 0.5
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02

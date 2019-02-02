@@ -385,9 +385,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a2c3a733c5cfaa548b7411b6c2ab025c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  linearMovement: 0
   angularMomentumFactor: 0.25
-  velocityDamp: 1
+  velocityDamp_xz: 0.995
+  velocityDamp_y: 0.9
   pullStrength: 0.15
+  maximumVelocity: 0
+  constantForce: 0
 --- !u!114 &3798610760229167962
 MonoBehaviour:
   m_ObjectHideFlags: 0
