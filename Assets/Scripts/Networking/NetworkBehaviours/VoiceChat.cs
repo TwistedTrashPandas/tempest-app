@@ -122,7 +122,7 @@ namespace MastersOfTempest.Networking
         {
             if (!serverObject.onServer && recording)
             {
-                GUI.Label(new Rect(Screen.width / 4, 2 * (Screen.height / 3), 100, 100), recordIcon);
+                GUI.Label(new Rect(Screen.width / 4, 2 * (Screen.height / 3), Screen.width / 20, Screen.width / 20), recordIcon);
             }
         }
 
