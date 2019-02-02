@@ -183,7 +183,7 @@ namespace MastersOfTempest.Networking
             ready = !ready;
             Client.Instance.Lobby.SetMemberData("Ready", ready.ToString());
             readyButton.GetComponent<UnityEngine.UI.Image>().color = ready ? new UnityEngine.Color(0, 0.25f, 0) : new UnityEngine.Color(0.25f, 0, 0);
-            readyButton.GetComponentInChildren<UnityEngine.UI.Text>().text = ready ? "Ready" : "Not Ready";
+            readyButton.GetComponentInChildren<UnityEngine.UI.Text>().text = ready ? "Ready" : "Click to Ready up";
         }
 
         private IEnumerator RefreshFriendAvatars()
