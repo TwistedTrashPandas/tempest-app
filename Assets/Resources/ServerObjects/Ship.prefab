@@ -420,7 +420,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   linearMovement: 1
   angularMomentumFactor: 0.25
-  velocityDamp_xz: 0.995
+  velocityDamp_xz: 0.99
   velocityDamp_y: 0.9
   pullStrength: 0.15
   maximumVelocity: 0
