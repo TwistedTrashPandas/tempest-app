@@ -103,7 +103,7 @@ namespace MastersOfTempest.Environment.Interacting
             }
         }
 
-        private void RemoveFirstEnvObject()
+        private void RemoveFirstEnvObject(bool removeAll = false)
         {
             if (envObjects.Count > maxNumObjects)
             {
@@ -217,7 +217,7 @@ namespace MastersOfTempest.Environment.Interacting
             spawning = false;
             for (int i = envObjects.Count; i >= 0; i--)
             {
-                RemoveFirstEnvObject();
+                RemoveFirstEnvObject(true);
             }
         }
 

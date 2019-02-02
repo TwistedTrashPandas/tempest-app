@@ -77,7 +77,7 @@ namespace MastersOfTempest.Environment.Interacting
         {
             if (health > 0f)
             {
-                if (Vector3.SqrMagnitude(Camera.main.transform.position - transform.position) < 100000f)
+                if (Camera.main != null && Vector3.SqrMagnitude(Camera.main.transform.position - transform.position) < 100000f)
                 {
                     var go = GameObject.Instantiate(onDestroyPrefab, this.transform.position, Quaternion.identity);
                     go.transform.localScale = 1.0f * transform.lossyScale;

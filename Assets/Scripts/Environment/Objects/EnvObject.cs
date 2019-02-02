@@ -116,6 +116,7 @@ namespace MastersOfTempest.Environment.Interacting
         public void EnableGravity()
         {
             rigidbody.useGravity = true;
+            rigidbody.constraints = RigidbodyConstraints.None;
         }
 
         protected virtual void OnCollisionEnter(Collision collision)

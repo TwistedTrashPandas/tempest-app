@@ -15,7 +15,7 @@ namespace MastersOfTempest.ShipBL
         public float velocityDamp_y = 0.9f;
         public float pullStrength = 1f;
         public float maximumVelocity;
-        public float constantForce;
+        public new float constantForce;
 
         private VectorField vectorField;
         private Rigidbody rb;
@@ -56,7 +56,9 @@ namespace MastersOfTempest.ShipBL
                 }
                 else
                 {
-                    rb.AddForce(transform.forward * constantForce);
+                    shipTargetForce = transform.forward;
+                    shipTargetForce.y = 0f;
+                    rb.AddForce(shipTargetForce.normalized * constantForce);
                 }
 
                 rb.velocity.Scale(velDampVector);
@@ -73,7 +75,7 @@ namespace MastersOfTempest.ShipBL
                     // adjusting orientation of the ship depending on movement
                     targetView = rb.velocity.normalized;
                     targetView.y /= 4f;
-                    rb.AddForce(shipTargetForce);
+
                     transform.LookAt(Vector3.Lerp(transform.forward, targetView, Time.fixedDeltaTime * angularMomentumFactor) + transform.position);
 
                     targetView.y = 0f;
