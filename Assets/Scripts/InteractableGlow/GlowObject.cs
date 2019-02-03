@@ -20,8 +20,8 @@ namespace MastersOfTempest.Glow
         }
 
         private List<Material> _materials = new List<Material>();
-        private Color _currentColor;
-        private Color _targetColor;
+        private Color _currentColor = Color.black;
+        private Color _targetColor = Color.black;
 
         void Start()
         {
