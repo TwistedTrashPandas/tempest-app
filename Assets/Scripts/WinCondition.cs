@@ -18,9 +18,11 @@ namespace MastersOfTempest
         public float timeZoom;
         public Material skybox;
 
+        public GameObject winCondPrefab;
+
         private float timeZoomCurr;
 
-        private CapsuleCollider winCondition;
+        private SphereCollider winCondition;
         private bool toggleWinText;
 
         private GUIContent guiContent;
@@ -29,6 +31,8 @@ namespace MastersOfTempest
         private Transform targetLookAt;
         private Vector3 targetCamPos;
         private Vector3 startCamPos;
+
+        private GameObject magicCore;
 
         protected override void StartServer()
         {
@@ -59,6 +63,7 @@ namespace MastersOfTempest
             buffer[0] = 1;
             GetComponent<Gamemaster>().GetEnvironmentManager().envSpawner.RemoveAllObjects();
             SendToAllClients(buffer, Facepunch.Steamworks.Networking.SendType.Reliable);
+            Destroy(magicCore);
         }
 
         protected override void Update()
@@ -140,16 +145,29 @@ namespace MastersOfTempest
         private IEnumerator InitAfter5Seconds()
         {
             yield return new WaitForSeconds(5f);
-            if (serverObject.onServer)
+            VectorField vectorField = GetComponent<Gamemaster>().GetEnvironmentManager().vectorField;
+            Vector3 center = vectorField.GetCenterWS() + Vector3.up * Random.Range(-0.3f, 0.3f) * vectorField.GetDimensions().y;
+
+            var go = GameObject.Instantiate(winCondPrefab, center, Quaternion.identity);
+            var goPSs = go.GetComponentsInChildren<ParticleSystem>();
+
+            for (int i = 0; i < goPSs.Length; i++)
             {
-                VectorField vectorField = GetComponent<Gamemaster>().GetEnvironmentManager().vectorField;
-                winCondition = gameObject.AddComponent<CapsuleCollider>();
-                winCondition.center = vectorField.GetCenterWS();
-                winCondition.height = vectorField.GetCellSize() * vectorField.GetDimensions().y * 2f;
-                winCondition.direction = 1;
-                winCondition.isTrigger = true;
-                winCondition.radius = radiusCollider;
+                goPSs[i].gameObject.transform.localScale = new Vector3(radiusCollider, radiusCollider, radiusCollider);
             }
+            winCondition = gameObject.AddComponent<SphereCollider>();
+            winCondition.center = center;
+            //winCondition.height = vectorField.GetCellSize() * vectorField.GetDimensions().y * 2f;
+            //winCondition.direction = 1;
+            winCondition.isTrigger = true;
+            winCondition.radius = radiusCollider;
+            for (int i = 0; i < goPSs.Length; i++)
+            {
+                goPSs[i].enableEmission = false;
+            }
+
+            magicCore = go;
+            go.transform.parent = this.gameObject.transform;
         }
     }
 }

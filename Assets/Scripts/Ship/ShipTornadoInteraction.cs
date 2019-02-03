@@ -72,18 +72,13 @@ namespace MastersOfTempest.ShipBL
             {
                 if (!linearMovement || true)
                 {
-                    // adjusting orientation of the ship depending on movement
-                    targetView = rb.velocity.normalized;
-                    targetView.y /= 4f;
-
-
-                    if (Vector3.Dot(transform.forward, rb.velocity.normalized) >= -0.1f)
+                    if (Vector3.Dot(transform.forward, rb.velocity.normalized) >= -0.01f)
                     {
+                        // adjusting orientation of the ship depending on movement
+                        targetView = rb.velocity.normalized;
+                        targetView.y /= 4f;
                         transform.LookAt(Vector3.Lerp(transform.forward, targetView, Time.fixedDeltaTime * angularMomentumFactor) + transform.position);
-                    }
 
-                    if (Vector3.Dot(transform.forward, rb.velocity.normalized) >= -0.1f)
-                    {
                         targetView.y = 0f;
                         Vector3 currForward = transform.forward;
                         currForward.y = 0f;

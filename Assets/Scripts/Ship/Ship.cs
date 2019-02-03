@@ -131,7 +131,8 @@ namespace MastersOfTempest.ShipBL
                 {
                     children[i].parent = null;
                     children[i].gameObject.layer = LayerMask.NameToLayer("Server");
-                    children[i].gameObject.AddComponent<Rigidbody>();
+                    if(children[i].gameObject.GetComponent<Rigidbody>() == null)
+                        children[i].gameObject.AddComponent<Rigidbody>();
                     children[i].gameObject.GetComponent<Rigidbody>().useGravity = false;
                     // children[i].gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value) * 0.1f);
                     children[i].gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
