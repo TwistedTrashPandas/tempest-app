@@ -10,7 +10,7 @@ namespace MastersOfTempest.ShipBL
     {
         public event EventHandler ActionRequest;
 
-        const float freezeSlowdown = .7f;
+        const float freezeSlowdown = .4f;
         public float Health { get; set; }
         public float Shield { get; set; }
         public ShipCondition Condition { get; private set; } = ShipCondition.None;
