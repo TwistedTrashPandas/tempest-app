@@ -260,7 +260,7 @@ namespace MastersOfTempest.Environment.Interacting
                         var currEnvObject = currGO.GetComponent<EnvObject>();
                         envObjects.Add(currEnvObject);
                         Damaging dmg = currGO.GetComponent<Damaging>();
-                        if (Random.Range(0, 5) == 0)
+                        if (Random.Range(0, 6) == 0)
                         {
                             randomSize = Random.Range(0.5f, 1.5f);
                             currEnvObject.moveType = (MoveType.Direct); //((Random.Range(2, 4) >= 3) ? 3 : 2);
