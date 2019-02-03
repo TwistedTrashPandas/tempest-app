@@ -260,13 +260,13 @@ namespace MastersOfTempest.Environment.Interacting
                         var currEnvObject = currGO.GetComponent<EnvObject>();
                         envObjects.Add(currEnvObject);
                         Damaging dmg = currGO.GetComponent<Damaging>();
-                        if (Random.Range(0, 8) == 0)
+                        if (Random.Range(0, 6) == 0)
                         {
                             randomSize = Random.Range(0.5f, 1.5f);
                             currEnvObject.moveType = (MoveType.Direct); //((Random.Range(2, 4) >= 3) ? 3 : 2);
-                            currEnvObject.speed *= 0.45f;
+                            currEnvObject.speed *= 0.5f;
                             randOffset = GetRandomPointOnSphere(minRadiusS, maxRadiusS, numRings > 0);
-                            dmg.damage = 0.1f * randomSize;
+                            dmg.damage = 0.2f * randomSize;
                         }
                         else
                         {
