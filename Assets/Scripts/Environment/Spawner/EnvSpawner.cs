@@ -273,7 +273,7 @@ namespace MastersOfTempest.Environment.Interacting
                             randomSize = Random.Range(15f, 25f);
                             currEnvObject.speed *= 0.01f;
                             if (Random.Range(0,7) == 0)
-                                currEnvObject.speed *= 5f;
+                                currEnvObject.speed *= 8f;
                             dmg.health = randomSize;
 
                             currEnvObject.moveType = (MoveType)((Random.Range(0, 3) <= 1) ? 0 : 2); // MoveType.ForceDirect; // 
