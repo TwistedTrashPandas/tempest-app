@@ -17,7 +17,7 @@ namespace MastersOfTempest
         private bool inTransition;
         private int page;
 
-        void Start()
+        void Awake()
         {
             animator = GetComponent<Animator>();
             inTransition = false;
