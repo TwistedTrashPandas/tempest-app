@@ -33,7 +33,12 @@ namespace MastersOfTempest.PlayerControls
             Vector3 cameraDirection;
 
             var ship = context.GetShip();
-            var playerCam = context.GetPlayers()[0].GetComponent<SpellDependantCameraMovement>();
+            var playerCam = context.GetPlayers();
+            SpellDependantCameraMovement[] camMovements = new SpellDependantCameraMovement[playerCam.Count];
+            for(int i = 0; i< playerCam.Count; i++)
+            {
+                camMovements[i] = playerCam[i].GetComponent<SpellDependantCameraMovement>();
+            }
 
             Quaternion rotBefore = ship.transform.rotation;
 
@@ -68,7 +73,12 @@ namespace MastersOfTempest.PlayerControls
 
             ship.GetShipForceManipulator().AddForce(forceDirection.normalized * SteeringForceValue, .5f);
             if (this.newSpellCast)
-                playerCam.MoveCamera(cameraDirection, ship.GetFreezingSlowDown());
+            {
+                for (int i = 0; i < camMovements.Length; i++)
+                {
+                    camMovements[i].MoveCamera(cameraDirection, 1.0f - ship.GetFreezingSlowDown() * 2f);
+                }
+            }
         }
     }
 }
