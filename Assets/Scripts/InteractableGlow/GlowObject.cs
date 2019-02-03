@@ -20,8 +20,8 @@ namespace MastersOfTempest.Glow
         }
 
         private List<Material> _materials = new List<Material>();
-        private Color _currentColor;
-        private Color _targetColor;
+        private Color _currentColor = Color.black;
+        private Color _targetColor = Color.black;
 
         void Start()
         {
@@ -43,6 +43,14 @@ namespace MastersOfTempest.Glow
         {
             _targetColor = Color.black;
             enabled = true;
+        }
+
+        public void ChangeColorIfGlowing()
+        {
+            if(!_currentColor.Equals(Color.black))
+            {
+                TurnGlowOn();
+            }
         }
 
         /// <summary>
