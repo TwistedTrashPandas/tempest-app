@@ -76,7 +76,7 @@ namespace MastersOfTempest.PlayerControls
             {
                 for (int i = 0; i < camMovements.Length; i++)
                 {
-                    camMovements[i].MoveCamera(cameraDirection, 1.0f - ship.GetFreezingSlowDown() * 2f);
+                    camMovements[i].MoveCamera(cameraDirection, 1.0f);
                 }
             }
         }
