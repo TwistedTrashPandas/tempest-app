@@ -45,6 +45,14 @@ namespace MastersOfTempest.Glow
             enabled = true;
         }
 
+        public void ChangeColorIfGlowing()
+        {
+            if(!_currentColor.Equals(Color.black))
+            {
+                TurnGlowOn();
+            }
+        }
+
         /// <summary>
         /// Loop over all cached materials and update their color, disable self if we reach our target color.
         /// </summary>
