@@ -555,7 +555,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1004535761}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.99999994
+  m_Size: 0.97786456
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2187,7 +2187,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0.00024414062}
+  m_AnchoredPosition: {x: 0, y: 0.00012207031}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1125393301
@@ -2828,7 +2828,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1328014539}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.9999999
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3057,7 +3057,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -20, y: -20}
+  m_SizeDelta: {x: -30, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1459708185
 MonoBehaviour:
@@ -3092,7 +3092,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Not Ready
+  m_Text: Click to Ready up
 --- !u!222 &1459708186
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3428,8 +3428,8 @@ MonoBehaviour:
   readyButton: {fileID: 1092243025}
   selectWizardButton: {fileID: 1667338505}
   selectApprenticeButton: {fileID: 176802352}
-  serverSceneName: IntroCinematicServer
-  clientSceneName: IntroCinematicClient
+  serverSceneName: MergedServer
+  clientSceneName: MergedClient
 --- !u!1 &1791836039
 GameObject:
   m_ObjectHideFlags: 0
@@ -3543,7 +3543,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000062942505, y: -0.000061035156}
+  m_AnchoredPosition: {x: -0.00002861023, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1819350276

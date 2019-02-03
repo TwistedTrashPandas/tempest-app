@@ -62,19 +62,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b481b83ab7320c43aa7cabceab2dbc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawning: 1
   spawnRate: 2
   dampingFactorVel: 1
   dampingFactorForce: 0
   maximumObjVelocity: 30
-  spawnProbD: 0.95
-  spawnProbS: 0.025
-  spawnProbZ: 0.025
-  rockRotSpeed: 2
-  minRadiusT: 4
-  maxRadiusT: 8
-  minRadiusS: 100
-  maxRadiusS: 3000
-  maxNumObjects: 120
+  maxLargeObjVelocity: 20
+  spawnProbD: 0.92
+  spawnProbS: 0.04
+  spawnProbZ: 0.04
+  rockRotSpeed: 3
+  minRadiusT: 3
+  maxRadiusT: 10
+  minRadiusS: 250
+  maxRadiusS: 1500
+  numRings: 10
+  startObjects: 100
+  maxNumObjects: 150
   vectorField: {fileID: 114404567317752372}
   damagingPrefabs:
   - {fileID: 1476894203371464, guid: e8c9d0a525a3e1b4fba9d4d419b35e72, type: 3}
@@ -135,6 +139,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -151,8 +156,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c00f619167f3b444e86ec3225496e04e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  f_cellSize: 4
-  f_cellSize_horizontal: 10
+  f_cellSize: 8
+  f_cellSize_horizontal: 16
   v3_dimensions: {x: 152, y: 312, z: 152}
   loadFromFile: 1
   vectorFieldFileNum: 999

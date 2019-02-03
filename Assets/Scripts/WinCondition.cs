@@ -13,13 +13,22 @@ namespace MastersOfTempest
         public static event WinAnimation OnWin;
 
         public Font winFont;
-        public float radiusCollider = 50f;
+        public float radiusCollider = 80f;
+
+        public float timeZoom;
+        public Material skybox;
+
+        private float timeZoomCurr;
 
         private CapsuleCollider winCondition;
         private bool toggleWinText;
 
         private GUIContent guiContent;
         private GUIStyle guiStyle;
+
+        private Transform targetLookAt;
+        private Vector3 targetCamPos;
+        private Vector3 startCamPos;
 
         protected override void StartServer()
         {
@@ -38,7 +47,10 @@ namespace MastersOfTempest
             guiStyle.fontSize = 10;
             guiStyle.font = winFont;
 
-            guiStyle.normal.textColor = new Color(0.0f, 0.6f, 0f);
+            targetCamPos = new Vector3();
+            timeZoomCurr = 0f;
+
+            guiStyle.normal.textColor = new Color(0.36f, 0.34f, 0f);
         }
 
         public void OnWinServer()
@@ -47,6 +59,16 @@ namespace MastersOfTempest
             buffer[0] = 1;
             GetComponent<Gamemaster>().GetEnvironmentManager().envSpawner.RemoveAllObjects();
             SendToAllClients(buffer, Facepunch.Steamworks.Networking.SendType.Reliable);
+        }
+
+        protected override void Update()
+        {
+            if (toggleWinText && timeZoomCurr < timeZoom)
+            {
+                Camera.main.transform.position = Vector3.Lerp(startCamPos, targetCamPos, timeZoomCurr / timeZoom);
+                timeZoomCurr += Time.deltaTime;
+                Camera.main.transform.LookAt(targetLookAt);
+            }
         }
 
         private void OnGUI()
@@ -76,8 +98,14 @@ namespace MastersOfTempest
             {
                 if (!toggleWinText)
                 {
+                    startCamPos = Camera.main.transform.position;
+                    targetLookAt = GetComponent<Gamemaster>().GetShip().transform;
+                    targetCamPos.y = 1.2f * targetLookAt.position.y;
+                    targetCamPos.x = -200f;
+                    targetCamPos.z = -200f;
                     toggleWinText = true;
                     OnWin(gameObject.GetComponent<Gamemaster>().GetShip().gameObject);
+                    StartCoroutine(IncreaseFontSize());
                 }
             }
         }
@@ -88,6 +116,27 @@ namespace MastersOfTempest
                 OnWinServer();
         }
 
+        private IEnumerator IncreaseFontSize()
+        {
+            float startFogDens = RenderSettings.fogDensity;
+            while (guiStyle.fontSize < 250)
+            {
+                guiStyle.fontSize += 1;
+                if (RenderSettings.fog)
+                {
+                    RenderSettings.fogDensity -= 0.01f;
+                    RenderSettings.skybox = skybox;
+                }
+
+                if (RenderSettings.fogDensity < 0f)
+                {
+                    RenderSettings.fog = false;
+                    RenderSettings.fogDensity = startFogDens;
+                }
+                yield return new WaitForEndOfFrame();
+            }
+            RenderSettings.fogDensity = startFogDens;
+        }
         private IEnumerator InitAfter5Seconds()
         {
             yield return new WaitForSeconds(5f);

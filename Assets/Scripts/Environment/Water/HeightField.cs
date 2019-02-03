@@ -150,12 +150,7 @@ namespace MastersOfTempest.Environment.VisualEffects
         private Vector2[,] segmentConfigurations;
         private int lastConfig;
         private Vector3 lastPosition;
-
-        private void Start()
-        {
-            Initialize(Vector3.zero);
-        }
-
+        
         public void Initialize(Vector3 midPosition)
         {
             switch (QualitySettings.GetQualityLevel())
@@ -218,6 +213,7 @@ namespace MastersOfTempest.Environment.VisualEffects
                     break;
             }
 
+            waterMode = WaterMode.Minimal;
             inOutCounter = 0;
             currentCollision = 1;
             //transform.position = midPosition - new Vector3(widthMesh * quadSize / 2f, midPosition.y, depthMesh * quadSize / 2f);
@@ -244,19 +240,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             //CreateMesh();
             initBuffers();
         }
-
-        void OnApplicationQuit()
-        {
-            heightFieldCB.Release();
-            reflectWavesCB.Release();
-            heightFieldCBOut.Release();
-            verticesCB.Release();
-            normalsCB.Release();
-            randomXZ.Release();
-            trianglesRCB.Release();
-            normTrianglesCB.Release();
-        }
-
+        
         void Update()
         {
             //  if noisy factor changes -> initialize randomDisplacements again
@@ -862,6 +846,23 @@ namespace MastersOfTempest.Environment.VisualEffects
             float resultingHeight = (x1 * (1 - x) + x4 * (x)) * (1 - y) + (x3 * (1 - x) + x2 * (x)) * (y);
 
             return resultingHeight;
+        }
+
+        void OnDestroy()
+        {
+            ReleaseComputeBuffers();
+        }
+
+        public void ReleaseComputeBuffers()
+        {
+            heightFieldCB.Release();
+            reflectWavesCB.Release();
+            heightFieldCBOut.Release();
+            verticesCB.Release();
+            normalsCB.Release();
+            randomXZ.Release();
+            trianglesRCB.Release();
+            normTrianglesCB.Release();
         }
     }
 }

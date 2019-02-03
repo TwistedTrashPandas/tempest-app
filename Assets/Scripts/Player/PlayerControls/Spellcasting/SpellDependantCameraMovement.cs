@@ -55,7 +55,6 @@ namespace MastersOfTempest.PlayerControls
             {
                 throw new InvalidOperationException($"{nameof(spellcastingController)} is not specified!");
             }
-            spellcastingController.SpellCasted += OnSpellCasted;
             gamemaster = GameObject.Find("Gamemaster").GetComponent<Gamemaster>();
             ship = gamemaster.GetShip();
             lastSpellCast = "";
@@ -67,7 +66,7 @@ namespace MastersOfTempest.PlayerControls
             lastSpellCast = "";
         }
 
-        private void MoveCamera(Vector3 direction, float intensity)
+        public void MoveCamera(Vector3 direction, float intensity)
         {
             if (serverObject.onServer)
             {
@@ -85,38 +84,6 @@ namespace MastersOfTempest.PlayerControls
         {
             var message = ByteSerializer.FromBytes<CameraMovement>(data);
             MoveCamera(message.Direciton, message.i);
-        }
-
-        private void OnSpellCasted(object sender, EventArgs args)
-        {
-            var arguments = (SpellCastedEventArgs)args;
-            if (!arguments.Spell.Name.Equals(lastSpellCast))
-            {
-                Vector3 direction = new Vector3();
-                switch (arguments.Spell.Name)
-                {
-                    case "Tailwind":
-                        direction = -ship.transform.forward;
-                        break;
-                    case "Headwind":
-                        direction = ship.transform.forward;
-                        break;
-                    case "Right halfwind":
-                        direction = ship.transform.right;
-                        break;
-                    case "Left halfwind":
-                        direction = -ship.transform.right;
-                        break;
-                    case "Go UP!":
-                        direction = -ship.transform.up;
-                        break;
-                    case "Down!":
-                        direction = ship.transform.up;
-                        break;
-                }
-                lastSpellCast = arguments.Spell.Name;
-                MoveCamera(direction, 1.0f);
-            }
-        }
+        }        
     }
 }

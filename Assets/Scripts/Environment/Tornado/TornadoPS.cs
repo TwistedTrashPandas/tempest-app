@@ -74,62 +74,83 @@ namespace MastersOfTempest.Environment.VisualEffects
 
         void Start()
         {
+            if (maxVel == null || maxVel.Length != 3)
+                throw new System.InvalidOperationException("initialize max Vel with 3 elements!");
+
+            InitTornado();
+            initBuffers();
+            Load3DTextures();
+            CreateMesh();
+            camPos = Camera.main.transform;
+            // TODO: seperate script
+            Camera.main.cullingMatrix = Matrix4x4.Ortho(-99999, 99999, -99999, 99999, 2f, 99999) *
+                                Matrix4x4.Translate(Vector3.forward * -99999 / 2f) *
+                                Camera.main.worldToCameraMatrix;
+
+            //ComputeAttenuationProperties();
+        }
+
+        private void InitTornado()
+        {
             material = GetComponent<MeshRenderer>().material;
-            float height = 1315f;
+            float height = 1315f * 2f;
             float radius = 7500f;
+            float size = 64;
+            float sizeTop = 8;
             switch (QualitySettings.GetQualityLevel())
             {
                 case 0:
                     particelNumExp = 10;
-                    numCloudSkyParticles = 8;
-                    material.SetFloat("g_fSize", 64);
-                    material.SetFloat("g_fSizeTop", 8);
+                    numCloudSkyParticles = 7;
+                    size = 64;
+                    sizeTop = 10;
                     radius = 5000f;
                     break;
                 case 1:
-                    particelNumExp = 10;
+                    particelNumExp = 11;
                     numCloudSkyParticles = 8;
-                    material.SetFloat("g_fSize", 96);
-                    material.SetFloat("g_fSizeTop", 8);
+                    size = 96;
+                    sizeTop = 8;
                     radius = 5000f;
                     break;
                 case 2:
-                    particelNumExp = 11;
-                    numCloudSkyParticles = 9;
-                    material.SetFloat("g_fSize", 96);
-                    material.SetFloat("g_fSizeTop", 8);
+                    particelNumExp = 12;
+                    numCloudSkyParticles = 8;
+                    size = 96;
+                    sizeTop = 8;
                     radius = 6000f;
                     break;
                 case 3:
-                    particelNumExp = 12;
+                    particelNumExp = 13;
                     numCloudSkyParticles = 9;
-                    material.SetFloat("g_fSize", 64);
-                    material.SetFloat("g_fSizeTop", 12);
+                    size = 64;
+                    sizeTop = 12;
                     radius = 6000f;
                     break;
                 case 4:
-                    particelNumExp = 13;
-                    numCloudSkyParticles = 10;
-                    material.SetFloat("g_fSize", 64);
-                    material.SetFloat("g_fSizeTop", 12);
+                    particelNumExp = 14;
+                    numCloudSkyParticles = 9;
+                    size = 64;
+                    sizeTop = 12;
+                    radius = 6000f;
                     break;
                 case 5:
-                    particelNumExp = 14;
-                    numCloudSkyParticles = 10;
-                    material.SetFloat("g_fSize", 48);
-                    material.SetFloat("g_fSizeTop", 16);
+                    particelNumExp = 15;
+                    numCloudSkyParticles = 9;
+                    size = 48;
+                    sizeTop = 12;
+                    radius = 6000f;
                     break;
                 default:
                     particelNumExp = 13;
-                    numCloudSkyParticles = 10;
-                    material.SetFloat("g_fSize", 64);
-                    material.SetFloat("g_fSizeTop", 12);
+                    numCloudSkyParticles = 9;
+                    size = 64;
+                    sizeTop = 8;
                     break;
             }
-
-            if (maxVel == null || maxVel.Length != 3)
-                throw new System.InvalidOperationException("initialize max Vel with 3 elements!");
-
+            material.SetFloat("g_fSizeTop", sizeTop * 1.6f);
+            material.SetFloat("g_fSize", size * 1.6f);
+            radius *= 1.6f;
             numberParticles = (uint)Mathf.Pow(2, particelNumExp);
 
             targetShip = false;
@@ -138,6 +159,11 @@ namespace MastersOfTempest.Environment.VisualEffects
             particleVel = new Vector3[numberParticles];
             particleIdx = new int[numberParticles];
             Vector3 center = vectorField.GetCenterWS();
+
+            Transform[] children = GetComponentsInChildren<Transform>();
+            if (children.Length > 1)
+                children[1].transform.position = center;
+
             center.y = height;
             for (int i = 0; i < numberParticles; i++)
             {
@@ -157,16 +183,6 @@ namespace MastersOfTempest.Environment.VisualEffects
                 }
                 particleIdx[i] = i;
             }
-            initBuffers();
-            Load3DTextures();
-            CreateMesh();
-            camPos = Camera.main.transform;
-            // TODO: seperate script
-            Camera.main.cullingMatrix = Matrix4x4.Ortho(-99999, 99999, -99999, 99999, 2f, 99999) *
-                                Matrix4x4.Translate(Vector3.forward * -99999 / 2f) *
-                                Camera.main.worldToCameraMatrix;
-
-            //ComputeAttenuationProperties();
         }
 
         private void initBuffers()
@@ -218,7 +234,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             dims[0] = temp.x;
             dims[1] = temp.y;
             dims[2] = temp.z;
-            float[] cellsizes = {vectorField.GetHorizontalCellSize(), vectorField.GetCellSize(),vectorField.GetHorizontalCellSize() };
+            float[] cellsizes = { vectorField.GetHorizontalCellSize(), vectorField.GetCellSize(), vectorField.GetHorizontalCellSize() };
             maxDist = temp.x * vectorField.GetHorizontalCellSize() * 3.5f;
             float[] center = new float[3];
             center[0] = (temp.x - 1) * 0.5f * cellsizes[0];
@@ -252,7 +268,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             material.SetFloat("g_fMaxHeight", dims[1] * cellsizes[1]);
             //material.SetFloatArray("g_i3Dimensions", dims);
             material.SetVector("g_vCenter", new Vector4(center[0], center[1], center[2], 1.0f));
-            material.SetFloat("g_fTopHeight",  dims[1] * cellsizes[1] * 1.05f);
+            material.SetFloat("g_fTopHeight", dims[1] * cellsizes[1] * 1.05f);
             //  assume static data for compute buffers
             vectorFieldCBIn.SetData(vectorField.GetVectorField());
             particlePosCB.SetData(particlePos);
@@ -484,7 +500,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             //Graphics.DrawMeshNow()
         }*/
 
-        void OnApplicationQuit()
+        void OnDestroy()
         {
             // releasing compute buffers
             particleVelCB.Release();
