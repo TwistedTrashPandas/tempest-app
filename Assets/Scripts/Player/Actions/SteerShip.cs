@@ -30,8 +30,10 @@ namespace MastersOfTempest.PlayerControls
         public override void Execute(Gamemaster context)
         {
             Vector3 forceDirection;
+            Vector3 cameraDirection;
 
             var ship = context.GetShip();
+            var playerCam = context.GetPlayers()[0].GetComponent<SpellDependantCameraMovement>();
 
             Quaternion rotBefore = ship.transform.rotation;
 
@@ -55,13 +57,18 @@ namespace MastersOfTempest.PlayerControls
                 default: throw new InvalidOperationException($"Unknown value {nameof(SteeringDirection)} of {direction}");
             }
 
+            ship.transform.rotation = rotBefore;
+
             //TODO: duration for the force, or add as an impulse
             if ((ship.GetCurrenStatus().Condition & ShipBL.ShipCondition.Freezing) == ShipBL.ShipCondition.Freezing)
                 forceDirection *= ship.GetFreezingSlowDown();
 
-            ship.transform.rotation = rotBefore;
+            // set camera movement direction
+            cameraDirection = - forceDirection.normalized;
 
             ship.GetShipForceManipulator().AddForce(forceDirection.normalized * SteeringForceValue, .5f);
+            if (this.newSpellCast)
+                playerCam.MoveCamera(cameraDirection, ship.GetFreezingSlowDown());
         }
     }
 }
