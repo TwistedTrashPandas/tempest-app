@@ -202,6 +202,7 @@ namespace MastersOfTempest.ShipBL
         public void SetDestruction(float destruc)
         {
             destruction = destruc;
+            InterpolateCurrentMesh();
         }
 
         // interpolate between damaged mesh and initial mesh
