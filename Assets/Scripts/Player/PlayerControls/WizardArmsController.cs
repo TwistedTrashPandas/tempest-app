@@ -26,9 +26,32 @@ namespace MastersOfTempest.PlayerControls
         public ParticleSystem [] HoldPS;
         public ParticleSystem [] DissipatePS;
         public ParticlesSucker FeedPS;
+
+        public AudioClip HoldingSound;
+        public AudioClip ChargeSound;
+        public AudioClip ReleaseSound;
         private Animator anim;
+
+        private AudioSource audioSource;
         void Start()
         {
+            audioSource = GetComponent<AudioSource>();
+            if (audioSource == null)
+            {
+                throw new InvalidOperationException($"{nameof(audioSource)} is not specified!");
+            }
+            if (HoldingSound == null)
+            {
+                throw new InvalidOperationException($"{nameof(HoldingSound)} is not specified!");
+            }
+            if (ChargeSound == null)
+            {
+                throw new InvalidOperationException($"{nameof(ChargeSound)} is not specified!");
+            }
+            if (ReleaseSound == null)
+            {
+                throw new InvalidOperationException($"{nameof(ReleaseSound)} is not specified!");
+            }
             if (SuckPoint == null)
             {
                 throw new InvalidOperationException($"{nameof(SuckPoint)} is not specified!");
@@ -97,6 +120,8 @@ namespace MastersOfTempest.PlayerControls
         {
             anim.SetBool("holdSpell", true);
             anim.CrossFade("Armature|RightHandGrab", 0.5f);
+            audioSource.PlayOneShot(ChargeSound);
+            audioSource.PlayDelayed(ChargeSound.length);
         }
 
         public void PulseRightHand()
@@ -106,6 +131,8 @@ namespace MastersOfTempest.PlayerControls
 
         public void ReleaseSpell()
         {
+            audioSource.Stop();
+            audioSource.PlayOneShot(ReleaseSound);
             anim.SetBool("holdSpell", false);
         }
     }
