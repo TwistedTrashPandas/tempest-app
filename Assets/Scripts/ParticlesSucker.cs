@@ -28,7 +28,7 @@ namespace MastersOfTempest
         {
             if (!currentToken?.CancellationRequested ?? false)
             {
-                throw new InvalidOperationException("Cannot start new channeling before ending previous!");
+                currentToken.CancellationRequested = true;
             }
             currentToken = cancellationToken;
             StartCoroutine(ChannelCoroutine(target, currentToken));

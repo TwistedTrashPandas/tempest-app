@@ -85,7 +85,7 @@ namespace MastersOfTempest.ShipBL
             //TODO: animation for being charged/not charged
             CurrentCharge = chargeType;
             glowObj.GlowColor = CurrentCharge.CorrespondingColor();
-            glowObj.TurnGlowOn();
+            glowObj.ChangeColorIfGlowing();
             mat.material.color = CurrentCharge.CorrespondingColor();;
             Debug.Log($"Received charge {CurrentCharge}");
         }
