@@ -76,15 +76,21 @@ namespace MastersOfTempest.ShipBL
                     targetView = rb.velocity.normalized;
                     targetView.y /= 4f;
 
-                    transform.LookAt(Vector3.Lerp(transform.forward, targetView, Time.fixedDeltaTime * angularMomentumFactor) + transform.position);
 
-                    targetView.y = 0f;
-                    Vector3 currForward = transform.forward;
-                    currForward.y = 0f;
+                    if (Vector3.Dot(transform.forward, rb.velocity.normalized) >= -0.1f)
+                    {
+                        transform.LookAt(Vector3.Lerp(transform.forward, targetView, Time.fixedDeltaTime * angularMomentumFactor) + transform.position);
+                    }
 
-                    float angle = Vector3.SignedAngle(targetView, currForward, Vector3.up) / 1.5f;
+                    if (Vector3.Dot(transform.forward, rb.velocity.normalized) >= -0.1f)
+                    {
+                        targetView.y = 0f;
+                        Vector3 currForward = transform.forward;
+                        currForward.y = 0f;
 
-                    transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, angle), Time.fixedDeltaTime * 8f);
+                        float angle = Vector3.SignedAngle(targetView, currForward, Vector3.up) / 1.5f;
+                        transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(transform.localRotation.eulerAngles.x, transform.localRotation.eulerAngles.y, angle), Time.fixedDeltaTime * 15f);
+                    }
                 }
             }
         }

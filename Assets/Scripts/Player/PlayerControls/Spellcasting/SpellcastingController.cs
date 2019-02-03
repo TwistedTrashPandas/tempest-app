@@ -18,7 +18,7 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
         /// </summary>
         public event EventHandler SpellCasted;
 
-        private const float SpellCheckFrequency = 2.5f;
+        private const float SpellCheckFrequency = 10f;
 
         private bool isActive;
 

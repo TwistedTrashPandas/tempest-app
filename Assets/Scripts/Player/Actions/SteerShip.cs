@@ -5,7 +5,7 @@ namespace MastersOfTempest.PlayerControls
 {
     public class SteerShip : PlayerAction
     {
-        const float SteeringForceValue = 1500f;
+        const float SteeringForceValue = 1000f;
         public enum SteeringDirection
         {
             Left,
@@ -13,7 +13,9 @@ namespace MastersOfTempest.PlayerControls
             Forward,
             Backward,
             Up,
-            Down
+            Down,
+            HardLeft,
+            HardRight
         }
 
         private SteeringDirection direction;
@@ -35,21 +37,21 @@ namespace MastersOfTempest.PlayerControls
 
             if (this.newSpellCast)
                 ship.StoreRotation();
-            else
-            {
-                ship.transform.rotation = ship.GetLastRotation();
-                ship.transform.rotation = Quaternion.Euler(0f, ship.transform.rotation.y, 0f);
-            }
+            
+            ship.transform.rotation = ship.GetLastRotation();
+            ship.transform.rotation = Quaternion.Euler(0f, ship.transform.rotation.eulerAngles.y, 0f);
             //ship.transform.rotation = originalRotation; // Quaternion.Euler(0f, rotBefore.eulerAngles.y, 0f);
 
             switch (direction)
             {
-                case SteeringDirection.Left: forceDirection = -ship.transform.right; break;
-                case SteeringDirection.Right: forceDirection = ship.transform.right; break;
+                case SteeringDirection.Left: forceDirection = Vector3.Normalize(-ship.transform.right + ship.transform.forward); break;
+                case SteeringDirection.Right: forceDirection = Vector3.Normalize(ship.transform.right + ship.transform.forward); break;
+                case SteeringDirection.HardLeft: forceDirection = -ship.transform.right; break;
+                case SteeringDirection.HardRight: forceDirection = ship.transform.right; break;
                 case SteeringDirection.Forward: forceDirection = ship.transform.forward; break;
                 case SteeringDirection.Backward: forceDirection = -ship.transform.forward; break;
-                case SteeringDirection.Up: forceDirection = ship.transform.up * 2f; break;
-                case SteeringDirection.Down: forceDirection = -ship.transform.up * 2f; break;
+                case SteeringDirection.Up: forceDirection = ship.transform.up * 4f; break;
+                case SteeringDirection.Down: forceDirection = -ship.transform.up * 4f; break;
                 default: throw new InvalidOperationException($"Unknown value {nameof(SteeringDirection)} of {direction}");
             }
 
@@ -59,7 +61,7 @@ namespace MastersOfTempest.PlayerControls
 
             ship.transform.rotation = rotBefore;
 
-            ship.GetShipForceManipulator().AddForce(forceDirection * SteeringForceValue, .5f);
+            ship.GetShipForceManipulator().AddForce(forceDirection.normalized * SteeringForceValue, .5f);
         }
     }
 }

@@ -102,9 +102,15 @@ namespace MastersOfTempest.PlayerControls
                         direction = ship.transform.forward;
                         break;
                     case "Right halfwind":
-                        direction = ship.transform.right;
+                        direction = (ship.transform.right + ship.transform.forward).normalized;
                         break;
                     case "Left halfwind":
+                        direction = (-ship.transform.right+ ship.transform.forward).normalized;
+                        break;
+                    case "Right wind":
+                        direction = ship.transform.right;
+                        break;
+                    case "Left wind":
                         direction = -ship.transform.right;
                         break;
                     case "Go UP!":

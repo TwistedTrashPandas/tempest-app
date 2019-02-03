@@ -49,7 +49,7 @@ namespace MastersOfTempest.ShipBL
             }
             context.Register(this);
             currentStatus = new ShipStatus();
-            lastRotation = Quaternion.identity;
+            lastRotation = this.transform.rotation;
             currentStatus.ActionRequest += ExecuteAction;
         }
 
@@ -114,7 +114,7 @@ namespace MastersOfTempest.ShipBL
 
         public void StoreRotation()
         {
-            lastRotation = transform.rotation;
+            lastRotation = this.transform.rotation;
         }
 
         public Quaternion GetLastRotation()

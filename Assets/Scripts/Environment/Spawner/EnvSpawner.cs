@@ -277,7 +277,7 @@ namespace MastersOfTempest.Environment.Interacting
                             if ((int)currEnvObject.moveType <= 1)
                                 currEnvObject.GetComponent<Rigidbody>().constraints |= (RigidbodyConstraints.FreezePositionY);
                             randOffset = GetRandomPointOnSphere(minRadiusS * 1.5f, maxRadiusS * 1.1f, numRings > 0);
-                            dmg.damage = 0.35f * randomSize;
+                            dmg.damage = 0.25f * randomSize;
                             currEnvObject.SetMass(randomSize);
                         }
 
