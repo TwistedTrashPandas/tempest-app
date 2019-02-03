@@ -143,7 +143,7 @@ namespace MastersOfTempest.Environment.Interacting
                 if (startObjects == maxNumObjects) 
                     radius = Mathf.Min(Mathf.Min(Mathf.Floor(Mathf.Pow(envObjects.Count, 2.0f) / numRings), numRings) * stepSize, Vector3.Distance(shipPos, centerWS)) + minRadius;
                 else
-                    radius = Mathf.Min(Random.Range(2, numRings + 2) * stepSize, Vector3.Distance(shipPos, centerWS)) + minRadius;
+                    radius = Mathf.Min(Random.Range(2, numRings - 1) * stepSize, Vector3.Distance(shipPos, centerWS) * 1.1f) + minRadius;
             }
             sinBeta *= radius;
             return new Vector3(Mathf.Cos(alpha) * sinBeta, Mathf.Cos(beta) * radius, Mathf.Sin(alpha) * sinBeta);
@@ -265,22 +265,22 @@ namespace MastersOfTempest.Environment.Interacting
                             randomSize = Random.Range(0.5f, 1.5f);
                             currEnvObject.moveType = (MoveType.Direct); //((Random.Range(2, 4) >= 3) ? 3 : 2);
                             currEnvObject.speed *= 0.5f;
-                            randOffset = GetRandomPointOnSphere(minRadiusS, maxRadiusS, numRings > 0);
-                            dmg.damage = 0.25f * randomSize;
+                            randOffset = GetRandomPointOnSphere(minRadiusS, maxRadiusS * 2f);
+                            dmg.damage = 0.22f * randomSize;
                         }
                         else
                         {
                             randomSize = Random.Range(15f, 25f);
                             currEnvObject.speed *= 0.01f;
                             if (Random.Range(0,7) == 0)
-                                currEnvObject.speed *= 8f;
+                               currEnvObject.speed *= 100f;
                             dmg.health = randomSize;
 
-                            currEnvObject.moveType = (MoveType)((Random.Range(0, 3) <= 1) ? 0 : 2); // MoveType.ForceDirect; // 
+                            currEnvObject.moveType = MoveType.ForceDirect; // (MoveType)((Random.Range(0, 3) <= 1) ? 0 : 2); // MoveType.ForceDirect; // 
                             if ((int)currEnvObject.moveType <= 1)
                                 currEnvObject.GetComponent<Rigidbody>().constraints |= (RigidbodyConstraints.FreezePositionY);
-                            randOffset = GetRandomPointOnSphere(minRadiusS * 1.4f, maxRadiusS * 1.1f, numRings > 0);
-                            dmg.damage = 0.45f * randomSize;
+                            randOffset = GetRandomPointOnSphere(minRadiusS * 1.4f, maxRadiusS * 0.9f, numRings > 0);
+                            dmg.damage = 0.4f * randomSize;
                             currEnvObject.SetMass(randomSize);
                         }
 
@@ -302,7 +302,7 @@ namespace MastersOfTempest.Environment.Interacting
                         break;
                     case EnvObjectType.DangerZone:
                         initialPos = new Vector3(Random.Range(0, dims.x) * cellSizeH, 0f, Random.Range(0, dims.z) * cellSizeH) + new Vector3(0.5f, 0.5f, 0.5f);
-                        initialPos.y = Mathf.Clamp(gamemaster.GetShip().transform.position.y + RandomGaussian.NextGaussian(0, 0.66f, -1f, 1f) * dims.y * cellSize * 0.25f, dims.y * cellSize * 0.05f, dims.y * cellSize * 0.85f);
+                        initialPos.y = Mathf.Clamp(gamemaster.GetShip().transform.position.y + RandomGaussian.NextGaussian(0, 0.6f, -1f, 1f) * dims.y * cellSize * 0.25f, dims.y * cellSize * 0.05f, dims.y * cellSize * 0.85f);
                         prefabNum = Mathf.FloorToInt(Random.Range(0f, dangerzonesPrefabs.Length - Mathf.Epsilon));
                         envObjects.Add(GameObject.Instantiate(dangerzonesPrefabs[prefabNum], initialPos, orientation).GetComponent<EnvObject>());
                         Destroy(envObjects[envObjects.Count - 1].GetComponent<ParticleSystem>());
@@ -310,7 +310,7 @@ namespace MastersOfTempest.Environment.Interacting
                         break;
                     case EnvObjectType.VoiceChatZone:
                         initialPos = new Vector3(Random.Range(0, dims.x) * cellSizeH, 0f, Random.Range(0, dims.z) * cellSizeH) + new Vector3(0.5f, 0.5f, 0.5f);
-                        initialPos.y = Mathf.Clamp(gamemaster.GetShip().transform.position.y + RandomGaussian.NextGaussian(0, 0.66f, -1f, 1f) * dims.y * cellSize * 0.25f, dims.y * cellSize * 0.05f, dims.y * cellSize * 0.85f);
+                        initialPos.y = Mathf.Clamp(gamemaster.GetShip().transform.position.y + RandomGaussian.NextGaussian(0, 0.6f, -1f, 1f) * dims.y * cellSize * 0.25f, dims.y * cellSize * 0.05f, dims.y * cellSize * 0.85f);
                         prefabNum = Mathf.FloorToInt(Random.Range(0f, voiceChatZonesPrefabs.Length - Mathf.Epsilon));
                         envObjects.Add(GameObject.Instantiate(voiceChatZonesPrefabs[prefabNum], initialPos, orientation).GetComponent<EnvObject>());
                         envObjects[envObjects.Count - 1].moveType = MoveType.Static;

@@ -13,8 +13,8 @@ namespace MastersOfTempest.ShipBL
         public event EventHandler ShipPartHit;
         public ShipPartArea interactionArea;
         private const float cutOffDist = 10.0f;
-        private const float impulseScaling = 1.0f;
-        private const float maxDisplacementDist = 0.6f;
+        private const float impulseScaling = 0.66f;
+        private const float maxDisplacementDist = 0.5f;
         /// <summary>
         /// destruction == 0:   ship part fully repaired
         ///             == 1:   ship part fully destroyed
@@ -70,7 +70,7 @@ namespace MastersOfTempest.ShipBL
         {
             // transfer damage to next shippart
             if (Mathf.Approximately(destruction, 1.0f) && destruc > 0.05f)
-                nextAreaPart.ResolveCollision(destruc / 2f, contactPoints, impulse / 2f);
+                nextAreaPart.ResolveCollision((destruc - 0.5f), contactPoints, impulse / 2f);
             else
             {
                 if ((status & ShipPartStatus.Fragile) == ShipPartStatus.Fragile)
@@ -83,7 +83,7 @@ namespace MastersOfTempest.ShipBL
 
                 // transfer damage to next ship part
                 if (destruc > 1.05f)
-                    nextAreaPart.ResolveCollision(destruc - 1.0f, contactPoints, impulse / 2f);
+                    nextAreaPart.ResolveCollision((destruc - 0.5f) / 1.5f, contactPoints, impulse / 2f);
             }
         }
 
@@ -168,7 +168,7 @@ namespace MastersOfTempest.ShipBL
 
 
                 // crash sound, played locally at ship part
-                audioSource.PlayOneShot(crashSound,Mathf.Clamp(Mathf.Clamp01(destruc) / 2.0f, 0.15f, 0.45f));
+                audioSource.PlayOneShot(crashSound, Mathf.Clamp(Mathf.Clamp01(destruc) / 2.0f, 0.15f, 0.45f));
 
                 // next 12 bytes are the values for the impulse vector
                 Vector3 impulse = new Vector3(BitConverter.ToSingle(data, 4), BitConverter.ToSingle(data, 8), BitConverter.ToSingle(data, 12));

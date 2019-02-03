@@ -107,7 +107,7 @@ Shader "Custom/StandardWithDestructionVal"
 
 			// Colors hard coded
 			half4 frag(VertexOutputForwardBase i) : SV_TARGET{
-				return lerp(lerp(fragForwardBaseInternal(i), _ColorInterp2, min(_fDestruction * 2.0f,1.0f)), _ColorInterp1, min(max(0.0f, _fDestruction - 0.5f)*4.0f,1.0f));
+				return lerp(saturate(lerp(fragForwardBaseInternal(i), _ColorInterp2, min(_fDestruction * 2.0,1.0))), _ColorInterp1, min(max(0.0, _fDestruction - 0.15)*1.6, 1.0));
 			}
 			ENDCG
 		}
@@ -285,7 +285,7 @@ Shader "Custom/StandardWithDestructionVal"
 
 			// Colors hard coded
 			half4 frag(VertexOutputForwardBase i) : SV_TARGET{
-				return lerp(lerp(fragForwardBaseInternal(i), _ColorInterp2, min(_fDestruction * 2.0f,1.0f)), _ColorInterp1, min(max(0.0f, _fDestruction - 0.5f)*4.0f,1.0f));
+				return lerp(lerp(fragForwardBaseInternal(i), _ColorInterp2, min(_fDestruction * 1.0f, 1.0f)), _ColorInterp1, min(max(0.0f, _fDestruction - 0.25f)*10.0, 1.0f));
 			}
 			ENDCG
 		}

@@ -2851,8 +2851,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.000038442395, y: 0.042191263, z: 0.011788193}
-  m_Center: {x: -6.941036e-17, y: 0.01281028, z: -0.0041148006}
+  m_Size: {x: 0.000038442395, y: 0.042191263, z: 0.011523178}
+  m_Center: {x: -1.0334897e-16, y: 0.012810279, z: -0.0006279608}
 --- !u!82 &2053417456833783454
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3590,7 +3590,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 0
-  interactionArea: 0
+  interactionArea: 2
   destruction: 0
   status: 0
   crashSound: {fileID: 0}
@@ -4193,8 +4193,8 @@ GameObject:
   - component: {fileID: 7952002934640848463}
   - component: {fileID: 3765198654847723288}
   - component: {fileID: 704969996273817691}
-  - component: {fileID: 2014922415753319222}
   - component: {fileID: 1076460891682493488}
+  - component: {fileID: 3938917523903007696}
   m_Layer: 0
   m_Name: MiddleSailBack
   m_TagString: Ship
@@ -4304,19 +4304,6 @@ MonoBehaviour:
   status: 0
   crashSound: {fileID: 0}
   nextAreaPart: {fileID: 0}
---- !u!65 &2014922415753319222
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7952002934638850063}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.000038442395, y: 0.042191263, z: 0.011788193}
-  m_Center: {x: -6.941036e-17, y: 0.01281028, z: -0.0041148006}
 --- !u!82 &1076460891682493488
 AudioSource:
   m_ObjectHideFlags: 0
@@ -4431,6 +4418,20 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!64 &3938917523903007696
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7952002934638850063}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 4300080, guid: e7d9f0ef9705de647ae4b54b0d58bde2, type: 3}
 --- !u!1 &7952002934638850065
 GameObject:
   m_ObjectHideFlags: 0
@@ -14282,7 +14283,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 0
-  interactionArea: 0
+  interactionArea: 1
   destruction: 0
   status: 0
   crashSound: {fileID: 0}
@@ -14534,7 +14535,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 0
-  interactionArea: 0
+  interactionArea: 1
   destruction: 0
   status: 0
   crashSound: {fileID: 0}
@@ -14992,7 +14993,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 0
-  interactionArea: 0
+  interactionArea: 1
   destruction: 0
   status: 0
   crashSound: {fileID: 0}
@@ -15243,7 +15244,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 0
-  interactionArea: 0
+  interactionArea: 1
   destruction: 0
   status: 0
   crashSound: {fileID: 0}
@@ -16635,8 +16636,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.020974668, y: 0.008734812, z: 0.014108814}
-  m_Center: {x: -0.00025468942, y: -0.028932825, z: 0.00019703194}
+  m_Size: {x: 0.020974666, y: 0.00767444, z: 0.012522781}
+  m_Center: {x: -0.00025469004, y: -0.028402625, z: 0.0009900504}
 --- !u!65 &6309402829833852027
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -16648,8 +16649,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.022151463, y: 0.021040509, z: 0.011079045}
-  m_Center: {x: -0.0000025176942, y: 0.029326247, z: -0.0026929236}
+  m_Size: {x: 0.012721931, y: 0.016524583, z: 0.011216637}
+  m_Center: {x: -0.0012989495, y: 0.027068246, z: -0.0027617137}
 --- !u!65 &5934511904531938059
 BoxCollider:
   m_ObjectHideFlags: 0
