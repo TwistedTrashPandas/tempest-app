@@ -247,7 +247,8 @@ namespace MastersOfTempest.PlayerControls
 
         private void OnGUI()
         {
-            GUI.DrawTexture(new Rect(Screen.width / 2, Screen.height / 2, Screen.width / 100, Screen.height / 100), Texture2D.whiteTexture, ScaleMode.ScaleToFit);
+            GUI.color = Color.grey;
+            GUI.DrawTexture(new Rect(Screen.width / 2, Screen.height / 2, Screen.width / 200, Screen.height / 200), Texture2D.whiteTexture, ScaleMode.ScaleToFit);
         }
     }
 }
