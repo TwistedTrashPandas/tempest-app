@@ -90,6 +90,10 @@ namespace MastersOfTempest
                 context.SetCurrentPlayer(this);
                 GetPlayerCameraController().Initialize();
             }
+            else
+            {
+                Destroy(GetPlayerCameraController());
+            }
         }
 
         private void ExecutePlayerAction(object sender, EventArgs e)

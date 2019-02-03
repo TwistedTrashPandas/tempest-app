@@ -4,7 +4,8 @@
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: HologramColor
   m_ImageContentsHash:
     serializedVersion: 2
@@ -14,7 +15,7 @@ RenderTexture:
   m_Width: 512
   m_Height: 512
   m_AntiAliasing: 1
-  m_DepthFormat: 2
+  m_DepthFormat: 0
   m_ColorFormat: 0
   m_MipMap: 0
   m_GenerateMips: 1
