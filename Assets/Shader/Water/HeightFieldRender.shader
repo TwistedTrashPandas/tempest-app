@@ -223,13 +223,23 @@ Shader "Custom/HeightFieldRender" {
 				//f = 1.0f - f;
 				//return float4(f, 0, 0, 1.0f);
 				//	if an object is close -> change color
-				/*if (diff < g_DepthVisible) {
+
+				if (diff < g_DepthVisible) {
 					diff /= g_DepthVisible;
 					if (diff < g_FoamDepth)
 						return float4(1.0f, 1.0f, 1.0f, 1.0f);
-					return lerp((lerp(g_DepthColor, i.lightingColor, float4(diff, diff, diff, diff))), refl, float4(g_Reflection, g_Reflection, g_Reflection, 0.0f));
-				}*/
-				float4 f4Color = lerp(i.lightingColor, refl,  float4(g_Reflection, g_Reflection, g_Reflection, 0.0f));
+
+					float4 f4Color2 = lerp((lerp(g_DepthColor, i.lightingColor, float4(diff, diff, diff, diff))), refl, float4(g_Reflection, g_Reflection, g_Reflection, 0.0f));
+					f4Color2.a = 1.0f;
+
+					UNITY_APPLY_FOG(i.fogCoord, f4Color2);
+
+					UNITY_OPAQUE_ALPHA(f4Color2.a);
+
+					return f4Color2;
+				}
+
+				float4 f4Color = lerp(i.lightingColor, refl, float4(g_Reflection, g_Reflection, g_Reflection, 0.0f));
 
 				f4Color = lerp(f4Color, refr, float4(f, f, f, 0.0f));
 				f4Color.a = 1.0f;
