@@ -77,6 +77,7 @@ namespace MastersOfTempest.PlayerControls
             {
                 currentState = WizardState.Charged;
                 currentChargeType = chargeType;
+                StartedCharging?.Invoke(this, new ChargingEventArgs(currentChargeType));
                 ChargingCompleted?.Invoke(this, new ChargingEventArgs(currentChargeType));
             }
             else

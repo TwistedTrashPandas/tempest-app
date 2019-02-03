@@ -114,7 +114,6 @@ namespace MastersOfTempest.PlayerControls
             var token = new CoroutineCancellationToken();
             armsController.FeedPS.GetComponent<ParticleSystem>().startLifetime = 0.25f;
             StartCoroutine(token.TimedCancel(.25f));
-            print(WizardInput.GetCurrentInteractable().transform);
             armsController.FeedPS.StartChannel(WizardInput.GetCurrentInteractable().transform, token);
             Debug.Log("Animation for discharge hit showed");
         }
