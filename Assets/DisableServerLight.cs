@@ -10,5 +10,7 @@ public class DisableServerLight : MonoBehaviour
     {
         if (GetComponent<ServerObject>().onServer)
             GetComponent<Light>().enabled = false;
+        else
+            GetComponent<Light>().cullingMask = 1 << LayerMask.NameToLayer("Client");
     }
 }

@@ -55,6 +55,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1
@@ -99,7 +100,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 2
   winFont: {fileID: 12800000, guid: 8ab0ce2e6f48833498113fbe6c368708, type: 3}
-  radiusCollider: 75
+  radiusCollider: 100
+  timeZoom: 1
+  skybox: {fileID: 2100000, guid: 3bc8bc0b38a2a134590088c19ebe756c, type: 2}
 --- !u!114 &910838310309382196
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -113,5 +116,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 3
-  overallDestructionThreshold: 0.75
+  overallDestructionThreshold: 0.7
   loseFont: {fileID: 12800000, guid: 8ab0ce2e6f48833498113fbe6c368708, type: 3}

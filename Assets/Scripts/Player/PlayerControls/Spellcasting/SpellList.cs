@@ -13,7 +13,9 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
             //new ShieldSpell(),
             new SlowdownSpell(),
             new SteerLeftSpell(),
+            new SteerHardLeftSpell(),
             new SteerRightSpell(),
+            new SteerHardRightSpell(),
             new SteerUpSpell(),
             new SteerDownSpell()
             // new SuperVisionSpell()

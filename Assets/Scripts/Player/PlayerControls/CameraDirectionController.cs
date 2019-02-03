@@ -219,7 +219,7 @@ namespace MastersOfTempest.PlayerControls
             const float MoveDurationFraction = MoveDuration / durationFraction;
             Transform cameraTransform = FirstPersonCamera.transform;
             Vector3 localPosBefore = cameraTransform.localPosition;
-            Vector3 localTargetPos = localPosBefore + direction * Mathf.Min(intensity, maxMovementDistance);
+            Vector3 localTargetPos = localPosBefore + cameraTransform.InverseTransformDirection(direction * Mathf.Min(intensity, maxMovementDistance));
 
             float timeElapsed = 0f;
 

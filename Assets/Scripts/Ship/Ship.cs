@@ -10,12 +10,13 @@ namespace MastersOfTempest.ShipBL
     [RequireComponent(typeof(ForceManilpulator))]
     public class Ship : NetworkBehaviour
     {
-        private const float freezingSlowDown = 0.3f;
+        private const float freezingSlowDown = 0.25f;
         private Gamemaster context;
         private ForceManilpulator forceManipulator;
         private ShipPartManager shipPartManager;
         private ShipTornadoInteraction shipTornInteraction;
         private ShipStatus currentStatus;
+        private Quaternion lastRotation;
 
         private struct RepairShipPartAreaMessage
         {
@@ -48,6 +49,7 @@ namespace MastersOfTempest.ShipBL
             }
             context.Register(this);
             currentStatus = new ShipStatus();
+            lastRotation = this.transform.rotation;
             currentStatus.ActionRequest += ExecuteAction;
         }
 
@@ -108,6 +110,16 @@ namespace MastersOfTempest.ShipBL
         {
             var action = ((ActionMadeEventArgs)args).Action;
             action.Execute(context);
+        }
+
+        public void StoreRotation()
+        {
+            lastRotation = this.transform.rotation;
+        }
+
+        public Quaternion GetLastRotation()
+        {
+            return lastRotation;
         }
 
         public void DestroyShip()

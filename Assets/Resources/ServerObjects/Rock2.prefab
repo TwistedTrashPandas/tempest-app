@@ -66,13 +66,15 @@ MonoBehaviour:
   relativeTargetPos: {x: 0, y: 0, z: 0}
   type: 0
   speed: 35
-  closestDistance: 20
+  closestDistance: 17
   moveType: 2
   damage: 0
   health: 1
   splitForce: 10
   status: 0
   envSpawner: {fileID: 0}
+  onDestroyPrefab: {fileID: 5675785256453333004, guid: 24dba110ba52d794f9ef46e8cb399d9a,
+    type: 3}
 --- !u!114 &114395870487560930
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93,6 +95,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 0
   removeChildRigidbodies: 1

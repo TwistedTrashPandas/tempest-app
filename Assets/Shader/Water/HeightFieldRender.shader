@@ -30,7 +30,7 @@ Shader "Custom/HeightFieldRender" {
 		[HideInInspector] _ReflectionTex("Internal Reflection", 2D) = "" {}
 	}
 		SubShader{
-		Tags { "Queue" = "Transparent" "IgnoreProjector" = "True" "RenderMode" = "Transparent" }
+		Tags { "Queue" = "Geometry" "IgnoreProjector" = "True" }
 
 		CGINCLUDE
 
@@ -85,6 +85,7 @@ Shader "Custom/HeightFieldRender" {
 			float4 worldPos : TEXCOORD2;
 			float2 uv : TEXCOORD3;
 			//SHADOW_COORDS(3)
+			UNITY_FOG_COORDS(4)
 		};
 
 		v2g vert(appdata v)
@@ -106,6 +107,7 @@ Shader "Custom/HeightFieldRender" {
 			maxWidth *= g_iWidth;
 			o.uv = float2(pos.x / (maxWidth), pos.z / (maxDepth));
 			//TRANSFER_SHADOW(o);
+			UNITY_TRANSFER_FOG(o, o.vertex);
 			return o;
 		}
 
@@ -172,7 +174,7 @@ Shader "Custom/HeightFieldRender" {
 			//	pass for directional lights
 		Pass {
 				ZWrite On
-				Cull Back
+				Cull Off
 				Blend SrcAlpha OneMinusSrcAlpha
 
 				Tags{ "LightMode" = "ForwardBase" }
@@ -182,6 +184,7 @@ Shader "Custom/HeightFieldRender" {
 
 				#pragma multi_compile_fwdbase 
 				#pragma vertex vert
+				#pragma multi_compile_fog
 				//#pragma geometry geom
 				#pragma fragment frag
 
@@ -220,14 +223,22 @@ Shader "Custom/HeightFieldRender" {
 				//f = 1.0f - f;
 				//return float4(f, 0, 0, 1.0f);
 				//	if an object is close -> change color
-				if (diff < g_DepthVisible) {
+				/*if (diff < g_DepthVisible) {
 					diff /= g_DepthVisible;
 					if (diff < g_FoamDepth)
 						return float4(1.0f, 1.0f, 1.0f, 1.0f);
 					return lerp((lerp(g_DepthColor, i.lightingColor, float4(diff, diff, diff, diff))), refl, float4(g_Reflection, g_Reflection, g_Reflection, 0.0f));
-				}
-				i.lightingColor = lerp(i.lightingColor, refl,  float4(g_Reflection, g_Reflection, g_Reflection, 0.0f));
-				return lerp(i.lightingColor, refr, float4(f, f, f, 0.0f));
+				}*/
+				float4 f4Color = lerp(i.lightingColor, refl,  float4(g_Reflection, g_Reflection, g_Reflection, 0.0f));
+
+				f4Color = lerp(f4Color, refr, float4(f, f, f, 0.0f));
+				f4Color.a = 1.0f;
+
+				UNITY_APPLY_FOG(i.fogCoord, f4Color);
+
+				UNITY_OPAQUE_ALPHA(f4Color.a);
+
+				return f4Color;
 			}
 
 			half3 BlinnPhong(half3 lightDir, half3 normal, half3 viewDir) {
