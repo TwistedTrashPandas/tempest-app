@@ -77,12 +77,12 @@ namespace MastersOfTempest.ShipBL
                     targetView.y /= 4f;
 
 
-                    if (Vector3.Dot(transform.forward, rb.velocity.normalized) >= -0.1f)
+                    if (Vector3.Dot(transform.forward, rb.velocity.normalized) >= -0.01f)
                     {
                         transform.LookAt(Vector3.Lerp(transform.forward, targetView, Time.fixedDeltaTime * angularMomentumFactor) + transform.position);
                     }
 
-                    if (Vector3.Dot(transform.forward, rb.velocity.normalized) >= -0.1f)
+                    if (Vector3.Dot(transform.forward, rb.velocity.normalized) >= -0.01f)
                     {
                         targetView.y = 0f;
                         Vector3 currForward = transform.forward;
