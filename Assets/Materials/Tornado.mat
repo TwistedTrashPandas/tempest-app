@@ -144,8 +144,8 @@ Material:
     - g_fDensity: 1
     - g_fLightAttenuation: 1.1
     - g_fMaxHeight: 0
-    - g_fMaxTransparency: 1
-    - g_fMaxTransparencyDist: 500
+    - g_fMaxTransparency: 0.95
+    - g_fMaxTransparencyDist: 800
     - g_fMinHeight: 300
     - g_fMinTransparency: 0.8
     - g_fSize: 64

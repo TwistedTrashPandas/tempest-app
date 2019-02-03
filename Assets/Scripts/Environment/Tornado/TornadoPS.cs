@@ -500,7 +500,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             //Graphics.DrawMeshNow()
         }*/
 
-        void OnApplicationQuit()
+        void OnDestroy()
         {
             // releasing compute buffers
             particleVelCB.Release();

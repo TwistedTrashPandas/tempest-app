@@ -68,9 +68,9 @@ MonoBehaviour:
   dampingFactorForce: 0
   maximumObjVelocity: 30
   maxLargeObjVelocity: 20
-  spawnProbD: 0.95
-  spawnProbS: 0.025
-  spawnProbZ: 0.025
+  spawnProbD: 0.92
+  spawnProbS: 0.04
+  spawnProbZ: 0.04
   rockRotSpeed: 3
   minRadiusT: 3
   maxRadiusT: 10
