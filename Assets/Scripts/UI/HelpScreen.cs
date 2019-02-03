@@ -5,11 +5,29 @@ using UnityEngine.UI;
 
 public class HelpScreen : MonoBehaviour
 {
+    public static HelpScreen Instance = null;
+
     public KeyCode keyToPress = KeyCode.F1;
     public Image help;
     public Image hint;
 
     private Text hintText;
+
+    protected void Awake()
+    {
+        if (Instance == null)
+        {
+            DontDestroyOnLoad(gameObject);
+            Instance = this;
+        }
+        else
+        {
+            // Replace the already created hint screen with this one (otherwise the hint animation would not play when reloaded)
+            Destroy(Instance.gameObject);
+            DontDestroyOnLoad(gameObject);
+            Instance = this;
+        }
+    }
 
     void Start()
     {
