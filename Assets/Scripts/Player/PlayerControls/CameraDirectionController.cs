@@ -112,7 +112,7 @@ namespace MastersOfTempest.PlayerControls
             }
         }
 
-        protected override void StartClient()
+        public void Initialize()
         {
             FirstPersonCamera = Camera.main;
             if (FirstPersonCamera == null)
