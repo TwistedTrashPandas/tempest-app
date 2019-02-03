@@ -78,6 +78,7 @@ namespace MastersOfTempest.ShipBL
                         targetView = rb.velocity.normalized;
                         targetView.y /= 4f;
                         transform.LookAt(Vector3.Lerp(transform.forward, targetView, Time.fixedDeltaTime * angularMomentumFactor) + transform.position);
+
                         targetView.y = 0f;
                         Vector3 currForward = transform.forward;
                         currForward.y = 0f;
