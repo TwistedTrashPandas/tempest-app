@@ -340,6 +340,8 @@ MonoBehaviour:
   frontPage: {fileID: 226428178}
   backPage: {fileID: 1558917871}
   pageTextures:
+  - {fileID: 2800000, guid: 26e98ff1afd62cb4ba6e4e8223856b45, type: 3}
+  - {fileID: 2800000, guid: 6bc746b613cbed344b79cda9c49dc6c0, type: 3}
   - {fileID: 2800000, guid: 2976a06c6ffdd504bb9154cd69caaa0e, type: 3}
   - {fileID: 2800000, guid: 7ab140b86e246fd41b33f28490966664, type: 3}
   - {fileID: 2800000, guid: 4ef32456819816c40a55cd1149062701, type: 3}
