@@ -168,7 +168,7 @@ namespace MastersOfTempest.ShipBL
 
 
                 // crash sound, played locally at ship part
-                audioSource.PlayOneShot(crashSound,Mathf.Clamp(Mathf.Clamp01(destruc) / 2.0f, 0.35f, 1.25f));
+                audioSource.PlayOneShot(crashSound,Mathf.Clamp(Mathf.Clamp01(destruc) / 2.0f, 0.35f, 0.8f));
 
                 // next 12 bytes are the values for the impulse vector
                 Vector3 impulse = new Vector3(BitConverter.ToSingle(data, 4), BitConverter.ToSingle(data, 8), BitConverter.ToSingle(data, 12));
