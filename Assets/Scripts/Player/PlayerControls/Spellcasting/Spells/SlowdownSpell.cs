@@ -25,7 +25,7 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
 
         public override PlayerAction GetPlayerAction()
         {
-            return new SteerShip(SteerShip.SteeringDirection.Backward);
+            return new SteerShip(SteerShip.SteeringDirection.Backward, newSpellCast);
         }
 
         public override Color SpellColor

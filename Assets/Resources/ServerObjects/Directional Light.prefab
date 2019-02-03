@@ -44,7 +44,7 @@ Light:
   serializedVersion: 8
   m_Type: 1
   m_Color: {r: 0.764151, g: 0.7386225, b: 0.61636704, a: 1}
-  m_Intensity: 1
+  m_Intensity: 1.2
   m_Range: 10
   m_SpotAngle: 30
   m_CookieSize: 10
@@ -91,6 +91,7 @@ MonoBehaviour:
   children: []
   serverLayer: Server
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1

@@ -32,7 +32,7 @@ namespace MastersOfTempest.PlayerControls.Spellcasting
 
         public override PlayerAction GetPlayerAction()
         {
-            return new SteerShip(SteerShip.SteeringDirection.Forward);
+            return new SteerShip(SteerShip.SteeringDirection.Forward, newSpellCast);
         }
     }
 }

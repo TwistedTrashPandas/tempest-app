@@ -88,6 +88,11 @@ namespace MastersOfTempest
                 playerInput.Bootstrap();
                 playerInput.ActionMade += ExecutePlayerAction;
                 context.SetCurrentPlayer(this);
+                GetPlayerCameraController().Initialize();
+            }
+            else
+            {
+                Destroy(GetPlayerCameraController());
             }
         }
 

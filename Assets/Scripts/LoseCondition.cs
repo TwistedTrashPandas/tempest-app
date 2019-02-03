@@ -97,7 +97,7 @@ namespace MastersOfTempest
             if (toggleLossText)
             {
                 float up = 60f * Screen.height / Screen.height;
-                float right = 60f * Screen.width / Screen.width;
+                float right = 40f * Screen.width / Screen.width;
                 GUI.Label(new Rect(Screen.width / 2f - right, Screen.height / 2f - up, Screen.width / 10f, Screen.height / 10f), guiContent, guiStyle);
 
                 /*

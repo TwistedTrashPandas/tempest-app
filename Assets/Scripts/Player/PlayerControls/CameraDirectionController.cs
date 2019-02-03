@@ -83,13 +83,13 @@ namespace MastersOfTempest.PlayerControls
             }
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                Active ^= true;
+                // Active ^= true;
             }
         }
 
         protected override void UpdateClient()
         {
-            if(isActive)
+            if (isActive)
             {
                 var message = new LookAroundInputMessage(Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), ++messageNumber);
                 SendToServer(ByteSerializer.GetBytes(message), Facepunch.Steamworks.Networking.SendType.Unreliable);
@@ -103,7 +103,7 @@ namespace MastersOfTempest.PlayerControls
         protected override void OnServerReceivedMessageRaw(byte[] data, ulong steamID)
         {
             var message = ByteSerializer.FromBytes<LookAroundInputMessage>(data);
-            if(message.messageNumber > this.messageNumber)
+            if (message.messageNumber > this.messageNumber)
             {
                 this.messageNumber = message.messageNumber;
                 yaw += speedH * message.horizontal;
@@ -112,7 +112,7 @@ namespace MastersOfTempest.PlayerControls
             }
         }
 
-        protected override void StartClient()
+        public void Initialize()
         {
             FirstPersonCamera = Camera.main;
             if (FirstPersonCamera == null)
@@ -127,15 +127,17 @@ namespace MastersOfTempest.PlayerControls
             switch (role)
             {
                 case PlayerRole.Wizard:
-                    FirstPersonCamera.cullingMask |= LayerMask.NameToLayer("ClientApprentice");
+                    FirstPersonCamera.cullingMask |= 1 << LayerMask.NameToLayer("ClientApprentice");
                     break;
                 case PlayerRole.Apprentice:
-                    FirstPersonCamera.cullingMask |= LayerMask.NameToLayer("ClientWizard");
+                    FirstPersonCamera.cullingMask |= 1 << LayerMask.NameToLayer("ClientWizard");
                     break;
                 case PlayerRole.Spectator:
-                    FirstPersonCamera.cullingMask |= LayerMask.NameToLayer("ClientWizard");
-                    FirstPersonCamera.cullingMask |= LayerMask.NameToLayer("ClientApprentice");
+                    FirstPersonCamera.cullingMask |= 1 << LayerMask.NameToLayer("ClientWizard");
+                    FirstPersonCamera.cullingMask |= 1 << LayerMask.NameToLayer("ClientApprentice");
                     break;
+                default:
+                    throw new System.InvalidOperationException("Role of players have to be set!");
             }
             Active = true;
         }
@@ -219,7 +221,7 @@ namespace MastersOfTempest.PlayerControls
             const float MoveDurationFraction = MoveDuration / durationFraction;
             Transform cameraTransform = FirstPersonCamera.transform;
             Vector3 localPosBefore = cameraTransform.localPosition;
-            Vector3 localTargetPos = localPosBefore + direction * Mathf.Min(intensity, maxMovementDistance);
+            Vector3 localTargetPos = localPosBefore + cameraTransform.InverseTransformDirection(direction * Mathf.Min(intensity, maxMovementDistance));
 
             float timeElapsed = 0f;
 
@@ -229,7 +231,7 @@ namespace MastersOfTempest.PlayerControls
                 float deltaTime = Time.unscaledDeltaTime;
                 timeElapsed += deltaTime;
                 cameraTransform.transform.localPosition = Vector3.Slerp(localPosBefore, localTargetPos, timeElapsed / MoveDurationFraction);
-               // localTargetPos = cameraTransform.InverseTransformDirection(direction * Mathf.Min(intensity, maxMovementDistance));
+                // localTargetPos = cameraTransform.InverseTransformDirection(direction * Mathf.Min(intensity, maxMovementDistance));
             }
             timeElapsed = MoveDurationFraction;
             while (timeElapsed < MoveDuration)
@@ -238,7 +240,7 @@ namespace MastersOfTempest.PlayerControls
                 float deltaTime = Time.unscaledDeltaTime;
                 timeElapsed += deltaTime;
                 cameraTransform.transform.localPosition = Vector3.Lerp(localTargetPos, localPosBefore, (timeElapsed - MoveDurationFraction) / (MoveDuration - MoveDurationFraction));
-               // localTargetPos = cameraTransform.InverseTransformDirection(direction * Mathf.Min(intensity, maxMovementDistance));
+                // localTargetPos = cameraTransform.InverseTransformDirection(direction * Mathf.Min(intensity, maxMovementDistance));
             }
             cameraTransform.transform.localPosition = localPosBefore;
         }
