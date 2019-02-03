@@ -159,6 +159,11 @@ namespace MastersOfTempest.Environment.VisualEffects
             particleVel = new Vector3[numberParticles];
             particleIdx = new int[numberParticles];
             Vector3 center = vectorField.GetCenterWS();
+
+            Transform[] children = GetComponentsInChildren<Transform>();
+            if (children.Length > 1)
+                children[1].transform.position = center;
+
             center.y = height;
             for (int i = 0; i < numberParticles; i++)
             {
@@ -229,7 +234,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             dims[0] = temp.x;
             dims[1] = temp.y;
             dims[2] = temp.z;
-            float[] cellsizes = {vectorField.GetHorizontalCellSize(), vectorField.GetCellSize(), vectorField.GetHorizontalCellSize() };
+            float[] cellsizes = { vectorField.GetHorizontalCellSize(), vectorField.GetCellSize(), vectorField.GetHorizontalCellSize() };
             maxDist = temp.x * vectorField.GetHorizontalCellSize() * 3.5f;
             float[] center = new float[3];
             center[0] = (temp.x - 1) * 0.5f * cellsizes[0];
@@ -263,7 +268,7 @@ namespace MastersOfTempest.Environment.VisualEffects
             material.SetFloat("g_fMaxHeight", dims[1] * cellsizes[1]);
             //material.SetFloatArray("g_i3Dimensions", dims);
             material.SetVector("g_vCenter", new Vector4(center[0], center[1], center[2], 1.0f));
-            material.SetFloat("g_fTopHeight",  dims[1] * cellsizes[1] * 1.05f);
+            material.SetFloat("g_fTopHeight", dims[1] * cellsizes[1] * 1.05f);
             //  assume static data for compute buffers
             vectorFieldCBIn.SetData(vectorField.GetVectorField());
             particlePosCB.SetData(particlePos);
