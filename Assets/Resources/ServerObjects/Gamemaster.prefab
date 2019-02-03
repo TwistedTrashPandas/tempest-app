@@ -100,7 +100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 2
   winFont: {fileID: 12800000, guid: 8ab0ce2e6f48833498113fbe6c368708, type: 3}
-  radiusCollider: 100
+  radiusCollider: 120
   timeZoom: 2
   skybox: {fileID: 2100000, guid: 3bc8bc0b38a2a134590088c19ebe756c, type: 2}
   winCondPrefab: {fileID: 5759207499340985431, guid: 83280f7c933d3154ebd3af3a9b126655,

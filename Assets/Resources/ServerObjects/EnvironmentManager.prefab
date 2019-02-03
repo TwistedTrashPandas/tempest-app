@@ -63,17 +63,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawning: 1
-  spawnRate: 2
+  spawnRate: 1.5
   dampingFactorVel: 1
   dampingFactorForce: 0
   maximumObjVelocity: 30
-  maxLargeObjVelocity: 12
+  maxLargeObjVelocity: 10
   spawnProbD: 0.85
   spawnProbS: 0.09
   spawnProbZ: 0.06
   rockRotSpeed: 3
-  minRadiusT: 3
-  maxRadiusT: 10
+  minRadiusT: 4
+  maxRadiusT: 12
   minRadiusS: 250
   maxRadiusS: 1550
   numRings: 10

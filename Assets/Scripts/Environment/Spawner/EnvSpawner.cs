@@ -290,7 +290,7 @@ namespace MastersOfTempest.Environment.Interacting
                         localScale = new Vector3(randomSize, randomSize, randomSize);
                         position += randOffset;
 
-                        position.y = Mathf.Clamp(gamemaster.GetShip().transform.position.y + RandomGaussian.NextGaussian(0, 0.6f, -1f, 1f) * dims.y * cellSize * 0.25f, dims.y * cellSize * 0.05f, dims.y * cellSize * 0.85f);
+                        position.y = Mathf.Clamp(gamemaster.GetShip().transform.position.y + RandomGaussian.NextGaussian(0, 0.5f, -1f, 1f) * dims.y * cellSize * 0.25f, dims.y * cellSize * 0.05f, dims.y * cellSize * 0.85f);
 
                         if (Vector3.Distance(position, gamemaster.GetShip().transform.position) < spawnDistToShip)
                             position += currEnvObject.transform.forward * spawnDistToShip;
@@ -302,7 +302,7 @@ namespace MastersOfTempest.Environment.Interacting
                         break;
                     case EnvObjectType.DangerZone:
                         initialPos = new Vector3(Random.Range(0, dims.x) * cellSizeH, 0f, Random.Range(0, dims.z) * cellSizeH) + new Vector3(0.5f, 0.5f, 0.5f);
-                        initialPos.y = Mathf.Clamp(gamemaster.GetShip().transform.position.y + RandomGaussian.NextGaussian(0, 0.6f, -1f, 1f) * dims.y * cellSize * 0.25f, dims.y * cellSize * 0.05f, dims.y * cellSize * 0.85f);
+                        initialPos.y = Mathf.Clamp(gamemaster.GetShip().transform.position.y + RandomGaussian.NextGaussian(0.25f, 0.72f, -0.75f, 1.25f) * dims.y * cellSize * 0.3f, dims.y * cellSize * 0.1f, dims.y * cellSize * 0.8f);
                         prefabNum = Mathf.FloorToInt(Random.Range(0f, dangerzonesPrefabs.Length - Mathf.Epsilon));
                         envObjects.Add(GameObject.Instantiate(dangerzonesPrefabs[prefabNum], initialPos, orientation).GetComponent<EnvObject>());
                         Destroy(envObjects[envObjects.Count - 1].GetComponent<ParticleSystem>());
@@ -310,7 +310,7 @@ namespace MastersOfTempest.Environment.Interacting
                         break;
                     case EnvObjectType.VoiceChatZone:
                         initialPos = new Vector3(Random.Range(0, dims.x) * cellSizeH, 0f, Random.Range(0, dims.z) * cellSizeH) + new Vector3(0.5f, 0.5f, 0.5f);
-                        initialPos.y = Mathf.Clamp(gamemaster.GetShip().transform.position.y + RandomGaussian.NextGaussian(0, 0.6f, -1f, 1f) * dims.y * cellSize * 0.25f, dims.y * cellSize * 0.05f, dims.y * cellSize * 0.85f);
+                        initialPos.y = Mathf.Clamp(gamemaster.GetShip().transform.position.y + RandomGaussian.NextGaussian(0.25f, 0.72f, -0.75f, 1.25f) * dims.y * cellSize * 0.3f, dims.y * cellSize * 0.1f, dims.y * cellSize * 0.8f);
                         prefabNum = Mathf.FloorToInt(Random.Range(0f, voiceChatZonesPrefabs.Length - Mathf.Epsilon));
                         envObjects.Add(GameObject.Instantiate(voiceChatZonesPrefabs[prefabNum], initialPos, orientation).GetComponent<EnvObject>());
                         envObjects[envObjects.Count - 1].moveType = MoveType.Static;
