@@ -67,7 +67,7 @@ MonoBehaviour:
   dampingFactorVel: 1
   dampingFactorForce: 0
   maximumObjVelocity: 30
-  maxLargeObjVelocity: 10
+  maxLargeObjVelocity: 8
   spawnProbD: 0.85
   spawnProbS: 0.09
   spawnProbZ: 0.06

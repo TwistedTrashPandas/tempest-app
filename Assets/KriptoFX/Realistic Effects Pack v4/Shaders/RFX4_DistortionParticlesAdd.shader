@@ -73,8 +73,8 @@ Shader "KriptoFX/RFX4/DistortionParticlesAdditive" {
 
 					float3 dir = _WorldSpaceCameraPos.xyz - mul(unity_ObjectToWorld, v.vertex).xyz;
 					float dist = dot(dir, dir) + 1.0f;
-					o.color.a = saturate(100000.0f / dist);
-					if (o.color.a < 0.1f)
+					o.color.a = saturate(80000.0f / dist);
+					if (o.color.a < 0.125f)
 						o.color.a = 0.0f;
 
 					return o;
