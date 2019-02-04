@@ -39,9 +39,9 @@ namespace MastersOfTempest.Environment.VisualEffects
 
 
             // Camera.main.cameraToWorldMatrix;
-            Camera.main.cullingMatrix = Matrix4x4.Ortho(-99999, 99999, -99999, 99999, 2f, 99999) *
+            /*Camera.main.cullingMatrix = Matrix4x4.Ortho(-99999, 99999, -99999, 99999, 2f, 99999) *
                                 Matrix4x4.Translate(Vector3.forward * -99999 / 2f) *
-                                Camera.main.worldToCameraMatrix;
+                                Camera.main.worldToCameraMatrix;*/
             Camera.main.depthTextureMode = DepthTextureMode.Depth;
             InitMesh();
         }
