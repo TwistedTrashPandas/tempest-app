@@ -208,7 +208,7 @@ namespace MastersOfTempest.Networking
 
                 foreach (SteamFriend friend in friends)
                 {
-                    if (friend.IsOnline)
+                    if (friend.IsOnline && friend.IsPlayingThisGame)
                     {
                         if (!friendsToStay.ContainsKey(friend.Id))
                         {
