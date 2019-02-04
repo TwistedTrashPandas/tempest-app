@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using MastersOfTempest.Networking;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -23,6 +24,13 @@ namespace MastersOfTempest.ShipBL
                 yield return null;
             }
             ship = shipObj.transform;
+            if (!shipObj.GetComponent<ServerObject>().onServer)
+            {
+                transform.parent = ship;
+                transform.position = ship.position;
+                transform.rotation = ship.rotation;
+                ship = null;
+            }
         }
 
         private void Update()
