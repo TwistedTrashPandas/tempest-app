@@ -8,10 +8,12 @@ namespace MastersOfTempest.ShipBL
     public class ShipPlayerColliders : MonoBehaviour
     {
         private Transform ship;
+
         void Start()
         {
             StartCoroutine(SearchForShip());
         }
+
         private IEnumerator SearchForShip()
         {
             Ship shipObj = null;
@@ -21,13 +23,15 @@ namespace MastersOfTempest.ShipBL
                 yield return null;
             }
             ship = shipObj.transform;
-            StartCoroutine(FollowShip());
         }
-        private IEnumerator FollowShip()
+
+        private void Update()
         {
-            this.gameObject.transform.rotation = ship.rotation;
-            this.gameObject.transform.position = ship.position;
-            yield return null;
+            if (ship != null)
+            {
+                this.gameObject.transform.rotation = ship.rotation;
+                this.gameObject.transform.position = ship.position;
+            }
         }
     }
 }
