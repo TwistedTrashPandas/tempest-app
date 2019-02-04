@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 1812681230377537068}
   m_Layer: 12
   m_Name: RepairArea Mid (1)
-  m_TagString: Interactable
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -487,7 +487,7 @@ GameObject:
   - component: {fileID: 3133257764915293893}
   m_Layer: 12
   m_Name: RepairArea Front (1)
-  m_TagString: Interactable
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1315,7 +1315,7 @@ GameObject:
   - component: {fileID: 7593645496248518322}
   m_Layer: 12
   m_Name: RepairArea Back (1)
-  m_TagString: Interactable
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
