@@ -72,7 +72,7 @@ namespace MastersOfTempest.ShipBL
             {
                 if (!linearMovement || true)
                 {
-                    if (Vector3.Dot(transform.forward, rb.velocity.normalized) >= -0.01f)
+                    if (Mathf.Abs(Vector3.Dot(transform.forward, rb.velocity.normalized)) <= 95f)
                     {
                         // adjusting orientation of the ship depending on movement
                         targetView = rb.velocity.normalized;
