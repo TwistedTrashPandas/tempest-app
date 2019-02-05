@@ -165,14 +165,14 @@ namespace MastersOfTempest.Environment.VisualEffects
                     break;
                 case 1:
                     waterMode = WaterMode.Minimal;
-                    widthHF = 128;
-                    depthHF = 128;
-                    widthMesh = 32;
-                    depthMesh = 32;
-                    quadSize = 400;
+                    widthHF = 256;
+                    depthHF = 256;
+                    widthMesh = 64;
+                    depthMesh = 64;
+                    quadSize = 200;
                     break;
                 case 2:
-                    waterMode = WaterMode.Minimal;
+                    waterMode = WaterMode.Reflection;
                     widthHF = 256;
                     depthHF = 256;
                     widthMesh = 64;

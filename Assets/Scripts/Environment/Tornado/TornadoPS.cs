@@ -107,11 +107,11 @@ namespace MastersOfTempest.Environment.VisualEffects
                     radius = 5000f;
                     break;
                 case 1:
-                    particelNumExp = 11;
+                    particelNumExp = 12;
                     numCloudSkyParticles = 8;
                     size = 96;
                     sizeTop = 8;
-                    radius = 5000f;
+                    radius = 6000f;
                     break;
                 case 2:
                     particelNumExp = 12;
