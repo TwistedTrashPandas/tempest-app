@@ -83,10 +83,10 @@ namespace MastersOfTempest.Environment.VisualEffects
             CreateMesh();
             camPos = Camera.main.transform;
             // TODO: seperate script
-            Camera.main.cullingMatrix = Matrix4x4.Ortho(-99999, 99999, -99999, 99999, 2f, 99999) *
+            /*Camera.main.cullingMatrix = Matrix4x4.Ortho(-99999, 99999, -99999, 99999, 2f, 99999) *
                                 Matrix4x4.Translate(Vector3.forward * -99999 / 2f) *
                                 Camera.main.worldToCameraMatrix;
-
+                                */
             //ComputeAttenuationProperties();
         }
 

@@ -268,8 +268,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.023199918, y: 0.02006264, z: 0.050772876}
-  m_Center: {x: -0.0010122645, y: -0.00015565268, z: 0.02388936}
+  m_Size: {x: 0.022928918, y: 0.02006264, z: 0.048383992}
+  m_Center: {x: -0.00087676407, y: -0.0001556527, z: 0.022694916}
 --- !u!114 &8646681008587862988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -705,6 +705,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6231363615240132168}
     m_Modifications:
+    - target: {fileID: 7203116056534751350, guid: 7c2a35cba1f3c4aa9a750ca70cfe603f,
+        type: 3}
+      propertyPath: m_Name
+      value: DrawEnergyPS
+      objectReference: {fileID: 0}
+    - target: {fileID: 7203116056534751338, guid: 7c2a35cba1f3c4aa9a750ca70cfe603f,
+        type: 3}
+      propertyPath: ParticlesColor.r
+      value: 0.56078434
+      objectReference: {fileID: 0}
+    - target: {fileID: 7203116056534751338, guid: 7c2a35cba1f3c4aa9a750ca70cfe603f,
+        type: 3}
+      propertyPath: ParticlesColor.g
+      value: 0.41568628
+      objectReference: {fileID: 0}
+    - target: {fileID: 7203116056534751338, guid: 7c2a35cba1f3c4aa9a750ca70cfe603f,
+        type: 3}
+      propertyPath: ParticlesColor.b
+      value: 0.08235294
+      objectReference: {fileID: 0}
     - target: {fileID: 7203116056534751337, guid: 7c2a35cba1f3c4aa9a750ca70cfe603f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -759,26 +779,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7203116056534751338, guid: 7c2a35cba1f3c4aa9a750ca70cfe603f,
-        type: 3}
-      propertyPath: ParticlesColor.r
-      value: 0.56078434
-      objectReference: {fileID: 0}
-    - target: {fileID: 7203116056534751338, guid: 7c2a35cba1f3c4aa9a750ca70cfe603f,
-        type: 3}
-      propertyPath: ParticlesColor.g
-      value: 0.41568628
-      objectReference: {fileID: 0}
-    - target: {fileID: 7203116056534751338, guid: 7c2a35cba1f3c4aa9a750ca70cfe603f,
-        type: 3}
-      propertyPath: ParticlesColor.b
-      value: 0.08235294
-      objectReference: {fileID: 0}
-    - target: {fileID: 7203116056534751350, guid: 7c2a35cba1f3c4aa9a750ca70cfe603f,
-        type: 3}
-      propertyPath: m_Name
-      value: DrawEnergyPS
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7c2a35cba1f3c4aa9a750ca70cfe603f, type: 3}

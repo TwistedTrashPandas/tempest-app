@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using MastersOfTempest.Networking;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace MastersOfTempest.ShipBL
@@ -7,33 +9,37 @@ namespace MastersOfTempest.ShipBL
     public class ShipPlayerColliders : MonoBehaviour
     {
         private Transform ship;
-        private Vector3 lastPos;
-        private Quaternion lastRot;
-        // Start is called before the first frame update
+
         void Start()
         {
-            ship = GameObject.Find("Ship").GetComponent<Transform>();
-            lastRot = ship.transform.rotation;
-            lastPos = ship.transform.position;
-            this.gameObject.transform.position = ship.transform.position;
-            this.gameObject.transform.rotation = ship.transform.rotation;
+            StartCoroutine(SearchForShip());
         }
 
-        // Update is called once per frame
-        void FixedUpdate()
+        private IEnumerator SearchForShip()
         {
-            //this.gameObject.transform.rotation = ship.rotation;
-            //this.gameObject.transform.position = ship.position;
+            Ship shipObj = null;
+            while(shipObj == null)
+            {
+                shipObj = FindObjectsOfType<Ship>().FirstOrDefault(ship => ship.gameObject.scene == this.gameObject.scene);
+                yield return null;
+            }
+            ship = shipObj.transform;
+            if (!shipObj.GetComponent<ServerObject>().onServer)
+            {
+                transform.parent = ship;
+                transform.position = ship.position;
+                transform.rotation = ship.rotation;
+                ship = null;
+            }
         }
+
         private void Update()
         {
-            this.gameObject.transform.rotation = ship.rotation;
-            this.gameObject.transform.position = ship.position;
-        }
-        private void LateUpdate()
-        {
-            //this.gameObject.transform.rotation = ship.rotation;
-            this.gameObject.transform.position = -ship.position;
+            if (ship != null)
+            {
+                this.gameObject.transform.rotation = ship.rotation;
+                this.gameObject.transform.position = ship.position;
+            }
         }
     }
 }

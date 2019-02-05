@@ -104,6 +104,7 @@ MonoBehaviour:
   children: []
   serverLayer: ServerEnvironment
   removeServerChildColliders: 0
+  clientLayer: Client
   interpolateOnClient: 1
   removeChildColliders: 1
   removeChildRigidbodies: 1
@@ -360,7 +361,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 80
+      scalar: 50
       minScalar: 1
       maxCurve:
         serializedVersion: 2

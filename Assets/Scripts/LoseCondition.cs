@@ -150,14 +150,21 @@ namespace MastersOfTempest
             {
                 float[] shipDestruction = shipPartManager.CalculateOverallDestruction();
                 int destructedParts = 0;
+                bool completelyBroken = false;
+                float avgDestruc = 0f;
                 for (int i = 0; i < shipDestruction.Length; i++)
                 {
-                    if (shipDestruction[i] >= overallDestructionThreshold)
+                    if (shipDestruction[i] >= overallDestructionThreshold )
                     {
+                        if (shipDestruction[i] >= 0.99f)
+                        {
+                            completelyBroken = true;
+                        }
                         destructedParts++;
                     }
+                    avgDestruc += shipDestruction[i];
                 }
-                if (destructedParts > 1)
+                if (destructedParts > 1 || completelyBroken || avgDestruc >= overallDestructionThreshold * 3f)
                     OnLoseServer();
             }
             else

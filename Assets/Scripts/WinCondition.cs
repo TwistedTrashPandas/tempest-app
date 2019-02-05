@@ -146,7 +146,7 @@ namespace MastersOfTempest
         {
             yield return new WaitForSeconds(5f);
             VectorField vectorField = GetComponent<Gamemaster>().GetEnvironmentManager().vectorField;
-            Vector3 center = vectorField.GetCenterWS() + Vector3.up * Random.Range(-0.3f, 0.3f) * vectorField.GetDimensions().y;
+            Vector3 center = vectorField.GetCenterWS() + Vector3.up * Random.Range(-0.125f, 0.125f) * vectorField.GetDimensions().y * vectorField.GetCellSize();
 
             var go = GameObject.Instantiate(winCondPrefab, center, Quaternion.identity);
             var goPSs = go.GetComponentsInChildren<ParticleSystem>();
